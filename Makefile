@@ -1,8 +1,8 @@
-docker-build:
+build-image:
 	docker build -t todo:latest .
 
-docker-run:
+run-with-docker:
 	@docker run -it --rm todo:latest
 
-docker-prune:
+prune-images:
 	@docker rmi `docker images --filter=label=app=todo -q`
