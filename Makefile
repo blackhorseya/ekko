@@ -13,6 +13,9 @@ gen-pb:
 test-with-unit:
 	@go test -v ./...
 
+test-with-coverage:
+	@go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+
 install-mod:
 	@go mod download
 

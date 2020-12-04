@@ -5,6 +5,7 @@ go:
 
 env:
   - GO111MODULE=on
+  - CODECOV_TOKEN=aa0a457a-579e-43f3-8126-f0137aa9e040
 
 before_install:
   - make install-tools
@@ -14,3 +15,7 @@ install:
 
 script:
   - make test-with-unit
+  - make test-with-coverage
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
