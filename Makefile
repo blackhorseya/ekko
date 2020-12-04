@@ -12,3 +12,9 @@ gen-pb:
 
 test-with-unit:
 	@go test -v ./...
+
+install-mod:
+	@go mod download
+
+install-tools:
+	@go get -v golang.org/x/lint/golint

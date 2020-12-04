@@ -7,7 +7,10 @@ env:
   - GO111MODULE=on
 
 before_install:
-  - go get -v golang.org/x/lint/golint
+  - make install-tools
+
+install:
+  - make install-mod
 
 script:
   - make test-with-unit
