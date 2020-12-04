@@ -9,3 +9,6 @@ prune-images:
 
 gen-pb:
 	@protoc --go_out=plugins=grpc:./internal/entities --proto_path=./internal/protos ./internal/protos/*.proto
+
+test-with-unit:
+	@go test -v ./...

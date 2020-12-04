@@ -1,0 +1,13 @@
+language: go
+
+go:
+  - "1.15"
+
+env:
+  - GO111MODULE=on
+
+before_install:
+  - go get -v golang.org/x/lint/golint
+
+script:
+  - make test-with-unit
