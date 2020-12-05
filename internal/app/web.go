@@ -1,19 +1,16 @@
 package app
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/blackhorseya/todo-app/internal/app/router"
+	"github.com/gin-gonic/gin"
+)
 
 // NewGinEngine init a engine of Gin
-func NewGinEngine() *gin.Engine {
-	engine := gin.Default()
+func NewGinEngine(r router.IRouter) *gin.Engine {
+	app := gin.Default()
 
-	api := engine.Group("/api")
-	{
-		api.GET("/readiness", func(ctx *gin.Context) {
-			ctx.JSON(200, gin.H{
-				"message": "ok",
-			})
-		})
-	}
+	// register route to Gin engine
+	_ = r.Register(app)
 
-	return engine
+	return app
 }
