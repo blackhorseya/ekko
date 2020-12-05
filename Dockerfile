@@ -14,7 +14,7 @@ COPY internal ./internal
 RUN go build -o app ./cmd/app
 
 # final stage
-FROM alpine
+FROM alpine:3
 
 LABEL maintainer="blackhorseya"
 LABEL mail="blackhorseya@gmail.com"
