@@ -8,6 +8,20 @@
 
 practice Todo list application
 
+## Functional
+
+### Main
+
+-   add tasks
+-   list all tasks by completed
+-   remove tasks
+-   modify tasks
+
+### Extra
+
+-   task with tags field
+-   task with startAt and endAt field 
+
 ## Technical
 
 ### Languages
