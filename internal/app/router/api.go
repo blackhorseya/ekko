@@ -6,10 +6,7 @@ import "github.com/gin-gonic/gin"
 func (r *Router) RegisterAPI(app *gin.Engine) {
 	api := app.Group("/api")
 	{
-		api.GET("/readiness", func(ctx *gin.Context) {
-			ctx.JSON(200, gin.H{
-				"message": "ok",
-			})
-		})
+		api.GET("/readiness", r.HealthAPI.Readiness)
+		api.GET("/liveness", r.HealthAPI.Liveness)
 	}
 }
