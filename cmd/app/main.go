@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/blackhorseya/todo-app/internal/utils/validator"
+	"github.com/blackhorseya/todo-app/pkg/utils/validator"
 	"github.com/sirupsen/logrus"
 )
 
