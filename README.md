@@ -8,24 +8,24 @@ practice Todo list application
 
 ### Languages
 
-- Go
-- React
+-   Go
+-   React
 
 ### Frameworks
 
-- Gin
-- Protobuf
+-   Gin
+-   Protobuf
 
 ### Infrastructures
 
-- GKE
-- Firebase
-- Docker
-- GCR
-- Terraform
-- Helm 3
+-   GKE
+-   Firebase
+-   Docker
+-   GCR
+-   Terraform
+-   Helm 3
 
 ### CI/CD
 
-- Travis CI
-- Codecov
+-   Travis CI
+-   Codecov
