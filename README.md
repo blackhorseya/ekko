@@ -19,6 +19,7 @@ practice Todo list application
 
 -   Gin
 -   Protobuf
+-   Wire
 
 ### Infrastructures
 
@@ -33,3 +34,4 @@ practice Todo list application
 
 -   Travis CI
 -   Codecov
+-   Codacy
