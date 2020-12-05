@@ -2,6 +2,7 @@ package apis
 
 import "github.com/gin-gonic/gin"
 
+// Health define health apis
 type Health struct {
 }
 
