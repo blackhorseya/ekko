@@ -8,7 +8,7 @@ prune-images:
 	@docker rmi `docker images --filter=label=app=todo -q`
 
 gen-pb:
-	@protoc --go_out=plugins=grpc:./internal/entities --proto_path=./internal/protos ./internal/protos/*.proto
+	@protoc --go_out=plugins=grpc:./internal/app/entities --proto_path=./internal/app/protos ./internal/app/protos/*.proto
 
 test-with-unit:
 	@go test -v ./...
