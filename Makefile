@@ -2,7 +2,7 @@ build-image:
 	docker build -t todo:latest .
 
 run-with-docker:
-	@docker run -it --rm todo:latest
+	@docker run -it --rm -p 8080:8080 todo:latest
 
 prune-images:
 	@docker rmi `docker images --filter=label=app=todo -q`
