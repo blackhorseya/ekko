@@ -8,19 +8,25 @@ package main
 import (
 	"github.com/blackhorseya/todo-app/internal/app"
 	"github.com/blackhorseya/todo-app/internal/app/apis"
+	"github.com/blackhorseya/todo-app/internal/app/config"
 	"github.com/blackhorseya/todo-app/internal/app/router"
 )
 
 // Injectors from wire.go:
 
-func CreateApp() (*app.Injector, func(), error) {
+func CreateApp(cfg string) (*app.Injector, func(), error) {
 	health := &apis.Health{}
 	routerRouter := &router.Router{
 		HealthAPI: health,
 	}
 	engine := app.NewGinEngine(routerRouter)
+	configConfig, err := config.NewConfig(cfg)
+	if err != nil {
+		return nil, nil, err
+	}
 	injector := &app.Injector{
 		Engine: engine,
+		C:      configConfig,
 	}
 	return injector, func() {
 	}, nil

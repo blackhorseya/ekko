@@ -1,9 +1,15 @@
 package main
 
-import "github.com/sirupsen/logrus"
+import (
+	"flag"
+
+	"github.com/sirupsen/logrus"
+)
+
+var cfgPath = flag.String("c", "app.yaml", "set config file path")
 
 func main() {
-	app, _, err := CreateApp()
+	app, _, err := CreateApp(*cfgPath)
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"error": err,
