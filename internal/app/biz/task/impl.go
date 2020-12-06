@@ -3,10 +3,12 @@ package task
 import (
 	"fmt"
 
+	"github.com/blackhorseya/todo-app/internal/app/biz/task/repository"
 	"github.com/blackhorseya/todo-app/internal/app/entities"
 )
 
 type impl struct {
+	TaskRepo repository.TaskRepo
 }
 
 // NewImpl is a constructor of implement business
