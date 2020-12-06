@@ -14,7 +14,7 @@ func BuildInjector() (*app.Injector, func(), error) {
 	wire.Build(
 		app.NewGinEngine,
 		apis.ProviderSet,
-		router.Set,
+		router.ProviderSet,
 		app.InjectorSet,
 	)
 
