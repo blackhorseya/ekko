@@ -1,6 +1,8 @@
 package task
 
 import (
+	"fmt"
+
 	"github.com/blackhorseya/todo-app/internal/app/entities"
 )
 
@@ -14,7 +16,11 @@ func NewImpl() Biz {
 
 // Create a task
 func (i *impl) Create(t *entities.Task) (task *entities.Task, err error) {
-	panic("implement me")
+	if len(t.Title) == 0 {
+		return nil, fmt.Errorf("title must be NOT empty")
+	}
+
+	return task, nil
 }
 
 // RemoveByID a task by id
