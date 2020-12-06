@@ -1,6 +1,9 @@
 package task
 
-import "github.com/blackhorseya/todo-app/internal/app/entities"
+import (
+	"github.com/blackhorseya/todo-app/internal/app/entities"
+	"github.com/google/wire"
+)
 
 // Biz describe task business service function
 type Biz interface {
@@ -9,3 +12,6 @@ type Biz interface {
 	ModifyTitle(id, title string) (task *entities.Task, err error)
 	List() (tasks []*entities.Task, err error)
 }
+
+// ProviderSet is a task provider set
+var ProviderSet = wire.NewSet(NewImpl)
