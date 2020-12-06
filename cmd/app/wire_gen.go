@@ -13,7 +13,7 @@ import (
 
 // Injectors from wire.go:
 
-func BuildInjector() (*app.Injector, func(), error) {
+func CreateApp() (*app.Injector, func(), error) {
 	health := &apis.Health{}
 	routerRouter := &router.Router{
 		HealthAPI: health,
