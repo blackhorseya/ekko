@@ -1,6 +1,12 @@
 package apis
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/google/wire"
+)
+
+// HealthSet is a Health provider set
+var HealthSet = wire.NewSet(wire.Struct(new(Health), "*"))
 
 // Health define health apis
 type Health struct {

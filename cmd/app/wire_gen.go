@@ -7,13 +7,17 @@ package main
 
 import (
 	"github.com/blackhorseya/todo-app/internal/app"
+	"github.com/blackhorseya/todo-app/internal/app/apis"
 	"github.com/blackhorseya/todo-app/internal/app/router"
 )
 
 // Injectors from wire.go:
 
 func BuildInjector() (*app.Injector, func(), error) {
-	routerRouter := &router.Router{}
+	health := &apis.Health{}
+	routerRouter := &router.Router{
+		HealthAPI: health,
+	}
 	engine := app.NewGinEngine(routerRouter)
 	injector := &app.Injector{
 		Engine: engine,
