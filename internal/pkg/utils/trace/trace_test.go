@@ -12,7 +12,7 @@ func TestNewTraceID(t *testing.T) {
 	}{
 		{
 			name: "generate then match regex",
-			want: "trace-id-\\d+-\\d{4}\\.\\d{2}\\.\\d{2}\\.\\d{2}\\.\\d{2}\\.\\d{2}\\.\\d{3}-\\d+",
+			want: "trace-id-\\d+-\\d{4}\\.\\d{2}\\.\\d{2}\\.\\d{2}\\.\\d{2}\\.\\d{2}\\.\\d+-\\d+",
 		},
 	}
 	for _, tt := range tests {
