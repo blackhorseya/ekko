@@ -14,9 +14,9 @@ func NewImpl() Biz {
 	return &impl{}
 }
 
-// Create a task
-func (i *impl) Create(t *entities.Task) (task *entities.Task, err error) {
-	if len(t.Title) == 0 {
+// Create serve user to create a task
+func (i *impl) Create(newTask *entities.Task) (task *entities.Task, err error) {
+	if len(newTask.Title) == 0 {
 		return nil, fmt.Errorf("title must be NOT empty")
 	}
 
@@ -25,23 +25,18 @@ func (i *impl) Create(t *entities.Task) (task *entities.Task, err error) {
 	return task, nil
 }
 
-// Complete a task which change complete status of task to true
-func (i *impl) Complete(id string) (task *entities.Task, err error) {
+// UpdateStatus serve user to update complete status of task by id
+func (i *impl) UpdateStatus(id string, completed bool) (task *entities.Task, err error) {
 	panic("implement me")
 }
 
-// Incomplete a task which change complete status of task to false
-func (i *impl) Incomplete(id string) (task *entities.Task, err error) {
+// Remove serve user to remove a task by id
+func (i *impl) Remove(id string) (ok bool, err error) {
 	panic("implement me")
 }
 
-// RemoveByID a task by id
-func (i *impl) RemoveByID(id string) (ok bool, err error) {
-	panic("implement me")
-}
-
-// ModifyTitle a title of task
-func (i *impl) ModifyTitle(id, title string) (task *entities.Task, err error) {
+// ChangeTitle serve user to update title of task
+func (i *impl) ChangeTitle(id, newTitle string) (task *entities.Task, err error) {
 	panic("implement me")
 }
 
