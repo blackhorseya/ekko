@@ -22,7 +22,10 @@ func (i *impl) Create(newTask *entities.Task) (task *entities.Task, err error) {
 		return nil, fmt.Errorf("title must be NOT empty")
 	}
 
-	// todo: 2020-12-06|12:34|doggy|implement it
+	task, err = i.TaskRepo.CreateTask(newTask)
+	if err != nil {
+		return nil, err
+	}
 
 	return task, nil
 }
