@@ -16,4 +16,4 @@ type Biz interface {
 }
 
 // ProviderSet is a task provider set
-var ProviderSet = wire.NewSet(NewImpl, repository.NewImpl)
+var ProviderSet = wire.NewSet(NewImpl, repository.ProviderSet)
