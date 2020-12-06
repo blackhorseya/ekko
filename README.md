@@ -38,7 +38,7 @@ practice Todo list application
 ### Infrastructures
 
 -   GKE
--   Firebase
+-   MongoDB
 -   Docker
 -   GCR
 -   Terraform
