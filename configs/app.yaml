@@ -1,0 +1,11 @@
+runMode: "debug"
+
+http:
+  host: ""
+  port: 8080
+
+swagger:
+  enabled: true
+
+log:
+  level: "debug"
