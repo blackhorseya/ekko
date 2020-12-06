@@ -20,7 +20,19 @@ func (i *impl) Create(t *entities.Task) (task *entities.Task, err error) {
 		return nil, fmt.Errorf("title must be NOT empty")
 	}
 
+	// todo: 2020-12-06|12:34|doggy|implement it
+
 	return task, nil
+}
+
+// Complete a task which change complete status of task to true
+func (i *impl) Complete(id string) (task *entities.Task, err error) {
+	panic("implement me")
+}
+
+// Incomplete a task which change complete status of task to false
+func (i *impl) Incomplete(id string) (task *entities.Task, err error) {
+	panic("implement me")
 }
 
 // RemoveByID a task by id
