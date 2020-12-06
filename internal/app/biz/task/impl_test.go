@@ -25,7 +25,6 @@ func Test_impl_Create(t *testing.T) {
 			wantTask: nil,
 			wantErr:  true,
 		},
-		// todo: 2020-12-06|13:34|doggy|test it using testify
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
