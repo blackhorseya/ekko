@@ -8,8 +8,8 @@ import (
 
 var _ IRouter = (*Router)(nil)
 
-// ProviderSet inject Router
-var ProviderSet = wire.NewSet(
+// Set inject Router
+var Set = wire.NewSet(
 	wire.Struct(new(Router), "*"),
 	wire.Bind(new(IRouter), new(*Router)),
 )

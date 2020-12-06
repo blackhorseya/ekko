@@ -1,7 +1,7 @@
 package main
 
 func main() {
-	injector, _, err := CreateApp()
+	injector, _, err := BuildInjector()
 	if err != nil {
 		panic(err)
 	}
