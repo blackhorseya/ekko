@@ -14,7 +14,6 @@ install:
   - make install-mod
 
 script:
-  - make test-with-unit
   - make test-with-coverage
 
 after_success:
