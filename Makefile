@@ -19,6 +19,9 @@ test-with-unit:
 test-with-coverage:
 	@go test -race -cover -coverpkg=./... -coverprofile=coverage.txt -covermode=atomic ./...
 
+lint:
+	@golint ./...
+
 install-mod:
 	@go mod download
 
