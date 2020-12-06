@@ -8,11 +8,11 @@ import (
 	"github.com/google/wire"
 )
 
-// BuildInjector build a injector
-func BuildInjector() (*app.Injector, func(), error) {
+// CreateApp create an application
+func CreateApp() (*app.Injector, func(), error) {
 	wire.Build(
 		app.NewGinEngine,
-		router.Set,
+		router.ProviderSet,
 		app.InjectorSet,
 	)
 
