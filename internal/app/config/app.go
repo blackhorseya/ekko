@@ -1,12 +1,17 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"fmt"
+
+	"github.com/spf13/viper"
+)
 
 // Config configure application parameters
 type Config struct {
-	RunMode string
-	Swagger Swagger
-	HTTP    HTTP
+	RunMode string  `yaml:"runMode"`
+	Swagger Swagger `yaml:"swagger"`
+	HTTP    HTTP    `yaml:"http"`
+	Log     Log     `yaml:"log"`
 }
 
 // NewConfig is a constructor of config with config path
@@ -30,16 +35,21 @@ func NewConfig(path string) (*Config, error) {
 
 // HTTP configure HTTP server parameters
 type HTTP struct {
-	Host string
-	Port int
+	Host string `yaml:"host"`
+	Port int    `yaml:"port"`
+}
+
+// GetAddress combine host and port, format is `host:port`
+func (h HTTP) GetAddress() string {
+	return fmt.Sprintf("%s:%d", h.Host, h.Port)
 }
 
 // Swagger configure swagger parameters
 type Swagger struct {
-	Enabled bool
+	Enabled bool `yaml:"enabled"`
 }
 
 // Log configure log parameters
 type Log struct {
-	Level string
+	Level string `yaml:"level"`
 }
