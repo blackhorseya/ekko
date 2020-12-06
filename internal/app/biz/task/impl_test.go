@@ -8,6 +8,9 @@ import (
 )
 
 func Test_impl_Create(t *testing.T) {
+	// todo: 2020-12-06|21:33|doggy|mock it and complete it
+	// repo := new(mocks.TaskRepo)
+
 	type args struct {
 		t *entities.Task
 	}
