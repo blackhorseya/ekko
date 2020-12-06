@@ -19,8 +19,8 @@ type Health struct {
 // Readiness to know when an application is ready to start accepting traffic
 func (h *Health) Readiness(ctx *gin.Context) {
 	var (
-		code = http.StatusOK
-		status = "ok"
+		code    = http.StatusOK
+		status  = "ok"
 		message = "application has been ready"
 	)
 
@@ -31,7 +31,6 @@ func (h *Health) Readiness(ctx *gin.Context) {
 		message = "application has failed"
 	}
 
-
 	ctx.JSON(code, gin.H{
 		"status":  status,
 		"message": message,
@@ -41,8 +40,8 @@ func (h *Health) Readiness(ctx *gin.Context) {
 // Liveness to know when to restart an application
 func (h *Health) Liveness(ctx *gin.Context) {
 	var (
-		code = http.StatusOK
-		status = "ok"
+		code    = http.StatusOK
+		status  = "ok"
 		message = "application was alive"
 	)
 
