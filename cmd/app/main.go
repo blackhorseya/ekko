@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var cfgPath = flag.String("c", "app.yaml", "set config file path")
+var cfgPath = flag.String("c", "configs/app.yaml", "set config file path")
 
 func main() {
 	app, _, err := CreateApp(*cfgPath)
@@ -16,7 +16,11 @@ func main() {
 		}).Panicf("create an application is panic")
 	}
 
-	err = app.Engine.Run(":8080")
+	logrus.WithFields(logrus.Fields{
+		"config": app.C,
+	}).Debugf("print config of application")
+
+	err = app.Engine.Run(app.C.HTTP.GetAddress())
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"error": err,

@@ -8,7 +8,7 @@ import (
 
 var _ IRouter = (*Router)(nil)
 
-// ProviderSet inject Router
+// ProviderSet is a router provider set
 var ProviderSet = wire.NewSet(
 	wire.Struct(new(Router), "*"),
 	wire.Bind(new(IRouter), new(*Router)),
