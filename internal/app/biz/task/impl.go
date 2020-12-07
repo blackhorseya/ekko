@@ -12,8 +12,10 @@ type impl struct {
 }
 
 // NewImpl is a constructor of implement business
-func NewImpl() Biz {
-	return &impl{}
+func NewImpl(repo repository.TaskRepo) Biz {
+	return &impl{
+		TaskRepo: repo,
+	}
 }
 
 // Create serve user to create a task

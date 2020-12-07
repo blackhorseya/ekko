@@ -13,7 +13,7 @@ import (
 // Injectors from wire.go:
 
 func CreateTaskBiz(repo repository.TaskRepo) (Biz, error) {
-	biz := NewImpl()
+	biz := NewImpl(repo)
 	return biz, nil
 }
 
