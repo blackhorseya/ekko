@@ -31,9 +31,11 @@ practice Todo list application
 
 ### Frameworks
 
--   Gin
--   Protobuf
--   Wire
+-   [Gin](https://github.com/gin-gonic/gin)
+-   [Protobuf](https://developers.google.com/protocol-buffers)
+-   [Wire](https://github.com/google/wire)
+-   [Testify](https://github.com/stretchr/testify)
+-   [Mockery](https://github.com/vektra/mockery)
 
 ### Infrastructures
 
@@ -46,6 +48,6 @@ practice Todo list application
 
 ### CI/CD
 
--   Travis CI
--   Codecov
--   Codacy
+-   [Travis CI](https://travis-ci.com)
+-   [Codecov](https://codecov.io/)
+-   [Codacy](https://www.codacy.com/)
