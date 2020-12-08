@@ -1,6 +1,7 @@
 package task
 
 import (
+	"errors"
 	"fmt"
 	"testing"
 
@@ -93,6 +94,60 @@ func (s *bizTestSuite) Test_impl_Create() {
 	}
 }
 
-func TestBizCreate(t *testing.T) {
+func (s *bizTestSuite) Test_impl_List() {
+	type args struct {
+		page int32
+		size int32
+	}
+	tests := []struct {
+		name      string
+		args      args
+		mockFunc  func()
+		wantTasks []*entities.Task
+		wantErr   string
+	}{
+		{
+			name: "list 1 3 then tasks[3] nil",
+			args: args{1, 3},
+			mockFunc: func() {
+				s.taskRepo.On("QueryTaskList", mock.AnythingOfType("int32"), mock.AnythingOfType("int32")).Return(
+					[]*entities.Task{
+						{Title: "1"},
+						{Title: "2"},
+						{Title: "3"},
+					}, nil).Once()
+			},
+			wantTasks: []*entities.Task{
+				{Title: "1"},
+				{Title: "2"},
+				{Title: "3"},
+			},
+			wantErr: "",
+		},
+		{
+			name: "list 1 3 then nil error",
+			args: args{1, 3},
+			mockFunc: func() {
+				s.taskRepo.On("QueryTaskList", mock.AnythingOfType("int32"), mock.AnythingOfType("int32")).Return(
+					nil, errors.New("test error")).Once()
+			},
+			wantTasks: nil,
+			wantErr:   "test error",
+		},
+	}
+	for _, tt := range tests {
+		tt.mockFunc()
+		gotTasks, err := s.taskBiz.List(tt.args.page, tt.args.size)
+		if err != nil {
+			s.EqualErrorf(err, tt.wantErr, "List() error = %v, wantErr %v", err, tt.wantErr)
+		}
+
+		if gotTasks != nil {
+			s.EqualValuesf(tt.wantTasks, gotTasks, "List() gotTasks = %v, want %v", gotTasks, tt.wantTasks)
+		}
+	}
+}
+
+func TestTaskBiz(t *testing.T) {
 	suite.Run(t, new(bizTestSuite))
 }

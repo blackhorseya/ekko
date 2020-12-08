@@ -48,6 +48,11 @@ func (i *impl) ChangeTitle(id, newTitle string) (task *entities.Task, err error)
 }
 
 // List all tasks
-func (i *impl) List() (tasks []*entities.Task, err error) {
-	panic("implement me")
+func (i *impl) List(page, size int32) (tasks []*entities.Task, err error) {
+	tasks, err = i.TaskRepo.QueryTaskList(size, (page-1)*size)
+	if err != nil {
+		return nil, err
+	}
+
+	return tasks, nil
 }
