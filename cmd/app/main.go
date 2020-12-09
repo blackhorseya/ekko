@@ -2,14 +2,10 @@ package main
 
 import (
 	"flag"
-	"strings"
 
 	"github.com/blackhorseya/todo-app/internal/app/config"
+	"github.com/blackhorseya/todo-app/internal/pkg/logger"
 	"github.com/sirupsen/logrus"
-)
-
-const (
-	timeFormat = "2006-01-02 15:04:05"
 )
 
 var cfgPath = flag.String("c", "configs/app.yaml", "set config file path")
@@ -17,30 +13,15 @@ var cfgPath = flag.String("c", "configs/app.yaml", "set config file path")
 func init() {
 	flag.Parse()
 
-	logrus.SetLevel(logrus.InfoLevel)
-	logrus.SetFormatter(&logrus.TextFormatter{
-		FullTimestamp:   true,
-		TimestampFormat: timeFormat,
-		DisableQuote:    true,
-	})
+	logger.SetDefault()
 }
 
 func initLogger(config config.Log) {
 	// set level of log
-	level, err := logrus.ParseLevel(config.Level)
-	if err != nil {
-		logrus.WithFields(logrus.Fields{
-			"error": err,
-		}).Panicf("parse log.level is panic")
-	}
-	logrus.SetLevel(level)
+	logger.SetLevel(config.Level)
 
 	// set formatter of log
-	if strings.ToLower(config.Format) == "json" {
-		logrus.SetFormatter(&logrus.JSONFormatter{
-			TimestampFormat: timeFormat,
-		})
-	}
+	logger.SetFormatter(config.Format)
 }
 
 // @title Todo list API
@@ -69,10 +50,16 @@ func main() {
 		"config": app.C,
 	}).Debugf("print config of application")
 
-	err = app.Engine.Run(app.C.HTTP.GetAddress())
+	address := app.C.HTTP.GetAddress()
+	logrus.WithFields(logrus.Fields{
+		"host": app.C.HTTP.Host,
+		"port": app.C.HTTP.Port,
+	}).Infof("listening and serving HTTP")
+	err = app.Engine.Run(address)
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"error": err,
 		}).Panicf("run engine of app is panic")
 	}
+
 }
