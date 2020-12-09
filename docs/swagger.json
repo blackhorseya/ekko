@@ -1,0 +1,9 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Todo list API",
+        "contact": {},
+        "version": "0.0.1"
+    },
+    "paths": {}
+}

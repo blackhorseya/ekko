@@ -8,6 +8,8 @@ import (
 
 var cfgPath = flag.String("c", "configs/app.yaml", "set config file path")
 
+// @title Todo list API
+// @version 0.0.1
 func main() {
 	app, _, err := CreateApp(*cfgPath)
 	if err != nil {

@@ -13,6 +13,9 @@ gen-pb:
 gen-wire:
 	@wire gen ./...
 
+gen-swagger:
+	@swag init -d cmd/app
+
 test-with-unit:
 	@go test -race -v ./...
 
