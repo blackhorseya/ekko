@@ -1,3 +1,4 @@
+basePath: /api
 info:
   contact:
     email: blackhorseya@gmail.com
@@ -9,5 +10,31 @@ info:
     url: https://spdx.org/licenses/GPL-3.0-only.html
   title: Todo list API
   version: 0.0.1
-paths: {}
+paths:
+  /liveness:
+    get:
+      consumes:
+      - application/json
+      description: to know when to restart an application
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Liveness
+  /readiness:
+    get:
+      consumes:
+      - application/json
+      description: Show application was ready to start accepting traffic
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Readiness
 swagger: "2.0"

@@ -18,6 +18,8 @@ var cfgPath = flag.String("c", "configs/app.yaml", "set config file path")
 
 // @license.name GPL-3.0
 // @license.url https://spdx.org/licenses/GPL-3.0-only.html
+
+// @BasePath /api
 func main() {
 	app, _, err := CreateApp(*cfgPath)
 	if err != nil {
