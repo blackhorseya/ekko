@@ -16,9 +16,6 @@ gen-wire:
 gen-swagger:
 	@swag init -g cmd/app/main.go --parseInternal -o internal/app/docs
 
-test-with-unit:
-	@go test -race -v ./...
-
 test-with-coverage:
 	@sh $(shell pwd)/scripts/go.test.sh
 
