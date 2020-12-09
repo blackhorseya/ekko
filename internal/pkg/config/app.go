@@ -13,6 +13,7 @@ type Config struct {
 	Swagger Swagger `yaml:"swagger"`
 	HTTP    HTTP    `yaml:"http"`
 	Log     Log     `yaml:"log"`
+	DB      DB      `yaml:"db"`
 }
 
 func (c *Config) String() string {
@@ -59,4 +60,10 @@ type Swagger struct {
 type Log struct {
 	Format string `yaml:"format"`
 	Level  string `yaml:"level"`
+}
+
+// DB is configuration of database
+type DB struct {
+	URL   string `yaml:"url"`
+	Debug bool   `yaml:"debug"`
 }

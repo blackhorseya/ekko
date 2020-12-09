@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/blackhorseya/todo-app/internal/app/config"
+	"github.com/blackhorseya/todo-app/internal/pkg/config"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 )

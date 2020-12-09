@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/blackhorseya/todo-app/internal/app/apis"
-	"github.com/blackhorseya/todo-app/internal/app/config"
+	"github.com/blackhorseya/todo-app/internal/pkg/config"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 )

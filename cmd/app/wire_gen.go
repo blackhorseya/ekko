@@ -9,8 +9,8 @@ import (
 	"github.com/blackhorseya/todo-app/internal/app"
 	"github.com/blackhorseya/todo-app/internal/app/apis"
 	"github.com/blackhorseya/todo-app/internal/app/biz/health"
-	"github.com/blackhorseya/todo-app/internal/app/config"
 	"github.com/blackhorseya/todo-app/internal/app/router"
+	"github.com/blackhorseya/todo-app/internal/pkg/config"
 )
 
 // Injectors from wire.go:

@@ -1,9 +1,9 @@
 package app
 
 import (
-	"github.com/blackhorseya/todo-app/internal/app/config"
 	"github.com/blackhorseya/todo-app/internal/app/middlewares"
 	"github.com/blackhorseya/todo-app/internal/app/router"
+	"github.com/blackhorseya/todo-app/internal/pkg/config"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"

@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"github.com/blackhorseya/todo-app/internal/app/config"
+	"github.com/blackhorseya/todo-app/internal/pkg/config"
 	"github.com/blackhorseya/todo-app/internal/pkg/logger"
 	"github.com/sirupsen/logrus"
 )
