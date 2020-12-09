@@ -4,21 +4,42 @@ import (
 	"flag"
 	"strings"
 
+	"github.com/blackhorseya/todo-app/internal/app/config"
 	"github.com/sirupsen/logrus"
 )
 
+const (
+	timeFormat = "2006-01-02 15:04:05"
+)
+
 var cfgPath = flag.String("c", "configs/app.yaml", "set config file path")
-var env = flag.String("e", "debug", "set run which env")
 
 func init() {
 	flag.Parse()
 
+	logrus.SetLevel(logrus.InfoLevel)
 	logrus.SetFormatter(&logrus.TextFormatter{
-		FullTimestamp: true,
-		TimestampFormat: "2006-01-02 15:04:05",
+		FullTimestamp:   true,
+		TimestampFormat: timeFormat,
+		DisableQuote:    true,
 	})
-	if strings.ToLower(*env) == "production" {
-		logrus.SetFormatter(&logrus.JSONFormatter{})
+}
+
+func initLogger(config config.Log) {
+	// set level of log
+	level, err := logrus.ParseLevel(config.Level)
+	if err != nil {
+		logrus.WithFields(logrus.Fields{
+			"error": err,
+		}).Panicf("parse log.level is panic")
+	}
+	logrus.SetLevel(level)
+
+	// set formatter of log
+	if strings.ToLower(config.Format) == "json" {
+		logrus.SetFormatter(&logrus.JSONFormatter{
+			TimestampFormat: timeFormat,
+		})
 	}
 }
 
@@ -42,13 +63,7 @@ func main() {
 		}).Panicf("create an application is panic")
 	}
 
-	level, err := logrus.ParseLevel(app.C.Log.Level)
-	if err != nil {
-		logrus.WithFields(logrus.Fields{
-			"error": err,
-		}).Panicf("parse log.level is panic")
-	}
-	logrus.SetLevel(level)
+	initLogger(app.C.Log)
 
 	logrus.WithFields(logrus.Fields{
 		"config": app.C,

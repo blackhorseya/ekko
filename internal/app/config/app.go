@@ -1,6 +1,7 @@
 package config
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/spf13/viper"
@@ -12,6 +13,11 @@ type Config struct {
 	Swagger Swagger `yaml:"swagger"`
 	HTTP    HTTP    `yaml:"http"`
 	Log     Log     `yaml:"log"`
+}
+
+func (c *Config) String() string {
+	ret, _ := json.Marshal(c)
+	return string(ret)
 }
 
 // NewConfig is a constructor of config with config path
@@ -51,5 +57,6 @@ type Swagger struct {
 
 // Log configure log parameters
 type Log struct {
-	Level string `yaml:"level"`
+	Format string `yaml:"format"`
+	Level  string `yaml:"level"`
 }
