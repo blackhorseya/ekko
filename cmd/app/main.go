@@ -2,11 +2,22 @@ package main
 
 import (
 	"flag"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 )
 
 var cfgPath = flag.String("c", "configs/app.yaml", "set config file path")
+var env = flag.String("e", "debug", "set run which env")
+
+func init() {
+	flag.Parse()
+
+	logrus.SetFormatter(&logrus.TextFormatter{})
+	if strings.ToLower(*env) == "production" {
+		logrus.SetFormatter(&logrus.JSONFormatter{})
+	}
+}
 
 // @title Todo list API
 // @version 0.0.1
