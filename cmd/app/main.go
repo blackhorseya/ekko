@@ -13,7 +13,10 @@ var env = flag.String("e", "debug", "set run which env")
 func init() {
 	flag.Parse()
 
-	logrus.SetFormatter(&logrus.TextFormatter{})
+	logrus.SetFormatter(&logrus.TextFormatter{
+		FullTimestamp: true,
+		TimestampFormat: "2006-01-02 15:04:05",
+	})
 	if strings.ToLower(*env) == "production" {
 		logrus.SetFormatter(&logrus.JSONFormatter{})
 	}
@@ -38,6 +41,14 @@ func main() {
 			"error": err,
 		}).Panicf("create an application is panic")
 	}
+
+	level, err := logrus.ParseLevel(app.C.Log.Level)
+	if err != nil {
+		logrus.WithFields(logrus.Fields{
+			"error": err,
+		}).Panicf("parse log.level is panic")
+	}
+	logrus.SetLevel(level)
 
 	logrus.WithFields(logrus.Fields{
 		"config": app.C,
