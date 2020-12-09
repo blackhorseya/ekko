@@ -18,7 +18,15 @@ var doc = `{
     "info": {
         "description": "{{.Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "contact": {
+            "name": "Sean Cheng",
+            "url": "https://blog.seancheng.space",
+            "email": "blackhorseya@gmail.com"
+        },
+        "license": {
+            "name": "GPL-3.0",
+            "url": "https://spdx.org/licenses/GPL-3.0-only.html"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -42,7 +50,7 @@ var SwaggerInfo = swaggerInfo{
 	BasePath:    "",
 	Schemes:     []string{},
 	Title:       "Todo list API",
-	Description: "",
+	Description: "Todo list API",
 }
 
 type s struct{}
