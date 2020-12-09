@@ -1,3 +1,4 @@
+# runMode can be [release, test, debug]
 runMode: "debug"
 
 http:
