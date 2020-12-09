@@ -14,7 +14,7 @@ gen-wire:
 	@wire gen ./...
 
 gen-swagger:
-	@swag init -g cmd/app/main.go --parseInternal
+	@swag init -g cmd/app/main.go --parseInternal -o internal/app/docs
 
 test-with-unit:
 	@go test -race -v ./...

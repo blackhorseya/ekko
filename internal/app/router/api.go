@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	// import docs for swagger
-	_ "github.com/blackhorseya/todo-app/docs"
+	_ "github.com/blackhorseya/todo-app/internal/app/docs"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
