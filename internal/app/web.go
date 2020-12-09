@@ -13,10 +13,13 @@ import (
 func NewGinEngine(r router.IRouter, config *config.Config) *gin.Engine {
 	gin.SetMode(config.RunMode)
 
-	app := gin.Default()
+	app := gin.New()
 
 	// logger
 	app.Use(middlewares.LoggerMiddleware())
+
+	// recovery
+	app.Use(gin.Recovery())
 
 	// register route to Gin engine
 	_ = r.Register(app)
