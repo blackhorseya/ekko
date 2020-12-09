@@ -24,6 +24,7 @@ type Router struct {
 	HealthAPI *apis.Health
 }
 
+// NewRouter constructor of Router
 func NewRouter(c *config.Config, healthAPI *apis.Health) IRouter {
 	return &Router{C: c, HealthAPI: healthAPI}
 }

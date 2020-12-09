@@ -3,11 +3,11 @@ package router
 import (
 	"fmt"
 
+	// import docs for swagger
+	_ "github.com/blackhorseya/todo-app/docs"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-
-	_ "github.com/blackhorseya/todo-app/docs"
 )
 
 // RegisterAPI register api group route
