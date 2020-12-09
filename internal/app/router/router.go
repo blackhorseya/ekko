@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/blackhorseya/todo-app/internal/app/apis"
+	"github.com/blackhorseya/todo-app/internal/app/config"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 )
@@ -9,10 +10,7 @@ import (
 var _ IRouter = (*Router)(nil)
 
 // ProviderSet is a router provider set
-var ProviderSet = wire.NewSet(
-	wire.Struct(new(Router), "*"),
-	wire.Bind(new(IRouter), new(*Router)),
-)
+var ProviderSet = wire.NewSet(NewRouter)
 
 // IRouter define a interface for router
 type IRouter interface {
@@ -22,7 +20,12 @@ type IRouter interface {
 
 // Router is a route management
 type Router struct {
+	C         *config.Config
 	HealthAPI *apis.Health
+}
+
+func NewRouter(c *config.Config, healthAPI *apis.Health) IRouter {
+	return &Router{C: c, HealthAPI: healthAPI}
 }
 
 // Register register route to Gin engine

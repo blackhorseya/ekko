@@ -16,22 +16,17 @@ import (
 // Injectors from wire.go:
 
 func CreateApp(cfg string) (*app.Injector, func(), error) {
-	biz := health.NewImpl()
-	apisHealth := &apis.Health{
-		HealthBiz: biz,
-	}
-	routerRouter := &router.Router{
-		HealthAPI: apisHealth,
-	}
-	engine := app.NewGinEngine(routerRouter)
 	configConfig, err := config.NewConfig(cfg)
 	if err != nil {
 		return nil, nil, err
 	}
-	injector := &app.Injector{
-		Engine: engine,
-		C:      configConfig,
+	biz := health.NewImpl()
+	apisHealth := &apis.Health{
+		HealthBiz: biz,
 	}
+	iRouter := router.NewRouter(configConfig, apisHealth)
+	engine := app.NewGinEngine(iRouter, configConfig)
+	injector := app.NewInjector(engine, configConfig)
 	return injector, func() {
 	}, nil
 }

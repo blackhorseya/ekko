@@ -7,10 +7,15 @@ import (
 )
 
 // InjectorSet inject Injector
-var InjectorSet = wire.NewSet(wire.Struct(new(Injector), "*"))
+var InjectorSet = wire.NewSet(NewInjector)
 
 // Injector define inject something
 type Injector struct {
 	Engine *gin.Engine
 	C      *config.Config
+}
+
+// NewInjector constructor of Injector
+func NewInjector(engine *gin.Engine, c *config.Config) *Injector {
+	return &Injector{Engine: engine, C: c}
 }
