@@ -10,7 +10,10 @@ import (
 var _ IRouter = (*Router)(nil)
 
 // ProviderSet is a router provider set
-var ProviderSet = wire.NewSet(NewRouter)
+var ProviderSet = wire.NewSet(
+	wire.Struct(new(Router), "*"),
+	wire.Bind(new(IRouter), new(*Router)),
+)
 
 // IRouter define a interface for router
 type IRouter interface {
@@ -22,11 +25,6 @@ type IRouter interface {
 type Router struct {
 	C         *config.Config
 	HealthAPI *apis.Health
-}
-
-// NewRouter constructor of Router
-func NewRouter(c *config.Config, healthAPI *apis.Health) IRouter {
-	return &Router{C: c, HealthAPI: healthAPI}
 }
 
 // Register register route to Gin engine

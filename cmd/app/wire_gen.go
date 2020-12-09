@@ -24,8 +24,11 @@ func CreateApp(cfg string) (*app.Injector, func(), error) {
 	apisHealth := &apis.Health{
 		HealthBiz: biz,
 	}
-	iRouter := router.NewRouter(configConfig, apisHealth)
-	engine := app.NewGinEngine(iRouter, configConfig)
+	routerRouter := &router.Router{
+		C:         configConfig,
+		HealthAPI: apisHealth,
+	}
+	engine := app.NewGinEngine(routerRouter, configConfig)
 	injector := app.NewInjector(engine, configConfig)
 	return injector, func() {
 	}, nil
