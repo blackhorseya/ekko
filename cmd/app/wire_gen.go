@@ -11,6 +11,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/app/biz/health"
 	"github.com/blackhorseya/todo-app/internal/app/router"
 	"github.com/blackhorseya/todo-app/internal/pkg/config"
+	"github.com/blackhorseya/todo-app/internal/pkg/databases"
 )
 
 // Injectors from wire.go:
@@ -20,7 +21,11 @@ func CreateApp(cfg string) (*app.Injector, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	biz := health.NewImpl()
+	client, err := databases.NewMongo(configConfig)
+	if err != nil {
+		return nil, nil, err
+	}
+	biz := health.NewImpl(client)
 	apisHealth := &apis.Health{
 		HealthBiz: biz,
 	}
