@@ -3,6 +3,7 @@ package health
 import "testing"
 
 func Test_impl_Readiness(t *testing.T) {
+	// todo: 2020-12-10|10:13|doggy|test it using testify and mock mongo.client
 	tests := []struct {
 		name    string
 		wantOk  bool
@@ -30,6 +31,7 @@ func Test_impl_Readiness(t *testing.T) {
 }
 
 func Test_impl_Liveness(t *testing.T) {
+	// todo: 2020-12-10|10:18|doggy|test it using testify and mock mongo.client
 	tests := []struct {
 		name    string
 		wantOk  bool
