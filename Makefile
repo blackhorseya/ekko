@@ -4,6 +4,9 @@ build-image:
 run-with-docker:
 	@docker run -it --rm -p 8080:8080 -v $(shell pwd)/configs/app.yaml:/app/configs/app.yaml todo:latest
 
+run-mongo:
+	@docker-compose -p todo -f $(shell pwd)/deployments/docker-compose.yml up -d
+
 prune-images:
 	@docker rmi `docker images --filter=label=app=todo -q`
 
