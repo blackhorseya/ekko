@@ -17,7 +17,7 @@ require (
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.7.0
 	github.com/ugorji/go v1.2.1 // indirect
-	go.mongodb.org/mongo-driver v1.4.4 // indirect
+	go.mongodb.org/mongo-driver v1.4.4
 	golang.org/x/crypto v0.0.0-20201208171446-5f87f3452ae9 // indirect
 	golang.org/x/net v0.0.0-20201207224615-747e23833adb // indirect
 	golang.org/x/sys v0.0.0-20201207223542-d4d67f95c62d // indirect
