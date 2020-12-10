@@ -11,3 +11,7 @@ swagger:
 log:
   format: ""
   level: "debug"
+
+db:
+  debug: true
+  url: "mongodb://root:changeme@localhost:27017/?connect=direct&authSource=admin"
