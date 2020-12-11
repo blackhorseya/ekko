@@ -1,6 +1,10 @@
 .PHONY: build-image
 build-image: gen-wire gen-swagger gen-pb
-	docker build -t todo:latest .
+	@docker build -t todo:latest .
+
+.PHONY: list-images
+list-images:
+	@docker images --filter=label=app=todo
 
 .PHONY: run-with-docker
 run-with-docker:
