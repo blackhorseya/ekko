@@ -12,10 +12,12 @@ type impl struct {
 	MongoClient *mongo.Client
 }
 
+// NewImpl is a constructor health of implement repository
 func NewImpl(mongoClient *mongo.Client) HealthRepo {
 	return &impl{MongoClient: mongoClient}
 }
 
+// Ping sends a ping command to verify that the client can connect to the deployment
 func (i *impl) Ping(timeout time.Duration) error {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
