@@ -1,9 +1,11 @@
 package health
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/blackhorseya/todo-app/internal/app/biz/health/repository/mocks"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -27,31 +29,39 @@ func (s *bizTestSuite) TearDownTest() {
 	s.healthRepo.AssertExpectations(s.T())
 }
 
-func Test_impl_Readiness(t *testing.T) {
-	// todo: 2020-12-10|10:13|doggy|test it using testify and mock mongo.client
+func (s *bizTestSuite) Test_impl_Readiness() {
 	tests := []struct {
-		name    string
-		wantOk  bool
-		wantErr bool
+		name     string
+		wantOk   bool
+		wantErr  string
+		mockFunc func()
 	}{
 		{
-			name:    "readiness then true nil",
+			name:    "no error then true nil",
 			wantOk:  true,
-			wantErr: false,
+			wantErr: "",
+			mockFunc: func() {
+				s.healthRepo.On("Ping", mock.AnythingOfType("time.Duration")).Return(nil).Once()
+			},
+		},
+		{
+			name:    "has error then false error",
+			wantOk:  false,
+			wantErr: "test error",
+			mockFunc: func() {
+				s.healthRepo.On("Ping", mock.AnythingOfType("time.Duration")).Return(
+					errors.New("test error")).Once()
+			},
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			i := &impl{}
-			gotOk, err := i.Readiness()
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Readiness() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if gotOk != tt.wantOk {
-				t.Errorf("Readiness() gotOk = %v, want %v", gotOk, tt.wantOk)
-			}
-		})
+		tt.mockFunc()
+		gotOk, err := s.healthBiz.Readiness()
+		if err != nil {
+			s.EqualErrorf(err, tt.wantErr, "Readiness() error = %v, wantErr %v", err, tt.wantErr)
+		}
+		s.EqualValuesf(tt.wantOk, gotOk, "Readiness() gotOk = %v, want %v", gotOk, tt.wantOk)
+		s.TearDownTest()
 	}
 }
 
@@ -81,4 +91,8 @@ func Test_impl_Liveness(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestHealthBiz(t *testing.T) {
+	suite.Run(t, new(bizTestSuite))
 }

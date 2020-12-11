@@ -1,6 +1,8 @@
 package health
 
 import (
+	"time"
+
 	"github.com/blackhorseya/todo-app/internal/app/biz/health/repository"
 )
 
@@ -15,7 +17,11 @@ func NewImpl(healthRepo repository.HealthRepo) Biz {
 
 // Readiness to handle application has been ready
 func (i *impl) Readiness() (ok bool, err error) {
-	// todo: 2020-12-11|19:08|doggy|implement me
+	err = i.HealthRepo.Ping(2 * time.Second)
+	if err != nil {
+		return false, err
+	}
+
 	return true, nil
 }
 
