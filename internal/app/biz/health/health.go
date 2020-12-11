@@ -1,6 +1,9 @@
 package health
 
-import "github.com/google/wire"
+import (
+	"github.com/blackhorseya/todo-app/internal/app/biz/health/repository"
+	"github.com/google/wire"
+)
 
 // Biz describe health business service function
 type Biz interface {
@@ -9,4 +12,4 @@ type Biz interface {
 }
 
 // ProviderSet is a health provider set
-var ProviderSet = wire.NewSet(NewImpl)
+var ProviderSet = wire.NewSet(NewImpl, repository.ProviderSet)

@@ -9,6 +9,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/app"
 	"github.com/blackhorseya/todo-app/internal/app/apis"
 	"github.com/blackhorseya/todo-app/internal/app/biz/health"
+	"github.com/blackhorseya/todo-app/internal/app/biz/health/repository"
 	"github.com/blackhorseya/todo-app/internal/app/router"
 	"github.com/blackhorseya/todo-app/internal/pkg/config"
 	"github.com/blackhorseya/todo-app/internal/pkg/databases"
@@ -25,7 +26,8 @@ func CreateApp(cfg string) (*app.Injector, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	biz := health.NewImpl(client)
+	healthRepo := repository.NewImpl(client)
+	biz := health.NewImpl(healthRepo)
 	apisHealth := &apis.Health{
 		HealthBiz: biz,
 	}
