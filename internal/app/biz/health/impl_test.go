@@ -65,31 +65,39 @@ func (s *bizTestSuite) Test_impl_Readiness() {
 	}
 }
 
-func Test_impl_Liveness(t *testing.T) {
-	// todo: 2020-12-10|10:18|doggy|test it using testify and mock mongo.client
+func (s *bizTestSuite) Test_impl_Liveness() {
 	tests := []struct {
-		name    string
-		wantOk  bool
-		wantErr bool
+		name     string
+		wantOk   bool
+		wantErr  string
+		mockFunc func()
 	}{
 		{
-			name:    "liveness then true nil",
+			name:    "no error then true nil",
 			wantOk:  true,
-			wantErr: false,
+			wantErr: "",
+			mockFunc: func() {
+				s.healthRepo.On("Ping", mock.AnythingOfType("time.Duration")).Return(nil).Once()
+			},
+		},
+		{
+			name:    "has error then false error",
+			wantOk:  false,
+			wantErr: "test error",
+			mockFunc: func() {
+				s.healthRepo.On("Ping", mock.AnythingOfType("time.Duration")).Return(
+					errors.New("test error")).Once()
+			},
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			i := &impl{}
-			gotOk, err := i.Liveness()
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Liveness() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if gotOk != tt.wantOk {
-				t.Errorf("Liveness() gotOk = %v, want %v", gotOk, tt.wantOk)
-			}
-		})
+		tt.mockFunc()
+		gotOk, err := s.healthBiz.Liveness()
+		if err != nil {
+			s.EqualErrorf(err, tt.wantErr, "Liveness() error = %v, wantErr %v", err, tt.wantErr)
+		}
+		s.EqualValuesf(tt.wantOk, gotOk, "Liveness() gotOk = %v, want %v", gotOk, tt.wantOk)
+		s.TearDownTest()
 	}
 }
 

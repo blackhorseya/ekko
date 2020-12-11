@@ -27,6 +27,10 @@ func (i *impl) Readiness() (ok bool, err error) {
 
 // Liveness to handle application was alive
 func (i *impl) Liveness() (ok bool, err error) {
-	// todo: 2020-12-10|10:17|doggy|implement me
+	err = i.HealthRepo.Ping(5 * time.Second)
+	if err != nil {
+		return false, err
+	}
+
 	return true, nil
 }
