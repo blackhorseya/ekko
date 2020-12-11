@@ -1,5 +1,5 @@
 .PHONY: build-image
-build-image:
+build-image: gen-wire gen-swagger gen-pb
 	docker build -t todo:latest .
 
 .PHONY: run-with-docker
