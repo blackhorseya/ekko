@@ -14,6 +14,12 @@ run-mongo:
 prune-images:
 	@docker rmi `docker images --filter=label=app=todo -q`
 
+# todo: 2020-12-11|20:32|doggy|implement me
+.PHONY: tag-image
+
+# todo: 2020-12-11|20:31|doggy|implement me
+.PHONY: push-image
+
 .PHONY: deploy-with-helm
 deploy-with-helm:
 	@helm --namespace sean-side-uat-ns upgrade --install todo ./deployments/helm --values ./deployments/helm/values.yaml
