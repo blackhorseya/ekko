@@ -10,6 +10,10 @@ run-mongo:
 prune-images:
 	@docker rmi `docker images --filter=label=app=todo -q`
 
+.PHOYN: deploy-with-helm
+deploy-with-helm:
+	@helm --namespace sean-side-uat-ns upgrade --install todo ./deployments/helm --values ./deployments/helm/values.yaml
+
 gen-pb:
 	@protoc --go_out=plugins=grpc:./internal/app/entities --proto_path=./internal/app/protos ./internal/app/protos/*.proto
 
