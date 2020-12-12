@@ -12,5 +12,14 @@ func (r *Router) RegisterAPI(app *gin.Engine) {
 	{
 		api.GET("/readiness", r.HealthAPI.Readiness)
 		api.GET("/liveness", r.HealthAPI.Liveness)
+
+		v1 := api.Group("/v1")
+		{
+			tasks := v1.Group("/tasks")
+			{
+				tasks.GET("/", r.TaskAPI.List)
+				tasks.POST("/", r.TaskAPI.Create)
+			}
+		}
 	}
 }
