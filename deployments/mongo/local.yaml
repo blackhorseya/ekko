@@ -184,7 +184,10 @@ configuration: ""
 ##   my_init_script.sh: |
 ##      #!/bin/bash
 ##      echo "Do something."
-initdbScripts: {}
+initdbScripts:
+  init.js: |
+    db = db.getSiblingDB('todo-db');
+    db.createCollection('tasks', { capped: false});
 
 ## Existing ConfigMap with custom init scripts
 ##
