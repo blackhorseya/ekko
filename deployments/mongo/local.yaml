@@ -47,7 +47,7 @@ image:
 
 ## Kubernetes Cluster Domain
 ##
-clusterDomain: cluster.local
+clusterDomain: minikube
 
 ## Use an alternate scheduler, e.g. "stork".
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
@@ -229,7 +229,7 @@ labels: {}
 ## Number of MongoDB replicas to deploy.
 ## Ignored when mongodb.architecture=standalone
 ##
-replicaCount: 1
+replicaCount: 2
 
 ## StrategyType for MongoDB statefulset
 ## It can be set to RollingUpdate or Recreate by default.
@@ -457,7 +457,7 @@ persistence:
 service:
   ## Service type
   ##
-  type: NodePort
+  type: LoadBalancer
   ## MongoDB service port
   ##
   port: 27017
@@ -467,7 +467,7 @@ service:
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: "30000"
+  nodePort: ""
   ## MongoDB service clusterIP IP
   ##
   # clusterIP: None
