@@ -1,6 +1,7 @@
 app_name = todo
 app_version = latest
 project_id = sean-side-uat
+namespace = sean-side-uat-ns
 
 .PHONY: build-image
 build-image: gen-wire gen-swagger gen-pb
@@ -21,11 +22,8 @@ run-with-docker:
 
 .PHONY: run-mongo
 run-mongo:
-	@docker-compose -p $(app_name) -f $(shell pwd)/deployments/docker-compose.yml up -d
-
-.PHONY: stop-mongo
-stop-mongo:
-	@docker-compose -p $(app_name) down -v
+	@helm --namespace $(namespace) upgrade --install $(app_name)-db bitnami/mongodb \
+	--values ./deployments/mongo/local.yaml
 
 .PHONY: prune-images
 prune-images:
@@ -41,7 +39,7 @@ push-image: tag-image
 
 .PHONY: deploy-with-helm
 deploy-with-helm:
-	@helm --namespace sean-side-uat-ns \
+	@helm --namespace $(namespace) \
 	upgrade --install $(app_name) ./deployments/helm \
 	--values ./deployments/helm/values.yaml
 
