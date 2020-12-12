@@ -20,10 +20,12 @@ paths:
       - application/json
       responses:
         "200":
-          description: ok
+          description: success
           schema:
             type: string
       summary: Liveness
+      tags:
+      - Health
   /readiness:
     get:
       consumes:
@@ -33,8 +35,50 @@ paths:
       - application/json
       responses:
         "200":
-          description: ok
+          description: success
           schema:
             type: string
       summary: Readiness
+      tags:
+      - Health
+  /v1/tasks:
+    get:
+      consumes:
+      - application/json
+      description: list all tasks
+      parameters:
+      - default: 1
+        description: page
+        in: query
+        name: page
+        type: integer
+      - default: 3
+        description: size of page
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+      summary: List
+      tags:
+      - Task
+    post:
+      consumes:
+      - application/json
+      description: create a task
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+      summary: Create
+      tags:
+      - Task
 swagger: "2.0"

@@ -41,10 +41,13 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Health"
+                ],
                 "summary": "Liveness",
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "success",
                         "schema": {
                             "type": "string"
                         }
@@ -61,10 +64,73 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Health"
+                ],
                 "summary": "Readiness",
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/tasks": {
+            "get": {
+                "description": "list all tasks",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "List",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 3,
+                        "description": "size of page",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create a task",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Create",
+                "responses": {
+                    "200": {
+                        "description": "success",
                         "schema": {
                             "type": "string"
                         }
