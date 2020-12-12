@@ -25,6 +25,7 @@ type IRouter interface {
 type Router struct {
 	C         *config.Config
 	HealthAPI *apis.Health
+	TaskAPI   *apis.Task
 }
 
 // Register register route to Gin engine
