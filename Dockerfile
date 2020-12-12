@@ -1,8 +1,6 @@
 # build stage
 FROM golang:alpine AS builder
 
-LABEL app="todo"
-
 WORKDIR /src
 
 COPY go.mod ./
@@ -16,9 +14,8 @@ RUN go build -o app ./cmd/app
 # final stage
 FROM alpine:3
 
-LABEL maintainer="blackhorseya"
-LABEL mail="blackhorseya@gmail.com"
-LABEL app="todo"
+LABEL maintainer.name="blackhorseya"
+LABEL maintainer.email="blackhorseya@gmail.com"
 
 WORKDIR /app
 

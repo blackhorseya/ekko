@@ -4,11 +4,14 @@ project_id = sean-side-uat
 
 .PHONY: build-image
 build-image: gen-wire gen-swagger gen-pb
-	@docker build -t $(app_name):$(app_version) .
+	@docker build -t $(app_name):$(app_version) \
+	--label "app.name=$(app_name)" \
+	--label "app.version=$(app_version)" \
+	.
 
 .PHONY: list-images
 list-images:
-	@docker images --filter=label=app=$(app_name)
+	@docker images --filter=label=app.name=$(app_name)
 
 .PHONY: run-with-docker
 run-with-docker:
@@ -20,7 +23,7 @@ run-mongo:
 
 .PHONY: prune-images
 prune-images:
-	@docker rmi `docker images --filter=label=app=$(app_name) -q`
+	@docker rmi -f `docker images --filter=label=app.name=$(app_name) -q`
 
 .PHONY: tag-image
 tag-image: build-image
