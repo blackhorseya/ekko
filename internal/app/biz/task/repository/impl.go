@@ -2,9 +2,12 @@ package repository
 
 import (
 	"context"
+	"time"
 
 	"github.com/blackhorseya/todo-app/internal/app/entities"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type impl struct {
@@ -18,8 +21,31 @@ func NewImpl(mongoClient *mongo.Client) TaskRepo {
 
 // QueryTaskList handle query task list by limit and offset
 func (i *impl) QueryTaskList(limit, offset int32) (tasks []*entities.Task, err error) {
-	// todo: 2020-12-12|20:05|doggy|implement me
-	panic("implement me")
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	coll := i.MongoClient.Database("todo-db").Collection("tasks")
+	cur, err := coll.Find(ctx, bson.D{}, options.Find().SetLimit(int64(limit)).SetSkip(int64(offset)))
+	if err != nil {
+		return nil, err
+	}
+	defer cur.Close(ctx)
+
+	for cur.Next(ctx) {
+		var task entities.Task
+		err := cur.Decode(&task)
+		if err != nil {
+			return nil, err
+		}
+
+		tasks = append(tasks, &task)
+	}
+
+	if err = cur.Err(); err != nil {
+		return nil, err
+	}
+
+	return tasks, nil
 }
 
 // CreateTask handle create a task

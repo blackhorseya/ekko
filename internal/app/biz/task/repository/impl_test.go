@@ -59,6 +59,38 @@ func (s *repoTestSuite) Test_impl_CreateTask() {
 	}
 }
 
+func (s *repoTestSuite) Test_impl_QueryTaskList() {
+	type args struct {
+		limit  int32
+		offset int32
+	}
+	tests := []struct {
+		name      string
+		args      args
+		wantTasks []*entities.Task
+		wantErr   string
+	}{
+		{
+			name: "3 0 then []task nil",
+			args: args{3, 0},
+			wantTasks: []*entities.Task{
+				{Title: "test"},
+				{Title: "test"},
+				{Title: "test"},
+			},
+			wantErr: "",
+		},
+	}
+	for _, tt := range tests {
+		gotTasks, err := s.taskRepo.QueryTaskList(tt.args.limit, tt.args.offset)
+		if err != nil {
+			s.EqualErrorf(err, tt.wantErr, "QueryTaskList() error = %v, wantErr %v", err, tt.wantErr)
+			return
+		}
+		s.EqualValuesf(tt.wantTasks, gotTasks, "QueryTaskList() gotTasks = %v, want %v", gotTasks, tt.wantTasks)
+	}
+}
+
 func TestTaskRepo(t *testing.T) {
 	suite.Run(t, new(repoTestSuite))
 }
