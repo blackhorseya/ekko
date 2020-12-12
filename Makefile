@@ -15,7 +15,9 @@ list-images:
 
 .PHONY: run-with-docker
 run-with-docker:
-	@docker run -it --rm -p 8080:8080 -v $(shell pwd)/configs/app.yaml:/app/configs/app.yaml $(app_name):$(app_version)
+	@docker run -it --rm -p 8080:8080 \
+	-v $(shell pwd)/configs/app.yaml:/app/configs/app.yaml \
+	$(app_name):$(app_version)
 
 .PHONY: run-mongo
 run-mongo:
@@ -39,11 +41,15 @@ push-image: tag-image
 
 .PHONY: deploy-with-helm
 deploy-with-helm:
-	@helm --namespace sean-side-uat-ns upgrade --install $(app_name) ./deployments/helm --values ./deployments/helm/values.yaml
+	@helm --namespace sean-side-uat-ns \
+	upgrade --install $(app_name) ./deployments/helm \
+	--values ./deployments/helm/values.yaml
 
 .PHONY: gen-pb
 gen-pb:
-	@protoc --go_out=plugins=grpc:./internal/app/entities --proto_path=./internal/app/protos ./internal/app/protos/*.proto
+	@protoc --go_out=plugins=grpc:./internal/app/entities \
+	--proto_path=./internal/app/protos \
+	./internal/app/protos/*.proto
 
 .PHONY: gen-wire
 gen-wire:
