@@ -19,9 +19,10 @@ type Health struct {
 // Readiness to know when an application is ready to start accepting traffic
 // @Summary Readiness
 // @Description Show application was ready to start accepting traffic
+// @Tags Health
 // @Accept application/json
 // @Produce application/json
-// @Success 200 {string} string "ok"
+// @Success 200 {string} string "success"
 // @Router /readiness [get]
 func (h *Health) Readiness(ctx *gin.Context) {
 	var (
@@ -46,9 +47,10 @@ func (h *Health) Readiness(ctx *gin.Context) {
 // Liveness to know when to restart an application
 // @Summary Liveness
 // @Description to know when to restart an application
+// @Tags Health
 // @Accept application/json
 // @Produce application/json
-// @Success 200 {string} string "ok"
+// @Success 200 {string} string "success"
 // @Router /liveness [get]
 func (h *Health) Liveness(ctx *gin.Context) {
 	var (
