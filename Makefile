@@ -1,32 +1,38 @@
+app_name = todo
+app_version = latest
+project_id = sean-side-uat
+
 .PHONY: build-image
 build-image: gen-wire gen-swagger gen-pb
-	@docker build -t todo:latest .
+	@docker build -t $(app_name):$(app_version) .
 
 .PHONY: list-images
 list-images:
-	@docker images --filter=label=app=todo
+	@docker images --filter=label=app=$(app_name)
 
 .PHONY: run-with-docker
 run-with-docker:
-	@docker run -it --rm -p 8080:8080 -v $(shell pwd)/configs/app.yaml:/app/configs/app.yaml todo:latest
+	@docker run -it --rm -p 8080:8080 -v $(shell pwd)/configs/app.yaml:/app/configs/app.yaml $(app_name):$(app_version)
 
 .PHONY: run-mongo
 run-mongo:
-	@docker-compose -p todo -f $(shell pwd)/deployments/docker-compose.yml up -d
+	@docker-compose -p $(app_name) -f $(shell pwd)/deployments/docker-compose.yml up -d
 
 .PHONY: prune-images
 prune-images:
-	@docker rmi `docker images --filter=label=app=todo -q`
+	@docker rmi `docker images --filter=label=app=$(app_name) -q`
 
-# todo: 2020-12-11|20:32|doggy|implement me
 .PHONY: tag-image
+tag-image: build-image
+	@docker tag $(app_name):$(app_version) gcr.io/$(project_id)/$(app_name):$(app_version)
 
-# todo: 2020-12-11|20:31|doggy|implement me
 .PHONY: push-image
+push-image: tag-image
+	@docker push gcr.io/$(project_id)/$(app_name):$(app_version)
 
 .PHONY: deploy-with-helm
 deploy-with-helm:
-	@helm --namespace sean-side-uat-ns upgrade --install todo ./deployments/helm --values ./deployments/helm/values.yaml
+	@helm --namespace sean-side-uat-ns upgrade --install $(app_name) ./deployments/helm --values ./deployments/helm/values.yaml
 
 .PHONY: gen-pb
 gen-pb:
