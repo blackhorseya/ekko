@@ -21,6 +21,10 @@ run-with-docker:
 run-mongo:
 	@docker-compose -p $(app_name) -f $(shell pwd)/deployments/docker-compose.yml up -d
 
+.PHONY: stop-mongo
+stop-mongo:
+	@docker-compose -p $(app_name) down -v
+
 .PHONY: prune-images
 prune-images:
 	@docker rmi -f `docker images --filter=label=app.name=$(app_name) -q`
