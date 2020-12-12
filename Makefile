@@ -43,6 +43,9 @@ deploy-with-helm:
 	upgrade --install $(app_name) ./deployments/helm \
 	--values ./deployments/helm/values.yaml
 
+.PHONY: gen
+gen: gen-pb gen-swagger gen-wire
+
 .PHONY: gen-pb
 gen-pb:
 	@protoc --go_out=plugins=grpc:./internal/app/entities \
