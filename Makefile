@@ -4,7 +4,7 @@ project_id = sean-side-uat
 namespace = sean-side-uat-ns
 
 .PHONY: build-image
-build-image: gen-wire gen-swagger gen-pb
+build-image:
 	@docker build -t $(app_name):$(app_version) \
 	--label "app.name=$(app_name)" \
 	--label "app.version=$(app_version)" \
@@ -66,10 +66,10 @@ test-with-coverage:
 
 .PHONY: lint
 lint:
-	@golint ./...
+	@curl -XPOST 'https://goreportcard.com/checks' --data 'repo=github.com/blackhorseya/todo-app'
 
 .PHONY: install-mod
-install-mod:
+download-mod:
 	@go mod download
 
 .PHONY: install-tools

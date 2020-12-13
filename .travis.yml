@@ -1,37 +1,43 @@
 language: go
 
-go:
-  - "1.15"
-
 cache:
   directories:
     - $HOME/.cache/go-build
     - $HOME/gopath/pkg/mod
 
+go:
+  - "1.15"
+
+services:
+  - docker
+
 env:
-  - GO111MODULE=on
-  - CODECOV_TOKEN=aa0a457a-579e-43f3-8126-f0137aa9e040
-
-before_install:
-  - make install-tools
-  - make install-mod
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  global:
+    - GO111MODULE=on
+    - CODECOV_TOKEN=aa0a457a-579e-43f3-8126-f0137aa9e040
 
 stages:
-  - test
-  - static code analytic
-  - name: deploy
-    if: branch = release
+  - Tests
+  - Static Code Analytic
+  - name: Deploy
+    if: branch =~ /^release-\d+\.\d+$/
 
 jobs:
   include:
-    - stage: test
-      name: "Unit Tests"
+    - stage: "Tests"
+      name: "Unit Test"
       script:
         - make test-with-coverage
-    - stage: static code analytic
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
+    - name: "Integration Test"
+      script:
+        - echo "execute integration test..."
+    - stage: "Static Code Analytic"
       name: "Lint"
       script:
         - make lint
+    - stage: "Deploy"
+      name: "Build Docker Image"
+      script:
+        - make build-image
