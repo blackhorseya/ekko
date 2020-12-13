@@ -3,14 +3,17 @@ language: go
 go:
   - "1.15"
 
+cache:
+  directories:
+    - $HOME/.cache/go-build
+    - $HOME/gopath/pkg/mod
+
 env:
   - GO111MODULE=on
   - CODECOV_TOKEN=aa0a457a-579e-43f3-8126-f0137aa9e040
 
 before_install:
   - make install-tools
-
-install:
   - make install-mod
 
 script:
