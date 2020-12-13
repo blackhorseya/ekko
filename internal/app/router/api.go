@@ -17,8 +17,8 @@ func (r *Router) RegisterAPI(app *gin.Engine) {
 		{
 			tasks := v1.Group("/tasks")
 			{
-				tasks.GET("/", r.TaskAPI.List)
-				tasks.POST("/", r.TaskAPI.Create)
+				tasks.GET("/", r.TaskHandler.List)
+				tasks.POST("/", r.TaskHandler.Create)
 			}
 		}
 	}
