@@ -2,6 +2,7 @@ package task
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/blackhorseya/todo-app/internal/app/biz/task"
 	"github.com/gin-gonic/gin"
@@ -27,11 +28,21 @@ func NewImpl(taskBiz task.Biz) IHandler {
 // @Success 200 {string} string "success"
 // @Router /v1/tasks [get]
 func (i *impl) List(c *gin.Context) {
-	// todo: 2020-12-12|21:58|doggy|implement me
-	page := c.DefaultQuery("page", "1")
-	size := c.DefaultQuery("size", "3")
+	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
+	if err != nil {
+		_ = c.AbortWithError(http.StatusBadRequest, err).SetType(gin.ErrorTypePublic)
+	}
+	size, err := strconv.Atoi(c.DefaultQuery("size", "3"))
+	if err != nil {
+		_ = c.AbortWithError(http.StatusBadRequest, err).SetType(gin.ErrorTypePublic)
+	}
 
-	c.String(http.StatusOK, "page: %s, size: %s", page, size)
+	tasks, _ := i.TaskBiz.List(int32(page), int32(size))
+	if len(tasks) == 0 {
+		c.String(http.StatusNoContent, "")
+	}
+
+	c.JSON(http.StatusOK, tasks)
 }
 
 // Create a task
