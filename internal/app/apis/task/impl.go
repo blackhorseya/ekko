@@ -70,7 +70,7 @@ func (i *impl) Create(c *gin.Context) {
 		_ = c.AbortWithError(http.StatusBadRequest, errors.New("missing new task")).SetType(gin.ErrorTypePublic)
 	}
 
-	ret, err := i.TaskBiz.Create(&entities.Task{Title: "test"})
+	ret, err := i.TaskBiz.Create(newTask)
 	if err != nil {
 		_ = c.AbortWithError(http.StatusInternalServerError, err).SetType(gin.ErrorTypePrivate)
 	}
