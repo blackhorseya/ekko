@@ -109,7 +109,22 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "success",
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.Task"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "type": "string"
                         }
@@ -128,13 +143,54 @@ var doc = `{
                     "Task"
                 ],
                 "summary": "Create",
+                "parameters": [
+                    {
+                        "description": "new task",
+                        "name": "newTask",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Task"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "success",
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Task"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "type": "string"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "entities.Task": {
+            "type": "object",
+            "properties": {
+                "completed": {
+                    "type": "boolean"
+                },
+                "createAt": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
                 }
             }
         }

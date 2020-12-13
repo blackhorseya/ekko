@@ -1,4 +1,16 @@
 basePath: /api
+definitions:
+  entities.Task:
+    properties:
+      completed:
+        type: boolean
+      createAt:
+        type: integer
+      id:
+        type: string
+      title:
+        type: string
+    type: object
 info:
   contact:
     email: blackhorseya@gmail.com
@@ -61,7 +73,17 @@ paths:
       - application/json
       responses:
         "200":
-          description: success
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Task'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
           schema:
             type: string
       summary: List
@@ -71,11 +93,25 @@ paths:
       consumes:
       - application/json
       description: create a task
+      parameters:
+      - description: new task
+        in: body
+        name: newTask
+        schema:
+          $ref: '#/definitions/entities.Task'
       produces:
       - application/json
       responses:
         "200":
-          description: success
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Task'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
           schema:
             type: string
       summary: Create

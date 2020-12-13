@@ -28,7 +28,9 @@ func NewImpl(taskBiz task.Biz) IHandler {
 // @Produce application/json
 // @Param page query integer false "page" default(1)
 // @Param size query integer false "size of page" default(3)
-// @Success 200 {string} string "success"
+// @Success 200 {array} entities.Task
+// @Failure 400 {object} string
+// @Failure 500 {object} string
 // @Router /v1/tasks [get]
 func (i *impl) List(c *gin.Context) {
 	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
@@ -54,7 +56,10 @@ func (i *impl) List(c *gin.Context) {
 // @Tags Task
 // @Accept application/json
 // @Produce application/json
-// @Success 200 {string} string "success"
+// @Param newTask body entities.Task false "new task"
+// @Success 200 {object} entities.Task
+// @Failure 400 {object} string
+// @Failure 500 {object} string
 // @Router /v1/tasks [post]
 func (i *impl) Create(c *gin.Context) {
 	var newTask *entities.Task
