@@ -16,9 +16,22 @@ before_install:
   - make install-tools
   - make install-mod
 
-script:
-  - make lint
-  - make test-with-coverage
-
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+stages:
+  - test
+  - static code analytic
+  - name: deploy
+    if: branch = release
+
+jobs:
+  include:
+    - stage: test
+      name: "Unit Tests"
+      script:
+        - make test-with-coverage
+    - stage: static code analytic
+      name: "Lint"
+      script:
+        - make lint
