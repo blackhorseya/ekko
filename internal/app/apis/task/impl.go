@@ -1,11 +1,14 @@
 package task
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
 	"github.com/blackhorseya/todo-app/internal/app/biz/task"
+	"github.com/blackhorseya/todo-app/internal/app/entities"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 type impl struct {
@@ -54,6 +57,18 @@ func (i *impl) List(c *gin.Context) {
 // @Success 200 {string} string "success"
 // @Router /v1/tasks [post]
 func (i *impl) Create(c *gin.Context) {
-	// todo: 2020-12-12|21:58|doggy|implement me
-	c.String(http.StatusCreated, "ok")
+	var newTask *entities.Task
+	if err := c.ShouldBindBodyWith(&newTask, binding.JSON); err != nil {
+		_ = c.AbortWithError(http.StatusInternalServerError, err).SetType(gin.ErrorTypeBind)
+	}
+	if newTask == nil {
+		_ = c.AbortWithError(http.StatusBadRequest, errors.New("missing new task")).SetType(gin.ErrorTypePublic)
+	}
+
+	ret, err := i.TaskBiz.Create(&entities.Task{Title: "test"})
+	if err != nil {
+		_ = c.AbortWithError(http.StatusInternalServerError, err).SetType(gin.ErrorTypePrivate)
+	}
+
+	c.JSON(http.StatusCreated, ret)
 }

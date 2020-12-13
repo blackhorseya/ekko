@@ -1,7 +1,9 @@
 package task
 
 import (
+	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -42,7 +44,6 @@ func (s *handlerTestSuite) Test_impl_List() {
 	s.r.GET("/api/v1/tasks", s.taskHandler.List)
 
 	type args struct {
-		c    *gin.Context
 		page string
 		size string
 	}
@@ -116,6 +117,79 @@ func (s *handlerTestSuite) Test_impl_List() {
 		s.EqualValuesf(tt.wantCode, got.StatusCode, "List() code = [%v], wantCode = [%v]", got.StatusCode, tt.wantCode)
 		if tt.wantTasks != nil {
 			s.EqualValuesf(tt.wantTasks, gotTasks, "List() tasks = [%v], wantTasks = [%v]", gotTasks, tt.wantTasks)
+		}
+		s.TearDownTest()
+	}
+}
+
+func (s *handlerTestSuite) Test_impl_Create() {
+	s.r.POST("/api/v1/tasks", s.taskHandler.Create)
+
+	type args struct {
+		newTask *entities.Task
+	}
+	tests := []struct {
+		name     string
+		args     args
+		mockFunc func()
+		wantCode int
+		wantTask *entities.Task
+	}{
+		{
+			name: "create newTask then 201 task",
+			args: args{&entities.Task{Title: "test"}},
+			mockFunc: func() {
+				s.taskBiz.On("Create", mock.AnythingOfType("*entities.Task")).Return(
+					&entities.Task{Title: "test"}, nil).Once()
+			},
+			wantCode: http.StatusCreated,
+			wantTask: &entities.Task{Title: "test"},
+		},
+		{
+			name: "create nil then 400 nil",
+			args: args{nil},
+			mockFunc: func() {
+				s.taskBiz.On("Create", mock.AnythingOfType("*entities.Task")).Return(
+					nil, nil).Once()
+			},
+			wantCode: http.StatusBadRequest,
+			wantTask: nil,
+		},
+		{
+			name:     "create newTask then 500 nil error",
+			args:     args{&entities.Task{Title: "test"}},
+			mockFunc: func() {
+				s.taskBiz.On("Create", mock.AnythingOfType("*entities.Task")).Return(
+					nil, errors.New("test error")).Once()
+			},
+			wantCode: http.StatusInternalServerError,
+			wantTask: nil,
+		},
+	}
+	for _, tt := range tests {
+		tt.mockFunc()
+		uri := fmt.Sprintf("/api/v1/tasks")
+		newTask, _ := json.Marshal(tt.args.newTask)
+		req := httptest.NewRequest(http.MethodPost, uri, bytes.NewBuffer(newTask))
+		w := httptest.NewRecorder()
+
+		s.r.ServeHTTP(w, req)
+
+		got := w.Result()
+		defer func() {
+			_ = got.Body.Close()
+		}()
+
+		body, _ := ioutil.ReadAll(got.Body)
+		var gotTask *entities.Task
+		err := json.Unmarshal(body, &gotTask)
+		if err != nil {
+			s.Errorf(err, "unmarshal response body")
+		}
+
+		s.EqualValuesf(tt.wantCode, got.StatusCode, "Create() code = [%v], wantCode = [%v]", got.StatusCode, tt.wantCode)
+		if tt.wantTask != nil {
+			s.EqualValuesf(tt.wantTask, gotTask, "Create() task = [%v], wantTask = [%v]", gotTask, tt.wantTask)
 		}
 		s.TearDownTest()
 	}
