@@ -7,7 +7,7 @@ package main
 
 import (
 	"github.com/blackhorseya/todo-app/internal/app"
-	"github.com/blackhorseya/todo-app/internal/app/apis"
+	health2 "github.com/blackhorseya/todo-app/internal/app/apis/health"
 	task2 "github.com/blackhorseya/todo-app/internal/app/apis/task"
 	"github.com/blackhorseya/todo-app/internal/app/biz/health"
 	"github.com/blackhorseya/todo-app/internal/app/biz/health/repository"
@@ -31,16 +31,14 @@ func CreateApp(cfg string) (*app.Injector, func(), error) {
 	}
 	healthRepo := repository.NewImpl(client)
 	biz := health.NewImpl(healthRepo)
-	apisHealth := &apis.Health{
-		HealthBiz: biz,
-	}
+	iHandler := health2.NewImpl(biz)
 	taskRepo := repository2.NewImpl(client)
 	taskBiz := task.NewImpl(taskRepo)
-	iHandler := task2.NewImpl(taskBiz)
+	taskIHandler := task2.NewImpl(taskBiz)
 	routerRouter := &router.Router{
-		C:           configConfig,
-		HealthAPI:   apisHealth,
-		TaskHandler: iHandler,
+		C:             configConfig,
+		HealthHandler: iHandler,
+		TaskHandler:   taskIHandler,
 	}
 	engine := app.NewGinEngine(routerRouter, configConfig)
 	injector := app.NewInjector(engine, configConfig)

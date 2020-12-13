@@ -1,19 +1,19 @@
-package apis
+package health
 
 import (
 	"net/http"
 
 	"github.com/blackhorseya/todo-app/internal/app/biz/health"
 	"github.com/gin-gonic/gin"
-	"github.com/google/wire"
 )
 
-// HealthSet is a Health provider set
-var HealthSet = wire.NewSet(wire.Struct(new(Health), "*"))
-
-// Health define health apis
-type Health struct {
+type impl struct {
 	HealthBiz health.Biz
+}
+
+// NewImpl is a constructor of implement health api handler
+func NewImpl(healthBiz health.Biz) IHandler {
+	return &impl{HealthBiz: healthBiz}
 }
 
 // Readiness to know when an application is ready to start accepting traffic
@@ -24,7 +24,7 @@ type Health struct {
 // @Produce application/json
 // @Success 200 {string} string "success"
 // @Router /readiness [get]
-func (h *Health) Readiness(ctx *gin.Context) {
+func (h *impl) Readiness(ctx *gin.Context) {
 	var (
 		code    = http.StatusOK
 		status  = "ok"
@@ -52,7 +52,7 @@ func (h *Health) Readiness(ctx *gin.Context) {
 // @Produce application/json
 // @Success 200 {string} string "success"
 // @Router /liveness [get]
-func (h *Health) Liveness(ctx *gin.Context) {
+func (h *impl) Liveness(ctx *gin.Context) {
 	var (
 		code    = http.StatusOK
 		status  = "ok"

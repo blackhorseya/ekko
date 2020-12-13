@@ -10,8 +10,8 @@ import (
 func (r *Router) RegisterAPI(app *gin.Engine) {
 	api := app.Group("/api")
 	{
-		api.GET("/readiness", r.HealthAPI.Readiness)
-		api.GET("/liveness", r.HealthAPI.Liveness)
+		api.GET("/readiness", r.HealthHandler.Readiness)
+		api.GET("/liveness", r.HealthHandler.Liveness)
 
 		v1 := api.Group("/v1")
 		{

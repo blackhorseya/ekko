@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/blackhorseya/todo-app/internal/app/apis"
+	"github.com/blackhorseya/todo-app/internal/app/apis/health"
 	"github.com/blackhorseya/todo-app/internal/app/apis/task"
 	"github.com/blackhorseya/todo-app/internal/pkg/config"
 	"github.com/gin-gonic/gin"
@@ -24,9 +24,9 @@ type IRouter interface {
 
 // Router is a route management
 type Router struct {
-	C           *config.Config
-	HealthAPI   *apis.Health
-	TaskHandler task.IHandler
+	C             *config.Config
+	HealthHandler health.IHandler
+	TaskHandler   task.IHandler
 }
 
 // Register register route to Gin engine
