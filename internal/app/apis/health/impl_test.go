@@ -1,12 +1,15 @@
 package health
 
 import (
+	"encoding/json"
 	"errors"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/blackhorseya/todo-app/internal/app/biz/health/mocks"
+	"github.com/blackhorseya/todo-app/internal/app/entities"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/suite"
 )
@@ -45,6 +48,7 @@ func (s *handlerTestSuite) Test_impl_Readiness() {
 		args     args
 		mockFunc func()
 		wantCode int
+		wantRes  *entities.Response
 	}{
 		{
 			name: "readiness then 200 ok",
@@ -53,6 +57,10 @@ func (s *handlerTestSuite) Test_impl_Readiness() {
 				s.biz.On("Readiness").Return(true, nil).Once()
 			},
 			wantCode: http.StatusOK,
+			wantRes: &entities.Response{
+				Ok:  true,
+				Msg: "application has been ready",
+			},
 		},
 		{
 			name: "readiness then 500 fail",
@@ -62,6 +70,10 @@ func (s *handlerTestSuite) Test_impl_Readiness() {
 					false, errors.New("test error")).Once()
 			},
 			wantCode: http.StatusInternalServerError,
+			wantRes: &entities.Response{
+				Ok:  false,
+				Msg: "application has failed",
+			},
 		},
 	}
 	for _, tt := range tests {
@@ -75,7 +87,15 @@ func (s *handlerTestSuite) Test_impl_Readiness() {
 		got := w.Result()
 		defer got.Body.Close()
 
+		body, _ := ioutil.ReadAll(got.Body)
+		var gotRes *entities.Response
+		err := json.Unmarshal(body, &gotRes)
+		if err != nil {
+			s.Errorf(err, "unmarshal response body")
+		}
+
 		s.EqualValuesf(tt.wantCode, got.StatusCode, "Readiness() code = [%v], wantCode = [%v]", got.StatusCode, tt.wantCode)
+		s.EqualValuesf(tt.wantRes, gotRes, "Readiness() res = [%v], wantRes = [%v]", gotRes, tt.wantRes)
 
 		s.TearDownTest()
 	}
@@ -91,6 +111,7 @@ func (s *handlerTestSuite) Test_impl_Liveness() {
 		args     args
 		mockFunc func()
 		wantCode int
+		wantRes  *entities.Response
 	}{
 		{
 			name: "liveness then 200 ok",
@@ -99,6 +120,10 @@ func (s *handlerTestSuite) Test_impl_Liveness() {
 				s.biz.On("Liveness").Return(true, nil).Once()
 			},
 			wantCode: http.StatusOK,
+			wantRes: &entities.Response{
+				Ok:  true,
+				Msg: "alive",
+			},
 		},
 		{
 			name: "liveness then 500 fail",
@@ -108,6 +133,10 @@ func (s *handlerTestSuite) Test_impl_Liveness() {
 					false, errors.New("test error")).Once()
 			},
 			wantCode: http.StatusInternalServerError,
+			wantRes: &entities.Response{
+				Ok:  false,
+				Msg: "dead",
+			},
 		},
 	}
 	for _, tt := range tests {
@@ -121,12 +150,20 @@ func (s *handlerTestSuite) Test_impl_Liveness() {
 		got := w.Result()
 		defer got.Body.Close()
 
+		body, _ := ioutil.ReadAll(got.Body)
+		var gotRes *entities.Response
+		err := json.Unmarshal(body, &gotRes)
+		if err != nil {
+			s.Errorf(err, "unmarshal response body")
+		}
+
 		s.EqualValuesf(tt.wantCode, got.StatusCode, "Liveness() code = [%v], wantCode = [%v]", got.StatusCode, tt.wantCode)
+		s.EqualValuesf(tt.wantRes, gotRes, "Liveness() res = [%v], wantRes = [%v]", gotRes, tt.wantRes)
 
 		s.TearDownTest()
 	}
 }
 
-func TestTaskHandler(t *testing.T) {
+func TestHealthHandler(t *testing.T) {
 	suite.Run(t, new(handlerTestSuite))
 }
