@@ -17,14 +17,14 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type handlerTestSuite struct {
+type taskTestSuite struct {
 	suite.Suite
 	r           *gin.Engine
 	taskBiz     *mocks.Biz
 	taskHandler IHandler
 }
 
-func (s *handlerTestSuite) SetupTest() {
+func (s *taskTestSuite) SetupTest() {
 	gin.SetMode(gin.TestMode)
 	s.r = gin.New()
 
@@ -36,11 +36,11 @@ func (s *handlerTestSuite) SetupTest() {
 	s.taskHandler = handler
 }
 
-func (s *handlerTestSuite) TearDownTest() {
+func (s *taskTestSuite) TearDownTest() {
 	s.taskBiz.AssertExpectations(s.T())
 }
 
-func (s *handlerTestSuite) Test_impl_List() {
+func (s *taskTestSuite) Test_impl_List() {
 	s.r.GET("/api/v1/tasks", s.taskHandler.List)
 
 	type args struct {
@@ -122,7 +122,7 @@ func (s *handlerTestSuite) Test_impl_List() {
 	}
 }
 
-func (s *handlerTestSuite) Test_impl_Create() {
+func (s *taskTestSuite) Test_impl_Create() {
 	s.r.POST("/api/v1/tasks", s.taskHandler.Create)
 
 	type args struct {
@@ -196,5 +196,5 @@ func (s *handlerTestSuite) Test_impl_Create() {
 }
 
 func TestTaskHandler(t *testing.T) {
-	suite.Run(t, new(handlerTestSuite))
+	suite.Run(t, new(taskTestSuite))
 }

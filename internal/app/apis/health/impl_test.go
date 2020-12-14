@@ -14,14 +14,14 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type handlerTestSuite struct {
+type healthTestSuite struct {
 	suite.Suite
 	r       *gin.Engine
 	biz     *mocks.Biz
 	handler IHandler
 }
 
-func (s *handlerTestSuite) SetupTest() {
+func (s *healthTestSuite) SetupTest() {
 	gin.SetMode(gin.TestMode)
 
 	s.r = gin.New()
@@ -34,11 +34,11 @@ func (s *handlerTestSuite) SetupTest() {
 	s.handler = handler
 }
 
-func (s *handlerTestSuite) TearDownTest() {
+func (s *healthTestSuite) TearDownTest() {
 	s.biz.AssertExpectations(s.T())
 }
 
-func (s *handlerTestSuite) Test_impl_Readiness() {
+func (s *healthTestSuite) Test_impl_Readiness() {
 	s.r.GET("/api/readiness", s.handler.Readiness)
 
 	type args struct {
@@ -101,7 +101,7 @@ func (s *handlerTestSuite) Test_impl_Readiness() {
 	}
 }
 
-func (s *handlerTestSuite) Test_impl_Liveness() {
+func (s *healthTestSuite) Test_impl_Liveness() {
 	s.r.GET("/api/liveness", s.handler.Liveness)
 
 	type args struct {
@@ -165,5 +165,5 @@ func (s *handlerTestSuite) Test_impl_Liveness() {
 }
 
 func TestHealthHandler(t *testing.T) {
-	suite.Run(t, new(handlerTestSuite))
+	suite.Run(t, new(healthTestSuite))
 }
