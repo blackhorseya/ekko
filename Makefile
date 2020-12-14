@@ -1,6 +1,6 @@
 app_name = todo
 app_version = latest
-project_id = sean-side-uat
+project_id = sean-side
 namespace = sean-side-uat-ns
 
 .PHONY: build-image

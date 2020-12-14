@@ -16,7 +16,7 @@ env:
     - GO111MODULE=on
 
 before_install:
-  - openssl aes-256-cbc -K $encrypted_7961871dbabc_key -iv $encrypted_7961871dbabc_iv -in sean-side-uat-gcr-pusher.json.enc -out sean-side-uat-gcr-pusher.json -d
+  - openssl aes-256-cbc -K $encrypted_61c8b5498ee9_key -iv $encrypted_61c8b5498ee9_iv -in sean-side-prod-gcr-pusher.json.enc -out sean-side-prod-gcr-pusher.json -d
 
 stages:
   - Tests
@@ -41,7 +41,7 @@ jobs:
         - make lint
     - stage: Deploy
       script:
-        - cat sean-side-uat-gcr-pusher.json | docker login -u _json_key --password-stdin https://gcr.io
+        - cat sean-side-prod-gcr-pusher.json | docker login -u _json_key --password-stdin https://gcr.io
         - make build-image
         - make tag-image
         - make push-image
