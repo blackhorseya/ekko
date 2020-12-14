@@ -30,11 +30,11 @@ prune-images:
 	@docker rmi -f `docker images --filter=label=app.name=$(app_name) -q`
 
 .PHONY: tag-image
-tag-image: build-image
+tag-image:
 	@docker tag $(app_name):$(app_version) gcr.io/$(project_id)/$(app_name):$(app_version)
 
 .PHONY: push-image
-push-image: tag-image
+push-image:
 	@docker push gcr.io/$(project_id)/$(app_name):$(app_version)
 
 .PHONY: deploy-with-helm

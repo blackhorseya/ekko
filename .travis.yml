@@ -2,11 +2,11 @@ language: go
 
 cache:
   directories:
-    - $HOME/.cache/go-build
-    - $HOME/gopath/pkg/mod
+    - "$HOME/.cache/go-build"
+    - "$HOME/gopath/pkg/mod"
 
 go:
-  - "1.15"
+  - '1.15'
 
 services:
   - docker
@@ -14,7 +14,9 @@ services:
 env:
   global:
     - GO111MODULE=on
-    - CODECOV_TOKEN=aa0a457a-579e-43f3-8126-f0137aa9e040
+
+before_install:
+  - openssl aes-256-cbc -K $encrypted_7961871dbabc_key -iv $encrypted_7961871dbabc_iv -in sean-side-uat-gcr-pusher.json.enc -out sean-side-uat-gcr-pusher.json -d
 
 stages:
   - Tests
@@ -24,20 +26,27 @@ stages:
 
 jobs:
   include:
-    - stage: "Tests"
-      name: "Unit Test"
+    - stage: Tests
+      name: Unit Test
       script:
         - make test-with-coverage
       after_success:
         - bash <(curl -s https://codecov.io/bash)
-    - name: "Integration Test"
+    - name: Integration Test
       script:
         - echo "execute integration test..."
-    - stage: "Static Code Analytic"
-      name: "Lint"
+    - stage: Static Code Analytic
+      name: Lint
       script:
         - make lint
-    - stage: "Deploy"
-      name: "Build Docker Image"
+    - stage: Deploy
+      name: Build Docker Image
       script:
+        - cat sean-side-uat-gcr-pusher.json | docker login -u _json_key --password-stdin https://gcr.io
         - make build-image
+    - name: Tag Docker Image
+      script:
+        - make tag-image
+    - name: Push Docker Image
+      script:
+        - make push-image
