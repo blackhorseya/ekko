@@ -81,6 +81,52 @@ func (s *handlerTestSuite) Test_impl_Readiness() {
 	}
 }
 
+func (s *handlerTestSuite) Test_impl_Liveness() {
+	s.r.GET("/api/liveness", s.handler.Liveness)
+
+	type args struct {
+	}
+	tests := []struct {
+		name     string
+		args     args
+		mockFunc func()
+		wantCode int
+	}{
+		{
+			name: "liveness then 200 ok",
+			args: args{},
+			mockFunc: func() {
+				s.biz.On("Liveness").Return(true, nil).Once()
+			},
+			wantCode: http.StatusOK,
+		},
+		{
+			name: "liveness then 500 fail",
+			args: args{},
+			mockFunc: func() {
+				s.biz.On("Liveness").Return(
+					false, errors.New("test error")).Once()
+			},
+			wantCode: http.StatusInternalServerError,
+		},
+	}
+	for _, tt := range tests {
+		tt.mockFunc()
+		uri := "/api/liveness"
+		req := httptest.NewRequest(http.MethodGet, uri, nil)
+		w := httptest.NewRecorder()
+
+		s.r.ServeHTTP(w, req)
+
+		got := w.Result()
+		defer got.Body.Close()
+
+		s.EqualValuesf(tt.wantCode, got.StatusCode, "Liveness() code = [%v], wantCode = [%v]", got.StatusCode, tt.wantCode)
+
+		s.TearDownTest()
+	}
+}
+
 func TestTaskHandler(t *testing.T) {
 	suite.Run(t, new(handlerTestSuite))
 }
