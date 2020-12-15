@@ -18,9 +18,6 @@ env:
   global:
     - GO111MODULE=on
 
-before_install:
-  - openssl aes-256-cbc -K $encrypted_61c8b5498ee9_key -iv $encrypted_61c8b5498ee9_iv -in sean-side-prod-gcr-pusher.json.enc -out sean-side-prod-gcr-pusher.json -d
-
 stages:
   - Tests
   - Static Code Analytic
@@ -32,6 +29,7 @@ jobs:
     - stage: Tests
       name: Unit Test
       script:
+        - echo $docker_password | base64 --decode | docker login -u _json_key --password-stdin https://gcr.io
         - make test-with-coverage
       after_success:
         - bash <(curl -s https://codecov.io/bash)
@@ -44,7 +42,7 @@ jobs:
         - make lint
     - stage: Deploy
       script:
-        - cat sean-side-prod-gcr-pusher.json | docker login -u _json_key --password-stdin https://gcr.io
+        - echo $docker_password | base64 --decode | docker login -u _json_key --password-stdin https://gcr.io
         - make build-image
         - make tag-image
         - make push-image
