@@ -1,5 +1,8 @@
 language: go
 
+git:
+  submodules: false
+
 cache:
   directories:
     - "$HOME/.cache/go-build"
