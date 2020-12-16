@@ -15,18 +15,14 @@ cache:
 go:
   - '1.15'
 
-services:
-  - docker
-
 env:
   global:
     - GO111MODULE=on
 
 stages:
   - Tests
-  - Static Code Analytic
   - name: Deploy
-    if: branch =~ /^release-\d+\.\d+$/
+    if: tag =~ ^v
 
 jobs:
   include:
@@ -43,14 +39,17 @@ jobs:
       script:
         - make lint
     - stage: Deploy
+      services:
+        - docker
       install:
         - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
         - curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
         - echo $kubeconfig | base64 --decode > ${HOME}/kubeconfig.yaml && export KUBECONFIG=${HOME}/kubeconfig.yaml
         - echo $gcloud_sa_key | base64 --decode > ${HOME}/key.json && export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/key.json
-      script:
         - echo $docker_password | base64 --decode | docker login -u _json_key --password-stdin https://gcr.io
-        - make build-image
-        - make tag-image
-        - make push-image
-        - make deploy-with-helm ns=side deploy_to=prod
+        - export version=$(echo $TRAVIS_TAG | cut -c 2-)
+      script:
+        - make build-image version=$version
+        - make tag-image version=$version
+        - make push-image version=$version
+        - make deploy-with-helm ns=side deploy_to=prod version=$version
