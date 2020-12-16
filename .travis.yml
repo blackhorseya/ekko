@@ -39,8 +39,7 @@ jobs:
     - name: Integration Test
       script:
         - echo "execute integration test..."
-    - stage: Static Code Analytic
-      name: Lint
+    - name: Lint
       script:
         - make lint
     - stage: Deploy
