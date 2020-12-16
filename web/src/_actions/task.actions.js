@@ -20,7 +20,12 @@ function list() {
   // action creators
   function request() {return {type: taskConstants.LIST_REQUEST};}
 
-  function success(data) {return {type: taskConstants.LIST_SUCCESS, data: data};}
+  function success(data) {
+    return {
+      type: taskConstants.LIST_SUCCESS,
+      data: data,
+    };
+  }
 
   function failure(error) {return {type: taskConstants.LIST_FAILURE, error};}
 }
