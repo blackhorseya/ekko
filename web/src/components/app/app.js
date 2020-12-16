@@ -9,8 +9,7 @@ class App extends React.Component {
   }
 
   render() {
-    const {tasks} = this.props;
-    console.log(tasks.item);
+    const tasks = this.props;
 
     return (
         <div className="App">
