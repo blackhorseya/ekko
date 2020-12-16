@@ -7,7 +7,7 @@ function list() {
     method: 'GET',
   };
 
-  return fetch('http://localhost:5000/api/v1/tasks', reqOpt).then(handleResponse);
+  return fetch('api/v1/tasks?size=10', reqOpt).then(handleResponse);
 }
 
 function handleResponse(resp) {
