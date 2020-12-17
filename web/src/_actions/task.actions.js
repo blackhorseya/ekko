@@ -15,7 +15,6 @@ function list() {
   function failure(error) {return {type: taskConstants.LIST_FAILURE, error};}
 
   // actions
-
   return (dispatch) => {
     dispatch(request());
 

@@ -14,8 +14,9 @@ function list() {
   const reqOpt = {
     method: 'GET',
   };
-  return fetch('api/v1/tasks?size=10', reqOpt).then(handleResponse);
 
+  return fetch(`${process.env.REACT_APP_API_URL}api/v1/tasks?size=10`, reqOpt)
+      .then(handleResponse);
 }
 
 export const taskServices = {

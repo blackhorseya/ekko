@@ -9,7 +9,7 @@ class App extends React.Component {
   }
 
   render() {
-    const tasks = this.props;
+    const {tasks} = this.props;
 
     return (
         <div className="App">
