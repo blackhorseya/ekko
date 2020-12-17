@@ -18,8 +18,28 @@ function list() {
   return (dispatch) => {
     dispatch(request());
 
-    // execute task service
+    // list tasks
     taskServices.list().then(
+        (data) => dispatch(success(data)),
+        (error) => dispatch(failure(error.toString())),
+    );
+  };
+}
+
+function add(title) {
+  // action creators
+  function request(task) {return {type: taskConstants.ADD_REQUEST, task};}
+
+  function success(task) {return {type: taskConstants.ADD_SUCCESS, task};}
+
+  function failure(error) {return {type: taskConstants.ADD_FAILURE, error};}
+
+  // actions
+  return (dispatch) => {
+    dispatch(request({title}));
+
+    // add task
+    taskServices.add(title).then(
         (data) => dispatch(success(data)),
         (error) => dispatch(failure(error.toString())),
     );
