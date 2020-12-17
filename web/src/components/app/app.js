@@ -2,7 +2,7 @@ import React from 'react';
 import './app.css';
 import {taskActions} from '../../_actions';
 import {connect} from 'react-redux';
-import {AddTodo} from '../../containers';
+import {AddTodo} from '../addTodo';
 
 class App extends React.Component {
   componentDidMount() {

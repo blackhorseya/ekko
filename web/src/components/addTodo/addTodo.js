@@ -1,5 +1,5 @@
 import React from 'react';
-import {taskActions} from '../_actions';
+import {taskActions} from '../../_actions';
 import {connect} from 'react-redux';
 
 class AddTodo extends React.Component {
