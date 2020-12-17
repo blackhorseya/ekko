@@ -3,6 +3,7 @@
 package repository
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/blackhorseya/todo-app/internal/app/entities"
@@ -93,6 +94,32 @@ func (s *repoTestSuite) Test_impl_QueryTaskList() {
 			return
 		}
 		s.EqualValuesf(tt.wantTasks, gotTasks, "QueryTaskList() gotTasks = %v, want %v", gotTasks, tt.wantTasks)
+	}
+}
+
+func (s *repoTestSuite) Test_impl_RemoveTask() {
+	type args struct {
+		id string
+	}
+	tests := []struct {
+		name      string
+		args      args
+		wantCount int
+		wantErr   error
+	}{
+		{
+			name:      "empty then 0 error",
+			args:      args{},
+			wantCount: 0,
+			wantErr:   errors.New("not found id: "),
+		},
+	}
+	for _, tt := range tests {
+		count, err := s.taskRepo.RemoveTask(tt.args.id)
+		if err != nil {
+			s.EqualErrorf(err, tt.wantErr.Error(), "RemoveTask() error = %v, wantErr = %v", err, tt.wantErr)
+		}
+		s.EqualValuesf(tt.wantCount, count, "RemoveTask() count = %v, wantCount = %v", count, tt.wantCount)
 	}
 }
 
