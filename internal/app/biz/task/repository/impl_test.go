@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/blackhorseya/todo-app/internal/app/entities"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -23,6 +24,8 @@ func (s *repoTestSuite) SetupTest() {
 }
 
 func (s *repoTestSuite) Test_impl_CreateTask() {
+	id1 := uuid.New().String()
+
 	type args struct {
 		newTask *entities.Task
 	}
@@ -35,9 +38,11 @@ func (s *repoTestSuite) Test_impl_CreateTask() {
 		{
 			name: "task then task nil",
 			args: args{&entities.Task{
+				Id:    id1,
 				Title: "test",
 			}},
 			wantTask: &entities.Task{
+				Id:    id1,
 				Title: "test",
 			},
 			wantErr: "",
@@ -74,9 +79,9 @@ func (s *repoTestSuite) Test_impl_QueryTaskList() {
 			name: "3 0 then []task nil",
 			args: args{3, 0},
 			wantTasks: []*entities.Task{
-				{Title: "test"},
-				{Title: "test"},
-				{Title: "test"},
+				{Title: "test1"},
+				{Title: "test2"},
+				{Title: "test3"},
 			},
 			wantErr: "",
 		},
