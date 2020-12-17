@@ -1,6 +1,7 @@
 package task
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -43,8 +44,22 @@ func (i *impl) UpdateStatus(id string, completed bool) (task *entities.Task, err
 }
 
 // Remove serve user to remove a task by id
-func (i *impl) Remove(id string) (ok bool, err error) {
-	panic("implement me")
+func (i *impl) Remove(id string) (count int, err error) {
+	if len(id) == 0 {
+		return 0, errors.New("id must be NOT empty")
+	}
+
+	uid, err := uuid.Parse(id)
+	if err != nil {
+		return 0, err
+	}
+
+	count, err = i.TaskRepo.RemoveTask(uid.String())
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
 }
 
 // ChangeTitle serve user to update title of task
