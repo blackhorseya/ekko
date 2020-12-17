@@ -15,7 +15,7 @@ function list() {
     method: 'GET',
   };
 
-  return fetch(`${process.env.REACT_APP_API_URL}api/v1/tasks?size=10`, reqOpt)
+  return fetch(`${process.env.REACT_APP_API_URL || ""}api/v1/tasks?size=10`, reqOpt)
       .then(handleResponse);
 }
 
