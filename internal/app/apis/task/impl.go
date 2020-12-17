@@ -36,15 +36,18 @@ func (i *impl) List(c *gin.Context) {
 	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
 	if err != nil {
 		_ = c.AbortWithError(http.StatusBadRequest, err).SetType(gin.ErrorTypePublic)
+		return
 	}
 	size, err := strconv.Atoi(c.DefaultQuery("size", "3"))
 	if err != nil {
 		_ = c.AbortWithError(http.StatusBadRequest, err).SetType(gin.ErrorTypePublic)
+		return
 	}
 
 	tasks, _ := i.TaskBiz.List(int32(page), int32(size))
 	if len(tasks) == 0 {
 		c.String(http.StatusNoContent, "")
+		return
 	}
 
 	c.JSON(http.StatusOK, tasks)

@@ -51,7 +51,7 @@ func (i *impl) QueryTaskList(limit, offset int32) (tasks []*entities.Task, err e
 // CreateTask handle create a task
 func (i *impl) CreateTask(newTask *entities.Task) (task *entities.Task, err error) {
 	coll := i.MongoClient.Database("todo-db").Collection("tasks")
-	_, err = coll.InsertOne(context.TODO(), newTask)
+	_, err = coll.InsertOne(context.Background(), newTask)
 	if err != nil {
 		return newTask, err
 	}

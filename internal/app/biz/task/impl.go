@@ -2,9 +2,11 @@ package task
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/blackhorseya/todo-app/internal/app/biz/task/repository"
 	"github.com/blackhorseya/todo-app/internal/app/entities"
+	"github.com/google/uuid"
 )
 
 type impl struct {
@@ -23,6 +25,9 @@ func (i *impl) Create(newTask *entities.Task) (task *entities.Task, err error) {
 	if len(newTask.Title) == 0 {
 		return nil, fmt.Errorf("title must be NOT empty")
 	}
+
+	newTask.Id = uuid.New().String()
+	newTask.CreateAt = time.Now().UnixNano()
 
 	task, err = i.TaskRepo.CreateTask(newTask)
 	if err != nil {
