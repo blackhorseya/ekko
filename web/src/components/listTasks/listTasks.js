@@ -2,7 +2,7 @@ import React from 'react';
 import {taskActions} from '../../_actions';
 import {connect} from 'react-redux';
 
-class ListTodo extends React.Component {
+class ListTasks extends React.Component {
   componentDidMount() {
     this.props.list();
   }
@@ -12,7 +12,7 @@ class ListTodo extends React.Component {
 
     return (
         <div>
-          <h1>Todos</h1>
+          <h1>Tasks</h1>
           <ul>
             {
               tasks.item && tasks.item.map((task, index) =>
@@ -36,5 +36,5 @@ const actionCreators = {
   list: taskActions.list,
 };
 
-const connectedListTodo = connect(mapStateToProps, actionCreators)(ListTodo);
+const connectedListTodo = connect(mapStateToProps, actionCreators)(ListTasks);
 export {connectedListTodo as ListTodo};

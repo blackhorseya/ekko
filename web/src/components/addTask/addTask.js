@@ -2,7 +2,7 @@ import React from 'react';
 import {taskActions} from '../../_actions';
 import {connect} from 'react-redux';
 
-class AddTodo extends React.Component {
+class AddTask extends React.Component {
   constructor(props) {
     super(props);
 
@@ -52,5 +52,5 @@ const actionCreators = {
   add: taskActions.add,
 };
 
-const connectedAddTodo = connect(mapStateToProps, actionCreators)(AddTodo);
+const connectedAddTodo = connect(mapStateToProps, actionCreators)(AddTask);
 export {connectedAddTodo as AddTodo};

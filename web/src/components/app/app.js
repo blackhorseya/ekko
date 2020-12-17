@@ -1,8 +1,8 @@
 import React from 'react';
 import './app.css';
 import {connect} from 'react-redux';
-import {AddTodo} from '../addTodo';
-import {ListTodo} from '../listTodo';
+import {AddTodo} from '../addTask';
+import {ListTodo} from '../listTasks';
 
 class App extends React.Component {
   render() {
