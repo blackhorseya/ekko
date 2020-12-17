@@ -48,4 +48,5 @@ function add(title) {
 
 export const taskActions = {
   list,
+  add,
 };

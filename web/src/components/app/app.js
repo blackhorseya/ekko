@@ -2,6 +2,7 @@ import React from 'react';
 import './app.css';
 import {taskActions} from '../../_actions';
 import {connect} from 'react-redux';
+import {AddTodo} from '../../containers';
 
 class App extends React.Component {
   componentDidMount() {
@@ -13,6 +14,7 @@ class App extends React.Component {
 
     return (
         <div className="App">
+          <AddTodo/>
           <ul>
             {
               tasks.item && tasks.item.map((task, index) =>
