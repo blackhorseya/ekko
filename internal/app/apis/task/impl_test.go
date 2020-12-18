@@ -56,12 +56,12 @@ func (s *taskTestSuite) Test_impl_List() {
 		wantTasks []*entities.Task
 	}{
 		{
-			name: "list 10 10 then 204 nil",
+			name: "list 10 10 then 404 nil",
 			args: args{page: "10", size: "10"},
 			mockFunc: func() {
 				s.taskBiz.On("List", int32(10), int32(10)).Return(nil, nil).Once()
 			},
-			wantCode: http.StatusNoContent,
+			wantCode: http.StatusNotFound,
 		},
 		{
 			name: "list 1 1 then 200 tasks",
@@ -208,7 +208,6 @@ func (s *taskTestSuite) Test_impl_Remove() {
 		args     args
 		mockFunc func()
 		wantCode int
-		wantResp *entities.Response
 	}{
 		{
 			name:     "missing id then 404 error",
@@ -216,21 +215,47 @@ func (s *taskTestSuite) Test_impl_Remove() {
 			mockFunc: func() {},
 			wantCode: 404,
 		},
+		{
+			name:     "123 then 400 error",
+			args:     args{"123"},
+			mockFunc: func() {},
+			wantCode: 400,
+		},
+		{
+			name: "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0 then 200 nil",
+			args: args{"f3d58c97-e50e-4a00-ba51-ef7d2bec02e0"},
+			mockFunc: func() {
+				s.taskBiz.On("Remove", "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0").Return(
+					1, nil).Once()
+			},
+			wantCode: 200,
+		},
+		{
+			name: "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0 then 500 error",
+			args: args{"f3d58c97-e50e-4a00-ba51-ef7d2bec02e0"},
+			mockFunc: func() {
+				s.taskBiz.On("Remove", "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0").Return(
+					0, errors.New("test error"))
+			},
+			wantCode: 500,
+		},
 	}
 	for _, tt := range tests {
-		tt.mockFunc()
-		uri := fmt.Sprintf("/api/v1/tasks/%s", tt.args.id)
-		req := httptest.NewRequest(http.MethodDelete, uri, nil)
-		w := httptest.NewRecorder()
+		s.Run(tt.name, func() {
+			tt.mockFunc()
+			uri := fmt.Sprintf("/api/v1/tasks/%s", tt.args.id)
+			req := httptest.NewRequest(http.MethodDelete, uri, nil)
+			w := httptest.NewRecorder()
 
-		s.r.ServeHTTP(w, req)
+			s.r.ServeHTTP(w, req)
 
-		got := w.Result()
-		defer got.Body.Close()
+			got := w.Result()
+			defer got.Body.Close()
 
-		s.EqualValuesf(tt.wantCode, got.StatusCode, "[%s] Remove() code = [%v], wantCode = [%v]")
+			s.EqualValuesf(tt.wantCode, got.StatusCode, "Remove() code = [%v], wantCode = [%v]", got.StatusCode, tt.wantCode)
 
-		s.TearDownTest()
+			s.TearDownTest()
+		})
 	}
 }
 
