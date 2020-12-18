@@ -98,3 +98,17 @@ func (i *impl) Create(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, ret)
 }
+
+// Remove a task
+// @Summary Remove
+// @Description remove a task
+// @Tags Task
+// @Accept application/json
+// @Produce application/json
+// @Success 200 {object} string
+// @Failure 400 {object} string
+// @Failure 500 {object} string
+// @Router /v1/tasks [delete]
+func (i *impl) Remove(c *gin.Context) {
+	panic("implement me")
+}

@@ -77,21 +77,15 @@ func (s *taskTestSuite) Test_impl_List() {
 			},
 		},
 		{
-			name: "list a b then 400 nil",
-			args: args{page: "a", size: "b"},
-			mockFunc: func() {
-				s.taskBiz.On("List", mock.AnythingOfType("int32"), mock.AnythingOfType("int32")).Return(
-					nil, nil).Once()
-			},
+			name:     "list a b then 400 nil",
+			args:     args{page: "a", size: "b"},
+			mockFunc: func() {},
 			wantCode: http.StatusBadRequest,
 		},
 		{
-			name: "list 10 b then 400 nil",
-			args: args{page: "10", size: "b"},
-			mockFunc: func() {
-				s.taskBiz.On("List", mock.AnythingOfType("int32"), mock.AnythingOfType("int32")).Return(
-					nil, nil).Once()
-			},
+			name:     "list 10 b then 400 nil",
+			args:     args{page: "10", size: "b"},
+			mockFunc: func() {},
 			wantCode: http.StatusBadRequest,
 		},
 	}
@@ -198,6 +192,43 @@ func (s *taskTestSuite) Test_impl_Create() {
 
 		s.EqualValuesf(tt.wantCode, got.StatusCode, "[%s] Create() code = [%v], wantCode = [%v]", tt.name, got.StatusCode, tt.wantCode)
 		s.EqualValuesf(tt.wantRes, gotRes, "[%s] Create() res = [%v], wantRes = [%v]", tt.name, gotRes, tt.wantRes)
+
+		s.TearDownTest()
+	}
+}
+
+func (s *taskTestSuite) Test_impl_Remove() {
+	s.r.DELETE("/api/v1/tasks/:id", s.taskHandler.Remove)
+
+	type args struct {
+		id string
+	}
+	tests := []struct {
+		name     string
+		args     args
+		mockFunc func()
+		wantCode int
+		wantResp *entities.Response
+	}{
+		{
+			name:     "missing id then 404 error",
+			args:     args{},
+			mockFunc: func() {},
+			wantCode: 404,
+		},
+	}
+	for _, tt := range tests {
+		tt.mockFunc()
+		uri := fmt.Sprintf("/api/v1/tasks/%s", tt.args.id)
+		req := httptest.NewRequest(http.MethodDelete, uri, nil)
+		w := httptest.NewRecorder()
+
+		s.r.ServeHTTP(w, req)
+
+		got := w.Result()
+		defer got.Body.Close()
+
+		s.EqualValuesf(tt.wantCode, got.StatusCode, "[%s] Remove() code = [%v], wantCode = [%v]")
 
 		s.TearDownTest()
 	}
