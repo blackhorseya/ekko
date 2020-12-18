@@ -76,3 +76,7 @@ func (i *impl) RemoveTask(id string) (count int, err error) {
 
 	return int(res.DeletedCount), nil
 }
+
+func (i *impl) UpdateTask(updated *entities.Task) (task *entities.Task, err error) {
+	panic("implement me")
+}
