@@ -109,10 +109,12 @@ type removeReq struct {
 // @Tags Task
 // @Accept application/json
 // @Produce application/json
+// @Param id path string true "Task ID"
 // @Success 200 {object} string
+// @Failure 400 {object} string
 // @Success 404 {object} string
 // @Failure 500 {object} string
-// @Router /v1/tasks [delete]
+// @Router /v1/tasks/{id} [delete]
 func (i *impl) Remove(c *gin.Context) {
 	var req removeReq
 	err := c.ShouldBindUri(&req)
