@@ -264,6 +264,68 @@ func (s *bizTestSuite) Test_impl_UpdateStatus() {
 	}
 }
 
+func (s *bizTestSuite) Test_impl_ChangeTitle() {
+	type args struct {
+		id       string
+		newTitle string
+	}
+	tests := []struct {
+		name     string
+		args     args
+		mockFunc func()
+		wantTask *entities.Task
+		wantErr  bool
+	}{
+		{
+			name: "id test then nil error",
+			args: args{"id", "test"},
+			mockFunc: func() {
+
+			},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "uuid empty then nil error",
+			args: args{"f3d58c97-e50e-4a00-ba51-ef7d2bec02e0", ""},
+			mockFunc: func() {
+
+			},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "uuid test then task nil",
+			args: args{"f3d58c97-e50e-4a00-ba51-ef7d2bec02e0", "test"},
+			mockFunc: func() {
+				s.mockRepo.On("UpdateTask", mock.AnythingOfType("*entities.Task")).Return(
+					&entities.Task{
+						Id:    "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0",
+						Title: "test",
+					}, nil).Once()
+			},
+			wantTask: &entities.Task{
+				Id:    "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0",
+				Title: "test",
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		s.Run(tt.name, func() {
+			tt.mockFunc()
+			gotTask, err := s.taskBiz.ChangeTitle(tt.args.id, tt.args.newTitle)
+			if (err != nil) != tt.wantErr {
+				s.Errorf(err, "ChangeTitle() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			s.EqualValuesf(tt.wantTask, gotTask, "ChangeTitle() gotTask = %v, want %v", gotTask, tt.wantTask)
+
+			s.TearDownTest()
+		})
+	}
+}
+
 func TestTaskBiz(t *testing.T) {
 	suite.Run(t, new(bizTestSuite))
 }

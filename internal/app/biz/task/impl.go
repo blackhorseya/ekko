@@ -75,7 +75,25 @@ func (i *impl) Remove(id string) (count int, err error) {
 
 // ChangeTitle serve user to update title of task
 func (i *impl) ChangeTitle(id, newTitle string) (task *entities.Task, err error) {
-	panic("implement me")
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(newTitle) == 0 {
+		return nil, errors.New("title must be NOT empty")
+	}
+
+	updated := &entities.Task{
+		Id:    id,
+		Title: newTitle,
+	}
+	task, err = i.TaskRepo.UpdateTask(updated)
+	if err != nil {
+		return nil, err
+	}
+
+	return task, nil
 }
 
 // List all tasks
