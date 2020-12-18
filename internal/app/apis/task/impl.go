@@ -46,7 +46,7 @@ func (i *impl) List(c *gin.Context) {
 
 	tasks, _ := i.TaskBiz.List(int32(page), int32(size))
 	if len(tasks) == 0 {
-		c.String(http.StatusNoContent, "")
+		c.String(http.StatusNotFound, "")
 		return
 	}
 
@@ -99,6 +99,10 @@ func (i *impl) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, ret)
 }
 
+type removeReq struct {
+	ID string `uri:"id" binding:"required,uuid"`
+}
+
 // Remove a task
 // @Summary Remove
 // @Description remove a task
@@ -106,9 +110,21 @@ func (i *impl) Create(c *gin.Context) {
 // @Accept application/json
 // @Produce application/json
 // @Success 200 {object} string
-// @Failure 400 {object} string
+// @Success 404 {object} string
 // @Failure 500 {object} string
 // @Router /v1/tasks [delete]
 func (i *impl) Remove(c *gin.Context) {
-	panic("implement me")
+	var req removeReq
+	err := c.ShouldBindUri(&req)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err)
+		return
+	}
+
+	count, err := i.TaskBiz.Remove(req.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+	}
+
+	c.JSON(http.StatusOK, count)
 }
