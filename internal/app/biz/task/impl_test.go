@@ -236,6 +236,11 @@ func (s *bizTestSuite) Test_impl_UpdateStatus() {
 			name: "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0 false then task nil",
 			args: args{"f3d58c97-e50e-4a00-ba51-ef7d2bec02e0", false},
 			mockFunc: func() {
+				s.mockRepo.On("FindOne", mock.AnythingOfType("string")).Return(
+					&entities.Task{
+						Id:        "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0",
+						Completed: true,
+					}, nil).Once()
 				s.mockRepo.On("UpdateTask", mock.AnythingOfType("*entities.Task")).Return(
 					&entities.Task{
 						Id:        "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0",

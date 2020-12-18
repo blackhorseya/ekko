@@ -45,11 +45,13 @@ func (i *impl) UpdateStatus(id string, completed bool) (task *entities.Task, err
 		return nil, err
 	}
 
-	updated := &entities.Task{
-		Id:        id,
-		Completed: completed,
+	exist, err := i.TaskRepo.FindOne(id)
+	if err != nil {
+		return nil, err
 	}
-	task, err = i.TaskRepo.UpdateTask(updated)
+
+	exist.Completed = completed
+	task, err = i.TaskRepo.UpdateTask(exist)
 
 	return task, nil
 }
