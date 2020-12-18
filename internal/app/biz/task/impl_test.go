@@ -82,15 +82,17 @@ func (s *bizTestSuite) Test_impl_Create() {
 		},
 	}
 	for _, tt := range tests {
-		tt.mockFunc()
-		task, err := s.taskBiz.Create(tt.args.t)
-		if err != nil {
-			s.EqualErrorf(err, tt.wantErr, "Create() error = [%v], wantErr [%v]", err, tt.wantErr)
-		}
-		if task != nil {
-			s.EqualValuesf(tt.wantTask.Title, task.Title, "Create() task = [%v], wantTask = [%v]", task, tt.wantTask)
-		}
-		s.TearDownTest()
+		s.Run(tt.name, func() {
+			tt.mockFunc()
+			task, err := s.taskBiz.Create(tt.args.t)
+			if err != nil {
+				s.EqualErrorf(err, tt.wantErr, "Create() error = [%v], wantErr [%v]", err, tt.wantErr)
+			}
+			if task != nil {
+				s.EqualValuesf(tt.wantTask.Title, task.Title, "Create() task = [%v], wantTask = [%v]", task, tt.wantTask)
+			}
+			s.TearDownTest()
+		})
 	}
 }
 
@@ -136,15 +138,17 @@ func (s *bizTestSuite) Test_impl_List() {
 		},
 	}
 	for _, tt := range tests {
-		tt.mockFunc()
-		gotTasks, err := s.taskBiz.List(tt.args.page, tt.args.size)
-		if err != nil {
-			s.EqualErrorf(err, tt.wantErr, "List() error = %v, wantErr %v", err, tt.wantErr)
-		}
+		s.Run(tt.name, func() {
+			tt.mockFunc()
+			gotTasks, err := s.taskBiz.List(tt.args.page, tt.args.size)
+			if err != nil {
+				s.EqualErrorf(err, tt.wantErr, "List() error = %v, wantErr %v", err, tt.wantErr)
+			}
 
-		if gotTasks != nil {
-			s.EqualValuesf(tt.wantTasks, gotTasks, "List() gotTasks = %v, want %v", gotTasks, tt.wantTasks)
-		}
+			if gotTasks != nil {
+				s.EqualValuesf(tt.wantTasks, gotTasks, "List() gotTasks = %v, want %v", gotTasks, tt.wantTasks)
+			}
+		})
 	}
 }
 
@@ -194,14 +198,16 @@ func (s *bizTestSuite) Test_impl_Remove() {
 		},
 	}
 	for _, tt := range tests {
-		tt.mockFunc()
-		gotCount, err := s.taskBiz.Remove(tt.args.id)
-		if err != nil || tt.wantErr != nil {
-			s.EqualErrorf(err, tt.wantErr.Error(), "[%s] Remove() error = %v, wantErr %v", tt.name, err, tt.wantErr)
-		}
-		s.EqualValuesf(tt.wantCount, gotCount, "[%s] Remove() gotCount = %v, want %v", tt.name, gotCount, tt.wantCount)
+		s.Run(tt.name, func() {
+			tt.mockFunc()
+			gotCount, err := s.taskBiz.Remove(tt.args.id)
+			if err != nil || tt.wantErr != nil {
+				s.EqualErrorf(err, tt.wantErr.Error(), "[%s] Remove() error = %v, wantErr %v", tt.name, err, tt.wantErr)
+			}
+			s.EqualValuesf(tt.wantCount, gotCount, "[%s] Remove() gotCount = %v, want %v", tt.name, gotCount, tt.wantCount)
 
-		s.TearDownTest()
+			s.TearDownTest()
+		})
 	}
 }
 
