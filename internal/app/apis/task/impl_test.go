@@ -21,7 +21,7 @@ import (
 type taskTestSuite struct {
 	suite.Suite
 	r           *gin.Engine
-	taskBiz     *mocks.Biz
+	mockBiz     *mocks.Biz
 	taskHandler IHandler
 }
 
@@ -29,8 +29,8 @@ func (s *taskTestSuite) SetupTest() {
 	gin.SetMode(gin.TestMode)
 	s.r = gin.New()
 
-	s.taskBiz = new(mocks.Biz)
-	handler, err := CreateTaskHandler(s.taskBiz)
+	s.mockBiz = new(mocks.Biz)
+	handler, err := CreateTaskHandler(s.mockBiz)
 	if err != nil {
 		panic(err)
 	}
@@ -38,7 +38,7 @@ func (s *taskTestSuite) SetupTest() {
 }
 
 func (s *taskTestSuite) TearDownTest() {
-	s.taskBiz.AssertExpectations(s.T())
+	s.mockBiz.AssertExpectations(s.T())
 }
 
 func (s *taskTestSuite) Test_impl_List() {
@@ -59,7 +59,7 @@ func (s *taskTestSuite) Test_impl_List() {
 			name: "list 10 10 then 404 nil",
 			args: args{page: "10", size: "10"},
 			mockFunc: func() {
-				s.taskBiz.On("List", int32(10), int32(10)).Return(nil, nil).Once()
+				s.mockBiz.On("List", int32(10), int32(10)).Return(nil, nil).Once()
 			},
 			wantCode: http.StatusNotFound,
 		},
@@ -67,7 +67,7 @@ func (s *taskTestSuite) Test_impl_List() {
 			name: "list 1 1 then 200 tasks",
 			args: args{page: "1", size: "1"},
 			mockFunc: func() {
-				s.taskBiz.On("List", int32(1), int32(1)).Return([]*entities.Task{
+				s.mockBiz.On("List", int32(1), int32(1)).Return([]*entities.Task{
 					{Title: "test"},
 				}, nil).Once()
 			},
@@ -90,30 +90,32 @@ func (s *taskTestSuite) Test_impl_List() {
 		},
 	}
 	for _, tt := range tests {
-		tt.mockFunc()
-		uri := fmt.Sprintf("/api/v1/tasks?page=%s&size=%s", tt.args.page, tt.args.size)
-		req := httptest.NewRequest(http.MethodGet, uri, nil)
-		w := httptest.NewRecorder()
+		s.Run(tt.name, func() {
+			tt.mockFunc()
+			uri := fmt.Sprintf("/api/v1/tasks?page=%s&size=%s", tt.args.page, tt.args.size)
+			req := httptest.NewRequest(http.MethodGet, uri, nil)
+			w := httptest.NewRecorder()
 
-		s.r.ServeHTTP(w, req)
+			s.r.ServeHTTP(w, req)
 
-		got := w.Result()
-		defer func() {
-			_ = got.Body.Close()
-		}()
+			got := w.Result()
+			defer func() {
+				_ = got.Body.Close()
+			}()
 
-		body, _ := ioutil.ReadAll(got.Body)
-		var gotTasks []*entities.Task
-		err := json.Unmarshal(body, &gotTasks)
-		if err != nil {
-			s.Errorf(err, "unmarshal response body")
-		}
+			body, _ := ioutil.ReadAll(got.Body)
+			var gotTasks []*entities.Task
+			err := json.Unmarshal(body, &gotTasks)
+			if err != nil {
+				s.Errorf(err, "unmarshal response body")
+			}
 
-		s.EqualValuesf(tt.wantCode, got.StatusCode, "List() code = [%v], wantCode = [%v]", got.StatusCode, tt.wantCode)
-		if tt.wantTasks != nil {
-			s.EqualValuesf(tt.wantTasks, gotTasks, "List() tasks = [%v], wantTasks = [%v]", gotTasks, tt.wantTasks)
-		}
-		s.TearDownTest()
+			s.EqualValuesf(tt.wantCode, got.StatusCode, "List() code = [%v], wantCode = [%v]", got.StatusCode, tt.wantCode)
+			if tt.wantTasks != nil {
+				s.EqualValuesf(tt.wantTasks, gotTasks, "List() tasks = [%v], wantTasks = [%v]", gotTasks, tt.wantTasks)
+			}
+			s.TearDownTest()
+		})
 	}
 }
 
@@ -136,7 +138,7 @@ func (s *taskTestSuite) Test_impl_Create() {
 			name: "create newTask then 201 task",
 			args: args{&entities.Task{Title: "test"}},
 			mockFunc: func() {
-				s.taskBiz.On("Create", mock.AnythingOfType("*entities.Task")).Return(
+				s.mockBiz.On("Create", mock.AnythingOfType("*entities.Task")).Return(
 					&entities.Task{Title: "test"}, nil).Once()
 			},
 			wantCode: http.StatusCreated,
@@ -159,7 +161,7 @@ func (s *taskTestSuite) Test_impl_Create() {
 			name: "create newTask then 500 nil error",
 			args: args{&entities.Task{Title: "500"}},
 			mockFunc: func() {
-				s.taskBiz.On("Create", mock.AnythingOfType("*entities.Task")).Return(
+				s.mockBiz.On("Create", mock.AnythingOfType("*entities.Task")).Return(
 					nil, errors.New("")).Once()
 			},
 			wantCode: http.StatusInternalServerError,
@@ -170,30 +172,32 @@ func (s *taskTestSuite) Test_impl_Create() {
 		},
 	}
 	for _, tt := range tests {
-		tt.mockFunc()
-		uri := fmt.Sprintf("/api/v1/tasks")
-		newTask, _ := json.Marshal(tt.args.newTask)
-		req := httptest.NewRequest(http.MethodPost, uri, bytes.NewBuffer(newTask))
-		w := httptest.NewRecorder()
+		s.Run(tt.name, func() {
+			tt.mockFunc()
+			uri := fmt.Sprintf("/api/v1/tasks")
+			newTask, _ := json.Marshal(tt.args.newTask)
+			req := httptest.NewRequest(http.MethodPost, uri, bytes.NewBuffer(newTask))
+			w := httptest.NewRecorder()
 
-		s.r.ServeHTTP(w, req)
+			s.r.ServeHTTP(w, req)
 
-		got := w.Result()
-		defer func() {
-			_ = got.Body.Close()
-		}()
+			got := w.Result()
+			defer func() {
+				_ = got.Body.Close()
+			}()
 
-		body, _ := ioutil.ReadAll(got.Body)
-		var gotRes *entities.Response
-		err := json.Unmarshal(body, &gotRes)
-		if err != nil {
-			s.Errorf(err, "unmarshal response body")
-		}
+			body, _ := ioutil.ReadAll(got.Body)
+			var gotRes *entities.Response
+			err := json.Unmarshal(body, &gotRes)
+			if err != nil {
+				s.Errorf(err, "unmarshal response body")
+			}
 
-		s.EqualValuesf(tt.wantCode, got.StatusCode, "[%s] Create() code = [%v], wantCode = [%v]", tt.name, got.StatusCode, tt.wantCode)
-		s.EqualValuesf(tt.wantRes, gotRes, "[%s] Create() res = [%v], wantRes = [%v]", tt.name, gotRes, tt.wantRes)
+			s.EqualValuesf(tt.wantCode, got.StatusCode, "Create() code = [%v], wantCode = [%v]", got.StatusCode, tt.wantCode)
+			s.EqualValuesf(tt.wantRes, gotRes, "Create() res = [%v], wantRes = [%v]", gotRes, tt.wantRes)
 
-		s.TearDownTest()
+			s.TearDownTest()
+		})
 	}
 }
 
@@ -225,7 +229,7 @@ func (s *taskTestSuite) Test_impl_Remove() {
 			name: "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0 then 200 nil",
 			args: args{"f3d58c97-e50e-4a00-ba51-ef7d2bec02e0"},
 			mockFunc: func() {
-				s.taskBiz.On("Remove", "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0").Return(
+				s.mockBiz.On("Remove", "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0").Return(
 					1, nil).Once()
 			},
 			wantCode: 200,
@@ -234,7 +238,7 @@ func (s *taskTestSuite) Test_impl_Remove() {
 			name: "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0 then 500 error",
 			args: args{"f3d58c97-e50e-4a00-ba51-ef7d2bec02e0"},
 			mockFunc: func() {
-				s.taskBiz.On("Remove", "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0").Return(
+				s.mockBiz.On("Remove", "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0").Return(
 					0, errors.New("test error"))
 			},
 			wantCode: 500,
