@@ -40,7 +40,18 @@ func (i *impl) Create(newTask *entities.Task) (task *entities.Task, err error) {
 
 // UpdateStatus serve user to update complete status of task by id
 func (i *impl) UpdateStatus(id string, completed bool) (task *entities.Task, err error) {
-	panic("implement me")
+	_, err = uuid.Parse(id)
+	if err != nil {
+		return nil, err
+	}
+
+	updated := &entities.Task{
+		Id:        id,
+		Completed: completed,
+	}
+	task, err = i.TaskRepo.UpdateTask(updated)
+
+	return task, nil
 }
 
 // Remove serve user to remove a task by id
