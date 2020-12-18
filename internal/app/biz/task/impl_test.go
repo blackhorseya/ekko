@@ -298,6 +298,11 @@ func (s *bizTestSuite) Test_impl_ChangeTitle() {
 			name: "uuid test then task nil",
 			args: args{"f3d58c97-e50e-4a00-ba51-ef7d2bec02e0", "test"},
 			mockFunc: func() {
+				s.mockRepo.On("FindOne", "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0").Return(
+					&entities.Task{
+						Id:    "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0",
+						Title: "exist",
+					}, nil).Once()
 				s.mockRepo.On("UpdateTask", mock.AnythingOfType("*entities.Task")).Return(
 					&entities.Task{
 						Id:    "f3d58c97-e50e-4a00-ba51-ef7d2bec02e0",
