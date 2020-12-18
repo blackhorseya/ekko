@@ -84,11 +84,13 @@ func (i *impl) ChangeTitle(id, newTitle string) (task *entities.Task, err error)
 		return nil, errors.New("title must be NOT empty")
 	}
 
-	updated := &entities.Task{
-		Id:    id,
-		Title: newTitle,
+	exist, err := i.TaskRepo.FindOne(id)
+	if err != nil {
+		return nil, err
 	}
-	task, err = i.TaskRepo.UpdateTask(updated)
+
+	exist.Title = newTitle
+	task, err = i.TaskRepo.UpdateTask(exist)
 	if err != nil {
 		return nil, err
 	}
