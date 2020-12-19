@@ -20,6 +20,23 @@ func NewImpl(taskBiz task.Biz) IHandler {
 	return &impl{TaskBiz: taskBiz}
 }
 
+// ModifyInfo partial update information of task
+// @Summary ModifyInfo
+// @Description modify information of task
+// @Tags Task
+// @Accept application/json
+// @Produce application/json
+// @Param id path string true "Task ID"
+// @Success 200 {object} string
+// @Success 204 {object} string
+// @Failure 400 {object} string
+// @Failure 404 {object} string
+// @Failure 500 {object} string
+// @Router /v1/tasks/{id} [patch]
+func (i *impl) ModifyInfo(c *gin.Context) {
+	panic("implement me")
+}
+
 // List all tasks
 // @Summary List
 // @Description list all tasks
