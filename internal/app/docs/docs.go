@@ -255,6 +255,18 @@ var doc = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "completed of task",
+                        "name": "completed",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "title of task",
+                        "name": "title",
+                        "in": "query"
                     }
                 ],
                 "responses": {

@@ -168,6 +168,14 @@ paths:
         name: id
         required: true
         type: string
+      - description: completed of task
+        in: query
+        name: completed
+        type: string
+      - description: title of task
+        in: query
+        name: title
+        type: string
       produces:
       - application/json
       responses:
