@@ -2,7 +2,7 @@ import React from 'react';
 import './app.css';
 import {connect} from 'react-redux';
 import {AddTodo} from '../addTask';
-import {ListTodo} from '../listTasks';
+import {ListTasks} from '../listTasks';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
@@ -13,7 +13,7 @@ class App extends React.Component {
           <CssBaseline/>
           <Container maxWidth="sm">
             <AddTodo/>
-            <ListTodo/>
+            <ListTasks/>
           </Container>
         </React.Fragment>
     );

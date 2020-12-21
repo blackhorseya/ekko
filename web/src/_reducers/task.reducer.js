@@ -26,6 +26,18 @@ export function tasks(state = {}, action) {
       return {
         error: action.error,
       };
+    case taskConstants.REMOVE_REQUEST:
+      return {
+        loading: true,
+      };
+    case taskConstants.REMOVE_SUCCESS:
+      return {
+        item: action.data,
+      };
+    case taskConstants.REMOVE_FAILURE:
+      return {
+        error: action.error,
+      };
     default:
       return state;
   }
