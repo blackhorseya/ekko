@@ -9,10 +9,11 @@ import (
 
 // Config configure application parameters
 type Config struct {
-	RunMode string  `yaml:"runMode"`
-	HTTP    HTTP    `yaml:"http"`
-	Log     Log     `yaml:"log"`
-	DB      DB      `yaml:"db"`
+	RunMode string `yaml:"runMode"`
+	HTTP    HTTP   `yaml:"http"`
+	Log     Log    `yaml:"log"`
+	DB      DB     `yaml:"db"`
+	API     API    `yaml:"api"`
 }
 
 func (c *Config) String() string {
@@ -60,4 +61,8 @@ type Log struct {
 type DB struct {
 	URL   string `yaml:"url"`
 	Debug bool   `yaml:"debug"`
+}
+
+type API struct {
+	Endpoint string `yaml:"endpoint"`
 }
