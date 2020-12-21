@@ -10,7 +10,6 @@ import (
 // Config configure application parameters
 type Config struct {
 	RunMode string  `yaml:"runMode"`
-	Swagger Swagger `yaml:"swagger"`
 	HTTP    HTTP    `yaml:"http"`
 	Log     Log     `yaml:"log"`
 	DB      DB      `yaml:"db"`
@@ -49,11 +48,6 @@ type HTTP struct {
 // GetAddress combine host and port, format is `host:port`
 func (h HTTP) GetAddress() string {
 	return fmt.Sprintf("%s:%d", h.Host, h.Port)
-}
-
-// Swagger configure swagger parameters
-type Swagger struct {
-	Enabled bool `yaml:"enabled"`
 }
 
 // Log configure log parameters
