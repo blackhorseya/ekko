@@ -17,10 +17,11 @@ export function tasks(state = {}, action) {
     case taskConstants.ADD_REQUEST:
       return {
         loading: true,
+        item: state.item,
       };
     case taskConstants.ADD_SUCCESS:
       return {
-        item: action.data,
+        item: state.item.concat(action.task),
       };
     case taskConstants.ADD_FAILURE:
       return {
@@ -29,10 +30,11 @@ export function tasks(state = {}, action) {
     case taskConstants.REMOVE_REQUEST:
       return {
         loading: true,
+        item: state.item,
       };
     case taskConstants.REMOVE_SUCCESS:
       return {
-        item: action.data,
+        item: state.item.filter((task) => task.id !== action.id),
       };
     case taskConstants.REMOVE_FAILURE:
       return {
