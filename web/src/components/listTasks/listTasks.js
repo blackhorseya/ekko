@@ -96,5 +96,5 @@ const actionCreators = {
   remove: taskActions.remove,
 };
 
-const connectedListTodo = connect(mapStateToProps, actionCreators)(ListTasks);
-export {connectedListTodo as ListTasks};
+const connectedListTasks = connect(mapStateToProps, actionCreators)(ListTasks);
+export {connectedListTasks as ListTasks};
