@@ -21,7 +21,12 @@ func NewImpl(repo repository.TaskRepo) Biz {
 
 // Count all tasks
 func (i *impl) Count() (total int, err error) {
-	panic("implement me")
+	total, err = i.TaskRepo.CountTasks()
+	if err != nil {
+		return 0, err
+	}
+
+	return total, nil
 }
 
 // Create serve user to create a task
