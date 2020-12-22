@@ -117,7 +117,12 @@ func (i *impl) List(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, tasks)
+	c.JSON(http.StatusOK, gin.H{
+		"data": tasks,
+		"page": page,
+		"size": size,
+		// todo: 2020-12-22|21:13|doggy|add total tasks count
+	})
 }
 
 // Create a task
