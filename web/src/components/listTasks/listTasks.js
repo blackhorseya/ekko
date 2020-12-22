@@ -20,7 +20,7 @@ class ListTasks extends React.Component {
 
     this.state = {
       page: 0,
-      size: 10,
+      size: 2,
     };
 
     this.handleRemoveTask = this.handleRemoveTask.bind(this);
@@ -85,7 +85,7 @@ class ListTasks extends React.Component {
         <TableContainer component={Paper}>
           <Table size="small">
             <TableBody>
-              {tasks.item && tasks.item.map((row) => (
+              {tasks.item && tasks.item.data.map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>
                       <IconButton
@@ -114,7 +114,9 @@ class ListTasks extends React.Component {
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25, {label: 'All', value: -1}]}
                     colSpan={3}
-                    count={tasks.item !== undefined ? tasks.item.length : 10}
+                    count={tasks.item !== undefined
+                        ? tasks.item.total
+                        : 0}
                     rowsPerPage={size}
                     page={page}
                     SelectProps={{
