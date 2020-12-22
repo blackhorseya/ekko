@@ -14,4 +14,4 @@ db:
   url: "mongodb://todo-app:changeme@localhost:27017/todo-db/?connect=direct&authSource=todo-db"
 
 api:
-  endpoint: "https://localhost:5000/api"
+  endpoint: "http://localhost:5000"
