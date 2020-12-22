@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-	"fmt"
 
 	"github.com/blackhorseya/todo-app/internal/app/commands"
+	"github.com/blackhorseya/todo-app/internal/pkg/config"
 	"github.com/blackhorseya/todo-app/internal/pkg/utils/exit"
 	"github.com/spf13/cobra"
 )
@@ -25,5 +25,8 @@ func main() {
 }
 
 func initConfig() {
-	fmt.Println(*cfgPath)
+	_, err := config.NewConfig(*cfgPath)
+	if err != nil {
+		exit.Er(err)
+	}
 }
