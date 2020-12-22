@@ -13,7 +13,7 @@ import (
 
 var (
 	completeCmd = &cobra.Command{
-		Use: "complete",
+		Use:   "complete",
 		Short: "set status of task to complete",
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
@@ -53,7 +53,7 @@ var (
 	}
 
 	incompleteCmd = &cobra.Command{
-		Use: "incomplete",
+		Use:   "incomplete",
 		Short: "set status of task to incomplete",
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {

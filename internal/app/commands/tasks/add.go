@@ -15,7 +15,7 @@ import (
 
 var (
 	addCmd = &cobra.Command{
-		Use: "add",
+		Use:   "add",
 		Short: "add a task",
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
@@ -57,4 +57,3 @@ var (
 		},
 	}
 )
-
