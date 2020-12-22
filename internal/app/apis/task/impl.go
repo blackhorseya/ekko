@@ -117,11 +117,17 @@ func (i *impl) List(c *gin.Context) {
 		return
 	}
 
+	total, err := i.TaskBiz.Count()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"data": tasks,
-		"page": page,
-		"size": size,
-		// todo: 2020-12-22|21:13|doggy|add total tasks count
+		"data":  tasks,
+		"page":  page,
+		"size":  size,
+		"total": total,
 	})
 }
 
