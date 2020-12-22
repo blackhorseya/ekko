@@ -13,5 +13,5 @@ var (
 
 func init() {
 	Cmd.AddCommand(listCmd)
-	Cmd.AddCommand(addCmd)
+	Cmd.AddCommand(deleteCmd)
 }
