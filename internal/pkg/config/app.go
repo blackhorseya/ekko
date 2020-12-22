@@ -63,6 +63,7 @@ type DB struct {
 	Debug bool   `yaml:"debug"`
 }
 
+// API configure api settings
 type API struct {
 	Endpoint string `yaml:"endpoint"`
 }

@@ -5,6 +5,7 @@ import (
 )
 
 var (
+	// Cmd is root command of tasks
 	Cmd = &cobra.Command{
 		Use:   "tasks",
 		Short: "Tasks command",
