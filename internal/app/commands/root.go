@@ -1,6 +1,9 @@
 package commands
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/blackhorseya/todo-app/internal/app/commands/tasks"
+	"github.com/spf13/cobra"
+)
 
 var (
 	rootCmd = &cobra.Command{
@@ -23,4 +26,5 @@ func Execute() error {
 
 func init() {
 	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(tasks.Cmd)
 }
