@@ -20,6 +20,7 @@ var (
 	}
 )
 
+// Execute root command
 func Execute() error {
 	return rootCmd.Execute()
 }
