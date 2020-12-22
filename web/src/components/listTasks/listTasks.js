@@ -20,7 +20,7 @@ class ListTasks extends React.Component {
 
     this.state = {
       page: 0,
-      size: 2,
+      size: 5,
     };
 
     this.handleRemoveTask = this.handleRemoveTask.bind(this);
@@ -54,11 +54,16 @@ class ListTasks extends React.Component {
 
   handleChangePage(e, page) {
     this.setState({'page': page});
+    const {size} = this.state;
+
+    this.props.list(page + 1, size);
   }
 
   handleChangeSize(e) {
     this.setState({'size': parseInt(e.target.value, 10)});
     this.setState({'page': 0});
+
+    this.props.list(1, parseInt(e.target.value, 10));
   }
 
   handleFirstPage(e) {
@@ -118,7 +123,7 @@ class ListTasks extends React.Component {
                         ? tasks.item.total
                         : 0}
                     rowsPerPage={size}
-                    page={page}
+                    page={tasks.item !== undefined ? page : 0}
                     SelectProps={{
                       inputProps: {'aria-label': 'rows per page'},
                       native: true,
