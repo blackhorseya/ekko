@@ -8,7 +8,6 @@ import {
   TableContainer,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,15 +15,29 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 
 class ListTasks extends React.Component {
-  componentDidMount() {
-    this.props.list();
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      page: 0,
+      size: 10,
+    };
+
+    this.handleRemoveTask = this.handleRemoveTask.bind(this);
+    this.handleChangeStatus = this.handleChangeStatus.bind(this);
 
     this.handleFirstPage = this.handleFirstPage.bind(this);
     this.handleLastPage = this.handleLastPage.bind(this);
     this.handleNextPage = this.handleNextPage.bind(this);
     this.handleBackPage = this.handleBackPage.bind(this);
-    this.handleRemoveTask = this.handleRemoveTask.bind(this);
-    this.handleChangeStatus = this.handleChangeStatus.bind(this);
+
+    this.handleChangePage = this.handleChangePage.bind(this);
+    this.handleChangeSize = this.handleChangeSize.bind(this);
+  }
+
+  componentDidMount() {
+    const {page, size} = this.state;
+    this.props.list(page + 1, size);
   }
 
   handleRemoveTask(id) {
@@ -33,10 +46,19 @@ class ListTasks extends React.Component {
 
   handleChangeStatus(id, completed) {
     if (completed === undefined || !completed) {
-      this.props.changeStatus(id, 2)
+      this.props.changeStatus(id, 2);
     } else {
-      this.props.changeStatus(id, 1)
+      this.props.changeStatus(id, 1);
     }
+  }
+
+  handleChangePage(e, page) {
+    this.setState({'page': page});
+  }
+
+  handleChangeSize(e) {
+    this.setState({'size': parseInt(e.target.value, 10)});
+    this.setState({'page': 0});
   }
 
   handleFirstPage(e) {
@@ -56,6 +78,7 @@ class ListTasks extends React.Component {
   }
 
   render() {
+    const {page, size} = this.state;
     const {tasks} = this.props;
 
     return (
@@ -86,11 +109,23 @@ class ListTasks extends React.Component {
                   </TableRow>
               ))}
             </TableBody>
-            {/*<TableFooter>*/}
-            {/*  <TableRow>*/}
-            {/*    <TablePagination rowsPerPageOptions={[10, 50]}/>*/}
-            {/*  </TableRow>*/}
-            {/*</TableFooter>*/}
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, {label: 'All', value: -1}]}
+                    colSpan={3}
+                    count={tasks.item !== undefined ? tasks.item.length : 10}
+                    rowsPerPage={size}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {'aria-label': 'rows per page'},
+                      native: true,
+                    }}
+                    onChangePage={this.handleChangePage}
+                    onChangeRowsPerPage={this.handleChangeSize}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </TableContainer>
     );
