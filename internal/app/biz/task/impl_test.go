@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/blackhorseya/todo-app/internal/app/biz/task/repository"
 	"github.com/blackhorseya/todo-app/internal/app/biz/task/repository/mocks"
 	"github.com/blackhorseya/todo-app/internal/app/entities"
 	"github.com/stretchr/testify/mock"
@@ -342,23 +341,33 @@ func (s *bizTestSuite) Test_impl_ChangeTitle() {
 }
 
 func (s *bizTestSuite) Test_impl_Count() {
-	type fields struct {
-		TaskRepo repository.TaskRepo
-	}
 	tests := []struct {
 		name      string
-		fields    fields
+		mockFunc  func()
 		wantTotal int
 		wantErr   bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "count then 3 nil",
+			mockFunc: func() {
+				s.mockRepo.On("CountTasks").Return(3, nil).Once()
+			},
+			wantTotal: 3,
+			wantErr:   false,
+		},
+		{
+			name: "count then 0 error",
+			mockFunc: func() {
+				s.mockRepo.On("CountTasks").Return(0, errors.New("test error")).Once()
+			},
+			wantTotal: 0,
+			wantErr:   true,
+		},
 	}
 	for _, tt := range tests {
 		s.Run(tt.name, func() {
-			i := &impl{
-				TaskRepo: tt.fields.TaskRepo,
-			}
-			gotTotal, err := i.Count()
+			tt.mockFunc()
+			gotTotal, err := s.taskBiz.Count()
 			if (err != nil) != tt.wantErr {
 				s.T().Errorf("Count() error = %v, wantErr %v", err, tt.wantErr)
 				return
