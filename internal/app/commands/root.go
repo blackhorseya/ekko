@@ -20,3 +20,7 @@ var (
 func Execute() error {
 	return rootCmd.Execute()
 }
+
+func init() {
+	rootCmd.AddCommand(versionCmd)
+}
