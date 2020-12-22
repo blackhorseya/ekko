@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/blackhorseya/todo-app/internal/app/biz/task/repository"
 	"github.com/blackhorseya/todo-app/internal/app/biz/task/repository/mocks"
 	"github.com/blackhorseya/todo-app/internal/app/entities"
 	"github.com/stretchr/testify/mock"
@@ -31,6 +32,10 @@ func (s *bizTestSuite) SetupTest() {
 
 func (s *bizTestSuite) TearDownTest() {
 	s.mockRepo.AssertExpectations(s.T())
+}
+
+func TestTaskBiz(t *testing.T) {
+	suite.Run(t, new(bizTestSuite))
 }
 
 func (s *bizTestSuite) Test_impl_Create() {
@@ -336,6 +341,31 @@ func (s *bizTestSuite) Test_impl_ChangeTitle() {
 	}
 }
 
-func TestTaskBiz(t *testing.T) {
-	suite.Run(t, new(bizTestSuite))
+func (s *bizTestSuite) Test_impl_Count() {
+	type fields struct {
+		TaskRepo repository.TaskRepo
+	}
+	tests := []struct {
+		name      string
+		fields    fields
+		wantTotal int
+		wantErr   bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		s.Run(tt.name, func() {
+			i := &impl{
+				TaskRepo: tt.fields.TaskRepo,
+			}
+			gotTotal, err := i.Count()
+			if (err != nil) != tt.wantErr {
+				s.T().Errorf("Count() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if gotTotal != tt.wantTotal {
+				s.T().Errorf("Count() gotTotal = %v, want %v", gotTotal, tt.wantTotal)
+			}
+		})
+	}
 }
