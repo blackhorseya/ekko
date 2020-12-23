@@ -9,7 +9,6 @@
 practice Todo list application using `golang`
 
 - [Todo List](#todo-list)
-    * [How to use](#how-to-use)
     * [Live Preview](#live-preview)
     * [Functional](#functional)
         + [Main](#main)
@@ -19,8 +18,6 @@ practice Todo list application using `golang`
         + [Frameworks](#frameworks)
         + [Infrastructures](#infrastructures)
         + [CI/CD](#ci-cd)
-
-## How to use
 
 ## Live Preview
 
