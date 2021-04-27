@@ -12,10 +12,12 @@ export const todoSlice = createSlice({
   initialState: initialState,
   reducers: {
     add: (state, action) => {
-      state.tasks.push(action.payload);
+      state.tasks.push({id: state.tasks[state.tasks.length - 1].id + 1, name: action.payload});
     },
   },
 });
+
+export const {add} = todoSlice.actions;
 
 export const selectTodo = (state) => state.todo;
 
