@@ -16,11 +16,11 @@ info:
     email: blackhorseya@gmail.com
     name: Sean Cheng
     url: https://blog.seancheng.space
-  description: Todo list API
+  description: TodoList list API
   license:
     name: GPL-3.0
     url: https://spdx.org/licenses/GPL-3.0-only.html
-  title: Todo list API
+  title: TodoList list API
   version: 0.0.1
 paths:
   /liveness:

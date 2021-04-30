@@ -24,9 +24,9 @@ func initLogger(config config.Log) {
 	logger.SetFormatter(config.Format)
 }
 
-// @title Todo list API
+// @title TodoList list API
 // @version 0.0.1
-// @description Todo list API
+// @description TodoList list API
 
 // @contact.name Sean Cheng
 // @contact.email blackhorseya@gmail.com

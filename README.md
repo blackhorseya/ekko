@@ -1,4 +1,4 @@
-# Todo List
+# TodoList List
 
 [![Build Status](https://travis-ci.com/blackhorseya/todo-app.svg?branch=main)](https://travis-ci.com/blackhorseya/todo-app)
 [![codecov](https://codecov.io/gh/blackhorseya/todo-app/branch/main/graph/badge.svg?token=SV4V6G6QZJ)](https://codecov.io/gh/blackhorseya/todo-app)
@@ -6,9 +6,9 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/39294b20d6aa45be9a2aa4c109afde5d)](https://www.codacy.com/gh/blackhorseya/todo-app/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=blackhorseya/todo-app&amp;utm_campaign=Badge_Grade)
 ![license](https://img.shields.io/github/license/blackhorseya/todo-app)
 
-practice Todo list application using `golang`
+practice TodoList list application using `golang`
 
-- [Todo List](#todo-list)
+- [TodoList List](#todo-list)
     * [Live Preview](#live-preview)
     * [Functional](#functional)
         + [Main](#main)
