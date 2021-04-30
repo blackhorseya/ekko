@@ -1,5 +1,5 @@
-import {useDispatch, useSelector} from 'react-redux';
-import {add, selectTodo} from './todoSlice';
+import {useSelector} from 'react-redux';
+import {selectTodo} from './todoSlice';
 
 export function TodoList() {
   const todo = useSelector(selectTodo);
