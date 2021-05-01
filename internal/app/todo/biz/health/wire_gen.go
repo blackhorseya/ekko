@@ -6,13 +6,13 @@
 package health
 
 import (
-	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repository"
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo"
 	"github.com/google/wire"
 )
 
 // Injectors from wire.go:
 
-func CreateHealthBiz(repo repository.HealthRepo) (Biz, error) {
+func CreateHealthBiz(repo repo.IRepo) (IBiz, error) {
 	biz := NewImpl(repo)
 	return biz, nil
 }

@@ -8,11 +8,11 @@ import (
 )
 
 type impl struct {
-	HealthBiz health2.Biz
+	HealthBiz health2.IBiz
 }
 
 // NewImpl is a constructor of implement health api handler
-func NewImpl(healthBiz health2.Biz) IHandler {
+func NewImpl(healthBiz health2.IBiz) IHandler {
 	return &impl{HealthBiz: healthBiz}
 }
 

@@ -4,29 +4,29 @@ import (
 	"errors"
 	"testing"
 
-	mocks2 "github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repository/mocks"
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo/mocks"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
 
 type bizTestSuite struct {
 	suite.Suite
-	healthRepo *mocks2.HealthRepo
-	healthBiz  Biz
+	mock *mocks.IRepo
+	biz  IBiz
 }
 
 func (s *bizTestSuite) SetupTest() {
-	s.healthRepo = new(mocks2.HealthRepo)
-	biz, err := CreateHealthBiz(s.healthRepo)
+	s.mock = new(mocks.IRepo)
+	biz, err := CreateHealthBiz(s.mock)
 	if err != nil {
 		panic(err)
 	}
 
-	s.healthBiz = biz
+	s.biz = biz
 }
 
 func (s *bizTestSuite) TearDownTest() {
-	s.healthRepo.AssertExpectations(s.T())
+	s.mock.AssertExpectations(s.T())
 }
 
 func (s *bizTestSuite) Test_impl_Readiness() {
@@ -41,7 +41,7 @@ func (s *bizTestSuite) Test_impl_Readiness() {
 			wantOk:  true,
 			wantErr: "",
 			mockFunc: func() {
-				s.healthRepo.On("Ping", mock.AnythingOfType("time.Duration")).Return(nil).Once()
+				s.mock.On("Ping", mock.AnythingOfType("time.Duration")).Return(nil).Once()
 			},
 		},
 		{
@@ -49,7 +49,7 @@ func (s *bizTestSuite) Test_impl_Readiness() {
 			wantOk:  false,
 			wantErr: "test error",
 			mockFunc: func() {
-				s.healthRepo.On("Ping", mock.AnythingOfType("time.Duration")).Return(
+				s.mock.On("Ping", mock.AnythingOfType("time.Duration")).Return(
 					errors.New("test error")).Once()
 			},
 		},
@@ -57,7 +57,7 @@ func (s *bizTestSuite) Test_impl_Readiness() {
 	for _, tt := range tests {
 		s.Run(tt.name, func() {
 			tt.mockFunc()
-			gotOk, err := s.healthBiz.Readiness()
+			gotOk, err := s.biz.Readiness()
 			if err != nil {
 				s.EqualErrorf(err, tt.wantErr, "Readiness() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -79,7 +79,7 @@ func (s *bizTestSuite) Test_impl_Liveness() {
 			wantOk:  true,
 			wantErr: "",
 			mockFunc: func() {
-				s.healthRepo.On("Ping", mock.AnythingOfType("time.Duration")).Return(nil).Once()
+				s.mock.On("Ping", mock.AnythingOfType("time.Duration")).Return(nil).Once()
 			},
 		},
 		{
@@ -87,7 +87,7 @@ func (s *bizTestSuite) Test_impl_Liveness() {
 			wantOk:  false,
 			wantErr: "test error",
 			mockFunc: func() {
-				s.healthRepo.On("Ping", mock.AnythingOfType("time.Duration")).Return(
+				s.mock.On("Ping", mock.AnythingOfType("time.Duration")).Return(
 					errors.New("test error")).Once()
 			},
 		},
@@ -95,7 +95,7 @@ func (s *bizTestSuite) Test_impl_Liveness() {
 	for _, tt := range tests {
 		s.Run(tt.name, func() {
 			tt.mockFunc()
-			gotOk, err := s.healthBiz.Liveness()
+			gotOk, err := s.biz.Liveness()
 			if err != nil {
 				s.EqualErrorf(err, tt.wantErr, "Liveness() error = %v, wantErr %v", err, tt.wantErr)
 			}

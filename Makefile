@@ -43,9 +43,9 @@ tag-image:
 push-image:
 	@docker push gcr.io/$(PROJECT_ID)/$(APP_NAME):$(VERSION)
 
-.PHONY: iNStall-db
-iNStall-db:
-	@helm --namespace $(NS) upgrade --iNStall $(APP_NAME)-db bitnami/mongodb \
+.PHONY: install-db
+install-db:
+	@helm --namespace $(NS) upgrade --install $(APP_NAME)-db bitnami/mongodb \
 	--values ./deployments/configs/$(DEPLOY_TO)/mongo.yaml
 
 .PHONY: deploy

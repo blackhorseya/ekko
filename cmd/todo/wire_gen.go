@@ -11,7 +11,7 @@ import (
 	health2 "github.com/blackhorseya/todo-app/internal/app/todo/apis/health"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health"
-	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repository"
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/app"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/config"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/database"
@@ -51,7 +51,7 @@ func CreateApp(path string) (*app.Application, error) {
 	if err != nil {
 		return nil, err
 	}
-	healthRepo := repository.NewImpl(client)
+	healthRepo := repo.NewImpl(client)
 	biz := health.NewImpl(healthRepo)
 	iHandler := health2.NewImpl(biz)
 	initHandlers := apis.CreateInitHandlerFn(iHandler)

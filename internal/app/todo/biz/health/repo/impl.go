@@ -1,4 +1,4 @@
-package repository
+package repo
 
 import (
 	"context"
@@ -12,8 +12,8 @@ type impl struct {
 	MongoClient *mongo.Client
 }
 
-// NewImpl is a constructor health of implement repository
-func NewImpl(mongoClient *mongo.Client) HealthRepo {
+// NewImpl is a constructor health of implement repo
+func NewImpl(mongoClient *mongo.Client) IRepo {
 	return &impl{MongoClient: mongoClient}
 }
 
