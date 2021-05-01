@@ -125,7 +125,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entities.Task"
+                                "$ref": "#/definitions/todo.Task"
                             }
                         }
                     },
@@ -161,7 +161,7 @@ var doc = `{
                         "name": "newTask",
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/entities.Task"
+                            "$ref": "#/definitions/todo.Task"
                         }
                     }
                 ],
@@ -169,7 +169,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.Task"
+                            "$ref": "#/definitions/todo.Task"
                         }
                     },
                     "400": {
@@ -305,7 +305,7 @@ var doc = `{
         }
     },
     "definitions": {
-        "entities.Task": {
+        "todo.Task": {
             "type": "object",
             "properties": {
                 "completed": {

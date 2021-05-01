@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/blackhorseya/todo-app/internal/app/biz/health"
-	"github.com/blackhorseya/todo-app/internal/app/entities"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,20 +26,12 @@ func NewImpl(healthBiz health.Biz) IHandler {
 // @Failure 500 {object} string
 // @Router /readiness [get]
 func (h *impl) Readiness(ctx *gin.Context) {
-	res := &entities.Response{
-		Ok:  true,
-		Msg: "application has been ready",
-	}
-	code := http.StatusOK
 
 	ok, _ := h.HealthBiz.Readiness()
 	if !ok {
-		code = http.StatusInternalServerError
-		res.Ok = false
-		res.Msg = "application has failed"
 	}
 
-	ctx.JSON(code, res)
+	ctx.Status(http.StatusOK)
 }
 
 // Liveness to know when to restart an application
@@ -53,18 +44,9 @@ func (h *impl) Readiness(ctx *gin.Context) {
 // @Failure 500 {object} string
 // @Router /liveness [get]
 func (h *impl) Liveness(ctx *gin.Context) {
-	ret := &entities.Response{
-		Ok:  true,
-		Msg: "alive",
-	}
-	code := http.StatusOK
-
 	ok, _ := h.HealthBiz.Liveness()
 	if !ok {
-		code = http.StatusInternalServerError
-		ret.Ok = false
-		ret.Msg = "dead"
 	}
 
-	ctx.JSON(code, ret)
+	ctx.Status(http.StatusOK)
 }

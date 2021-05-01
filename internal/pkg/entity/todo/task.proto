@@ -1,6 +1,6 @@
 syntax = "proto3";
-package entities;
-option go_package = ".;entities";
+package todo;
+option go_package = "./todo;todo";
 
 message Task {
   string id = 1;

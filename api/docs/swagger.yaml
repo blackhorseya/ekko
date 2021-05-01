@@ -1,6 +1,6 @@
 basePath: /api
 definitions:
-  entities.Task:
+  todo.Task:
     properties:
       completed:
         type: boolean
@@ -84,7 +84,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entities.Task'
+              $ref: '#/definitions/todo.Task'
             type: array
         "400":
           description: Bad Request
@@ -106,14 +106,14 @@ paths:
         in: body
         name: newTask
         schema:
-          $ref: '#/definitions/entities.Task'
+          $ref: '#/definitions/todo.Task'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.Task'
+            $ref: '#/definitions/todo.Task'
         "400":
           description: Bad Request
           schema:
