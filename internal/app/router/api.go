@@ -2,7 +2,7 @@ package router
 
 import (
 	// import docs for swagger
-	_ "github.com/blackhorseya/todo-app/internal/app/docs"
+	_ "github.com/blackhorseya/todo-app/api/docs"
 	"github.com/gin-gonic/gin"
 )
 

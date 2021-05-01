@@ -3,7 +3,7 @@ package middlewares
 import (
 	"net/http"
 
-	"github.com/blackhorseya/house-management/internal/pkg/entity/er"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/gin-gonic/gin"
 )
 
