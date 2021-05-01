@@ -24,7 +24,7 @@ func NewImpl(logger *zap.Logger, healthRepo repo.IRepo) IBiz {
 
 // Readiness to handle application has been ready
 func (i *impl) Readiness(ctx contextx.Contextx) (ok bool, err error) {
-	err = i.repo.Ping(2 * time.Second)
+	err = i.repo.Ping(ctx, 2*time.Second)
 	if err != nil {
 		i.logger.Error(er.ErrPing.Error(), zap.Error(err))
 		return false, er.ErrPing
@@ -35,7 +35,7 @@ func (i *impl) Readiness(ctx contextx.Contextx) (ok bool, err error) {
 
 // Liveness to handle application was alive
 func (i *impl) Liveness(ctx contextx.Contextx) (ok bool, err error) {
-	err = i.repo.Ping(5 * time.Second)
+	err = i.repo.Ping(ctx, 5*time.Second)
 	if err != nil {
 		i.logger.Error(er.ErrPing.Error(), zap.Error(err))
 		return false, er.ErrPing

@@ -1,9 +1,9 @@
 package repo
 
 import (
-	"context"
 	"time"
 
+	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
@@ -18,11 +18,11 @@ func NewImpl(mongoClient *mongo.Client) IRepo {
 }
 
 // Ping sends a ping command to verify that the client can connect to the deployment
-func (i *impl) Ping(timeout time.Duration) error {
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+func (i *impl) Ping(ctx contextx.Contextx, timeout time.Duration) error {
+	withTimeout, cancel := contextx.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	err := i.MongoClient.Ping(ctx, readpref.Primary())
+	err := i.MongoClient.Ping(withTimeout, readpref.Primary())
 	if err != nil {
 		return err
 	}
