@@ -3,8 +3,10 @@ package health
 import (
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo/mocks"
+	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
@@ -44,23 +46,22 @@ func (s *bizTestSuite) Test_impl_Readiness() {
 			wantOk:  true,
 			wantErr: "",
 			mockFunc: func() {
-				s.mock.On("Ping", mock.AnythingOfType("time.Duration")).Return(nil).Once()
+				s.mock.On("Ping", mock.Anything, 2*time.Second).Return(nil).Once()
 			},
 		},
 		{
 			name:    "has error then false error",
 			wantOk:  false,
-			wantErr: "test error",
+			wantErr: "db ping is failure",
 			mockFunc: func() {
-				s.mock.On("Ping", mock.AnythingOfType("time.Duration")).Return(
-					errors.New("test error")).Once()
+				s.mock.On("Ping", mock.Anything, 2*time.Second).Return(errors.New("db ping is failure")).Once()
 			},
 		},
 	}
 	for _, tt := range tests {
 		s.Run(tt.name, func() {
 			tt.mockFunc()
-			gotOk, err := s.biz.Readiness()
+			gotOk, err := s.biz.Readiness(contextx.Background())
 			if err != nil {
 				s.EqualErrorf(err, tt.wantErr, "Readiness() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -82,23 +83,22 @@ func (s *bizTestSuite) Test_impl_Liveness() {
 			wantOk:  true,
 			wantErr: "",
 			mockFunc: func() {
-				s.mock.On("Ping", mock.AnythingOfType("time.Duration")).Return(nil).Once()
+				s.mock.On("Ping", mock.Anything, 5*time.Second).Return(nil).Once()
 			},
 		},
 		{
 			name:    "has error then false error",
 			wantOk:  false,
-			wantErr: "test error",
+			wantErr: "db ping is failure",
 			mockFunc: func() {
-				s.mock.On("Ping", mock.AnythingOfType("time.Duration")).Return(
-					errors.New("test error")).Once()
+				s.mock.On("Ping", mock.Anything, 5*time.Second).Return(errors.New("db ping is failure")).Once()
 			},
 		},
 	}
 	for _, tt := range tests {
 		s.Run(tt.name, func() {
 			tt.mockFunc()
-			gotOk, err := s.biz.Liveness()
+			gotOk, err := s.biz.Liveness(contextx.Background())
 			if err != nil {
 				s.EqualErrorf(err, tt.wantErr, "Liveness() error = %v, wantErr %v", err, tt.wantErr)
 			}

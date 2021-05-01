@@ -1,9 +1,12 @@
+// +build integration
+
 package repo
 
 import (
 	"testing"
 	"time"
 
+	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -42,7 +45,7 @@ func (s *repoSuite) Test_impl_Ping() {
 	}
 	for _, tt := range tests {
 		s.T().Run(tt.name, func(t *testing.T) {
-			if err := s.repo.Ping(tt.args.timeout); (err != nil) != tt.wantErr {
+			if err := s.repo.Ping(contextx.Background(), tt.args.timeout); (err != nil) != tt.wantErr {
 				t.Errorf("Ping() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
