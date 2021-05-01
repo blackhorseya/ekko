@@ -1,8 +1,8 @@
-app_name = todo
-version = latest
-project_id = sean-side
-ns = side
-deploy_to = uat
+APP_NAME = todo
+VERSION = latest
+PROJECT_ID = sean-side
+NS = side
+DEPLOY_TO = uat
 
 .PHONY: clean
 clean:
@@ -22,38 +22,38 @@ report:
 
 .PHONY: build-image
 build-image:
-	@docker build -t $(app_name):$(version) \
-	--label "app.name=$(app_name)" \
-	--label "app.version=$(version)" \
+	@docker build -t $(APP_NAME):$(VERSION) \
+	--label "app.name=$(APP_NAME)" \
+	--label "app.version=$(VERSION)" \
 	--pull .
 
 .PHONY: list-images
 list-images:
-	@docker images --filter=label=app.name=$(app_name)
+	@docker images --filter=label=app.name=$(APP_NAME)
 
 .PHONY: prune-images
 prune-images:
-	@docker rmi -f `docker images --filter=label=app.name=$(app_name) -q`
+	@docker rmi -f `docker images --filter=label=app.name=$(APP_NAME) -q`
 
 .PHONY: tag-image
 tag-image:
-	@docker tag $(app_name):$(version) gcr.io/$(project_id)/$(app_name):$(version)
+	@docker tag $(APP_NAME):$(VERSION) gcr.io/$(PROJECT_ID)/$(APP_NAME):$(VERSION)
 
 .PHONY: push-image
 push-image:
-	@docker push gcr.io/$(project_id)/$(app_name):$(version)
+	@docker push gcr.io/$(PROJECT_ID)/$(APP_NAME):$(VERSION)
 
-.PHONY: install-db
-install-db:
-	@helm --namespace $(ns) upgrade --install $(app_name)-db bitnami/mongodb \
-	--values ./deployments/configs/$(deploy_to)/mongo.yaml
+.PHONY: iNStall-db
+iNStall-db:
+	@helm --namespace $(NS) upgrade --iNStall $(APP_NAME)-db bitnami/mongodb \
+	--values ./deployments/configs/$(DEPLOY_TO)/mongo.yaml
 
 .PHONY: deploy
 deploy:
-	@helm --namespace $(ns) \
-	upgrade --install $(app_name) ./deployments/helm \
-	--values ./deployments/configs/$(deploy_to)/todo.yaml \
-	--set image.tag=$(version)
+	@helm --namespace $(NS) \
+	upgrade --iNStall $(APP_NAME) ./deployments/helm \
+	--values ./deployments/configs/$(DEPLOY_TO)/todo.yaml \
+	--set image.tag=$(VERSION)
 
 .PHONY: gen
 gen: gen-pb gen-swagger gen-wire
@@ -68,4 +68,4 @@ gen-wire:
 
 .PHONY: gen-swagger
 gen-swagger:
-	@swag init -g cmd/app/main.go --parseInternal -o api/docs
+	@swag init -g cmd/$(APP_NAME)/main.go --parseInternal -o api/docs

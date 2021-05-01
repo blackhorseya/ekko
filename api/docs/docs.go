@@ -108,8 +108,8 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "",
 	BasePath:    "/api",
 	Schemes:     []string{},
-	Title:       "TodoList list API",
-	Description: "TodoList list API",
+	Title:       "TodoList API",
+	Description: "TodoList API",
 }
 
 type s struct{}

@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "TodoList list API",
-        "title": "TodoList list API",
+        "description": "TodoList API",
+        "title": "TodoList API",
         "contact": {
             "name": "Sean Cheng",
             "url": "https://blog.seancheng.space",
