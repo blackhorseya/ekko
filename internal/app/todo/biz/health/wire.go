@@ -5,6 +5,7 @@ package health
 import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo"
 	"github.com/google/wire"
+	"go.uber.org/zap"
 )
 
 var testProviderSet = wire.NewSet(
@@ -12,6 +13,6 @@ var testProviderSet = wire.NewSet(
 )
 
 // CreateHealthBiz serve user to create health biz
-func CreateHealthBiz(repo repo.IRepo) (IBiz, error) {
+func CreateHealthBiz(logger *zap.Logger, repo repo.IRepo) (IBiz, error) {
 	panic(wire.Build(testProviderSet))
 }

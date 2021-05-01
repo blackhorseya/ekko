@@ -21,6 +21,7 @@ func NewImpl(mongoClient *mongo.Client) IRepo {
 func (i *impl) Ping(timeout time.Duration) error {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
+
 	err := i.MongoClient.Ping(ctx, readpref.Primary())
 	if err != nil {
 		return err

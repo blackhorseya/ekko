@@ -18,8 +18,8 @@ import (
 
 // Options is configuration of database
 type Options struct {
-	URL   string `yaml:"url"`
-	Debug bool
+	URL   string `json:"url" yaml:"url"`
+	Debug bool   `json:"debug" yaml:"debug"`
 }
 
 // NewOptions serve caller to create an Options

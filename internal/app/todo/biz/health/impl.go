@@ -3,23 +3,30 @@ package health
 import (
 	"time"
 
-	repository2 "github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo"
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
+	"go.uber.org/zap"
 )
 
 type impl struct {
-	HealthRepo repository2.IRepo
+	logger *zap.Logger
+	repo   repo.IRepo
 }
 
 // NewImpl is a constructor of implement business with parameters
-func NewImpl(healthRepo repository2.IRepo) IBiz {
-	return &impl{HealthRepo: healthRepo}
+func NewImpl(logger *zap.Logger, healthRepo repo.IRepo) IBiz {
+	return &impl{
+		logger: logger.With(zap.String("type", "HealthBiz")),
+		repo:   healthRepo,
+	}
 }
 
 // Readiness to handle application has been ready
 func (i *impl) Readiness() (ok bool, err error) {
-	err = i.HealthRepo.Ping(2 * time.Second)
+	err = i.repo.Ping(2 * time.Second)
 	if err != nil {
-		return false, err
+		i.logger.Error(er.ErrPing.Error(), zap.Error(err))
+		return false, er.ErrPing
 	}
 
 	return true, nil
@@ -27,9 +34,10 @@ func (i *impl) Readiness() (ok bool, err error) {
 
 // Liveness to handle application was alive
 func (i *impl) Liveness() (ok bool, err error) {
-	err = i.HealthRepo.Ping(5 * time.Second)
+	err = i.repo.Ping(5 * time.Second)
 	if err != nil {
-		return false, err
+		i.logger.Error(er.ErrPing.Error(), zap.Error(err))
+		return false, er.ErrPing
 	}
 
 	return true, nil

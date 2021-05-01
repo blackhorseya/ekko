@@ -22,8 +22,8 @@ import (
 
 // Injectors from wire.go:
 
-func CreateApp(path string) (*app.Application, error) {
-	viper, err := config.New(path)
+func CreateApp(path2 string) (*app.Application, error) {
+	viper, err := config.New(path2)
 	if err != nil {
 		return nil, err
 	}
@@ -51,9 +51,9 @@ func CreateApp(path string) (*app.Application, error) {
 	if err != nil {
 		return nil, err
 	}
-	healthRepo := repo.NewImpl(client)
-	biz := health.NewImpl(healthRepo)
-	iHandler := health2.NewImpl(biz)
+	iRepo := repo.NewImpl(client)
+	iBiz := health.NewImpl(logger, iRepo)
+	iHandler := health2.NewImpl(iBiz)
 	initHandlers := apis.CreateInitHandlerFn(iHandler)
 	engine := http.NewRouter(httpOptions, logger, initHandlers)
 	server, err := http.New(httpOptions, logger, engine)
