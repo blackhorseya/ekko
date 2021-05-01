@@ -4,8 +4,8 @@ import (
 	"flag"
 
 	"github.com/blackhorseya/todo-app/internal/app/commands"
+	exit2 "github.com/blackhorseya/todo-app/internal/pkg/base/exit"
 	"github.com/blackhorseya/todo-app/internal/pkg/config"
-	"github.com/blackhorseya/todo-app/internal/pkg/utils/exit"
 	"github.com/spf13/cobra"
 )
 
@@ -20,13 +20,13 @@ func init() {
 func main() {
 	err := commands.Execute()
 	if err != nil {
-		exit.Er(err)
+		exit2.Er(err)
 	}
 }
 
 func initConfig() {
 	_, err := config.NewConfig(*cfgPath)
 	if err != nil {
-		exit.Er(err)
+		exit2.Er(err)
 	}
 }
