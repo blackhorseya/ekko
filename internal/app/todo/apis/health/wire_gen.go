@@ -12,7 +12,7 @@ import (
 
 // Injectors from wire.go:
 
-func CreateHealthHandler(biz health.IBiz) (IHandler, error) {
+func CreateIHandler(biz health.IBiz) (IHandler, error) {
 	iHandler := NewImpl(biz)
 	return iHandler, nil
 }

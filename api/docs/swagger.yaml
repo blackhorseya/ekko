@@ -1,4 +1,21 @@
 basePath: /api
+definitions:
+  er.APPError:
+    properties:
+      code:
+        type: integer
+      msg:
+        type: string
+    type: object
+  response.Response:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      msg:
+        type: string
+    type: object
 info:
   contact:
     email: blackhorseya@gmail.com
@@ -22,11 +39,11 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            $ref: '#/definitions/response.Response'
         "500":
           description: Internal Server Error
           schema:
-            type: string
+            $ref: '#/definitions/er.APPError'
       summary: Liveness
       tags:
       - Health
@@ -41,11 +58,11 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            $ref: '#/definitions/response.Response'
         "500":
           description: Internal Server Error
           schema:
-            type: string
+            $ref: '#/definitions/er.APPError'
       summary: Readiness
       tags:
       - Health
