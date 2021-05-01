@@ -3,7 +3,7 @@
 package health
 
 import (
-	"github.com/blackhorseya/todo-app/internal/app/biz/health/repository"
+	repository2 "github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repository"
 	"github.com/google/wire"
 )
 
@@ -12,6 +12,6 @@ var testProviderSet = wire.NewSet(
 )
 
 // CreateHealthBiz serve user to create health biz
-func CreateHealthBiz(repo repository.HealthRepo) (Biz, error) {
+func CreateHealthBiz(repo repository2.HealthRepo) (Biz, error) {
 	panic(wire.Build(testProviderSet))
 }

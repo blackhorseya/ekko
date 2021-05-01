@@ -3,15 +3,15 @@ package health
 import (
 	"time"
 
-	"github.com/blackhorseya/todo-app/internal/app/biz/health/repository"
+	repository2 "github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repository"
 )
 
 type impl struct {
-	HealthRepo repository.HealthRepo
+	HealthRepo repository2.HealthRepo
 }
 
 // NewImpl is a constructor of implement business with parameters
-func NewImpl(healthRepo repository.HealthRepo) Biz {
+func NewImpl(healthRepo repository2.HealthRepo) Biz {
 	return &impl{HealthRepo: healthRepo}
 }
 

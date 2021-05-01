@@ -4,19 +4,19 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/blackhorseya/todo-app/internal/app/biz/health/repository/mocks"
+	mocks2 "github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repository/mocks"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
 
 type bizTestSuite struct {
 	suite.Suite
-	healthRepo *mocks.HealthRepo
+	healthRepo *mocks2.HealthRepo
 	healthBiz  Biz
 }
 
 func (s *bizTestSuite) SetupTest() {
-	s.healthRepo = new(mocks.HealthRepo)
+	s.healthRepo = new(mocks2.HealthRepo)
 	biz, err := CreateHealthBiz(s.healthRepo)
 	if err != nil {
 		panic(err)
