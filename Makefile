@@ -8,6 +8,18 @@ deploy_to = uat
 clean:
 	@rm -rf coverage.txt profile.out bin
 
+.PHONY: test-unit
+test-unit:
+	@sh $(shell pwd)/scripts/go.test.sh
+
+.PHONY: lint
+lint:
+	@golint ./...
+
+.PHONY: report
+report:
+	@curl -XPOST 'https://goreportcard.com/checks' --data 'repo=github.com/blackhorseya/todo-app'
+
 .PHONY: build-image
 build-image:
 	@docker build -t $(app_name):$(version) \
@@ -18,17 +30,6 @@ build-image:
 .PHONY: list-images
 list-images:
 	@docker images --filter=label=app.name=$(app_name)
-
-.PHONY: run-with-docker
-run-with-docker:
-	@docker run -it --rm -p 8080:8080 \
-	-v $(shell pwd)/configs/app.yaml:/app/configs/app.yaml \
-	$(app_name):$(version)
-
-.PHONY: run-mongo
-run-mongo:
-	@helm --namespace $(ns) upgrade --install $(app_name)-db bitnami/mongodb \
-	--values ./deployments/configs/$(deploy_to)/mongo.yaml
 
 .PHONY: prune-images
 prune-images:
@@ -42,8 +43,13 @@ tag-image:
 push-image:
 	@docker push gcr.io/$(project_id)/$(app_name):$(version)
 
-.PHONY: deploy-with-helm
-deploy-with-helm:
+.PHONY: install-db
+install-db:
+	@helm --namespace $(ns) upgrade --install $(app_name)-db bitnami/mongodb \
+	--values ./deployments/configs/$(deploy_to)/mongo.yaml
+
+.PHONY: deploy
+deploy:
 	@helm --namespace $(ns) \
 	upgrade --install $(app_name) ./deployments/helm \
 	--values ./deployments/configs/$(deploy_to)/todo.yaml \
@@ -63,19 +69,3 @@ gen-wire:
 .PHONY: gen-swagger
 gen-swagger:
 	@swag init -g cmd/app/main.go --parseInternal -o api/docs
-
-.PHONY: test-with-coverage
-test-with-coverage:
-	@sh $(shell pwd)/scripts/go.test.sh
-
-.PHONY: lint
-lint:
-	@curl -XPOST 'https://goreportcard.com/checks' --data 'repo=github.com/blackhorseya/todo-app'
-
-.PHONY: install-mod
-download-mod:
-	@go mod download
-
-.PHONY: install-tools
-install-tools:
-	@go get -v golang.org/x/lint/golint

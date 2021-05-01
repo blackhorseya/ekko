@@ -29,15 +29,15 @@ jobs:
     - stage: Tests
       name: Unit Test
       script:
-        - make test-with-coverage
+        - make test-unit
       after_success:
         - bash <(curl -s https://codecov.io/bash)
     - name: Integration Test
       script:
         - echo "execute integration test..."
-    - name: Lint
+    - name: Report
       script:
-        - make lint
+        - make repot
     - stage: Deploy
       services:
         - docker
