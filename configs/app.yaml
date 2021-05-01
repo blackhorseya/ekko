@@ -1,17 +1,13 @@
-# runMode can be [release, test, debug]
-runMode: "debug"
+app:
+  name: todo
 
 http:
   host: ""
   port: 8080
 
 log:
-  format: ""
   level: "debug"
 
 db:
   debug: true
   url: "mongodb://todo-app:changeme@localhost:27017/todo-db/?connect=direct&authSource=todo-db"
-
-api:
-  endpoint: "http://localhost:5000"
