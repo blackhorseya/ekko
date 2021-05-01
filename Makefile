@@ -64,7 +64,7 @@ gen-wire:
 
 .PHONY: gen-swagger
 gen-swagger:
-	@swag init -g cmd/app/main.go --parseInternal -o internal/app/docs
+	@swag init -g cmd/app/main.go --parseInternal -o api/docs
 
 .PHONY: test-with-coverage
 test-with-coverage:
