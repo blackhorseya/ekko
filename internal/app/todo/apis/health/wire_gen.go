@@ -6,7 +6,7 @@
 package health
 
 import (
-	"github.com/blackhorseya/todo-app/internal/app/biz/health"
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health"
 	"github.com/google/wire"
 )
 

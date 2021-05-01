@@ -3,16 +3,16 @@ package health
 import (
 	"net/http"
 
-	"github.com/blackhorseya/todo-app/internal/app/biz/health"
+	health2 "github.com/blackhorseya/todo-app/internal/app/todo/biz/health"
 	"github.com/gin-gonic/gin"
 )
 
 type impl struct {
-	HealthBiz health.Biz
+	HealthBiz health2.Biz
 }
 
 // NewImpl is a constructor of implement health api handler
-func NewImpl(healthBiz health.Biz) IHandler {
+func NewImpl(healthBiz health2.Biz) IHandler {
 	return &impl{HealthBiz: healthBiz}
 }
 
