@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"github.com/blackhorseya/house-management/internal/pkg/base/contextx"
+	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/gin-gonic/gin"
 )
 
