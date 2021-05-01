@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/blackhorseya/todo-app/internal/app/entities"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -26,7 +26,7 @@ var (
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			url := fmt.Sprintf("%v/api/v1/tasks", viper.Get("api.endpoint"))
-			newTask := &entities.Task{
+			newTask := &todo.Task{
 				Title: args[0],
 			}
 			data, err := json.Marshal(newTask)

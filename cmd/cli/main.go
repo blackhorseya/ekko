@@ -5,7 +5,6 @@ import (
 
 	"github.com/blackhorseya/todo-app/internal/app/commands"
 	exit2 "github.com/blackhorseya/todo-app/internal/pkg/base/exit"
-	"github.com/blackhorseya/todo-app/internal/pkg/config"
 	"github.com/spf13/cobra"
 )
 
@@ -25,8 +24,9 @@ func main() {
 }
 
 func initConfig() {
-	_, err := config.NewConfig(*cfgPath)
-	if err != nil {
-		exit2.Er(err)
-	}
+	// todo: 2021-05-01|21:38|doggy|fix me
+	// _, err := config.NewConfig(*cfgPath)
+	// if err != nil {
+	// 	exit2.Er(err)
+	// }
 }
