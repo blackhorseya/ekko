@@ -8,13 +8,14 @@ package health
 import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo"
 	"github.com/google/wire"
+	"go.uber.org/zap"
 )
 
 // Injectors from wire.go:
 
-func CreateHealthBiz(repo repo.IRepo) (IBiz, error) {
-	biz := NewImpl(repo)
-	return biz, nil
+func CreateHealthBiz(logger *zap.Logger, repo2 repo.IRepo) (IBiz, error) {
+	iBiz := NewImpl(logger, repo2)
+	return iBiz, nil
 }
 
 // wire.go:

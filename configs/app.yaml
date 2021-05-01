@@ -10,4 +10,4 @@ log:
 
 db:
   debug: true
-  url: "mongodb://todo-app:changeme@localhost:27017/todo-db/?connect=direct&authSource=todo-db"
+  url: "mongodb://todo-app:changeme@localhost:27017/todo-db?connect=direct&authSource=todo-db"

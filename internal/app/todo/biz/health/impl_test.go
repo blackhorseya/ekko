@@ -7,6 +7,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo/mocks"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
+	"go.uber.org/zap"
 )
 
 type bizTestSuite struct {
@@ -16,8 +17,10 @@ type bizTestSuite struct {
 }
 
 func (s *bizTestSuite) SetupTest() {
+	logger, _ := zap.NewDevelopment()
+
 	s.mock = new(mocks.IRepo)
-	biz, err := CreateHealthBiz(s.mock)
+	biz, err := CreateHealthBiz(logger, s.mock)
 	if err != nil {
 		panic(err)
 	}
