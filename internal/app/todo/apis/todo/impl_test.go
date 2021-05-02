@@ -125,7 +125,73 @@ func (s *handlerSuite) Test_impl_GetByID() {
 			got := w.Result()
 			defer got.Body.Close()
 
-			s.EqualValuesf(tt.wantCode, got.StatusCode, "Signup() code = %v, wantCode = %v", got.StatusCode, tt.wantCode)
+			s.EqualValuesf(tt.wantCode, got.StatusCode, "GetByID() code = %v, wantCode = %v", got.StatusCode, tt.wantCode)
+
+			s.TearDownTest()
+		})
+	}
+}
+
+func (s *handlerSuite) Test_impl_List() {
+	s.r.GET("/api/v1/tasks", s.handler.List)
+
+	type args struct {
+		start string
+		end   string
+		mock  func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantCode int
+	}{
+		{
+			name:     "start not a integer then error",
+			args:     args{start: "start", end: "3"},
+			wantCode: 400,
+		},
+		{
+			name:     "end not a integer then error",
+			args:     args{start: "0", end: "end"},
+			wantCode: 400,
+		},
+		{
+			name: "list then error",
+			args: args{start: "0", end: "3", mock: func() {
+				s.mock.On("List", mock.Anything, 0, 3).Return(nil, 0, er.ErrListTasks).Once()
+			}},
+			wantCode: 500,
+		},
+		{
+			name: "list then not found error",
+			args: args{start: "0", end: "3", mock: func() {
+				s.mock.On("List", mock.Anything, 0, 3).Return(nil, 0, er.ErrTaskNotExists).Once()
+			}},
+			wantCode: 404,
+		},
+		{
+			name: "list then success",
+			args: args{start: "0", end: "3", mock: func() {
+				s.mock.On("List", mock.Anything, 0, 3).Return([]*todo.Task{task1}, 10, nil).Once()
+			}},
+			wantCode: 200,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			uri := fmt.Sprintf("/api/v1/tasks?start=%v&end=%v", tt.args.start, tt.args.end)
+			req := httptest.NewRequest(http.MethodGet, uri, nil)
+			w := httptest.NewRecorder()
+			s.r.ServeHTTP(w, req)
+
+			got := w.Result()
+			defer got.Body.Close()
+
+			s.EqualValuesf(tt.wantCode, got.StatusCode, "List() code = %v, wantCode = %v", got.StatusCode, tt.wantCode)
 
 			s.TearDownTest()
 		})
