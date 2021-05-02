@@ -48,8 +48,33 @@ func (i *impl) GetByID(ctx contextx.Contextx, id string) (task *todo.Task, err e
 }
 
 func (i *impl) List(ctx contextx.Contextx, start, end int) (tasks []*todo.Task, total int, err error) {
-	// todo: 2021-05-01|23:27|doggy|implement me
-	panic("implement me")
+	if start < 0 {
+		i.logger.Error(er.ErrInvalidStart.Error(), zap.Int("start", start), zap.Int("end", end))
+		return nil, 0, er.ErrInvalidStart
+	}
+
+	if end < 0 {
+		i.logger.Error(er.ErrInvalidEnd.Error(), zap.Int("start", start), zap.Int("end", end))
+		return nil, 0, er.ErrInvalidEnd
+	}
+
+	ret, err := i.repo.List(ctx, end-start+1, start)
+	if err != nil {
+		i.logger.Error(er.ErrListTasks.Error(), zap.Error(err), zap.Int("start", start), zap.Int("end", end))
+		return nil, 0, er.ErrListTasks
+	}
+	if ret == nil {
+		i.logger.Error(er.ErrTaskNotExists.Error(), zap.Int("start", start), zap.Int("end", end))
+		return nil, 0, er.ErrTaskNotExists
+	}
+
+	total, err = i.repo.Count(ctx)
+	if err != nil {
+		i.logger.Error(er.ErrCountTask.Error(), zap.Error(err))
+		return nil, 0, er.ErrCountTask
+	}
+
+	return ret, total, nil
 }
 
 func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err error) {
