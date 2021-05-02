@@ -8,6 +8,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/base/netutil"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http/middlewares"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
@@ -58,6 +59,7 @@ func NewRouter(o *Options, logger *zap.Logger, init InitHandlers) *gin.Engine {
 
 	r := gin.New()
 
+	r.Use(cors.Default())
 	r.Use(middlewares.ContextMiddleware())
 	r.Use(gin.Recovery())
 	r.Use(ginzap.Ginzap(logger, time.RFC3339, true))
