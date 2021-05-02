@@ -90,8 +90,16 @@ func (i *impl) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Tas
 }
 
 func (i *impl) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Task, err error) {
-	// todo: 2021-05-02|10:15|doggy|implement me
-	panic("implement me")
+	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	coll := i.client.Database("todo-db").Collection("tasks")
+	res := coll.FindOneAndUpdate(timeout, bson.D{{"id", updated.Id}}, bson.D{{"$set", updated}})
+	if res.Err() != nil {
+		return nil, res.Err()
+	}
+
+	return updated, nil
 }
 
 func (i *impl) Remove(ctx contextx.Contextx, id string) error {
