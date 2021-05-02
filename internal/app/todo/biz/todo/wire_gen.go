@@ -3,10 +3,10 @@
 //go:generate wire
 //+build !wireinject
 
-package health
+package todo
 
 import (
-	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo"
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/google/wire"
 	"go.uber.org/zap"
 )
@@ -20,6 +20,4 @@ func CreateIBiz(logger *zap.Logger, repo2 repo.IRepo) (IBiz, error) {
 
 // wire.go:
 
-var testProviderSet = wire.NewSet(
-	NewImpl,
-)
+var testProviderSet = wire.NewSet(NewImpl)

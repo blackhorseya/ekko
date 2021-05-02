@@ -22,7 +22,7 @@ func (s *bizTestSuite) SetupTest() {
 	logger, _ := zap.NewDevelopment()
 
 	s.mock = new(mocks.IRepo)
-	biz, err := CreateHealthBiz(logger, s.mock)
+	biz, err := CreateIBiz(logger, s.mock)
 	if err != nil {
 		panic(err)
 	}
