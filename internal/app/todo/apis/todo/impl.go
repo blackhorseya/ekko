@@ -2,6 +2,7 @@ package todo
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo"
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
@@ -73,8 +74,30 @@ func (i *impl) GetByID(c *gin.Context) {
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks [get]
 func (i *impl) List(c *gin.Context) {
-	// todo: 2021-05-02|19:47|doggy|implement me
-	panic("implement me")
+	ctx := c.MustGet("ctx").(contextx.Contextx)
+
+	start, err := strconv.Atoi(c.DefaultQuery("start", "0"))
+	if err != nil {
+		i.logger.Error(er.ErrInvalidStart.Error(), zap.Error(err), zap.String("start", c.Query("start")))
+		c.Error(er.ErrInvalidStart)
+		return
+	}
+
+	end, err := strconv.Atoi(c.DefaultQuery("end", "10"))
+	if err != nil {
+		i.logger.Error(er.ErrInvalidEnd.Error(), zap.Error(err), zap.String("end", c.Query("end")))
+		c.Error(er.ErrInvalidEnd)
+		return
+	}
+
+	ret, total, err := i.biz.List(ctx, start, end)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	c.Header("x-total", strconv.Itoa(total))
+	c.JSON(http.StatusOK, response.OK.WithData(ret))
 }
 
 // Create
