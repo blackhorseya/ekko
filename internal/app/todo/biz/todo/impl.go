@@ -1,6 +1,8 @@
 package todo
 
 import (
+	"time"
+
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
@@ -83,7 +85,12 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err
 		return nil, er.ErrMissingTitle
 	}
 
-	ret, err := i.repo.Create(ctx, title)
+	newTask := &todo.Task{
+		Id:       uuid.New().String(),
+		Title:    title,
+		CreateAt: time.Now().UnixNano(),
+	}
+	ret, err := i.repo.Create(ctx, newTask)
 	if err != nil {
 		i.logger.Error(er.ErrCreateTask.Error(), zap.Error(err), zap.String("title", title))
 		return nil, er.ErrCreateTask

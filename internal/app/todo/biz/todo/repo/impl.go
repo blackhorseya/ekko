@@ -41,8 +41,17 @@ func (i *impl) Count(ctx contextx.Contextx) (total int, err error) {
 	return int(ret), nil
 }
 
-func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err error) {
-	panic("implement me")
+func (i *impl) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Task, err error) {
+	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	coll := i.client.Database("todo-db").Collection("tasks")
+	_, err = coll.InsertOne(timeout, newTask)
+	if err != nil {
+		return nil, err
+	}
+
+	return newTask, nil
 }
 
 func (i *impl) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Task, err error) {
