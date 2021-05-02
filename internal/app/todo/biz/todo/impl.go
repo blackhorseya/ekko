@@ -93,8 +93,35 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err
 }
 
 func (i *impl) UpdateStatus(ctx contextx.Contextx, id string, status bool) (task *todo.Task, err error) {
-	// todo: 2021-05-01|23:27|doggy|implement me
-	panic("implement me")
+	if len(id) == 0 {
+		i.logger.Error(er.ErrMissingID.Error())
+		return nil, er.ErrMissingID
+	}
+
+	_, err = uuid.Parse(id)
+	if err != nil {
+		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", id))
+		return nil, er.ErrInvalidID
+	}
+
+	exists, err := i.repo.GetByID(ctx, id)
+	if err != nil {
+		i.logger.Error(er.ErrGetTask.Error(), zap.Error(err), zap.String("id", id))
+		return nil, er.ErrGetTask
+	}
+	if exists == nil {
+		i.logger.Error(er.ErrTaskNotExists.Error(), zap.String("id", id))
+		return nil, er.ErrTaskNotExists
+	}
+
+	exists.Completed = status
+	ret, err := i.repo.Update(ctx, exists)
+	if err != nil {
+		i.logger.Error(er.ErrUpdateStatusTask.Error(), zap.Error(err), zap.String("id", id), zap.Bool("status", status))
+		return nil, er.ErrUpdateStatusTask
+	}
+
+	return ret, nil
 }
 
 func (i *impl) ChangeTitle(ctx contextx.Contextx, id string, title string) (task *todo.Task, err error) {
