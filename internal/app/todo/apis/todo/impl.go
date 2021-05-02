@@ -182,8 +182,29 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks/{id}/title [patch]
 func (i *impl) ChangeTitle(c *gin.Context) {
-	// todo: 2021-05-02|19:47|doggy|implement me
-	panic("implement me")
+	ctx := c.MustGet("ctx").(contextx.Contextx)
+
+	var req reqID
+	if err := c.ShouldBindUri(&req); err != nil {
+		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
+		c.Error(er.ErrInvalidID)
+		return
+	}
+
+	var data *todoE.Task
+	if err := c.ShouldBindJSON(&data); err != nil {
+		i.logger.Error(er.ErrChangeTitleTask.Error(), zap.Error(err))
+		c.Error(er.ErrChangeTitleTask)
+		return
+	}
+
+	ret, err := i.biz.ChangeTitle(ctx, req.ID, data.Title)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, response.OK.WithData(ret))
 }
 
 // Delete
