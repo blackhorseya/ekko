@@ -52,4 +52,7 @@ var (
 
 	// ErrUpdateStatusTask means update the task's status is failure
 	ErrUpdateStatusTask = newAPPError(http.StatusInternalServerError, 50011, "update the task's status is failure")
+
+	// ErrChangeTitleTask means change the task's title is failure
+	ErrChangeTitleTask = newAPPError(http.StatusInternalServerError, 50012, "change the task's title is failure")
 )
