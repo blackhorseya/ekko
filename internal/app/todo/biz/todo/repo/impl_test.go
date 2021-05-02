@@ -18,6 +18,12 @@ var (
 		Id:    uuid1,
 		Title: "title",
 	}
+
+	updated1 = &todo.Task{
+		Id: uuid1,
+		Title: "update",
+		Completed: true,
+	}
 )
 
 type repoSuite struct {
@@ -157,6 +163,37 @@ func (s *repoSuite) Test_impl_List() {
 			}
 			if !reflect.DeepEqual(gotTasks, tt.wantTasks) {
 				t.Errorf("List() gotTasks = %v, want %v", gotTasks, tt.wantTasks)
+			}
+		})
+	}
+}
+
+func (s *repoSuite) Test_impl_Update() {
+	type args struct {
+		updated *todo.Task
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantTask *todo.Task
+		wantErr  bool
+	}{
+		{
+			name:     "update then success",
+			args:     args{updated: updated1},
+			wantTask: updated1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			gotTask, err := s.repo.Update(contextx.Background(), tt.args.updated)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTask, tt.wantTask) {
+				t.Errorf("Update() gotTask = %v, want %v", gotTask, tt.wantTask)
 			}
 		})
 	}
