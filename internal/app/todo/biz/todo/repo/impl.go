@@ -30,6 +30,10 @@ func (i *impl) Count(ctx contextx.Contextx) (total int, err error) {
 	panic("implement me")
 }
 
+func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err error) {
+	panic("implement me")
+}
+
 func (i *impl) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Task, err error) {
 	// todo: 2021-05-02|10:15|doggy|implement me
 	panic("implement me")
