@@ -7,6 +7,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type impl struct {
@@ -38,8 +39,28 @@ func (i *impl) GetByID(ctx contextx.Contextx, id string) (task *todo.Task, err e
 }
 
 func (i *impl) List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Task, err error) {
-	// todo: 2021-05-02|10:15|doggy|implement me
-	panic("implement me")
+	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	coll := i.client.Database("todo-db").Collection("tasks")
+	cur, err := coll.Find(timeout, bson.D{}, options.Find().SetLimit(int64(limit)).SetSkip(int64(offset)))
+	if err != nil {
+		return nil, err
+	}
+	defer cur.Close(timeout)
+
+	var ret []*todo.Task
+	for cur.Next(timeout) {
+		var task *todo.Task
+		err := cur.Decode(&task)
+		if err != nil {
+			continue
+		}
+
+		ret = append(ret, task)
+	}
+
+	return ret, nil
 }
 
 func (i *impl) Count(ctx contextx.Contextx) (total int, err error) {
