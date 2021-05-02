@@ -14,6 +14,9 @@ type IRepo interface {
 	// List serve caller to list all tasks
 	List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Task, err error)
 
+	// Create serve caller to create a task with title
+	Create(ctx contextx.Contextx, title string) (task *todo.Task, err error)
+
 	// Count serve caller to count all tasks
 	Count(ctx contextx.Contextx) (total int, err error)
 

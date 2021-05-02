@@ -43,4 +43,7 @@ var (
 
 	// ErrCountTask means count task is failure
 	ErrCountTask = newAPPError(http.StatusInternalServerError, 50008, "count task is failure")
+
+	// ErrCreateTask means create a task is failure
+	ErrCreateTask = newAPPError(http.StatusInternalServerError, 50009, "create a task is failure")
 )

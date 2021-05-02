@@ -35,6 +35,29 @@ func (_m *IRepo) Count(ctx contextx.Contextx) (int, error) {
 	return r0, r1
 }
 
+// Create provides a mock function with given fields: ctx, title
+func (_m *IRepo) Create(ctx contextx.Contextx, title string) (*todo.Task, error) {
+	ret := _m.Called(ctx, title)
+
+	var r0 *todo.Task
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, string) *todo.Task); ok {
+		r0 = rf(ctx, title)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*todo.Task)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(contextx.Contextx, string) error); ok {
+		r1 = rf(ctx, title)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetByID provides a mock function with given fields: ctx, id
 func (_m *IRepo) GetByID(ctx contextx.Contextx, id string) (*todo.Task, error) {
 	ret := _m.Called(ctx, id)

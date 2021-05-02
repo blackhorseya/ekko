@@ -203,3 +203,57 @@ func (s *bizSuite) Test_impl_List() {
 		})
 	}
 }
+
+func (s *bizSuite) Test_impl_Create() {
+	type args struct {
+		title string
+		mock  func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantTask *todo.Task
+		wantErr  bool
+	}{
+		{
+			name:     "missing title then error",
+			args:     args{title: ""},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "create then error",
+			args: args{title: "title", mock: func() {
+				s.mock.On("Create", mock.Anything, "title").Return(nil, errors.New("error")).Once()
+			}},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "create then success",
+			args: args{title: "title", mock: func() {
+				s.mock.On("Create", mock.Anything, "title").Return(task1, nil).Once()
+			}},
+			wantTask: task1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTask, err := s.biz.Create(contextx.Background(), tt.args.title)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTask, tt.wantTask) {
+				t.Errorf("Create() gotTask = %v, want %v", gotTask, tt.wantTask)
+			}
+
+			s.TearDownTest()
+		})
+	}
+}

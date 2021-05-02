@@ -78,8 +78,18 @@ func (i *impl) List(ctx contextx.Contextx, start, end int) (tasks []*todo.Task, 
 }
 
 func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err error) {
-	// todo: 2021-05-01|23:27|doggy|implement me
-	panic("implement me")
+	if len(title) == 0 {
+		i.logger.Error(er.ErrMissingTitle.Error())
+		return nil, er.ErrMissingTitle
+	}
+
+	ret, err := i.repo.Create(ctx, title)
+	if err != nil {
+		i.logger.Error(er.ErrCreateTask.Error(), zap.Error(err), zap.String("title", title))
+		return nil, er.ErrCreateTask
+	}
+
+	return ret, nil
 }
 
 func (i *impl) UpdateStatus(ctx contextx.Contextx, id string, status bool) (task *todo.Task, err error) {
