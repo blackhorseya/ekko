@@ -16,6 +16,17 @@ definitions:
       msg:
         type: string
     type: object
+  todo.Task:
+    properties:
+      completed:
+        type: boolean
+      createAt:
+        type: integer
+      id:
+        type: string
+      title:
+        type: string
+    type: object
 info:
   contact:
     email: blackhorseya@gmail.com
@@ -66,4 +77,233 @@ paths:
       summary: Readiness
       tags:
       - Health
+  /v1/tasks:
+    get:
+      consumes:
+      - application/json
+      description: List all tasks
+      parameters:
+      - default: 0
+        description: start
+        in: query
+        name: start
+        type: integer
+      - default: 10
+        description: end
+        in: query
+        name: end
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/todo.Task'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.APPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/er.APPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.APPError'
+      summary: List all tasks
+      tags:
+      - Tasks
+    post:
+      consumes:
+      - application/json
+      description: Create a task
+      parameters:
+      - description: created task
+        in: body
+        name: created
+        required: true
+        schema:
+          $ref: '#/definitions/todo.Task'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/todo.Task'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.APPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.APPError'
+      summary: Create a task
+      tags:
+      - Tasks
+  /v1/tasks/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a task by id
+      parameters:
+      - description: ID of task
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.APPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/er.APPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.APPError'
+      summary: Delete a task by id
+      tags:
+      - Tasks
+    get:
+      consumes:
+      - application/json
+      description: Get a task by id
+      parameters:
+      - description: ID of task
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/todo.Task'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.APPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/er.APPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.APPError'
+      summary: Get a task by id
+      tags:
+      - Tasks
+  /v1/tasks/{id}/status:
+    patch:
+      consumes:
+      - application/json
+      description: Update task's status by id
+      parameters:
+      - description: ID of task
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: updated task
+        in: body
+        name: updated
+        required: true
+        schema:
+          $ref: '#/definitions/todo.Task'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/todo.Task'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.APPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.APPError'
+      summary: Update task's status by id
+      tags:
+      - Tasks
+  /v1/tasks/{id}/title:
+    patch:
+      consumes:
+      - application/json
+      description: Change task's title by id
+      parameters:
+      - description: ID of task
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: updated task
+        in: body
+        name: updated
+        required: true
+        schema:
+          $ref: '#/definitions/todo.Task'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/todo.Task'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.APPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.APPError'
+      summary: Change task's title by id
+      tags:
+      - Tasks
 swagger: "2.0"

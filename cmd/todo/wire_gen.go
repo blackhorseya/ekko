@@ -9,9 +9,12 @@ import (
 	"github.com/blackhorseya/todo-app/internal/app/todo"
 	"github.com/blackhorseya/todo-app/internal/app/todo/apis"
 	health2 "github.com/blackhorseya/todo-app/internal/app/todo/apis/health"
+	todo3 "github.com/blackhorseya/todo-app/internal/app/todo/apis/todo"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo"
+	todo2 "github.com/blackhorseya/todo-app/internal/app/todo/biz/todo"
+	repo2 "github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/app"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/config"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/database"
@@ -54,7 +57,10 @@ func CreateApp(path2 string) (*app.Application, error) {
 	iRepo := repo.NewImpl(client)
 	iBiz := health.NewImpl(logger, iRepo)
 	iHandler := health2.NewImpl(iBiz)
-	initHandlers := apis.CreateInitHandlerFn(iHandler)
+	repoIRepo := repo2.NewImpl(client)
+	todoIBiz := todo2.NewImpl(logger, repoIRepo)
+	todoIHandler := todo3.NewImpl(logger, todoIBiz)
+	initHandlers := apis.CreateInitHandlerFn(iHandler, todoIHandler)
 	engine := http.NewRouter(httpOptions, logger, initHandlers)
 	server, err := http.New(httpOptions, logger, engine)
 	if err != nil {
