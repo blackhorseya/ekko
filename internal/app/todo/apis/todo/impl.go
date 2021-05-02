@@ -1,7 +1,12 @@
 package todo
 
 import (
+	"net/http"
+
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo"
+	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/response"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -19,6 +24,10 @@ func NewImpl(logger *zap.Logger, biz todo.IBiz) IHandler {
 	}
 }
 
+type reqID struct {
+	ID string `uri:"id" binding:"required,uuid"`
+}
+
 // GetByID
 // @Summary Get a task by id
 // @Description Get a task by id
@@ -32,8 +41,22 @@ func NewImpl(logger *zap.Logger, biz todo.IBiz) IHandler {
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks/{id} [get]
 func (i *impl) GetByID(c *gin.Context) {
-	// todo: 2021-05-02|19:47|doggy|implement me
-	panic("implement me")
+	ctx := c.MustGet("ctx").(contextx.Contextx)
+
+	var req reqID
+	if err := c.ShouldBindUri(&req); err != nil {
+		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
+		c.Error(er.ErrInvalidID)
+		return
+	}
+
+	ret, err := i.biz.GetByID(ctx, req.ID)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, response.OK.WithData(ret))
 }
 
 // List
