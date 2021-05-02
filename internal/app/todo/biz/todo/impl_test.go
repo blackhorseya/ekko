@@ -18,6 +18,7 @@ var (
 
 	task1 = &todo.Task{
 		Id: uuid1,
+		Title: "title",
 	}
 
 	updated1 = &todo.Task{
@@ -362,7 +363,7 @@ func (s *bizSuite) Test_impl_UpdateStatus() {
 			name: "update status then error",
 			args: args{id: uuid1, status: true, mock: func() {
 				s.mock.On("GetByID", mock.Anything, uuid1).Return(task1, nil).Once()
-				s.mock.On("Update", mock.Anything, updated1).Return(nil, errors.New("error")).Once()
+				s.mock.On("Update", mock.Anything, task1).Return(nil, errors.New("error")).Once()
 			}},
 			wantTask: nil,
 			wantErr:  true,
@@ -371,7 +372,7 @@ func (s *bizSuite) Test_impl_UpdateStatus() {
 			name: "update status then success",
 			args: args{id: uuid1, status: true, mock: func() {
 				s.mock.On("GetByID", mock.Anything, uuid1).Return(task1, nil).Once()
-				s.mock.On("Update", mock.Anything, updated1).Return(updated1, nil).Once()
+				s.mock.On("Update", mock.Anything, task1).Return(updated1, nil).Once()
 			}},
 			wantTask: updated1,
 			wantErr:  false,
