@@ -220,6 +220,20 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks/{id} [delete]
 func (i *impl) Delete(c *gin.Context) {
-	// todo: 2021-05-02|19:47|doggy|implement me
-	panic("implement me")
+	ctx := c.MustGet("ctx").(contextx.Contextx)
+
+	var req reqID
+	if err := c.ShouldBindUri(&req); err != nil {
+		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
+		c.Error(er.ErrInvalidID)
+		return
+	}
+
+	err := i.biz.Delete(ctx, req.ID)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	c.Status(http.StatusNoContent)
 }
