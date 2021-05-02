@@ -248,3 +248,63 @@ func (s *handlerSuite) Test_impl_Create() {
 		})
 	}
 }
+
+func (s *handlerSuite) Test_impl_UpdateStatus() {
+	s.r.PATCH("/api/v1/tasks/:id/status", s.handler.UpdateStatus)
+
+	type args struct {
+		id      string
+		updated *todo.Task
+		mock    func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantCode int
+	}{
+		{
+			name:     "missing id then error",
+			args:     args{id: ""},
+			wantCode: 400,
+		},
+		{
+			name:     "id is not a uuid then error",
+			args:     args{id: "id"},
+			wantCode: 400,
+		},
+		{
+			name: "update status then error",
+			args: args{id: uuid1, updated: updated1, mock: func() {
+				s.mock.On("UpdateStatus", mock.Anything, uuid1, updated1.Completed).Return(nil, er.ErrUpdateStatusTask).Once()
+			}},
+			wantCode: 500,
+		},
+		{
+			name: "update status then success",
+			args: args{id: uuid1, updated: updated1, mock: func() {
+				s.mock.On("UpdateStatus", mock.Anything, uuid1, updated1.Completed).Return(updated1, nil).Once()
+			}},
+			wantCode: 200,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			uri := fmt.Sprintf("/api/v1/tasks/%v/status", tt.args.id)
+			data, _ := json.Marshal(tt.args.updated)
+			req := httptest.NewRequest(http.MethodPatch, uri, bytes.NewBuffer(data))
+			w := httptest.NewRecorder()
+			s.r.ServeHTTP(w, req)
+
+			got := w.Result()
+			defer got.Body.Close()
+
+			s.EqualValuesf(tt.wantCode, got.StatusCode, "UpdateStatus() code = %v, wantCode = %v", got.StatusCode, tt.wantCode)
+
+			s.TearDownTest()
+		})
+	}
+}

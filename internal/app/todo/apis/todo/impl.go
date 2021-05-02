@@ -144,8 +144,29 @@ func (i *impl) Create(c *gin.Context) {
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks/{id}/status [patch]
 func (i *impl) UpdateStatus(c *gin.Context) {
-	// todo: 2021-05-02|19:47|doggy|implement me
-	panic("implement me")
+	ctx := c.MustGet("ctx").(contextx.Contextx)
+
+	var req reqID
+	if err := c.ShouldBindUri(&req); err != nil {
+		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
+		c.Error(er.ErrInvalidID)
+		return
+	}
+
+	var data *todoE.Task
+	if err := c.ShouldBindJSON(&data); err != nil {
+		i.logger.Error(er.ErrUpdateStatusTask.Error(), zap.Error(err))
+		c.Error(er.ErrUpdateStatusTask)
+		return
+	}
+
+	ret, err := i.biz.UpdateStatus(ctx, req.ID, data.Completed)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, response.OK.WithData(ret))
 }
 
 // ChangeTitle
