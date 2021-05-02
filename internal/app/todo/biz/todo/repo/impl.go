@@ -19,8 +19,22 @@ func NewImpl(client *mongo.Client) IRepo {
 }
 
 func (i *impl) GetByID(ctx contextx.Contextx, id string) (task *todo.Task, err error) {
-	// todo: 2021-05-02|10:15|doggy|implement me
-	panic("implement me")
+	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	coll := i.client.Database("todo-db").Collection("tasks")
+	res := coll.FindOne(timeout, bson.D{{"id", id}})
+	if res.Err() != nil {
+		return nil, res.Err()
+	}
+
+	var ret *todo.Task
+	err = res.Decode(&ret)
+	if err != nil {
+		return nil, err
+	}
+
+	return ret, nil
 }
 
 func (i *impl) List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Task, err error) {

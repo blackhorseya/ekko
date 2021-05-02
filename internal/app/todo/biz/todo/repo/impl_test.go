@@ -98,3 +98,34 @@ func (s *repoSuite) Test_impl_Create() {
 		})
 	}
 }
+
+func (s *repoSuite) Test_impl_GetByID() {
+	type args struct {
+		id  string
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantTask *todo.Task
+		wantErr  bool
+	}{
+		{
+			name:     "get by id then success",
+			args:     args{id: uuid1},
+			wantTask: task1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			gotTask, err := s.repo.GetByID(contextx.Background(), tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetByID() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTask, tt.wantTask) {
+				t.Errorf("GetByID() gotTask = %v, want %v", gotTask, tt.wantTask)
+			}
+		})
+	}
+}
