@@ -103,6 +103,14 @@ func (i *impl) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Tas
 }
 
 func (i *impl) Remove(ctx contextx.Contextx, id string) error {
-	// todo: 2021-05-02|10:15|doggy|implement me
-	panic("implement me")
+	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	coll := i.client.Database("todo-db").Collection("tasks")
+	_, err := coll.DeleteOne(timeout, bson.D{{"id", id}})
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
