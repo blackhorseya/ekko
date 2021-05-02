@@ -35,13 +35,13 @@ func (_m *IRepo) Count(ctx contextx.Contextx) (int, error) {
 	return r0, r1
 }
 
-// Create provides a mock function with given fields: ctx, title
-func (_m *IRepo) Create(ctx contextx.Contextx, title string) (*todo.Task, error) {
-	ret := _m.Called(ctx, title)
+// Create provides a mock function with given fields: ctx, newTask
+func (_m *IRepo) Create(ctx contextx.Contextx, newTask *todo.Task) (*todo.Task, error) {
+	ret := _m.Called(ctx, newTask)
 
 	var r0 *todo.Task
-	if rf, ok := ret.Get(0).(func(contextx.Contextx, string) *todo.Task); ok {
-		r0 = rf(ctx, title)
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, *todo.Task) *todo.Task); ok {
+		r0 = rf(ctx, newTask)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*todo.Task)
@@ -49,8 +49,8 @@ func (_m *IRepo) Create(ctx contextx.Contextx, title string) (*todo.Task, error)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(contextx.Contextx, string) error); ok {
-		r1 = rf(ctx, title)
+	if rf, ok := ret.Get(1).(func(contextx.Contextx, *todo.Task) error); ok {
+		r1 = rf(ctx, newTask)
 	} else {
 		r1 = ret.Error(1)
 	}
