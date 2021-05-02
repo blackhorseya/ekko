@@ -30,3 +30,17 @@ var (
 	// ErrLogin means login is failure
 	ErrLogin = newAPPError(http.StatusInternalServerError, 50005, "login is failure")
 )
+
+var (
+	// ErrGetTask means get a task by id is failure
+	ErrGetTask = newAPPError(http.StatusInternalServerError, 50006, "get a task by id is failure")
+
+	// ErrTaskNotExists means task is not exists
+	ErrTaskNotExists = newAPPError(http.StatusNotFound, 40401, "task is not exists")
+
+	// ErrListTasks means list all tasks is failure
+	ErrListTasks = newAPPError(http.StatusInternalServerError, 50007, "list all tasks is failure")
+
+	// ErrCountTask means count task is failure
+	ErrCountTask = newAPPError(http.StatusInternalServerError, 50008, "count task is failure")
+)

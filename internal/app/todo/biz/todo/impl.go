@@ -3,7 +3,9 @@ package todo
 import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/google/uuid"
 	"go.uber.org/zap"
 )
 
@@ -21,8 +23,28 @@ func NewImpl(logger *zap.Logger, repo repo.IRepo) IBiz {
 }
 
 func (i *impl) GetByID(ctx contextx.Contextx, id string) (task *todo.Task, err error) {
-	// todo: 2021-05-01|23:27|doggy|implement me
-	panic("implement me")
+	if len(id) == 0 {
+		i.logger.Error(er.ErrMissingID.Error())
+		return nil, er.ErrMissingID
+	}
+
+	_, err = uuid.Parse(id)
+	if err != nil {
+		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", id))
+		return nil, er.ErrInvalidID
+	}
+
+	ret, err := i.repo.GetByID(ctx, id)
+	if err != nil {
+		i.logger.Error(er.ErrGetTask.Error(), zap.Error(err), zap.String("id", id))
+		return nil, er.ErrGetTask
+	}
+	if ret == nil {
+		i.logger.Error(er.ErrTaskNotExists.Error(), zap.String("id", id))
+		return nil, er.ErrTaskNotExists
+	}
+
+	return ret, nil
 }
 
 func (i *impl) List(ctx contextx.Contextx, start, end int) (tasks []*todo.Task, total int, err error) {
