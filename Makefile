@@ -4,6 +4,8 @@ PROJECT_ID = sean-side
 NS = side
 DEPLOY_TO = uat
 
+DB_URI="mongodb://todo-app:changeme@localhost:27017/todo-db"
+
 .PHONY: clean
 clean:
 	@rm -rf coverage.txt profile.out bin
@@ -69,3 +71,11 @@ gen-wire:
 .PHONY: gen-swagger
 gen-swagger:
 	@swag init -g cmd/$(APP_NAME)/main.go --parseInternal -o api/docs
+
+.PHONY: migrate-up
+migrate-up:
+	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migrations up
+
+.PHONY: migrate-down
+migrate-down:
+	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migrations down
