@@ -8,6 +8,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/response"
+	todoE "github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -112,8 +113,22 @@ func (i *impl) List(c *gin.Context) {
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks [post]
 func (i *impl) Create(c *gin.Context) {
-	// todo: 2021-05-02|19:47|doggy|implement me
-	panic("implement me")
+	ctx := c.MustGet("ctx").(contextx.Contextx)
+
+	var data *todoE.Task
+	if err := c.ShouldBindJSON(&data); err != nil {
+		i.logger.Error(er.ErrCreateTask.Error(), zap.Error(err))
+		c.Error(er.ErrCreateTask)
+		return
+	}
+
+	ret, err := i.biz.Create(ctx, data.Title)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusCreated, response.OK.WithData(ret))
 }
 
 // UpdateStatus

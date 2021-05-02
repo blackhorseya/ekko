@@ -1,6 +1,8 @@
 package todo
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -192,6 +194,55 @@ func (s *handlerSuite) Test_impl_List() {
 			defer got.Body.Close()
 
 			s.EqualValuesf(tt.wantCode, got.StatusCode, "List() code = %v, wantCode = %v", got.StatusCode, tt.wantCode)
+
+			s.TearDownTest()
+		})
+	}
+}
+
+func (s *handlerSuite) Test_impl_Create() {
+	s.r.POST("/api/v1/tasks", s.handler.Create)
+
+	type args struct {
+		created *todo.Task
+		mock    func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantCode int
+	}{
+		{
+			name: "create then error",
+			args: args{created: task1, mock: func() {
+				s.mock.On("Create", mock.Anything, task1.Title).Return(nil, er.ErrCreateTask).Once()
+			}},
+			wantCode: 500,
+		},
+		{
+			name: "create then success",
+			args: args{created: task1, mock: func() {
+				s.mock.On("Create", mock.Anything, task1.Title).Return(task1, nil).Once()
+			}},
+			wantCode: 201,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			uri := fmt.Sprintf("/api/v1/tasks")
+			data, _ := json.Marshal(tt.args.created)
+			req := httptest.NewRequest(http.MethodPost, uri, bytes.NewBuffer(data))
+			w := httptest.NewRecorder()
+			s.r.ServeHTTP(w, req)
+
+			got := w.Result()
+			defer got.Body.Close()
+
+			s.EqualValuesf(tt.wantCode, got.StatusCode, "Create() code = %v, wantCode = %v", got.StatusCode, tt.wantCode)
 
 			s.TearDownTest()
 		})
