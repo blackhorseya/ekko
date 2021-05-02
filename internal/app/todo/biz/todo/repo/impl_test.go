@@ -20,8 +20,8 @@ var (
 	}
 
 	updated1 = &todo.Task{
-		Id: uuid1,
-		Title: "update",
+		Id:        uuid1,
+		Title:     "update",
 		Completed: true,
 	}
 )
@@ -194,6 +194,30 @@ func (s *repoSuite) Test_impl_Update() {
 			}
 			if !reflect.DeepEqual(gotTask, tt.wantTask) {
 				t.Errorf("Update() gotTask = %v, want %v", gotTask, tt.wantTask)
+			}
+		})
+	}
+}
+
+func (s *repoSuite) Test_impl_Remove() {
+	type args struct {
+		id string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name:    "remove then success",
+			args:    args{id: uuid1},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if err := s.repo.Remove(contextx.Background(), tt.args.id); (err != nil) != tt.wantErr {
+				t.Errorf("Remove() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
