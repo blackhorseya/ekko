@@ -103,6 +103,22 @@ func (i *impl) ChangeTitle(ctx contextx.Contextx, id string, title string) (task
 }
 
 func (i *impl) Delete(ctx contextx.Contextx, id string) error {
-	// todo: 2021-05-01|23:27|doggy|implement me
-	panic("implement me")
+	if len(id) == 0 {
+		i.logger.Error(er.ErrMissingID.Error())
+		return er.ErrMissingID
+	}
+
+	_, err := uuid.Parse(id)
+	if err != nil {
+		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", id))
+		return er.ErrInvalidID
+	}
+
+	err = i.repo.Remove(ctx, id)
+	if err != nil {
+		i.logger.Error(er.ErrDeleteTask.Error(), zap.Error(err), zap.String("id", id))
+		return er.ErrDeleteTask
+	}
+
+	return nil
 }
