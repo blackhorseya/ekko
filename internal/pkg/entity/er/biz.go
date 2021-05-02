@@ -46,4 +46,7 @@ var (
 
 	// ErrCreateTask means create a task is failure
 	ErrCreateTask = newAPPError(http.StatusInternalServerError, 50009, "create a task is failure")
+
+	// ErrDeleteTask means delete a task by id is failure
+	ErrDeleteTask = newAPPError(http.StatusInternalServerError, 50010, "delete a task by id is failure")
 )

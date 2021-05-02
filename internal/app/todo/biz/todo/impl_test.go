@@ -257,3 +257,53 @@ func (s *bizSuite) Test_impl_Create() {
 		})
 	}
 }
+
+func (s *bizSuite) Test_impl_Delete() {
+	type args struct {
+		id   string
+		mock func()
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name:    "missing id then error",
+			args:    args{id: ""},
+			wantErr: true,
+		},
+		{
+			name:    "id is not a uuid then error",
+			args:    args{id: "id"},
+			wantErr: true,
+		},
+		{
+			name: "uuid remove then error",
+			args: args{id: uuid1, mock: func() {
+				s.mock.On("Remove", mock.Anything, uuid1).Return(errors.New("error")).Once()
+			}},
+			wantErr: true,
+		},
+		{
+			name: "uuid remove then success",
+			args: args{id: uuid1, mock: func() {
+				s.mock.On("Remove", mock.Anything, uuid1).Return(nil).Once()
+			}},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			if err := s.biz.Delete(contextx.Background(), tt.args.id); (err != nil) != tt.wantErr {
+				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			s.TearDownTest()
+		})
+	}
+}
