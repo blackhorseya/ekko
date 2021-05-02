@@ -101,7 +101,7 @@ func (s *repoSuite) Test_impl_Create() {
 
 func (s *repoSuite) Test_impl_GetByID() {
 	type args struct {
-		id  string
+		id string
 	}
 	tests := []struct {
 		name     string
@@ -125,6 +125,38 @@ func (s *repoSuite) Test_impl_GetByID() {
 			}
 			if !reflect.DeepEqual(gotTask, tt.wantTask) {
 				t.Errorf("GetByID() gotTask = %v, want %v", gotTask, tt.wantTask)
+			}
+		})
+	}
+}
+
+func (s *repoSuite) Test_impl_List() {
+	type args struct {
+		limit  int
+		offset int
+	}
+	tests := []struct {
+		name      string
+		args      args
+		wantTasks []*todo.Task
+		wantErr   bool
+	}{
+		{
+			name:      "list by limit and offset then success",
+			args:      args{limit: 3, offset: 0},
+			wantTasks: []*todo.Task{task1},
+			wantErr:   false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			gotTasks, err := s.repo.List(contextx.Background(), tt.args.limit, tt.args.offset)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTasks, tt.wantTasks) {
+				t.Errorf("List() gotTasks = %v, want %v", gotTasks, tt.wantTasks)
 			}
 		})
 	}
