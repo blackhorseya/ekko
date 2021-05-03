@@ -1,5 +1,18 @@
 [
   {
-    "drop": "tasks"
+    "drop": "tasks",
+    "capped": true
+  },
+  {
+    "createIndexes": "tasks",
+    "indexes": [
+      {
+        "key": {
+          "id": 1
+        },
+        "name": "unique_id",
+        "unique": true
+      }
+    ]
   }
 ]
