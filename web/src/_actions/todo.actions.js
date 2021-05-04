@@ -1,7 +1,7 @@
 import {todoConstants} from '../_constants';
 import {todoService} from '../_services';
 
-export const todoAction = {
+export const todoActions = {
   list,
 };
 

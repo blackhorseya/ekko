@@ -8,14 +8,13 @@ function list(start, end) {
   };
 
   return fetch(
-      `${process.env.REACT_APP_API_ENDPOINT}/api/v1/tasks？start=${start}&end=${end}`,
+      `${process.env.REACT_APP_API_ENDPOINT}/api/v1/tasks?start=${start}&end=${end}`,
       opts).
       then(handlerResp);
 }
 
 function handlerResp(response) {
   return response.text().then(text => {
-    console.log(text);
     const resp = text && JSON.parse(text);
 
     if (!response.ok) {
