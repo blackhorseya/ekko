@@ -1,3 +1,7 @@
+export const todoService = {
+  list,
+};
+
 function list(start, end) {
   const opts = {
     method: 'GET',
