@@ -4,6 +4,7 @@ import {todoService} from '../_services';
 export const todoActions = {
   list,
   add,
+  remove,
 };
 
 function list(start, end) {
@@ -57,5 +58,32 @@ function add(task) {
 
   function failure(error) {
     return {type: todoConstants.ADD_FAILURE, error};
+  }
+}
+
+function remove(id) {
+  return dispatch => {
+    dispatch(request());
+
+    todoService.remove(id).then(
+        id => {
+          dispatch(success(id));
+        },
+        error => {
+          dispatch(failure(error.toString()));
+        },
+    );
+  };
+
+  function request() {
+    return {type: todoConstants.REMOVE_REQUEST};
+  }
+
+  function success(id) {
+    return {type: todoConstants.REMOVE_SUCCESS, id};
+  }
+
+  function failure(error) {
+    return {type: todoConstants.REMOVE_FAILURE, error};
   }
 }

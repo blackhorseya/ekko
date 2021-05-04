@@ -34,9 +34,28 @@ export function todos(state = {}, action) {
     case todoConstants.ADD_FAILURE:
       return {
         loading: false,
-        data: [],
+        data: [...state.data],
         error: action.error,
       };
+
+    case todoConstants.REMOVE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case todoConstants.REMOVE_SUCCESS:
+      return {
+        loading: false,
+        data: [...state.data.filter(x => x.id !== action.id)],
+        error: '',
+      };
+    case todoConstants.REMOVE_FAILURE:
+      return {
+        loading: false,
+        data: [...state.data],
+        error: action.error,
+      };
+
     default:
       return state;
   }

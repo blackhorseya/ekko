@@ -26,7 +26,7 @@ class AddTodo extends React.Component {
     if (title) {
       this.props.add({title: title});
     }
-    this.setState({['title']: ''});
+    this.setState({'title': ''});
   }
 
   render() {
