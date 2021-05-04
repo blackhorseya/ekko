@@ -3,10 +3,6 @@ import {todoActions} from '../../_actions';
 import {connect} from 'react-redux';
 
 class TodoList extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.list(0, 10);
   }
