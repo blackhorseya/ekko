@@ -15,6 +15,7 @@ export function todos(state = initState, action) {
       };
     case todoConstants.LIST_SUCCESS:
       return {
+        ...state,
         loading: false,
         data: action.tasks,
         total: action.total,
@@ -22,6 +23,7 @@ export function todos(state = initState, action) {
       };
     case todoConstants.LIST_FAILURE:
       return {
+        ...state,
         loading: false,
         data: [],
         error: action.error,
@@ -34,12 +36,14 @@ export function todos(state = initState, action) {
       };
     case todoConstants.ADD_SUCCESS:
       return {
+        ...state,
         loading: false,
         data: [...state.data, action.task],
         error: '',
       };
     case todoConstants.ADD_FAILURE:
       return {
+        ...state,
         loading: false,
         data: [...state.data],
         error: action.error,
@@ -52,12 +56,14 @@ export function todos(state = initState, action) {
       };
     case todoConstants.REMOVE_SUCCESS:
       return {
+        ...state,
         loading: false,
         data: [...state.data.filter(x => x.id !== action.id)],
         error: '',
       };
     case todoConstants.REMOVE_FAILURE:
       return {
+        ...state,
         loading: false,
         data: [...state.data],
         error: action.error,
@@ -72,6 +78,7 @@ export function todos(state = initState, action) {
       const i = state.data.findIndex((o => o.id === action.task.id));
 
       return {
+        ...state,
         loading: false,
         data: [
           ...state.data.slice(0, i),
@@ -81,6 +88,7 @@ export function todos(state = initState, action) {
       };
     case todoConstants.CHANGE_STATUS_FAILURE:
       return {
+        ...state,
         loading: false,
         data: [...state.data],
         error: action.error,
