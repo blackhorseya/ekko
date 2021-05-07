@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {todoActions} from '../../_actions';
+import {Button, Grid, Paper, TextField} from '@material-ui/core';
 
 class AddTodo extends React.Component {
   constructor(props) {
@@ -33,12 +34,23 @@ class AddTodo extends React.Component {
     const {title} = this.state;
 
     return (
-        <div>
-          <h3>Add Todo</h3>
-          <input type="text" name="title" value={title}
-                 onChange={this.handleChange}/>
-          <button onClick={this.handleSubmit}>add</button>
-        </div>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Paper style={{padding: 20}}>
+              <Grid container spacing={2}>
+                <Grid item>
+                  <TextField label="new task" variant="outlined" name={'title'}
+                             size={'small'} value={title}
+                             onChange={this.handleChange}/>
+                </Grid>
+                <Grid item>
+                  <Button variant="contained" color="primary"
+                          onClick={this.handleSubmit}>add</Button>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
+        </Grid>
     );
   }
 }

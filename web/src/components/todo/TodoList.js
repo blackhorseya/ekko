@@ -1,6 +1,7 @@
 import React from 'react';
 import {todoActions} from '../../_actions';
 import {connect} from 'react-redux';
+import {FormLabel} from '@material-ui/core';
 
 class TodoList extends React.Component {
   constructor(props) {
@@ -79,7 +80,7 @@ class TodoList extends React.Component {
             <input type="number" name="size" value={size}
                    onChange={this.handleChangeSize}/>
             <button onClick={this.handleNext}>{`>`}</button>
-            <text>total: {todo.total}</text>
+            <FormLabel>total: {todo.total}</FormLabel>
           </div>}
           {todo.loading === false && todo.data && <ul>
             {todo.data.map((item, _) =>
