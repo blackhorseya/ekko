@@ -89,7 +89,6 @@ class TodoList extends React.Component {
                       'X' :
                       'V'}</button>
                   {item.title}
-                  <button>show info</button>
                   <button onClick={() => this.handleRemove(item.id)}>remove
                   </button>
                 </li>,
