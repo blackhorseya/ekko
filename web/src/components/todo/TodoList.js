@@ -1,7 +1,17 @@
 import React from 'react';
 import {todoActions} from '../../_actions';
 import {connect} from 'react-redux';
-import {FormLabel} from '@material-ui/core';
+import {
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemSecondaryAction,
+  ListItemText,
+  Paper,
+} from '@material-ui/core';
+import {Check, Close, Delete} from '@material-ui/icons';
 
 class TodoList extends React.Component {
   constructor(props) {
@@ -73,29 +83,57 @@ class TodoList extends React.Component {
     const {todo} = this.props;
 
     return (
-        <div>
-          {todo.loading ? <h1>Loading...</h1> : <div>
-            <h1>Todo List</h1>
-            <button onClick={this.handlePrevious}>{`<`}</button>
-            <input type="number" name="size" value={size}
-                   onChange={this.handleChangeSize}/>
-            <button onClick={this.handleNext}>{`>`}</button>
-            <FormLabel>total: {todo.total}</FormLabel>
-          </div>}
-          {todo.loading === false && todo.data && <ul>
-            {todo.data.map((item, _) =>
-                <li key={item.id}>
-                  <button onClick={() => this.handleChangeStatus(
-                      item.id, item.completed)}>{item.completed ?
-                      'X' :
-                      'V'}</button>
-                  {item.title}
-                  <button onClick={() => this.handleRemove(item.id)}>remove
-                  </button>
-                </li>,
-            )}
-          </ul>}
-        </div>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Paper style={{padding: 20}}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  {todo.loading ? <h1>Loading...</h1> : todo.data && <List>
+                    {todo.data.map((item, _) =>
+                        <ListItem key={item.id} role={undefined} dense button
+                                  onClick={() => this.handleChangeStatus(
+                                      item.id, item.completed)}>
+                          <ListItemIcon>
+                            {item.completed ? <Close/> : <Check/>}
+                          </ListItemIcon>
+                          <ListItemText id={item.id} primary={item.title}/>
+                          <ListItemSecondaryAction>
+                            <IconButton edge="end"
+                                        onClick={() => this.handleRemove(
+                                            item.id)}>
+                              <Delete/>
+                            </IconButton>
+                          </ListItemSecondaryAction>
+                        </ListItem>,
+                    )}
+                  </List>}
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
+
+          {/*{todo.loading ? <h1>Loading...</h1> : <div>*/}
+          {/*  <h1>Todo List</h1>*/}
+          {/*  <button onClick={this.handlePrevious}>{`<`}</button>*/}
+          {/*  <input type="number" name="size" value={size}*/}
+          {/*         onChange={this.handleChangeSize}/>*/}
+          {/*  <button onClick={this.handleNext}>{`>`}</button>*/}
+          {/*  <FormLabel>total: {todo.total}</FormLabel>*/}
+          {/*</div>}*/}
+          {/*{todo.loading === false && todo.data && <ul>*/}
+          {/*  {todo.data.map((item, _) =>*/}
+          {/*      <li key={item.id}>*/}
+          {/*        <button onClick={() => this.handleChangeStatus(*/}
+          {/*            item.id, item.completed)}>{item.completed ?*/}
+          {/*            'X' :*/}
+          {/*            'V'}</button>*/}
+          {/*        {item.title}*/}
+          {/*        <button onClick={() => this.handleRemove(item.id)}>remove*/}
+          {/*        </button>*/}
+          {/*      </li>,*/}
+          {/*  )}*/}
+          {/*</ul>}*/}
+        </Grid>
     );
   }
 

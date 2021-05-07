@@ -65,8 +65,6 @@ function changeStatus(id, status) {
 }
 
 function handlerResp(response) {
-  console.log(response.headers.get('X-Total-Count'));
-
   return response.json().then(body => {
     if (!response.ok) {
       const error = (body && body.msg) || response.statusText;
