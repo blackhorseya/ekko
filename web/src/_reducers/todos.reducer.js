@@ -35,8 +35,11 @@ export function todos(state = initState, action) {
         loading: true,
       };
     case todoConstants.ADD_SUCCESS:
+      const total = parseInt(state.total, 10)
+
       return {
         ...state,
+        total: total + 1,
         loading: false,
         data: [...state.data, action.task],
         error: '',
@@ -57,6 +60,7 @@ export function todos(state = initState, action) {
     case todoConstants.REMOVE_SUCCESS:
       return {
         ...state,
+        total: state.total - 1,
         loading: false,
         data: [...state.data.filter(x => x.id !== action.id)],
         error: '',
