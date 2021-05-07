@@ -10,6 +10,7 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   Paper,
+  TablePagination,
 } from '@material-ui/core';
 import {Check, Close, Delete} from '@material-ui/icons';
 
@@ -18,20 +19,21 @@ class TodoList extends React.Component {
     super(props);
 
     this.state = {
-      start: 0,
-      end: 4,
+      page: 0,
       size: 5,
     };
 
     this.handleRemove = this.handleRemove.bind(this);
     this.handleChangeStatus = this.handleChangeStatus.bind(this);
-    this.handleChangeSize = this.handleChangeSize.bind(this);
-    this.handlePrevious = this.handlePrevious.bind(this);
-    this.handleNext = this.handleNext.bind(this);
+    this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
+    this.handleChangePage = this.handleChangePage.bind(this);
   }
 
   componentDidMount() {
-    const {start, end} = this.state;
+    const {page, size} = this.state;
+    const start = page * size;
+    const end = (page + 1) * size - 1;
+
     this.props.list(start, end);
   }
 
@@ -47,39 +49,26 @@ class TodoList extends React.Component {
     }
   }
 
-  handleChangeSize(e) {
-    const {value} = e.target;
+  handleChangePage(e, newPage) {
+    const {size} = this.state;
+    this.setState({page: newPage});
+    const start = newPage * size;
+    const end = (newPage + 1) * size - 1;
 
-    const {start, size} = this.state;
-    const newEnd = start + size;
-    const newSize = parseInt(value, 10);
-    this.setState({end: newEnd, size: newSize});
-
-    this.props.list(start, newEnd);
+    this.props.list(start, end);
   }
 
-  handlePrevious(e) {
-    const {start, end, size} = this.state;
-    const newStart = start - size;
-    const newEnd = end - size;
+  handleChangeRowsPerPage(e) {
+    const newSize = parseInt(e.target.value, 10);
+    this.setState({size: newSize});
+    const start = 0;
+    const end = newSize - 1;
 
-    this.setState({start: newStart, end: newEnd});
-
-    this.props.list(newStart, newEnd);
-  }
-
-  handleNext(e) {
-    const {start, end, size} = this.state;
-    const newStart = start + size;
-    const newEnd = end + size;
-
-    this.setState({start: newStart, end: newEnd});
-
-    this.props.list(newStart, newEnd);
+    this.props.list(start, end);
   }
 
   render() {
-    const {size} = this.state;
+    const {size, page} = this.state;
     const {todo} = this.props;
 
     return (
@@ -87,6 +76,17 @@ class TodoList extends React.Component {
           <Grid item xs={12}>
             <Paper style={{padding: 20}}>
               <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TablePagination
+                      component="div"
+                      count={parseInt(todo.total, 10)}
+                      page={page}
+                      onChangePage={this.handleChangePage}
+                      rowsPerPage={size}
+                      rowsPerPageOptions={[5, 10, 20, 50]}
+                      onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                  />
+                </Grid>
                 <Grid item xs={12}>
                   {todo.loading ? <h1>Loading...</h1> : todo.data && <List>
                     {todo.data.map((item, _) =>

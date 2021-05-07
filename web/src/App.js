@@ -5,7 +5,7 @@ import {Container, Grid, Typography} from '@material-ui/core';
 
 function App() {
   return (
-      <Container maxWidth={'xs'} style={{padding: 20}}>
+      <Container maxWidth={'lg'} style={{padding: 20}}>
         <Grid container justify="center" alignItems="center" spacing={3}>
           <Grid item xs={12}>
             <Typography variant="h1" component="h2">Todo List</Typography>
