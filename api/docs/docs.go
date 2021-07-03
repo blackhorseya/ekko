@@ -233,7 +233,7 @@ var doc = `{
                 "summary": "Get a task by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -293,7 +293,7 @@ var doc = `{
                 "summary": "Delete a task by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -343,7 +343,7 @@ var doc = `{
                 "summary": "Update task's status by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -408,7 +408,7 @@ var doc = `{
                 "summary": "Change task's title by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -495,7 +495,7 @@ var doc = `{
                     "type": "integer"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "title": {
                     "type": "string"

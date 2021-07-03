@@ -23,7 +23,7 @@ definitions:
       createAt:
         type: integer
       id:
-        type: string
+        type: integer
       title:
         type: string
     type: object
@@ -166,7 +166,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -198,7 +198,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -236,7 +236,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       - description: updated task
         in: body
         name: updated
@@ -276,7 +276,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       - description: updated task
         in: body
         name: updated

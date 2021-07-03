@@ -19,7 +19,7 @@ func NewImpl(client *mongo.Client) IRepo {
 	return &impl{client: client}
 }
 
-func (i *impl) GetByID(ctx contextx.Contextx, id string) (task *todo.Task, err error) {
+func (i *impl) GetByID(ctx contextx.Contextx, id int64) (task *todo.Task, err error) {
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
@@ -102,7 +102,7 @@ func (i *impl) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Tas
 	return updated, nil
 }
 
-func (i *impl) Remove(ctx contextx.Contextx, id string) error {
+func (i *impl) Remove(ctx contextx.Contextx, id int64) error {
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
