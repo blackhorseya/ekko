@@ -164,7 +164,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/todo.Task"
+                            "$ref": "#/definitions/todo.reqTitle"
                         }
                     }
                 ],
@@ -339,7 +339,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/todo.Task"
+                            "$ref": "#/definitions/todo.reqStatus"
                         }
                     }
                 ],
@@ -404,7 +404,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/todo.Task"
+                            "$ref": "#/definitions/todo.reqTitle"
                         }
                     }
                 ],
@@ -481,6 +481,28 @@
                 "id": {
                     "type": "integer"
                 },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "todo.reqStatus": {
+            "type": "object",
+            "required": [
+                "status"
+            ],
+            "properties": {
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "todo.reqTitle": {
+            "type": "object",
+            "required": [
+                "title"
+            ],
+            "properties": {
                 "title": {
                     "type": "string"
                 }
