@@ -26,6 +26,10 @@ func (i *impl) GetByID(ctx contextx.Contextx, id int64) (task *todo.Task, err er
 	coll := i.client.Database("todo-db").Collection("tasks")
 	res := coll.FindOne(timeout, bson.D{{"id", id}})
 	if res.Err() != nil {
+		if res.Err() == mongo.ErrNoDocuments {
+			return nil, nil
+		}
+
 		return nil, res.Err()
 	}
 

@@ -36,7 +36,7 @@ type reqID struct {
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param id path int true "ID of task"
+// @Param id path integer true "ID of task"
 // @Success 200 {object} response.Response{data=todo.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
@@ -137,7 +137,7 @@ func (i *impl) Create(c *gin.Context) {
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param id path int true "ID of task"
+// @Param id path integer true "ID of task"
 // @Param updated body todo.Task true "updated task"
 // @Success 200 {object} response.Response{data=todo.Task}
 // @Failure 400 {object} er.APPError
@@ -175,7 +175,7 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param id path int true "ID of task"
+// @Param id path integer true "ID of task"
 // @Param updated body todo.Task true "updated task"
 // @Success 200 {object} response.Response{data=todo.Task}
 // @Failure 400 {object} er.APPError
@@ -213,7 +213,7 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param id path int true "ID of task"
+// @Param id path integer true "ID of task"
 // @Success 204 {object} response.Response
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
