@@ -27,6 +27,20 @@ definitions:
       title:
         type: string
     type: object
+  todo.reqStatus:
+    properties:
+      status:
+        type: boolean
+    required:
+    - status
+    type: object
+  todo.reqTitle:
+    properties:
+      title:
+        type: string
+    required:
+    - title
+    type: object
 info:
   contact:
     email: blackhorseya@gmail.com
@@ -132,7 +146,7 @@ paths:
         name: created
         required: true
         schema:
-          $ref: '#/definitions/todo.Task'
+          $ref: '#/definitions/todo.reqTitle'
       produces:
       - application/json
       responses:
@@ -242,7 +256,7 @@ paths:
         name: updated
         required: true
         schema:
-          $ref: '#/definitions/todo.Task'
+          $ref: '#/definitions/todo.reqStatus'
       produces:
       - application/json
       responses:
@@ -282,7 +296,7 @@ paths:
         name: updated
         required: true
         schema:
-          $ref: '#/definitions/todo.Task'
+          $ref: '#/definitions/todo.reqTitle'
       produces:
       - application/json
       responses:

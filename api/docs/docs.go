@@ -180,7 +180,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/todo.Task"
+                            "$ref": "#/definitions/todo.reqTitle"
                         }
                     }
                 ],
@@ -355,7 +355,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/todo.Task"
+                            "$ref": "#/definitions/todo.reqStatus"
                         }
                     }
                 ],
@@ -420,7 +420,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/todo.Task"
+                            "$ref": "#/definitions/todo.reqTitle"
                         }
                     }
                 ],
@@ -497,6 +497,28 @@ var doc = `{
                 "id": {
                     "type": "integer"
                 },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "todo.reqStatus": {
+            "type": "object",
+            "required": [
+                "status"
+            ],
+            "properties": {
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "todo.reqTitle": {
+            "type": "object",
+            "required": [
+                "title"
+            ],
+            "properties": {
                 "title": {
                     "type": "string"
                 }
