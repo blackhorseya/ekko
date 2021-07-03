@@ -1,5 +1,6 @@
 app:
   name: todo
+  nodeID: 1
 
 http:
   host: ""
