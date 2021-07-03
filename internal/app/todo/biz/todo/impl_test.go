@@ -7,6 +7,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo/mocks"
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/bwmarrin/snowflake"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -40,9 +41,10 @@ type bizSuite struct {
 
 func (s *bizSuite) SetupTest() {
 	logger, _ := zap.NewDevelopment()
+	node, _ := snowflake.NewNode(1)
 
 	s.mock = new(mocks.IRepo)
-	biz, err := CreateIBiz(logger, s.mock)
+	biz, err := CreateIBiz(logger, s.mock, node)
 	if err != nil {
 		panic(err)
 	}

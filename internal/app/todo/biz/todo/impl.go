@@ -7,20 +7,23 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/bwmarrin/snowflake"
 	"github.com/google/uuid"
 	"go.uber.org/zap"
 )
 
 type impl struct {
-	logger *zap.Logger
-	repo   repo.IRepo
+	logger    *zap.Logger
+	repo      repo.IRepo
+	generator *snowflake.Node
 }
 
 // NewImpl serve caller to create an IBiz
-func NewImpl(logger *zap.Logger, repo repo.IRepo) IBiz {
+func NewImpl(logger *zap.Logger, repo repo.IRepo, generator *snowflake.Node) IBiz {
 	return &impl{
-		logger: logger.With(zap.String("type", "TodoBiz")),
-		repo:   repo,
+		logger:    logger.With(zap.String("type", "TodoBiz")),
+		repo:      repo,
+		generator: generator,
 	}
 }
 
