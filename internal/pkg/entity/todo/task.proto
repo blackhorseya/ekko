@@ -3,7 +3,7 @@ package todo;
 option go_package = "./todo;todo";
 
 message Task {
-  string id = 1;
+  int64 id = 1;
   string title = 2;
   bool completed = 3;
   int64 createAt = 4;

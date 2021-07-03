@@ -12,6 +12,6 @@ import (
 var testProviderSet = wire.NewSet(NewImpl)
 
 // CreateIBiz serve user to create health biz
-func CreateIBiz(logger *zap.Logger, repo repo.IRepo, generator *snowflake.Node) (IBiz, error) {
+func CreateIBiz(logger *zap.Logger, repo repo.IRepo, node *snowflake.Node) (IBiz, error) {
 	panic(wire.Build(testProviderSet))
 }

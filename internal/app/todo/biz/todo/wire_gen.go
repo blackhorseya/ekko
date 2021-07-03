@@ -15,8 +15,8 @@ import (
 // Injectors from wire.go:
 
 // CreateIBiz serve user to create health biz
-func CreateIBiz(logger *zap.Logger, repo2 repo.IRepo, generator *snowflake.Node) (IBiz, error) {
-	iBiz := NewImpl(logger, repo2, generator)
+func CreateIBiz(logger *zap.Logger, repo2 repo.IRepo, node *snowflake.Node) (IBiz, error) {
+	iBiz := NewImpl(logger, repo2, node)
 	return iBiz, nil
 }
 

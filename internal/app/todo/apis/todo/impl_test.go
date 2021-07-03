@@ -19,7 +19,7 @@ import (
 )
 
 var (
-	uuid1 = "43fa0832-fd3a-4ba7-a3c7-8b4a36506a83"
+	uuid1 = int64(1)
 
 	task1 = &todo.Task{
 		Id:    uuid1,
@@ -73,7 +73,7 @@ func (s *handlerSuite) Test_impl_GetByID() {
 	s.r.GET("/api/v1/tasks/:id", s.handler.GetByID)
 
 	type args struct {
-		id   string
+		id   int64
 		mock func()
 	}
 	tests := []struct {
@@ -81,16 +81,6 @@ func (s *handlerSuite) Test_impl_GetByID() {
 		args     args
 		wantCode int
 	}{
-		{
-			name:     "missing id then error",
-			args:     args{id: ""},
-			wantCode: 404,
-		},
-		{
-			name:     "id is not a uuid then error",
-			args:     args{id: "id"},
-			wantCode: 400,
-		},
 		{
 			name: "get by id then error",
 			args: args{id: uuid1, mock: func() {
@@ -253,7 +243,7 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 	s.r.PATCH("/api/v1/tasks/:id/status", s.handler.UpdateStatus)
 
 	type args struct {
-		id      string
+		id      int64
 		updated *todo.Task
 		mock    func()
 	}
@@ -262,16 +252,6 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 		args     args
 		wantCode int
 	}{
-		{
-			name:     "missing id then error",
-			args:     args{id: ""},
-			wantCode: 400,
-		},
-		{
-			name:     "id is not a uuid then error",
-			args:     args{id: "id"},
-			wantCode: 400,
-		},
 		{
 			name: "update status then error",
 			args: args{id: uuid1, updated: updated1, mock: func() {
@@ -313,7 +293,7 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 	s.r.PATCH("/api/v1/tasks/:id/title", s.handler.ChangeTitle)
 
 	type args struct {
-		id      string
+		id      int64
 		updated *todo.Task
 		mock    func()
 	}
@@ -322,16 +302,6 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 		args     args
 		wantCode int
 	}{
-		{
-			name:     "missing id then error",
-			args:     args{id: ""},
-			wantCode: 400,
-		},
-		{
-			name:     "id is not a uuid then error",
-			args:     args{id: "id"},
-			wantCode: 400,
-		},
 		{
 			name: "change title then error",
 			args: args{id: uuid1, updated: updated1, mock: func() {
@@ -373,7 +343,7 @@ func (s *handlerSuite) Test_impl_Delete() {
 	s.r.DELETE("/api/v1/tasks/:id", s.handler.Delete)
 
 	type args struct {
-		id   string
+		id   int64
 		mock func()
 	}
 	tests := []struct {
@@ -381,16 +351,6 @@ func (s *handlerSuite) Test_impl_Delete() {
 		args     args
 		wantCode int
 	}{
-		{
-			name:     "missing id then error",
-			args:     args{id: ""},
-			wantCode: 404,
-		},
-		{
-			name:     "id is not a uuid then error",
-			args:     args{id: "id"},
-			wantCode: 400,
-		},
 		{
 			name: "delete then error",
 			args: args{id: uuid1, mock: func() {
