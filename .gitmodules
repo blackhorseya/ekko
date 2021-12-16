@@ -1,3 +1,4 @@
 [submodule "deployments/configs"]
 	path = deployments/configs
 	url = git@github.com:blackhorseya/todo-app-configs.git
+	branch = main
