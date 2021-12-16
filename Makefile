@@ -3,12 +3,17 @@ VERSION = latest
 PROJECT_ID = sean-side
 NS = side
 DEPLOY_TO = uat
+REGISTRY = gcr.io/$(PROJECT_ID)
+HELM_REPO_NAME = blackhorseya
+CHART_NAME = todo-app
+RELEASE_NAME = todo
 
 DB_URI="mongodb://todo-app:changeme@localhost:27017/todo-db"
 
 .PHONY: clean
 clean:
-	@rm -rf coverage.txt profile.out bin
+	@rm -rf coverage.txt profile.out ./bin
+	@echo Successfuly removed artifacts
 
 .PHONY: test-unit
 test-unit:
@@ -24,7 +29,7 @@ report:
 
 .PHONY: build-image
 build-image:
-	@docker build -t $(APP_NAME):$(VERSION) \
+	@docker build -t $(REGISTRY)/$(APP_NAME):$(VERSION) \
 	--label "app.name=$(APP_NAME)" \
 	--label "app.version=$(VERSION)" \
 	--build-arg APP_NAME=$(APP_NAME) \
@@ -38,23 +43,14 @@ list-images:
 prune-images:
 	@docker rmi -f `docker images --filter=label=app.name=$(APP_NAME) -q`
 
-.PHONY: tag-image
-tag-image:
-	@docker tag $(APP_NAME):$(VERSION) gcr.io/$(PROJECT_ID)/$(APP_NAME):$(VERSION)
-
 .PHONY: push-image
 push-image:
-	@docker push gcr.io/$(PROJECT_ID)/$(APP_NAME):$(VERSION)
-
-.PHONY: install-db
-install-db:
-	@helm --namespace $(NS) upgrade --install $(APP_NAME)-db bitnami/mongodb \
-	--values ./deployments/configs/$(DEPLOY_TO)/mongo.yaml
+	@docker push $(REGISTRY)/$(APP_NAME):$(VERSION)
 
 .PHONY: deploy
 deploy:
 	@helm --namespace $(NS) \
-	upgrade --install $(APP_NAME) ./deployments/helm \
+	upgrade --install $(APP_NAME) $(HELM_REPO_NAME)/$(CHART_NAME) \
 	--values ./deployments/configs/$(DEPLOY_TO)/todo.yaml \
 	--set image.tag=$(VERSION)
 
@@ -63,7 +59,8 @@ gen: gen-pb gen-swagger gen-wire
 
 .PHONY: gen-pb
 gen-pb:
-	@protoc --go_out=plugins=grpc,paths=source_relative:. ./internal/pkg/entity/**/*.proto
+	@protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. ./internal/pkg/entity/**/*.proto
+	@echo Successfully generated proto
 
 .PHONY: gen-wire
 gen-wire:
