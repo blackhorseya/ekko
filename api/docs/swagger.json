@@ -488,9 +488,6 @@
         },
         "todo.reqStatus": {
             "type": "object",
-            "required": [
-                "status"
-            ],
             "properties": {
                 "status": {
                     "type": "boolean"
@@ -499,9 +496,6 @@
         },
         "todo.reqTitle": {
             "type": "object",
-            "required": [
-                "title"
-            ],
             "properties": {
                 "title": {
                     "type": "string"

@@ -31,15 +31,11 @@ definitions:
     properties:
       status:
         type: boolean
-    required:
-    - status
     type: object
   todo.reqTitle:
     properties:
       title:
         type: string
-    required:
-    - title
     type: object
 info:
   contact:
