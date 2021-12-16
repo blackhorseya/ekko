@@ -10,6 +10,8 @@ RELEASE_NAME = todo
 
 DB_URI="mongodb://todo-app:changeme@localhost:27017/todo-db"
 
+check_defined = $(if $(value $1),,$(error Undefined $1))
+
 .PHONY: clean
 clean:
 	@rm -rf coverage.txt profile.out ./bin
@@ -49,6 +51,8 @@ push-image:
 
 .PHONY: deploy
 deploy:
+	$(call check_defined,VERSION)
+	$(call check_defined,DEPLOY_TO)
 	@helm --namespace $(NS) \
 	upgrade --install $(APP_NAME) $(HELM_REPO_NAME)/$(CHART_NAME) \
 	--values ./deployments/configs/$(DEPLOY_TO)/todo.yaml \
