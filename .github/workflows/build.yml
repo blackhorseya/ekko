@@ -1,0 +1,37 @@
+name: Build
+on:
+  push:
+    branches:
+      - "**"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: Clone submodules
+        run: |
+          sed -i 's/git@github.com:/https:\/\/'"${{ secrets.USERNAME }}"':'"${{ secrets.TOKEN }}"'@github.com\//' .gitmodules
+          git submodule update --init --recursive
+      - name: Setup go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.17'
+      - name: Setup cache
+        uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Lint
+        run: |
+          go get -u golang.org/x/lint/golint
+          make lint
+      - name: Test
+        run: |
+          make test-unit
+      - name: Send code coverage report
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
