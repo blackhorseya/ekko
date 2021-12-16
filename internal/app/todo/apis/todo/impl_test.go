@@ -244,7 +244,7 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 
 	type args struct {
 		id      int64
-		updated *todo.Task
+		updated *reqStatus
 		mock    func()
 	}
 	tests := []struct {
@@ -254,14 +254,14 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 	}{
 		{
 			name: "update status then error",
-			args: args{id: uuid1, updated: updated1, mock: func() {
+			args: args{id: uuid1, updated: &reqStatus{Status: true}, mock: func() {
 				s.mock.On("UpdateStatus", mock.Anything, uuid1, updated1.Completed).Return(nil, er.ErrUpdateStatusTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
 			name: "update status then success",
-			args: args{id: uuid1, updated: updated1, mock: func() {
+			args: args{id: uuid1, updated: &reqStatus{Status: true}, mock: func() {
 				s.mock.On("UpdateStatus", mock.Anything, uuid1, updated1.Completed).Return(updated1, nil).Once()
 			}},
 			wantCode: 200,
@@ -294,7 +294,7 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 
 	type args struct {
 		id      int64
-		updated *todo.Task
+		updated *reqTitle
 		mock    func()
 	}
 	tests := []struct {
@@ -303,16 +303,16 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 		wantCode int
 	}{
 		{
-			name: "change title then error",
-			args: args{id: uuid1, updated: updated1, mock: func() {
+			name: "change title then 500",
+			args: args{id: uuid1, updated: &reqTitle{Title: ""}, mock: func() {
 				s.mock.On("ChangeTitle", mock.Anything, uuid1, updated1.Title).Return(nil, er.ErrChangeTitleTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
 			name: "change title then success",
-			args: args{id: uuid1, updated: updated1, mock: func() {
-				s.mock.On("ChangeTitle", mock.Anything, uuid1, updated1.Title).Return(updated1, nil).Once()
+			args: args{id: uuid1, updated: &reqTitle{Title: "title"}, mock: func() {
+				s.mock.On("ChangeTitle", mock.Anything, uuid1, updated2.Title).Return(updated1, nil).Once()
 			}},
 			wantCode: 200,
 		},
@@ -334,7 +334,7 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 
 			s.EqualValuesf(tt.wantCode, got.StatusCode, "ChangeTitle() code = %v, wantCode = %v", got.StatusCode, tt.wantCode)
 
-			s.TearDownTest()
+			s.mock.AssertExpectations(t)
 		})
 	}
 }

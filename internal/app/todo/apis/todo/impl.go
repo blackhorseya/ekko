@@ -101,7 +101,7 @@ func (i *impl) List(c *gin.Context) {
 }
 
 type reqTitle struct {
-	Title string `uri:"title" binding:"required"`
+	Title string `uri:"title"`
 }
 
 // Create
@@ -135,7 +135,7 @@ func (i *impl) Create(c *gin.Context) {
 }
 
 type reqStatus struct {
-	Status bool `json:"status" binding:"required"`
+	Status bool `json:"status"`
 }
 
 // UpdateStatus
