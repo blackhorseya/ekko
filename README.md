@@ -1,6 +1,6 @@
 # TodoList List
 
-[![Build Status](https://travis-ci.com/blackhorseya/todo-app.svg?branch=main)](https://travis-ci.com/blackhorseya/todo-app)
+[![Build](https://github.com/blackhorseya/todo-app/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/blackhorseya/todo-app/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/blackhorseya/todo-app/branch/main/graph/badge.svg?token=SV4V6G6QZJ)](https://codecov.io/gh/blackhorseya/todo-app)
 [![Go Report Card](https://goreportcard.com/badge/github.com/blackhorseya/todo-app)](https://goreportcard.com/report/github.com/blackhorseya/todo-app)
 [![Go Reference](https://pkg.go.dev/badge/github.com/blackhorseya/todo-app)](https://pkg.go.dev/github.com/blackhorseya/todo-app)
