@@ -504,9 +504,6 @@ var doc = `{
         },
         "todo.reqStatus": {
             "type": "object",
-            "required": [
-                "status"
-            ],
             "properties": {
                 "status": {
                     "type": "boolean"
@@ -515,9 +512,6 @@ var doc = `{
         },
         "todo.reqTitle": {
             "type": "object",
-            "required": [
-                "title"
-            ],
             "properties": {
                 "title": {
                     "type": "string"
