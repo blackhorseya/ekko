@@ -11,4 +11,4 @@ log:
 
 db:
   debug: true
-  url: "mongodb+srv://root:%;4\X$fB*>`6kq:h@side.exsla.mongodb.net/todo?retryWrites=true&w=majority"
+  url: "mongodb://todo-app:changeme@localhost:27017/todo-db?connect=direct&authSource=todo-db"
