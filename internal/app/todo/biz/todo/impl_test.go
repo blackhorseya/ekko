@@ -7,6 +7,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo/mocks"
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/bwmarrin/snowflake"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -14,10 +15,10 @@ import (
 )
 
 var (
-	uuid1 = "43fa0832-fd3a-4ba7-a3c7-8b4a36506a83"
+	uuid1 = int64(1)
 
 	task1 = &todo.Task{
-		Id: uuid1,
+		Id:    uuid1,
 		Title: "title",
 	}
 
@@ -40,9 +41,10 @@ type bizSuite struct {
 
 func (s *bizSuite) SetupTest() {
 	logger, _ := zap.NewDevelopment()
+	node, _ := snowflake.NewNode(1)
 
 	s.mock = new(mocks.IRepo)
-	biz, err := CreateIBiz(logger, s.mock)
+	biz, err := CreateIBiz(logger, s.mock, node)
 	if err != nil {
 		panic(err)
 	}
@@ -60,7 +62,7 @@ func TestBizSuite(t *testing.T) {
 
 func (s *bizSuite) Test_impl_GetByID() {
 	type args struct {
-		id   string
+		id   int64
 		mock func()
 	}
 	tests := []struct {
@@ -69,18 +71,6 @@ func (s *bizSuite) Test_impl_GetByID() {
 		wantTask *todo.Task
 		wantErr  bool
 	}{
-		{
-			name:     "missing id then error",
-			args:     args{id: ""},
-			wantTask: nil,
-			wantErr:  true,
-		},
-		{
-			name:     "id is not a uuid then error",
-			args:     args{id: "id"},
-			wantTask: nil,
-			wantErr:  true,
-		},
 		{
 			name: "get by id then error",
 			args: args{id: uuid1, mock: func() {
@@ -271,7 +261,7 @@ func (s *bizSuite) Test_impl_Create() {
 
 func (s *bizSuite) Test_impl_Delete() {
 	type args struct {
-		id   string
+		id   int64
 		mock func()
 	}
 	tests := []struct {
@@ -279,16 +269,6 @@ func (s *bizSuite) Test_impl_Delete() {
 		args    args
 		wantErr bool
 	}{
-		{
-			name:    "missing id then error",
-			args:    args{id: ""},
-			wantErr: true,
-		},
-		{
-			name:    "id is not a uuid then error",
-			args:    args{id: "id"},
-			wantErr: true,
-		},
 		{
 			name: "uuid remove then error",
 			args: args{id: uuid1, mock: func() {
@@ -321,7 +301,7 @@ func (s *bizSuite) Test_impl_Delete() {
 
 func (s *bizSuite) Test_impl_UpdateStatus() {
 	type args struct {
-		id     string
+		id     int64
 		status bool
 		mock   func()
 	}
@@ -331,18 +311,6 @@ func (s *bizSuite) Test_impl_UpdateStatus() {
 		wantTask *todo.Task
 		wantErr  bool
 	}{
-		{
-			name:     "missing id then error",
-			args:     args{id: ""},
-			wantTask: nil,
-			wantErr:  true,
-		},
-		{
-			name:     "id is not a uuid then error",
-			args:     args{id: "id"},
-			wantTask: nil,
-			wantErr:  true,
-		},
 		{
 			name: "get by id then error",
 			args: args{id: uuid1, status: true, mock: func() {
@@ -400,7 +368,7 @@ func (s *bizSuite) Test_impl_UpdateStatus() {
 
 func (s *bizSuite) Test_impl_ChangeTitle() {
 	type args struct {
-		id    string
+		id    int64
 		title string
 		mock  func()
 	}
@@ -410,18 +378,6 @@ func (s *bizSuite) Test_impl_ChangeTitle() {
 		wantTask *todo.Task
 		wantErr  bool
 	}{
-		{
-			name:     "missing id then error",
-			args:     args{id: "", title: "title"},
-			wantTask: nil,
-			wantErr:  true,
-		},
-		{
-			name:     "id is not a uuid then error",
-			args:     args{id: "id", title: "title"},
-			wantTask: nil,
-			wantErr:  true,
-		},
 		{
 			name:     "missing title then error",
 			args:     args{id: uuid1, title: ""},

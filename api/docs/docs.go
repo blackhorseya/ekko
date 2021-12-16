@@ -180,7 +180,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/todo.Task"
+                            "$ref": "#/definitions/todo.reqTitle"
                         }
                     }
                 ],
@@ -233,7 +233,7 @@ var doc = `{
                 "summary": "Get a task by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -293,7 +293,7 @@ var doc = `{
                 "summary": "Delete a task by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -343,7 +343,7 @@ var doc = `{
                 "summary": "Update task's status by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -355,7 +355,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/todo.Task"
+                            "$ref": "#/definitions/todo.reqStatus"
                         }
                     }
                 ],
@@ -408,7 +408,7 @@ var doc = `{
                 "summary": "Change task's title by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -420,7 +420,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/todo.Task"
+                            "$ref": "#/definitions/todo.reqTitle"
                         }
                     }
                 ],
@@ -495,8 +495,30 @@ var doc = `{
                     "type": "integer"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "integer"
                 },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "todo.reqStatus": {
+            "type": "object",
+            "required": [
+                "status"
+            ],
+            "properties": {
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "todo.reqTitle": {
+            "type": "object",
+            "required": [
+                "title"
+            ],
+            "properties": {
                 "title": {
                     "type": "string"
                 }

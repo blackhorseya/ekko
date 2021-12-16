@@ -7,42 +7,33 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
-	"github.com/google/uuid"
+	"github.com/bwmarrin/snowflake"
 	"go.uber.org/zap"
 )
 
 type impl struct {
 	logger *zap.Logger
 	repo   repo.IRepo
+	node   *snowflake.Node
 }
 
 // NewImpl serve caller to create an IBiz
-func NewImpl(logger *zap.Logger, repo repo.IRepo) IBiz {
+func NewImpl(logger *zap.Logger, repo repo.IRepo, node *snowflake.Node) IBiz {
 	return &impl{
 		logger: logger.With(zap.String("type", "TodoBiz")),
 		repo:   repo,
+		node:   node,
 	}
 }
 
-func (i *impl) GetByID(ctx contextx.Contextx, id string) (task *todo.Task, err error) {
-	if len(id) == 0 {
-		i.logger.Error(er.ErrMissingID.Error())
-		return nil, er.ErrMissingID
-	}
-
-	_, err = uuid.Parse(id)
-	if err != nil {
-		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", id))
-		return nil, er.ErrInvalidID
-	}
-
+func (i *impl) GetByID(ctx contextx.Contextx, id int64) (task *todo.Task, err error) {
 	ret, err := i.repo.GetByID(ctx, id)
 	if err != nil {
-		i.logger.Error(er.ErrGetTask.Error(), zap.Error(err), zap.String("id", id))
+		i.logger.Error(er.ErrGetTask.Error(), zap.Error(err), zap.Int64("id", id))
 		return nil, er.ErrGetTask
 	}
 	if ret == nil {
-		i.logger.Error(er.ErrTaskNotExists.Error(), zap.String("id", id))
+		i.logger.Error(er.ErrTaskNotExists.Error(), zap.Int64("id", id))
 		return nil, er.ErrTaskNotExists
 	}
 
@@ -86,7 +77,7 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err
 	}
 
 	newTask := &todo.Task{
-		Id:       uuid.New().String(),
+		Id:       i.node.Generate().Int64(),
 		Title:    title,
 		CreateAt: time.Now().UnixNano(),
 	}
@@ -99,50 +90,28 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err
 	return ret, nil
 }
 
-func (i *impl) UpdateStatus(ctx contextx.Contextx, id string, status bool) (task *todo.Task, err error) {
-	if len(id) == 0 {
-		i.logger.Error(er.ErrMissingID.Error())
-		return nil, er.ErrMissingID
-	}
-
-	_, err = uuid.Parse(id)
-	if err != nil {
-		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", id))
-		return nil, er.ErrInvalidID
-	}
-
+func (i *impl) UpdateStatus(ctx contextx.Contextx, id int64, status bool) (task *todo.Task, err error) {
 	exists, err := i.repo.GetByID(ctx, id)
 	if err != nil {
-		i.logger.Error(er.ErrGetTask.Error(), zap.Error(err), zap.String("id", id))
+		i.logger.Error(er.ErrGetTask.Error(), zap.Error(err), zap.Int64("id", id))
 		return nil, er.ErrGetTask
 	}
 	if exists == nil {
-		i.logger.Error(er.ErrTaskNotExists.Error(), zap.String("id", id))
+		i.logger.Error(er.ErrTaskNotExists.Error(), zap.Int64("id", id))
 		return nil, er.ErrTaskNotExists
 	}
 
 	exists.Completed = status
 	ret, err := i.repo.Update(ctx, exists)
 	if err != nil {
-		i.logger.Error(er.ErrUpdateStatusTask.Error(), zap.Error(err), zap.String("id", id), zap.Bool("status", status))
+		i.logger.Error(er.ErrUpdateStatusTask.Error(), zap.Error(err), zap.Int64("id", id), zap.Bool("status", status))
 		return nil, er.ErrUpdateStatusTask
 	}
 
 	return ret, nil
 }
 
-func (i *impl) ChangeTitle(ctx contextx.Contextx, id string, title string) (task *todo.Task, err error) {
-	if len(id) == 0 {
-		i.logger.Error(er.ErrMissingID.Error())
-		return nil, er.ErrMissingID
-	}
-
-	_, err = uuid.Parse(id)
-	if err != nil {
-		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", id))
-		return nil, er.ErrInvalidID
-	}
-
+func (i *impl) ChangeTitle(ctx contextx.Contextx, id int64, title string) (task *todo.Task, err error) {
 	if len(title) == 0 {
 		i.logger.Error(er.ErrMissingTitle.Error())
 		return nil, er.ErrMissingTitle
@@ -150,39 +119,28 @@ func (i *impl) ChangeTitle(ctx contextx.Contextx, id string, title string) (task
 
 	exists, err := i.repo.GetByID(ctx, id)
 	if err != nil {
-		i.logger.Error(er.ErrGetTask.Error(), zap.Error(err), zap.String("id", id))
+		i.logger.Error(er.ErrGetTask.Error(), zap.Error(err), zap.Int64("id", id))
 		return nil, er.ErrGetTask
 	}
 	if exists == nil {
-		i.logger.Error(er.ErrTaskNotExists.Error(), zap.String("id", id))
+		i.logger.Error(er.ErrTaskNotExists.Error(), zap.Int64("id", id))
 		return nil, er.ErrTaskNotExists
 	}
 
 	exists.Title = title
 	ret, err := i.repo.Update(ctx, exists)
 	if err != nil {
-		i.logger.Error(er.ErrChangeTitleTask.Error(), zap.Error(err), zap.String("id", id), zap.String("title", title))
+		i.logger.Error(er.ErrChangeTitleTask.Error(), zap.Error(err), zap.Int64("id", id), zap.String("title", title))
 		return nil, er.ErrChangeTitleTask
 	}
 
 	return ret, nil
 }
 
-func (i *impl) Delete(ctx contextx.Contextx, id string) error {
-	if len(id) == 0 {
-		i.logger.Error(er.ErrMissingID.Error())
-		return er.ErrMissingID
-	}
-
-	_, err := uuid.Parse(id)
+func (i *impl) Delete(ctx contextx.Contextx, id int64) error {
+	err := i.repo.Remove(ctx, id)
 	if err != nil {
-		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", id))
-		return er.ErrInvalidID
-	}
-
-	err = i.repo.Remove(ctx, id)
-	if err != nil {
-		i.logger.Error(er.ErrDeleteTask.Error(), zap.Error(err), zap.String("id", id))
+		i.logger.Error(er.ErrDeleteTask.Error(), zap.Error(err), zap.Int64("id", id))
 		return er.ErrDeleteTask
 	}
 

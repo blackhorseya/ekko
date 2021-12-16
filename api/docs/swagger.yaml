@@ -23,9 +23,23 @@ definitions:
       createAt:
         type: integer
       id:
-        type: string
+        type: integer
       title:
         type: string
+    type: object
+  todo.reqStatus:
+    properties:
+      status:
+        type: boolean
+    required:
+    - status
+    type: object
+  todo.reqTitle:
+    properties:
+      title:
+        type: string
+    required:
+    - title
     type: object
 info:
   contact:
@@ -132,7 +146,7 @@ paths:
         name: created
         required: true
         schema:
-          $ref: '#/definitions/todo.Task'
+          $ref: '#/definitions/todo.reqTitle'
       produces:
       - application/json
       responses:
@@ -166,7 +180,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -198,7 +212,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -236,13 +250,13 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       - description: updated task
         in: body
         name: updated
         required: true
         schema:
-          $ref: '#/definitions/todo.Task'
+          $ref: '#/definitions/todo.reqStatus'
       produces:
       - application/json
       responses:
@@ -276,13 +290,13 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       - description: updated task
         in: body
         name: updated
         required: true
         schema:
-          $ref: '#/definitions/todo.Task'
+          $ref: '#/definitions/todo.reqTitle'
       produces:
       - application/json
       responses:

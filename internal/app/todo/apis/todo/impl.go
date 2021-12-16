@@ -8,7 +8,6 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/response"
-	todoE "github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -27,7 +26,7 @@ func NewImpl(logger *zap.Logger, biz todo.IBiz) IHandler {
 }
 
 type reqID struct {
-	ID string `uri:"id" binding:"required,uuid"`
+	ID int64 `uri:"id" binding:"required"`
 }
 
 // GetByID
@@ -36,7 +35,7 @@ type reqID struct {
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param id path string true "ID of task"
+// @Param id path integer true "ID of task"
 // @Success 200 {object} response.Response{data=todo.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
@@ -101,13 +100,17 @@ func (i *impl) List(c *gin.Context) {
 	c.JSON(http.StatusOK, response.OK.WithData(ret))
 }
 
+type reqTitle struct {
+	Title string `uri:"title"`
+}
+
 // Create
 // @Summary Create a task
 // @Description Create a task
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param created body todo.Task true "created task"
+// @Param created body reqTitle true "created task"
 // @Success 201 {object} response.Response{data=todo.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
@@ -115,7 +118,7 @@ func (i *impl) List(c *gin.Context) {
 func (i *impl) Create(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
 
-	var data *todoE.Task
+	var data *reqTitle
 	if err := c.ShouldBindJSON(&data); err != nil {
 		i.logger.Error(er.ErrCreateTask.Error(), zap.Error(err))
 		c.Error(er.ErrCreateTask)
@@ -131,14 +134,18 @@ func (i *impl) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, response.OK.WithData(ret))
 }
 
+type reqStatus struct {
+	Status bool `json:"status"`
+}
+
 // UpdateStatus
 // @Summary Update task's status by id
 // @Description Update task's status by id
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param id path string true "ID of task"
-// @Param updated body todo.Task true "updated task"
+// @Param id path integer true "ID of task"
+// @Param updated body reqStatus true "updated task"
 // @Success 200 {object} response.Response{data=todo.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
@@ -153,14 +160,14 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 		return
 	}
 
-	var data *todoE.Task
+	var data *reqStatus
 	if err := c.ShouldBindJSON(&data); err != nil {
 		i.logger.Error(er.ErrUpdateStatusTask.Error(), zap.Error(err))
 		c.Error(er.ErrUpdateStatusTask)
 		return
 	}
 
-	ret, err := i.biz.UpdateStatus(ctx, req.ID, data.Completed)
+	ret, err := i.biz.UpdateStatus(ctx, req.ID, data.Status)
 	if err != nil {
 		c.Error(err)
 		return
@@ -175,8 +182,8 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param id path string true "ID of task"
-// @Param updated body todo.Task true "updated task"
+// @Param id path integer true "ID of task"
+// @Param updated body reqTitle true "updated task"
 // @Success 200 {object} response.Response{data=todo.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
@@ -191,7 +198,7 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 		return
 	}
 
-	var data *todoE.Task
+	var data *reqTitle
 	if err := c.ShouldBindJSON(&data); err != nil {
 		i.logger.Error(er.ErrChangeTitleTask.Error(), zap.Error(err))
 		c.Error(er.ErrChangeTitleTask)
@@ -213,7 +220,7 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param id path string true "ID of task"
+// @Param id path integer true "ID of task"
 // @Success 204 {object} response.Response
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError

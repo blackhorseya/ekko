@@ -19,7 +19,7 @@ import (
 )
 
 var (
-	uuid1 = "43fa0832-fd3a-4ba7-a3c7-8b4a36506a83"
+	uuid1 = int64(1)
 
 	task1 = &todo.Task{
 		Id:    uuid1,
@@ -73,7 +73,7 @@ func (s *handlerSuite) Test_impl_GetByID() {
 	s.r.GET("/api/v1/tasks/:id", s.handler.GetByID)
 
 	type args struct {
-		id   string
+		id   int64
 		mock func()
 	}
 	tests := []struct {
@@ -81,16 +81,6 @@ func (s *handlerSuite) Test_impl_GetByID() {
 		args     args
 		wantCode int
 	}{
-		{
-			name:     "missing id then error",
-			args:     args{id: ""},
-			wantCode: 404,
-		},
-		{
-			name:     "id is not a uuid then error",
-			args:     args{id: "id"},
-			wantCode: 400,
-		},
 		{
 			name: "get by id then error",
 			args: args{id: uuid1, mock: func() {
@@ -253,8 +243,8 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 	s.r.PATCH("/api/v1/tasks/:id/status", s.handler.UpdateStatus)
 
 	type args struct {
-		id      string
-		updated *todo.Task
+		id      int64
+		updated *reqStatus
 		mock    func()
 	}
 	tests := []struct {
@@ -263,25 +253,15 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 		wantCode int
 	}{
 		{
-			name:     "missing id then error",
-			args:     args{id: ""},
-			wantCode: 400,
-		},
-		{
-			name:     "id is not a uuid then error",
-			args:     args{id: "id"},
-			wantCode: 400,
-		},
-		{
 			name: "update status then error",
-			args: args{id: uuid1, updated: updated1, mock: func() {
+			args: args{id: uuid1, updated: &reqStatus{Status: true}, mock: func() {
 				s.mock.On("UpdateStatus", mock.Anything, uuid1, updated1.Completed).Return(nil, er.ErrUpdateStatusTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
 			name: "update status then success",
-			args: args{id: uuid1, updated: updated1, mock: func() {
+			args: args{id: uuid1, updated: &reqStatus{Status: true}, mock: func() {
 				s.mock.On("UpdateStatus", mock.Anything, uuid1, updated1.Completed).Return(updated1, nil).Once()
 			}},
 			wantCode: 200,
@@ -313,8 +293,8 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 	s.r.PATCH("/api/v1/tasks/:id/title", s.handler.ChangeTitle)
 
 	type args struct {
-		id      string
-		updated *todo.Task
+		id      int64
+		updated *reqTitle
 		mock    func()
 	}
 	tests := []struct {
@@ -323,26 +303,16 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 		wantCode int
 	}{
 		{
-			name:     "missing id then error",
-			args:     args{id: ""},
-			wantCode: 400,
-		},
-		{
-			name:     "id is not a uuid then error",
-			args:     args{id: "id"},
-			wantCode: 400,
-		},
-		{
-			name: "change title then error",
-			args: args{id: uuid1, updated: updated1, mock: func() {
+			name: "change title then 500",
+			args: args{id: uuid1, updated: &reqTitle{Title: ""}, mock: func() {
 				s.mock.On("ChangeTitle", mock.Anything, uuid1, updated1.Title).Return(nil, er.ErrChangeTitleTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
 			name: "change title then success",
-			args: args{id: uuid1, updated: updated1, mock: func() {
-				s.mock.On("ChangeTitle", mock.Anything, uuid1, updated1.Title).Return(updated1, nil).Once()
+			args: args{id: uuid1, updated: &reqTitle{Title: "title"}, mock: func() {
+				s.mock.On("ChangeTitle", mock.Anything, uuid1, updated2.Title).Return(updated1, nil).Once()
 			}},
 			wantCode: 200,
 		},
@@ -364,7 +334,7 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 
 			s.EqualValuesf(tt.wantCode, got.StatusCode, "ChangeTitle() code = %v, wantCode = %v", got.StatusCode, tt.wantCode)
 
-			s.TearDownTest()
+			s.mock.AssertExpectations(t)
 		})
 	}
 }
@@ -373,7 +343,7 @@ func (s *handlerSuite) Test_impl_Delete() {
 	s.r.DELETE("/api/v1/tasks/:id", s.handler.Delete)
 
 	type args struct {
-		id   string
+		id   int64
 		mock func()
 	}
 	tests := []struct {
@@ -381,16 +351,6 @@ func (s *handlerSuite) Test_impl_Delete() {
 		args     args
 		wantCode int
 	}{
-		{
-			name:     "missing id then error",
-			args:     args{id: ""},
-			wantCode: 404,
-		},
-		{
-			name:     "id is not a uuid then error",
-			args:     args{id: "id"},
-			wantCode: 400,
-		},
 		{
 			name: "delete then error",
 			args: args{id: uuid1, mock: func() {
