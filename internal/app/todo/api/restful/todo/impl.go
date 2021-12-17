@@ -118,8 +118,8 @@ func (i *impl) Create(c *gin.Context) {
 
 	var data *reqTitle
 	if err := c.ShouldBindJSON(&data); err != nil {
-		i.logger.Error(er.ErrCreateTask.Error(), zap.Error(err))
-		_ = c.Error(er.ErrCreateTask)
+		i.logger.Error(er.ErrBindTitle.Error(), zap.Error(err))
+		_ = c.Error(er.ErrBindTitle)
 		return
 	}
 
@@ -156,8 +156,8 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 
 	var data *reqStatus
 	if err := c.ShouldBindJSON(&data); err != nil {
-		i.logger.Error(er.ErrUpdateStatusTask.Error(), zap.Error(err))
-		_ = c.Error(er.ErrUpdateStatusTask)
+		i.logger.Error(er.ErrBindStatus.Error(), zap.Error(err))
+		_ = c.Error(er.ErrBindStatus)
 		return
 	}
 
@@ -194,8 +194,8 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 
 	var data *reqTitle
 	if err := c.ShouldBindJSON(&data); err != nil {
-		i.logger.Error(er.ErrChangeTitleTask.Error(), zap.Error(err))
-		_ = c.Error(er.ErrChangeTitleTask)
+		i.logger.Error(er.ErrBindTitle.Error(), zap.Error(err))
+		_ = c.Error(er.ErrBindTitle)
 		return
 	}
 
