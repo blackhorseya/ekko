@@ -1,10 +1,11 @@
+//go:build wireinject
 // +build wireinject
 
 package main
 
 import (
 	"github.com/blackhorseya/todo-app/internal/app/todo"
-	"github.com/blackhorseya/todo-app/internal/app/todo/apis"
+	"github.com/blackhorseya/todo-app/internal/app/todo/api/restful"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz"
 	"github.com/blackhorseya/todo-app/internal/pkg/app"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/config"
@@ -22,7 +23,7 @@ var providerSet = wire.NewSet(
 	http.ProviderSet,
 	database.ProviderSet,
 	todo.ProviderSet,
-	apis.ProviderSet,
+	restful.ProviderSet,
 	biz.ProviderSet,
 )
 
