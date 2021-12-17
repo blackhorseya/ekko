@@ -44,13 +44,13 @@ func (i *impl) GetByID(c *gin.Context) {
 	var req reqID
 	if err := c.ShouldBindUri(&req); err != nil {
 		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
-		c.Error(er.ErrInvalidID)
+		_ = c.Error(er.ErrInvalidID)
 		return
 	}
 
 	ret, err := i.biz.GetByID(ctx, req.ID)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		return
 	}
 
@@ -76,20 +76,20 @@ func (i *impl) List(c *gin.Context) {
 	start, err := strconv.Atoi(c.DefaultQuery("start", "0"))
 	if err != nil {
 		i.logger.Error(er.ErrInvalidStart.Error(), zap.Error(err), zap.String("start", c.Query("start")))
-		c.Error(er.ErrInvalidStart)
+		_ = c.Error(er.ErrInvalidStart)
 		return
 	}
 
 	end, err := strconv.Atoi(c.DefaultQuery("end", "10"))
 	if err != nil {
 		i.logger.Error(er.ErrInvalidEnd.Error(), zap.Error(err), zap.String("end", c.Query("end")))
-		c.Error(er.ErrInvalidEnd)
+		_ = c.Error(er.ErrInvalidEnd)
 		return
 	}
 
 	tasks, total, err := i.biz.List(ctx, start, end)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		return
 	}
 
@@ -119,13 +119,13 @@ func (i *impl) Create(c *gin.Context) {
 	var data *reqTitle
 	if err := c.ShouldBindJSON(&data); err != nil {
 		i.logger.Error(er.ErrCreateTask.Error(), zap.Error(err))
-		c.Error(er.ErrCreateTask)
+		_ = c.Error(er.ErrCreateTask)
 		return
 	}
 
 	ret, err := i.biz.Create(ctx, data.Title)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		return
 	}
 
@@ -150,20 +150,20 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 	var req reqID
 	if err := c.ShouldBindUri(&req); err != nil {
 		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
-		c.Error(er.ErrInvalidID)
+		_ = c.Error(er.ErrInvalidID)
 		return
 	}
 
 	var data *reqStatus
 	if err := c.ShouldBindJSON(&data); err != nil {
 		i.logger.Error(er.ErrUpdateStatusTask.Error(), zap.Error(err))
-		c.Error(er.ErrUpdateStatusTask)
+		_ = c.Error(er.ErrUpdateStatusTask)
 		return
 	}
 
 	ret, err := i.biz.UpdateStatus(ctx, req.ID, data.Status)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		return
 	}
 
@@ -188,20 +188,20 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 	var req reqID
 	if err := c.ShouldBindUri(&req); err != nil {
 		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
-		c.Error(er.ErrInvalidID)
+		_ = c.Error(er.ErrInvalidID)
 		return
 	}
 
 	var data *reqTitle
 	if err := c.ShouldBindJSON(&data); err != nil {
 		i.logger.Error(er.ErrChangeTitleTask.Error(), zap.Error(err))
-		c.Error(er.ErrChangeTitleTask)
+		_ = c.Error(er.ErrChangeTitleTask)
 		return
 	}
 
 	ret, err := i.biz.ChangeTitle(ctx, req.ID, data.Title)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		return
 	}
 
@@ -226,13 +226,13 @@ func (i *impl) Delete(c *gin.Context) {
 	var req reqID
 	if err := c.ShouldBindUri(&req); err != nil {
 		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
-		c.Error(er.ErrInvalidID)
+		_ = c.Error(er.ErrInvalidID)
 		return
 	}
 
 	err := i.biz.Delete(ctx, req.ID)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		return
 	}
 
