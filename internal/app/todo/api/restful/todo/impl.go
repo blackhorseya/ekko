@@ -26,10 +26,6 @@ func NewImpl(logger *zap.Logger, biz todo.IBiz) IHandler {
 	}
 }
 
-type reqID struct {
-	ID int64 `uri:"id" binding:"required"`
-}
-
 // GetByID
 // @Summary Get a task by id
 // @Description Get a task by id
@@ -106,10 +102,6 @@ func (i *impl) List(c *gin.Context) {
 	c.JSON(http.StatusOK, response.OK.WithData(ret))
 }
 
-type reqTitle struct {
-	Title string `uri:"title"`
-}
-
 // Create
 // @Summary Create a task
 // @Description Create a task
@@ -138,10 +130,6 @@ func (i *impl) Create(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, response.OK.WithData(models.NewTaskResponse(ret)))
-}
-
-type reqStatus struct {
-	Status bool `json:"status"`
 }
 
 // UpdateStatus
