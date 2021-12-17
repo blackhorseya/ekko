@@ -2,9 +2,11 @@ syntax = "proto3";
 package pb;
 option go_package = "./pb;pb";
 
+import "google/protobuf/timestamp.proto";
+
 message Task {
   int64 id = 1;
   string title = 2;
   bool completed = 3;
-  int64 createAt = 4;
+  google.protobuf.Timestamp createAt = 4;
 }
