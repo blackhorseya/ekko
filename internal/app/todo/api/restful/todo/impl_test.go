@@ -10,8 +10,8 @@ import (
 
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/mocks"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http/middlewares"
+	"github.com/blackhorseya/todo-app/pb"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -21,17 +21,17 @@ import (
 var (
 	uuid1 = int64(1)
 
-	task1 = &todo.Task{
+	task1 = &pb.Task{
 		Id:    uuid1,
 		Title: "title",
 	}
 
-	updated1 = &todo.Task{
+	updated1 = &pb.Task{
 		Id:        uuid1,
 		Completed: true,
 	}
 
-	updated2 = &todo.Task{
+	updated2 = &pb.Task{
 		Id:    uuid1,
 		Title: "title",
 	}
@@ -164,7 +164,7 @@ func (s *handlerSuite) Test_impl_List() {
 		{
 			name: "list then success",
 			args: args{start: "0", end: "3", mock: func() {
-				s.mock.On("List", mock.Anything, 0, 3).Return([]*todo.Task{task1}, 10, nil).Once()
+				s.mock.On("List", mock.Anything, 0, 3).Return([]*pb.Task{task1}, 10, nil).Once()
 			}},
 			wantCode: 200,
 		},
@@ -194,7 +194,7 @@ func (s *handlerSuite) Test_impl_Create() {
 	s.r.POST("/api/v1/tasks", s.handler.Create)
 
 	type args struct {
-		created *todo.Task
+		created *pb.Task
 		mock    func()
 	}
 	tests := []struct {

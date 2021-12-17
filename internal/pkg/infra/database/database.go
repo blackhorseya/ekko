@@ -4,16 +4,12 @@ import (
 	"time"
 
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
+	"github.com/google/wire"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.uber.org/zap"
-
-	// import mysql driver
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/google/wire"
-	"github.com/jmoiron/sqlx"
 )
 
 // Options is configuration of database
@@ -51,20 +47,6 @@ func NewMongo(o *Options) (*mongo.Client, error) {
 	}
 
 	return client, nil
-}
-
-// NewMariaDB init mariadb client
-func NewMariaDB(o *Options) (*sqlx.DB, error) {
-	db, err := sqlx.Open("mysql", o.URL)
-	if err != nil {
-		return nil, err
-	}
-
-	db.SetConnMaxLifetime(time.Minute * 3)
-	db.SetMaxOpenConns(10)
-	db.SetMaxIdleConns(10)
-
-	return db, nil
 }
 
 // ProviderSet is a provider set for wire

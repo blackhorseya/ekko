@@ -10,6 +10,8 @@ RELEASE_NAME = todo
 
 DB_URI="mongodb://todo-app:changeme@localhost:27017/todo-db"
 
+check_defined = $(if $(value $1),,$(error Undefined $1))
+
 .PHONY: clean
 clean:
 	@rm -rf coverage.txt profile.out ./bin
@@ -29,10 +31,12 @@ report:
 
 .PHONY: build-image
 build-image:
+	$(call check_defined,VERSION)
 	@docker build -t $(REGISTRY)/$(APP_NAME):$(VERSION) \
 	--label "app.name=$(APP_NAME)" \
 	--label "app.version=$(VERSION)" \
 	--build-arg APP_NAME=$(APP_NAME) \
+	--pull \
 	-f Dockerfile .
 
 .PHONY: list-images
@@ -45,21 +49,32 @@ prune-images:
 
 .PHONY: push-image
 push-image:
+	$(call check_defined,VERSION)
 	@docker push $(REGISTRY)/$(APP_NAME):$(VERSION)
+
+.PHONY: up-local-db
+up-local-db:
+	@docker-compose --file ./deployments/docker-compose.yaml --project-name $(APP_NAME) up -d
+
+.PHONY: down-local-db
+down-local-db:
+	@docker-compose --file ./deployments/docker-compose.yaml --project-name $(APP_NAME) down -v
 
 .PHONY: deploy
 deploy:
+	$(call check_defined,VERSION)
+	$(call check_defined,DEPLOY_TO)
 	@helm --namespace $(NS) \
 	upgrade --install $(APP_NAME) $(HELM_REPO_NAME)/$(CHART_NAME) \
 	--values ./deployments/configs/$(DEPLOY_TO)/todo.yaml \
 	--set image.tag=$(VERSION)
 
 .PHONY: gen
-gen: gen-pb gen-swagger gen-wire
+gen: gen-wire gen-pb gen-swagger
 
 .PHONY: gen-pb
 gen-pb:
-	@protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. ./internal/pkg/entity/**/*.proto
+	@protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. ./pb/*.proto
 	@echo Successfully generated proto
 
 .PHONY: gen-wire

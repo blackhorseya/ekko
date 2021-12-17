@@ -7,9 +7,9 @@ package main
 
 import (
 	"github.com/blackhorseya/todo-app/internal/app/todo"
-	"github.com/blackhorseya/todo-app/internal/app/todo/apis"
-	health2 "github.com/blackhorseya/todo-app/internal/app/todo/apis/health"
-	todo3 "github.com/blackhorseya/todo-app/internal/app/todo/apis/todo"
+	"github.com/blackhorseya/todo-app/internal/app/todo/api/restful"
+	health2 "github.com/blackhorseya/todo-app/internal/app/todo/api/restful/health"
+	todo3 "github.com/blackhorseya/todo-app/internal/app/todo/api/restful/todo"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo"
@@ -70,7 +70,7 @@ func CreateApp(path2 string) (*app.Application, error) {
 	}
 	todoIBiz := todo2.NewImpl(logger, repoIRepo, node)
 	todoIHandler := todo3.NewImpl(logger, todoIBiz)
-	initHandlers := apis.CreateInitHandlerFn(iHandler, todoIHandler)
+	initHandlers := restful.CreateInitHandlerFn(iHandler, todoIHandler)
 	engine := http.NewRouter(httpOptions, logger, initHandlers)
 	server, err := http.New(httpOptions, logger, engine)
 	if err != nil {
@@ -85,4 +85,4 @@ func CreateApp(path2 string) (*app.Application, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(log.ProviderSet, config.ProviderSet, generator.ProviderSet, http.ProviderSet, database.ProviderSet, todo.ProviderSet, apis.ProviderSet, biz.ProviderSet)
+var providerSet = wire.NewSet(log.ProviderSet, config.ProviderSet, generator.ProviderSet, http.ProviderSet, database.ProviderSet, todo.ProviderSet, restful.ProviderSet, biz.ProviderSet)

@@ -133,7 +133,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/todo.Task"
+                                                "$ref": "#/definitions/models.TaskResponse"
                                             }
                                         }
                                     }
@@ -196,7 +196,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/todo.Task"
+                                            "$ref": "#/definitions/models.TaskResponse"
                                         }
                                     }
                                 }
@@ -252,7 +252,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/todo.Task"
+                                            "$ref": "#/definitions/models.TaskResponse"
                                         }
                                     }
                                 }
@@ -371,7 +371,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/todo.Task"
+                                            "$ref": "#/definitions/models.TaskResponse"
                                         }
                                     }
                                 }
@@ -436,7 +436,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/todo.Task"
+                                            "$ref": "#/definitions/models.TaskResponse"
                                         }
                                     }
                                 }
@@ -471,6 +471,23 @@ var doc = `{
                 }
             }
         },
+        "models.TaskResponse": {
+            "type": "object",
+            "properties": {
+                "completed": {
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "response.Response": {
             "type": "object",
             "properties": {
@@ -485,28 +502,8 @@ var doc = `{
                 }
             }
         },
-        "todo.Task": {
-            "type": "object",
-            "properties": {
-                "completed": {
-                    "type": "boolean"
-                },
-                "createAt": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
         "todo.reqStatus": {
             "type": "object",
-            "required": [
-                "status"
-            ],
             "properties": {
                 "status": {
                     "type": "boolean"
@@ -515,9 +512,6 @@ var doc = `{
         },
         "todo.reqTitle": {
             "type": "object",
-            "required": [
-                "title"
-            ],
             "properties": {
                 "title": {
                     "type": "string"

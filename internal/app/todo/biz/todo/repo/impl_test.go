@@ -1,3 +1,4 @@
+//go:build integration
 // +build integration
 
 package repo
@@ -7,19 +8,19 @@ import (
 	"testing"
 
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/pb"
 	"github.com/stretchr/testify/suite"
 )
 
 var (
 	uuid1 = "43fa0832-fd3a-4ba7-a3c7-8b4a36506a83"
 
-	task1 = &todo.Task{
+	task1 = &pb.Task{
 		Id:    uuid1,
 		Title: "title",
 	}
 
-	updated1 = &todo.Task{
+	updated1 = &pb.Task{
 		Id:        uuid1,
 		Title:     "update",
 		Completed: true,
@@ -76,12 +77,12 @@ func (s *repoSuite) Test_impl_Count() {
 
 func (s *repoSuite) Test_impl_Create() {
 	type args struct {
-		newTask *todo.Task
+		newTask *pb.Task
 	}
 	tests := []struct {
 		name     string
 		args     args
-		wantTask *todo.Task
+		wantTask *pb.Task
 		wantErr  bool
 	}{
 		{
@@ -112,7 +113,7 @@ func (s *repoSuite) Test_impl_GetByID() {
 	tests := []struct {
 		name     string
 		args     args
-		wantTask *todo.Task
+		wantTask *pb.Task
 		wantErr  bool
 	}{
 		{
@@ -144,13 +145,13 @@ func (s *repoSuite) Test_impl_List() {
 	tests := []struct {
 		name      string
 		args      args
-		wantTasks []*todo.Task
+		wantTasks []*pb.Task
 		wantErr   bool
 	}{
 		{
 			name:      "list by limit and offset then success",
 			args:      args{limit: 3, offset: 0},
-			wantTasks: []*todo.Task{task1},
+			wantTasks: []*pb.Task{task1},
 			wantErr:   false,
 		},
 	}
@@ -170,12 +171,12 @@ func (s *repoSuite) Test_impl_List() {
 
 func (s *repoSuite) Test_impl_Update() {
 	type args struct {
-		updated *todo.Task
+		updated *pb.Task
 	}
 	tests := []struct {
 		name     string
 		args     args
-		wantTask *todo.Task
+		wantTask *pb.Task
 		wantErr  bool
 	}{
 		{

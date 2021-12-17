@@ -8,6 +8,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/response"
+	"github.com/blackhorseya/todo-app/internal/pkg/models"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -25,10 +26,6 @@ func NewImpl(logger *zap.Logger, biz todo.IBiz) IHandler {
 	}
 }
 
-type reqID struct {
-	ID int64 `uri:"id" binding:"required"`
-}
-
 // GetByID
 // @Summary Get a task by id
 // @Description Get a task by id
@@ -36,7 +33,7 @@ type reqID struct {
 // @Accept application/json
 // @Produce application/json
 // @Param id path integer true "ID of task"
-// @Success 200 {object} response.Response{data=todo.Task}
+// @Success 200 {object} response.Response{data=models.TaskResponse}
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
 // @Failure 500 {object} er.APPError
@@ -47,17 +44,17 @@ func (i *impl) GetByID(c *gin.Context) {
 	var req reqID
 	if err := c.ShouldBindUri(&req); err != nil {
 		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
-		c.Error(er.ErrInvalidID)
+		_ = c.Error(er.ErrInvalidID)
 		return
 	}
 
 	ret, err := i.biz.GetByID(ctx, req.ID)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		return
 	}
 
-	c.JSON(http.StatusOK, response.OK.WithData(ret))
+	c.JSON(http.StatusOK, response.OK.WithData(models.NewTaskResponse(ret)))
 }
 
 // List
@@ -68,7 +65,7 @@ func (i *impl) GetByID(c *gin.Context) {
 // @Produce application/json
 // @Param start query integer false "start" default(0)
 // @Param end query integer false "end" default(10)
-// @Success 200 {object} response.Response{data=[]todo.Task}
+// @Success 200 {object} response.Response{data=[]models.TaskResponse}
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
 // @Failure 500 {object} er.APPError
@@ -79,29 +76,30 @@ func (i *impl) List(c *gin.Context) {
 	start, err := strconv.Atoi(c.DefaultQuery("start", "0"))
 	if err != nil {
 		i.logger.Error(er.ErrInvalidStart.Error(), zap.Error(err), zap.String("start", c.Query("start")))
-		c.Error(er.ErrInvalidStart)
+		_ = c.Error(er.ErrInvalidStart)
 		return
 	}
 
 	end, err := strconv.Atoi(c.DefaultQuery("end", "10"))
 	if err != nil {
 		i.logger.Error(er.ErrInvalidEnd.Error(), zap.Error(err), zap.String("end", c.Query("end")))
-		c.Error(er.ErrInvalidEnd)
+		_ = c.Error(er.ErrInvalidEnd)
 		return
 	}
 
-	ret, total, err := i.biz.List(ctx, start, end)
+	tasks, total, err := i.biz.List(ctx, start, end)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		return
+	}
+
+	var ret []*models.TaskResponse
+	for _, task := range tasks {
+		ret = append(ret, models.NewTaskResponse(task))
 	}
 
 	c.Header("X-Total-Count", strconv.Itoa(total))
 	c.JSON(http.StatusOK, response.OK.WithData(ret))
-}
-
-type reqTitle struct {
-	Title string `uri:"title"`
 }
 
 // Create
@@ -111,7 +109,7 @@ type reqTitle struct {
 // @Accept application/json
 // @Produce application/json
 // @Param created body reqTitle true "created task"
-// @Success 201 {object} response.Response{data=todo.Task}
+// @Success 201 {object} response.Response{data=models.TaskResponse}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks [post]
@@ -120,22 +118,18 @@ func (i *impl) Create(c *gin.Context) {
 
 	var data *reqTitle
 	if err := c.ShouldBindJSON(&data); err != nil {
-		i.logger.Error(er.ErrCreateTask.Error(), zap.Error(err))
-		c.Error(er.ErrCreateTask)
+		i.logger.Error(er.ErrBindTitle.Error(), zap.Error(err))
+		_ = c.Error(er.ErrBindTitle)
 		return
 	}
 
 	ret, err := i.biz.Create(ctx, data.Title)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		return
 	}
 
-	c.JSON(http.StatusCreated, response.OK.WithData(ret))
-}
-
-type reqStatus struct {
-	Status bool `json:"status"`
+	c.JSON(http.StatusCreated, response.OK.WithData(models.NewTaskResponse(ret)))
 }
 
 // UpdateStatus
@@ -146,7 +140,7 @@ type reqStatus struct {
 // @Produce application/json
 // @Param id path integer true "ID of task"
 // @Param updated body reqStatus true "updated task"
-// @Success 200 {object} response.Response{data=todo.Task}
+// @Success 200 {object} response.Response{data=models.TaskResponse}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks/{id}/status [patch]
@@ -156,24 +150,24 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 	var req reqID
 	if err := c.ShouldBindUri(&req); err != nil {
 		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
-		c.Error(er.ErrInvalidID)
+		_ = c.Error(er.ErrInvalidID)
 		return
 	}
 
 	var data *reqStatus
 	if err := c.ShouldBindJSON(&data); err != nil {
-		i.logger.Error(er.ErrUpdateStatusTask.Error(), zap.Error(err))
-		c.Error(er.ErrUpdateStatusTask)
+		i.logger.Error(er.ErrBindStatus.Error(), zap.Error(err))
+		_ = c.Error(er.ErrBindStatus)
 		return
 	}
 
 	ret, err := i.biz.UpdateStatus(ctx, req.ID, data.Status)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		return
 	}
 
-	c.JSON(http.StatusOK, response.OK.WithData(ret))
+	c.JSON(http.StatusOK, response.OK.WithData(models.NewTaskResponse(ret)))
 }
 
 // ChangeTitle
@@ -184,7 +178,7 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 // @Produce application/json
 // @Param id path integer true "ID of task"
 // @Param updated body reqTitle true "updated task"
-// @Success 200 {object} response.Response{data=todo.Task}
+// @Success 200 {object} response.Response{data=models.TaskResponse}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks/{id}/title [patch]
@@ -194,24 +188,24 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 	var req reqID
 	if err := c.ShouldBindUri(&req); err != nil {
 		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
-		c.Error(er.ErrInvalidID)
+		_ = c.Error(er.ErrInvalidID)
 		return
 	}
 
 	var data *reqTitle
 	if err := c.ShouldBindJSON(&data); err != nil {
-		i.logger.Error(er.ErrChangeTitleTask.Error(), zap.Error(err))
-		c.Error(er.ErrChangeTitleTask)
+		i.logger.Error(er.ErrBindTitle.Error(), zap.Error(err))
+		_ = c.Error(er.ErrBindTitle)
 		return
 	}
 
 	ret, err := i.biz.ChangeTitle(ctx, req.ID, data.Title)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		return
 	}
 
-	c.JSON(http.StatusOK, response.OK.WithData(ret))
+	c.JSON(http.StatusOK, response.OK.WithData(models.NewTaskResponse(ret)))
 }
 
 // Delete
@@ -232,13 +226,13 @@ func (i *impl) Delete(c *gin.Context) {
 	var req reqID
 	if err := c.ShouldBindUri(&req); err != nil {
 		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
-		c.Error(er.ErrInvalidID)
+		_ = c.Error(er.ErrInvalidID)
 		return
 	}
 
 	err := i.biz.Delete(ctx, req.ID)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		return
 	}
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo/mocks"
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/pb"
 	"github.com/bwmarrin/snowflake"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/mock"
@@ -17,17 +17,17 @@ import (
 var (
 	uuid1 = int64(1)
 
-	task1 = &todo.Task{
+	task1 = &pb.Task{
 		Id:    uuid1,
 		Title: "title",
 	}
 
-	updated1 = &todo.Task{
+	updated1 = &pb.Task{
 		Id:        uuid1,
 		Completed: true,
 	}
 
-	updated2 = &todo.Task{
+	updated2 = &pb.Task{
 		Id:    uuid1,
 		Title: "title",
 	}
@@ -68,7 +68,7 @@ func (s *bizSuite) Test_impl_GetByID() {
 	tests := []struct {
 		name     string
 		args     args
-		wantTask *todo.Task
+		wantTask *pb.Task
 		wantErr  bool
 	}{
 		{
@@ -125,7 +125,7 @@ func (s *bizSuite) Test_impl_List() {
 	tests := []struct {
 		name      string
 		args      args
-		wantTasks []*todo.Task
+		wantTasks []*pb.Task
 		wantTotal int
 		wantErr   bool
 	}{
@@ -164,7 +164,7 @@ func (s *bizSuite) Test_impl_List() {
 		{
 			name: "count then error",
 			args: args{start: 0, end: 2, mock: func() {
-				s.mock.On("List", mock.Anything, 3, 0).Return([]*todo.Task{task1}, nil).Once()
+				s.mock.On("List", mock.Anything, 3, 0).Return([]*pb.Task{task1}, nil).Once()
 				s.mock.On("Count", mock.Anything).Return(0, errors.New("error")).Once()
 			}},
 			wantTasks: nil,
@@ -174,10 +174,10 @@ func (s *bizSuite) Test_impl_List() {
 		{
 			name: "start 0 end 2 then success",
 			args: args{start: 0, end: 2, mock: func() {
-				s.mock.On("List", mock.Anything, 3, 0).Return([]*todo.Task{task1}, nil).Once()
+				s.mock.On("List", mock.Anything, 3, 0).Return([]*pb.Task{task1}, nil).Once()
 				s.mock.On("Count", mock.Anything).Return(10, nil).Once()
 			}},
-			wantTasks: []*todo.Task{task1},
+			wantTasks: []*pb.Task{task1},
 			wantTotal: 10,
 			wantErr:   false,
 		},
@@ -213,7 +213,7 @@ func (s *bizSuite) Test_impl_Create() {
 	tests := []struct {
 		name     string
 		args     args
-		wantTask *todo.Task
+		wantTask *pb.Task
 		wantErr  bool
 	}{
 		{
@@ -308,7 +308,7 @@ func (s *bizSuite) Test_impl_UpdateStatus() {
 	tests := []struct {
 		name     string
 		args     args
-		wantTask *todo.Task
+		wantTask *pb.Task
 		wantErr  bool
 	}{
 		{
@@ -375,7 +375,7 @@ func (s *bizSuite) Test_impl_ChangeTitle() {
 	tests := []struct {
 		name     string
 		args     args
-		wantTask *todo.Task
+		wantTask *pb.Task
 		wantErr  bool
 	}{
 		{
