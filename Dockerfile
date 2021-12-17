@@ -19,6 +19,7 @@ FROM node:alpine AS builder-f2e
 
 WORKDIR /src
 
+ENV NODE_OPTIONS=--openssl-legacy-provider
 COPY web/package.json ./
 RUN yarn install
 
