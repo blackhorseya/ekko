@@ -1,10 +1,10 @@
-package apis
+package restful
 
 import (
 	// import swagger docs
 	_ "github.com/blackhorseya/todo-app/api/docs"
-	"github.com/blackhorseya/todo-app/internal/app/todo/apis/health"
-	"github.com/blackhorseya/todo-app/internal/app/todo/apis/todo"
+	"github.com/blackhorseya/todo-app/internal/app/todo/api/restful/health"
+	"github.com/blackhorseya/todo-app/internal/app/todo/api/restful/todo"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
