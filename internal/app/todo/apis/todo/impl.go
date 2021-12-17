@@ -36,7 +36,7 @@ type reqID struct {
 // @Accept application/json
 // @Produce application/json
 // @Param id path integer true "ID of task"
-// @Success 200 {object} response.Response{data=todo.Task}
+// @Success 200 {object} response.Response{data=pb.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
 // @Failure 500 {object} er.APPError
@@ -68,7 +68,7 @@ func (i *impl) GetByID(c *gin.Context) {
 // @Produce application/json
 // @Param start query integer false "start" default(0)
 // @Param end query integer false "end" default(10)
-// @Success 200 {object} response.Response{data=[]todo.Task}
+// @Success 200 {object} response.Response{data=[]pb.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
 // @Failure 500 {object} er.APPError
@@ -111,7 +111,7 @@ type reqTitle struct {
 // @Accept application/json
 // @Produce application/json
 // @Param created body reqTitle true "created task"
-// @Success 201 {object} response.Response{data=todo.Task}
+// @Success 201 {object} response.Response{data=pb.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks [post]
@@ -146,7 +146,7 @@ type reqStatus struct {
 // @Produce application/json
 // @Param id path integer true "ID of task"
 // @Param updated body reqStatus true "updated task"
-// @Success 200 {object} response.Response{data=todo.Task}
+// @Success 200 {object} response.Response{data=pb.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks/{id}/status [patch]
@@ -184,7 +184,7 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 // @Produce application/json
 // @Param id path integer true "ID of task"
 // @Param updated body reqTitle true "updated task"
-// @Success 200 {object} response.Response{data=todo.Task}
+// @Success 200 {object} response.Response{data=pb.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks/{id}/title [patch]

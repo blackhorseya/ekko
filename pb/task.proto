@@ -1,6 +1,6 @@
 syntax = "proto3";
-package todo;
-option go_package = "./todo;todo";
+package pb;
+option go_package = "./pb;pb";
 
 message Task {
   int64 id = 1;
