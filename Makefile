@@ -63,7 +63,7 @@ gen: gen-pb gen-swagger gen-wire
 
 .PHONY: gen-pb
 gen-pb:
-	@protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. ./internal/pkg/entity/**/*.proto
+	@protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. ./pb/*.proto
 	@echo Successfully generated proto
 
 .PHONY: gen-wire

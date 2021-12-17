@@ -133,7 +133,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/todo.Task"
+                                                "$ref": "#/definitions/pb.Task"
                                             }
                                         }
                                     }
@@ -196,7 +196,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/todo.Task"
+                                            "$ref": "#/definitions/pb.Task"
                                         }
                                     }
                                 }
@@ -252,7 +252,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/todo.Task"
+                                            "$ref": "#/definitions/pb.Task"
                                         }
                                     }
                                 }
@@ -371,7 +371,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/todo.Task"
+                                            "$ref": "#/definitions/pb.Task"
                                         }
                                     }
                                 }
@@ -436,7 +436,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/todo.Task"
+                                            "$ref": "#/definitions/pb.Task"
                                         }
                                     }
                                 }
@@ -471,21 +471,7 @@ var doc = `{
                 }
             }
         },
-        "response.Response": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer"
-                },
-                "data": {
-                    "type": "object"
-                },
-                "msg": {
-                    "type": "string"
-                }
-            }
-        },
-        "todo.Task": {
+        "pb.Task": {
             "type": "object",
             "properties": {
                 "completed": {
@@ -498,6 +484,20 @@ var doc = `{
                     "type": "integer"
                 },
                 "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "object"
+                },
+                "msg": {
                     "type": "string"
                 }
             }

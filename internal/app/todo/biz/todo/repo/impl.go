@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/pb"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -19,7 +19,7 @@ func NewImpl(client *mongo.Client) IRepo {
 	return &impl{client: client}
 }
 
-func (i *impl) GetByID(ctx contextx.Contextx, id int64) (task *todo.Task, err error) {
+func (i *impl) GetByID(ctx contextx.Contextx, id int64) (task *pb.Task, err error) {
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
@@ -33,7 +33,7 @@ func (i *impl) GetByID(ctx contextx.Contextx, id int64) (task *todo.Task, err er
 		return nil, res.Err()
 	}
 
-	var ret *todo.Task
+	var ret *pb.Task
 	err = res.Decode(&ret)
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func (i *impl) GetByID(ctx contextx.Contextx, id int64) (task *todo.Task, err er
 	return ret, nil
 }
 
-func (i *impl) List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Task, err error) {
+func (i *impl) List(ctx contextx.Contextx, limit, offset int) (tasks []*pb.Task, err error) {
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
@@ -53,9 +53,9 @@ func (i *impl) List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Tas
 	}
 	defer cur.Close(timeout)
 
-	var ret []*todo.Task
+	var ret []*pb.Task
 	for cur.Next(timeout) {
-		var task *todo.Task
+		var task *pb.Task
 		err := cur.Decode(&task)
 		if err != nil {
 			continue
@@ -80,7 +80,7 @@ func (i *impl) Count(ctx contextx.Contextx) (total int, err error) {
 	return int(ret), nil
 }
 
-func (i *impl) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Task, err error) {
+func (i *impl) Create(ctx contextx.Contextx, newTask *pb.Task) (task *pb.Task, err error) {
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
@@ -93,7 +93,7 @@ func (i *impl) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Tas
 	return newTask, nil
 }
 
-func (i *impl) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Task, err error) {
+func (i *impl) Update(ctx contextx.Contextx, updated *pb.Task) (task *pb.Task, err error) {
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 

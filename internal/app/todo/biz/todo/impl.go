@@ -6,7 +6,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/pb"
 	"github.com/bwmarrin/snowflake"
 	"go.uber.org/zap"
 )
@@ -26,7 +26,7 @@ func NewImpl(logger *zap.Logger, repo repo.IRepo, node *snowflake.Node) IBiz {
 	}
 }
 
-func (i *impl) GetByID(ctx contextx.Contextx, id int64) (task *todo.Task, err error) {
+func (i *impl) GetByID(ctx contextx.Contextx, id int64) (task *pb.Task, err error) {
 	ret, err := i.repo.GetByID(ctx, id)
 	if err != nil {
 		i.logger.Error(er.ErrGetTask.Error(), zap.Error(err), zap.Int64("id", id))
@@ -40,7 +40,7 @@ func (i *impl) GetByID(ctx contextx.Contextx, id int64) (task *todo.Task, err er
 	return ret, nil
 }
 
-func (i *impl) List(ctx contextx.Contextx, start, end int) (tasks []*todo.Task, total int, err error) {
+func (i *impl) List(ctx contextx.Contextx, start, end int) (tasks []*pb.Task, total int, err error) {
 	if start < 0 {
 		i.logger.Error(er.ErrInvalidStart.Error(), zap.Int("start", start), zap.Int("end", end))
 		return nil, 0, er.ErrInvalidStart
@@ -70,13 +70,13 @@ func (i *impl) List(ctx contextx.Contextx, start, end int) (tasks []*todo.Task, 
 	return ret, total, nil
 }
 
-func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err error) {
+func (i *impl) Create(ctx contextx.Contextx, title string) (task *pb.Task, err error) {
 	if len(title) == 0 {
 		i.logger.Error(er.ErrMissingTitle.Error())
 		return nil, er.ErrMissingTitle
 	}
 
-	newTask := &todo.Task{
+	newTask := &pb.Task{
 		Id:       i.node.Generate().Int64(),
 		Title:    title,
 		CreateAt: time.Now().UnixNano(),
@@ -90,7 +90,7 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err
 	return ret, nil
 }
 
-func (i *impl) UpdateStatus(ctx contextx.Contextx, id int64, status bool) (task *todo.Task, err error) {
+func (i *impl) UpdateStatus(ctx contextx.Contextx, id int64, status bool) (task *pb.Task, err error) {
 	exists, err := i.repo.GetByID(ctx, id)
 	if err != nil {
 		i.logger.Error(er.ErrGetTask.Error(), zap.Error(err), zap.Int64("id", id))
@@ -111,7 +111,7 @@ func (i *impl) UpdateStatus(ctx contextx.Contextx, id int64, status bool) (task 
 	return ret, nil
 }
 
-func (i *impl) ChangeTitle(ctx contextx.Contextx, id int64, title string) (task *todo.Task, err error) {
+func (i *impl) ChangeTitle(ctx contextx.Contextx, id int64, title string) (task *pb.Task, err error) {
 	if len(title) == 0 {
 		i.logger.Error(er.ErrMissingTitle.Error())
 		return nil, er.ErrMissingTitle
