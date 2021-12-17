@@ -31,10 +31,12 @@ report:
 
 .PHONY: build-image
 build-image:
+	$(call check_defined,VERSION)
 	@docker build -t $(REGISTRY)/$(APP_NAME):$(VERSION) \
 	--label "app.name=$(APP_NAME)" \
 	--label "app.version=$(VERSION)" \
 	--build-arg APP_NAME=$(APP_NAME) \
+	--pull \
 	-f Dockerfile .
 
 .PHONY: list-images
@@ -47,6 +49,7 @@ prune-images:
 
 .PHONY: push-image
 push-image:
+	$(call check_defined,VERSION)
 	@docker push $(REGISTRY)/$(APP_NAME):$(VERSION)
 
 .PHONY: deploy
