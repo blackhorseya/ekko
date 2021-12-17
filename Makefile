@@ -52,6 +52,14 @@ push-image:
 	$(call check_defined,VERSION)
 	@docker push $(REGISTRY)/$(APP_NAME):$(VERSION)
 
+.PHONY: up-local-db
+up-local-db:
+	@docker-compose --file ./deployments/docker-compose.yaml --project-name $(APP_NAME) up -d
+
+.PHONY: down-local-db
+down-local-db:
+	@docker-compose --file ./deployments/docker-compose.yaml --project-name $(APP_NAME) down -v
+
 .PHONY: deploy
 deploy:
 	$(call check_defined,VERSION)
