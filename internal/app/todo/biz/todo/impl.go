@@ -9,6 +9,7 @@ import (
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/bwmarrin/snowflake"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type impl struct {
@@ -79,7 +80,7 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *pb.Task, err e
 	newTask := &pb.Task{
 		Id:       i.node.Generate().Int64(),
 		Title:    title,
-		CreateAt: time.Now().UnixNano(),
+		CreateAt: timestamppb.New(time.Now()),
 	}
 	ret, err := i.repo.Create(ctx, newTask)
 	if err != nil {

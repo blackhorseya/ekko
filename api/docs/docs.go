@@ -133,7 +133,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/pb.Task"
+                                                "$ref": "#/definitions/models.TaskResponse"
                                             }
                                         }
                                     }
@@ -196,7 +196,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/pb.Task"
+                                            "$ref": "#/definitions/models.TaskResponse"
                                         }
                                     }
                                 }
@@ -252,7 +252,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/pb.Task"
+                                            "$ref": "#/definitions/models.TaskResponse"
                                         }
                                     }
                                 }
@@ -371,7 +371,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/pb.Task"
+                                            "$ref": "#/definitions/models.TaskResponse"
                                         }
                                     }
                                 }
@@ -436,7 +436,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/pb.Task"
+                                            "$ref": "#/definitions/models.TaskResponse"
                                         }
                                     }
                                 }
@@ -471,14 +471,14 @@ var doc = `{
                 }
             }
         },
-        "pb.Task": {
+        "models.TaskResponse": {
             "type": "object",
             "properties": {
                 "completed": {
                     "type": "boolean"
                 },
-                "createAt": {
-                    "type": "integer"
+                "created_at": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "integer"

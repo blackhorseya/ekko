@@ -8,6 +8,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/response"
+	"github.com/blackhorseya/todo-app/internal/pkg/models"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -36,7 +37,7 @@ type reqID struct {
 // @Accept application/json
 // @Produce application/json
 // @Param id path integer true "ID of task"
-// @Success 200 {object} response.Response{data=pb.Task}
+// @Success 200 {object} response.Response{data=models.TaskResponse}
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
 // @Failure 500 {object} er.APPError
@@ -57,7 +58,7 @@ func (i *impl) GetByID(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, response.OK.WithData(ret))
+	c.JSON(http.StatusOK, response.OK.WithData(models.NewTaskResponse(ret)))
 }
 
 // List
@@ -68,7 +69,7 @@ func (i *impl) GetByID(c *gin.Context) {
 // @Produce application/json
 // @Param start query integer false "start" default(0)
 // @Param end query integer false "end" default(10)
-// @Success 200 {object} response.Response{data=[]pb.Task}
+// @Success 200 {object} response.Response{data=[]models.TaskResponse}
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
 // @Failure 500 {object} er.APPError
@@ -90,10 +91,15 @@ func (i *impl) List(c *gin.Context) {
 		return
 	}
 
-	ret, total, err := i.biz.List(ctx, start, end)
+	tasks, total, err := i.biz.List(ctx, start, end)
 	if err != nil {
 		c.Error(err)
 		return
+	}
+
+	var ret []*models.TaskResponse
+	for _, task := range tasks {
+		ret = append(ret, models.NewTaskResponse(task))
 	}
 
 	c.Header("X-Total-Count", strconv.Itoa(total))
@@ -111,7 +117,7 @@ type reqTitle struct {
 // @Accept application/json
 // @Produce application/json
 // @Param created body reqTitle true "created task"
-// @Success 201 {object} response.Response{data=pb.Task}
+// @Success 201 {object} response.Response{data=models.TaskResponse}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks [post]
@@ -131,7 +137,7 @@ func (i *impl) Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, response.OK.WithData(ret))
+	c.JSON(http.StatusCreated, response.OK.WithData(models.NewTaskResponse(ret)))
 }
 
 type reqStatus struct {
@@ -146,7 +152,7 @@ type reqStatus struct {
 // @Produce application/json
 // @Param id path integer true "ID of task"
 // @Param updated body reqStatus true "updated task"
-// @Success 200 {object} response.Response{data=pb.Task}
+// @Success 200 {object} response.Response{data=models.TaskResponse}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks/{id}/status [patch]
@@ -173,7 +179,7 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, response.OK.WithData(ret))
+	c.JSON(http.StatusOK, response.OK.WithData(models.NewTaskResponse(ret)))
 }
 
 // ChangeTitle
@@ -184,7 +190,7 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 // @Produce application/json
 // @Param id path integer true "ID of task"
 // @Param updated body reqTitle true "updated task"
-// @Success 200 {object} response.Response{data=pb.Task}
+// @Success 200 {object} response.Response{data=models.TaskResponse}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks/{id}/title [patch]
@@ -211,7 +217,7 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, response.OK.WithData(ret))
+	c.JSON(http.StatusOK, response.OK.WithData(models.NewTaskResponse(ret)))
 }
 
 // Delete
