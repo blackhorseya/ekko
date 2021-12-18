@@ -360,3 +360,94 @@ func (s *bizSuite) Test_impl_Delete() {
 		})
 	}
 }
+
+func (s *bizSuite) Test_impl_List() {
+	type args struct {
+		start int
+		end   int
+		mock  func()
+	}
+	tests := []struct {
+		name      string
+		args      args
+		wantTasks []*todo.Task
+		wantTotal int
+		wantErr   bool
+	}{
+		{
+			name:      "invalid start then error",
+			args:      args{start: -1, end: 10},
+			wantTasks: nil,
+			wantTotal: 0,
+			wantErr:   true,
+		},
+		{
+			name:      "invalid end then error",
+			args:      args{start: 0, end: -10},
+			wantTasks: nil,
+			wantTotal: 0,
+			wantErr:   true,
+		},
+		{
+			name: "list tasks then error",
+			args: args{start: 1, end: 10, mock: func() {
+				s.mock.On("List", mock.Anything, 10, 1).Return(nil, errors.New("error")).Once()
+			}},
+			wantTasks: nil,
+			wantTotal: 0,
+			wantErr:   true,
+		},
+		{
+			name: "list tasks not found then error",
+			args: args{start: 1, end: 10, mock: func() {
+				s.mock.On("List", mock.Anything, 10, 1).Return(nil, nil).Once()
+			}},
+			wantTasks: nil,
+			wantTotal: 0,
+			wantErr:   true,
+		},
+		{
+			name: "count all tasks then error",
+			args: args{start: 1, end: 10, mock: func() {
+				s.mock.On("List", mock.Anything, 10, 1).Return([]*todo.Task{testdata.Task1}, nil).Once()
+
+				s.mock.On("Count", mock.Anything).Return(0, errors.New("error")).Once()
+			}},
+			wantTasks: nil,
+			wantTotal: 0,
+			wantErr:   true,
+		},
+		{
+			name: "list and count tasks then success",
+			args: args{start: 1, end: 10, mock: func() {
+				s.mock.On("List", mock.Anything, 10, 1).Return([]*todo.Task{testdata.Task1}, nil).Once()
+
+				s.mock.On("Count", mock.Anything).Return(10, nil).Once()
+			}},
+			wantTasks: []*todo.Task{testdata.Task1},
+			wantTotal: 10,
+			wantErr:   false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTasks, gotTotal, err := s.biz.List(contextx.Background(), tt.args.start, tt.args.end)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTasks, tt.wantTasks) {
+				t.Errorf("List() gotTasks = %v, want %v", gotTasks, tt.wantTasks)
+			}
+			if gotTotal != tt.wantTotal {
+				t.Errorf("List() gotTotal = %v, want %v", gotTotal, tt.wantTotal)
+			}
+
+			s.mock.AssertExpectations(t)
+		})
+	}
+}

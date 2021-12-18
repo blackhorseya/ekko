@@ -4,7 +4,6 @@ import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
-	"github.com/blackhorseya/todo-app/pb"
 	"github.com/google/wire"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -15,7 +14,7 @@ type IBiz interface {
 	GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo.Task, err error)
 
 	// List serve caller to list all tasks
-	List(ctx contextx.Contextx, start, end int) (tasks []*pb.Task, total int, err error)
+	List(ctx contextx.Contextx, start, end int) (tasks []*todo.Task, total int, err error)
 
 	// Create serve caller to create a task
 	Create(ctx contextx.Contextx, title string) (task *todo.Task, err error)
