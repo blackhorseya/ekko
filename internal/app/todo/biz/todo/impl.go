@@ -1,8 +1,6 @@
 package todo
 
 import (
-	"fmt"
-
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
@@ -121,33 +119,35 @@ func (i *impl) UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status
 	return ret, nil
 }
 
-func (i *impl) ChangeTitle(ctx contextx.Contextx, id primitive.ObjectID, title string) (task *pb.Task, err error) {
+func (i *impl) ChangeTitle(ctx contextx.Contextx, id primitive.ObjectID, title string) (task *todo.Task, err error) {
+	if id == primitive.NilObjectID {
+		i.logger.Error(er.ErrEmptyID.Error())
+		return nil, er.ErrEmptyID
+	}
+
 	if len(title) == 0 {
 		i.logger.Error(er.ErrEmptyTitle.Error())
 		return nil, er.ErrEmptyTitle
 	}
 
-	exists, err := i.repo.GetByID(ctx, primitive.ObjectID{})
+	found, err := i.repo.GetByID(ctx, id)
 	if err != nil {
 		i.logger.Error(er.ErrGetTask.Error(), zap.Error(err), zap.String("id", id.Hex()))
 		return nil, er.ErrGetTask
 	}
-	if exists == nil {
+	if found == nil {
 		i.logger.Error(er.ErrTaskNotExists.Error(), zap.String("id", id.Hex()))
 		return nil, er.ErrTaskNotExists
 	}
 
-	exists.Title = title
-	ret, err := i.repo.Update(ctx, exists)
+	found.Title = title
+	ret, err := i.repo.Update(ctx, found)
 	if err != nil {
-		i.logger.Error(er.ErrChangeTitleTask.Error(), zap.Error(err), zap.String("id", id.Hex()), zap.String("title", title))
+		i.logger.Error(er.ErrChangeTitleTask.Error(), zap.Error(err), zap.Any("updated", found))
 		return nil, er.ErrChangeTitleTask
 	}
 
-	fmt.Println(ret)
-	// todo: 2021-12-19|00:50|Sean|impl me
-	panic("impl me")
-	// return ret, nil
+	return ret, nil
 }
 
 func (i *impl) Delete(ctx contextx.Contextx, id primitive.ObjectID) error {

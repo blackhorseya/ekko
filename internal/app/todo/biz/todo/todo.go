@@ -24,7 +24,7 @@ type IBiz interface {
 	UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status bool) (task *todo.Task, err error)
 
 	// ChangeTitle serve caller to change the task's title by id
-	ChangeTitle(ctx contextx.Contextx, id primitive.ObjectID, title string) (task *pb.Task, err error)
+	ChangeTitle(ctx contextx.Contextx, id primitive.ObjectID, title string) (task *todo.Task, err error)
 
 	// Delete serve caller to given task's id to delete the task
 	Delete(ctx contextx.Contextx, id primitive.ObjectID) error
