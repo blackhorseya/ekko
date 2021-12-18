@@ -61,46 +61,6 @@ func TestRepoSuite(t *testing.T) {
 	suite.Run(t, new(repoSuite))
 }
 
-func (s *repoSuite) Test_impl_GetByID() {
-	type args struct {
-		id   primitive.ObjectID
-		mock func()
-	}
-	tests := []struct {
-		name     string
-		args     args
-		wantTask *todo.Task
-		wantErr  bool
-	}{
-		{
-			name: "get task by id then success",
-			args: args{id: testdata.Task1.ID, mock: func() {
-				_, _ = s.client.Database(dbName).Collection(collName).InsertOne(contextx.Background(), testdata.Task1)
-			}},
-			wantTask: testdata.Task1,
-			wantErr:  false,
-		},
-	}
-	for _, tt := range tests {
-		s.T().Run(tt.name, func(t *testing.T) {
-			if tt.args.mock != nil {
-				tt.args.mock()
-			}
-
-			gotTask, err := s.repo.GetByID(contextx.Background(), tt.args.id)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("GetByID() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(gotTask, tt.wantTask) {
-				t.Errorf("GetByID() gotTask = %v, want %v", gotTask, tt.wantTask)
-			}
-
-			_ = s.client.Database(dbName).Collection(collName).Drop(contextx.Background())
-		})
-	}
-}
-
 func (s *repoSuite) Test_impl_Update() {
 	type args struct {
 		updated *todo.Task
