@@ -5,7 +5,7 @@ type reqID struct {
 }
 
 type reqTitle struct {
-	Title string `uri:"title"`
+	Title string `uri:"title" binding:"required"`
 }
 
 type reqStatus struct {
