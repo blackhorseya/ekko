@@ -59,7 +59,7 @@ func CreateApp(path2 string) (*app.Application, error) {
 	iRepo := repo.NewImpl(client)
 	iBiz := health.NewImpl(logger, iRepo)
 	iHandler := health2.NewImpl(iBiz)
-	repoIRepo := repo2.NewImpl(client)
+	repoIRepo := repo2.NewImpl(logger, client)
 	generatorOptions, err := generator.NewOptions(viper)
 	if err != nil {
 		return nil, err

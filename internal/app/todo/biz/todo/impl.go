@@ -1,6 +1,7 @@
 package todo
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
@@ -8,6 +9,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/bwmarrin/snowflake"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -28,7 +30,7 @@ func NewImpl(logger *zap.Logger, repo repo.IRepo, node *snowflake.Node) IBiz {
 }
 
 func (i *impl) GetByID(ctx contextx.Contextx, id int64) (task *pb.Task, err error) {
-	ret, err := i.repo.GetByID(ctx, id)
+	ret, err := i.repo.GetByID(ctx, primitive.ObjectID{})
 	if err != nil {
 		i.logger.Error(er.ErrGetTask.Error(), zap.Error(err), zap.Int64("id", id))
 		return nil, er.ErrGetTask
@@ -38,7 +40,9 @@ func (i *impl) GetByID(ctx contextx.Contextx, id int64) (task *pb.Task, err erro
 		return nil, er.ErrTaskNotExists
 	}
 
-	return ret, nil
+	// todo: 2021-12-19|00:50|Sean|impl me
+	panic("impl me")
+	// return ret, nil
 }
 
 func (i *impl) List(ctx contextx.Contextx, start, end int) (tasks []*pb.Task, total int, err error) {
@@ -68,7 +72,9 @@ func (i *impl) List(ctx contextx.Contextx, start, end int) (tasks []*pb.Task, to
 		return nil, 0, er.ErrCountTask
 	}
 
-	return ret, total, nil
+	// todo: 2021-12-19|00:50|Sean|impl me
+	panic("impl me")
+	// return ret, total, nil
 }
 
 func (i *impl) Create(ctx contextx.Contextx, title string) (task *pb.Task, err error) {
@@ -82,17 +88,20 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *pb.Task, err e
 		Title:     title,
 		CreatedAt: timestamppb.New(time.Now()),
 	}
-	ret, err := i.repo.Create(ctx, newTask)
+	ret, err := i.repo.Create(ctx, nil)
 	if err != nil {
 		i.logger.Error(er.ErrCreateTask.Error(), zap.Error(err), zap.String("title", title))
 		return nil, er.ErrCreateTask
 	}
 
-	return ret, nil
+	fmt.Println(newTask, ret)
+	// todo: 2021-12-19|00:50|Sean|impl me
+	panic("impl me")
+	// return ret, nil
 }
 
 func (i *impl) UpdateStatus(ctx contextx.Contextx, id int64, status bool) (task *pb.Task, err error) {
-	exists, err := i.repo.GetByID(ctx, id)
+	exists, err := i.repo.GetByID(ctx, primitive.ObjectID{})
 	if err != nil {
 		i.logger.Error(er.ErrGetTask.Error(), zap.Error(err), zap.Int64("id", id))
 		return nil, er.ErrGetTask
@@ -109,7 +118,10 @@ func (i *impl) UpdateStatus(ctx contextx.Contextx, id int64, status bool) (task 
 		return nil, er.ErrUpdateStatusTask
 	}
 
-	return ret, nil
+	fmt.Println(ret)
+	// todo: 2021-12-19|00:50|Sean|impl me
+	panic("impl me")
+	// return ret, nil
 }
 
 func (i *impl) ChangeTitle(ctx contextx.Contextx, id int64, title string) (task *pb.Task, err error) {
@@ -118,7 +130,7 @@ func (i *impl) ChangeTitle(ctx contextx.Contextx, id int64, title string) (task 
 		return nil, er.ErrMissingTitle
 	}
 
-	exists, err := i.repo.GetByID(ctx, id)
+	exists, err := i.repo.GetByID(ctx, primitive.ObjectID{})
 	if err != nil {
 		i.logger.Error(er.ErrGetTask.Error(), zap.Error(err), zap.Int64("id", id))
 		return nil, er.ErrGetTask
@@ -135,11 +147,14 @@ func (i *impl) ChangeTitle(ctx contextx.Contextx, id int64, title string) (task 
 		return nil, er.ErrChangeTitleTask
 	}
 
-	return ret, nil
+	fmt.Println(ret)
+	// todo: 2021-12-19|00:50|Sean|impl me
+	panic("impl me")
+	// return ret, nil
 }
 
 func (i *impl) Delete(ctx contextx.Contextx, id int64) error {
-	err := i.repo.Remove(ctx, id)
+	err := i.repo.Remove(ctx, primitive.ObjectID{})
 	if err != nil {
 		i.logger.Error(er.ErrDeleteTask.Error(), zap.Error(err), zap.Int64("id", id))
 		return er.ErrDeleteTask

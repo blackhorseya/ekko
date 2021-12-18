@@ -6,40 +6,19 @@
 package repo
 
 import (
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/config"
-	"github.com/blackhorseya/todo-app/internal/pkg/infra/database"
-	"github.com/blackhorseya/todo-app/internal/pkg/infra/log"
 	"github.com/google/wire"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.uber.org/zap"
 )
 
 // Injectors from wire.go:
 
 // CreateIRepo serve caller to create an IRepo
-func CreateIRepo(path string) (IRepo, error) {
-	viper, err := config.New(path)
-	if err != nil {
-		return nil, err
-	}
-	options, err := log.NewOptions(viper)
-	if err != nil {
-		return nil, err
-	}
-	logger, err := log.New(options)
-	if err != nil {
-		return nil, err
-	}
-	databaseOptions, err := database.NewOptions(viper, logger)
-	if err != nil {
-		return nil, err
-	}
-	client, err := database.NewMongo(databaseOptions)
-	if err != nil {
-		return nil, err
-	}
-	iRepo := NewImpl(client)
+func CreateIRepo(logger *zap.Logger, client *mongo.Client) (IRepo, error) {
+	iRepo := NewImpl(logger, client)
 	return iRepo, nil
 }
 
 // wire.go:
 
-var testProviderSet = wire.NewSet(log.ProviderSet, config.ProviderSet, database.ProviderSet, NewImpl)
+var testProviderSet = wire.NewSet(NewImpl)
