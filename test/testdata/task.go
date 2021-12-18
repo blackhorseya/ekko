@@ -31,7 +31,7 @@ var (
 
 	// TaskCreate1 task create 1
 	TaskCreate1 = &todo.Task{
-		ID:        TaskOID1,
+		ID:        primitive.ObjectID{},
 		Title:     "task 1",
 		Completed: false,
 		CreatedAt: time.Time{},
