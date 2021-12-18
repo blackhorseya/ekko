@@ -204,20 +204,29 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
 
 	var req reqID
-	if err := c.ShouldBindUri(&req); err != nil {
-		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
+	err := c.ShouldBindUri(&req)
+	if err != nil {
+		i.logger.Error(er.ErrBindID.Error(), zap.Error(err))
+		_ = c.Error(er.ErrBindID)
+		return
+	}
+
+	id, err := primitive.ObjectIDFromHex(req.ID)
+	if err != nil {
+		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
 		_ = c.Error(er.ErrInvalidID)
 		return
 	}
 
 	var data *reqTitle
-	if err := c.ShouldBindJSON(&data); err != nil {
+	err = c.ShouldBindJSON(&data)
+	if err != nil {
 		i.logger.Error(er.ErrBindTitle.Error(), zap.Error(err))
 		_ = c.Error(er.ErrBindTitle)
 		return
 	}
 
-	ret, err := i.biz.ChangeTitle(ctx, primitive.NilObjectID, data.Title)
+	ret, err := i.biz.ChangeTitle(ctx, id, data.Title)
 	if err != nil {
 		_ = c.Error(err)
 		return

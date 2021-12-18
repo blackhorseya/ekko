@@ -308,9 +308,9 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 	s.r.PATCH("/api/v1/tasks/:id/title", s.handler.ChangeTitle)
 
 	type args struct {
-		id      int64
-		updated *reqTitle
-		mock    func()
+		id    string
+		title string
+		mock  func()
 	}
 	tests := []struct {
 		name     string
@@ -318,16 +318,31 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 		wantCode int
 	}{
 		{
+			name:     "missing id then 400",
+			args:     args{id: "", title: "title"},
+			wantCode: 400,
+		},
+		{
+			name:     "invalid id then 400",
+			args:     args{id: "xxx", title: "title"},
+			wantCode: 400,
+		},
+		{
+			name:     "missing title then 400",
+			args:     args{id: testdata.Task1.ID.Hex(), title: ""},
+			wantCode: 400,
+		},
+		{
 			name: "change title then 500",
-			args: args{id: uuid1, updated: &reqTitle{Title: ""}, mock: func() {
-				s.mock.On("ChangeTitle", mock.Anything, uuid1, updated1.Title).Return(nil, er.ErrChangeTitleTask).Once()
+			args: args{id: testdata.Task1.ID.Hex(), title: "title", mock: func() {
+				s.mock.On("ChangeTitle", mock.Anything, testdata.Task1.ID, "title").Return(nil, er.ErrChangeTitleTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
-			name: "change title then success",
-			args: args{id: uuid1, updated: &reqTitle{Title: "title"}, mock: func() {
-				s.mock.On("ChangeTitle", mock.Anything, uuid1, updated2.Title).Return(updated1, nil).Once()
+			name: "change title then 200",
+			args: args{id: testdata.Task1.ID.Hex(), title: "title", mock: func() {
+				s.mock.On("ChangeTitle", mock.Anything, testdata.Task1.ID, "title").Return(testdata.Task1, nil).Once()
 			}},
 			wantCode: 200,
 		},
@@ -339,7 +354,7 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 			}
 
 			uri := fmt.Sprintf("/api/v1/tasks/%v/title", tt.args.id)
-			data, _ := json.Marshal(tt.args.updated)
+			data, _ := json.Marshal(&reqTitle{Title: tt.args.title})
 			req := httptest.NewRequest(http.MethodPatch, uri, bytes.NewBuffer(data))
 			w := httptest.NewRecorder()
 			s.r.ServeHTTP(w, req)
