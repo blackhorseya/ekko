@@ -114,10 +114,10 @@ func (s *repoSuite) Test_impl_Update() {
 	}{
 		{
 			name: "update a task then success",
-			args: args{updated: testdata.TaskUpdate1, mock: func() {
+			args: args{updated: testdata.Task1, mock: func() {
 				_, _ = s.client.Database(dbName).Collection(collName).InsertOne(contextx.Background(), testdata.Task1)
 			}},
-			wantTask: testdata.TaskUpdate1,
+			wantTask: testdata.Task1,
 			wantErr:  false,
 		},
 	}
