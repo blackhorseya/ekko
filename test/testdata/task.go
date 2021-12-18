@@ -28,4 +28,13 @@ var (
 		CreatedAt: time.Time{},
 		UpdatedAt: time.Time{},
 	}
+
+	// TaskCreate1 task create 1
+	TaskCreate1 = &todo.Task{
+		ID:        primitive.ObjectID{},
+		Title:     "task 1",
+		Completed: false,
+		CreatedAt: time.Time{},
+		UpdatedAt: time.Time{},
+	}
 )

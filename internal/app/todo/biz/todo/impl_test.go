@@ -97,3 +97,57 @@ func (s *bizSuite) Test_impl_GetByID() {
 		})
 	}
 }
+
+func (s *bizSuite) Test_impl_Create() {
+	type args struct {
+		title string
+		mock  func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantTask *todo.Task
+		wantErr  bool
+	}{
+		{
+			name:     "empty title then error",
+			args:     args{title: ""},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "create task then error",
+			args: args{title: "task 1", mock: func() {
+				s.mock.On("Create", mock.Anything, testdata.TaskCreate1).Return(nil, errors.New("error")).Once()
+			}},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "create task then success",
+			args: args{title: "task 1", mock: func() {
+				s.mock.On("Create", mock.Anything, testdata.TaskCreate1).Return(testdata.Task1, nil).Once()
+			}},
+			wantTask: testdata.Task1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTask, err := s.biz.Create(contextx.Background(), tt.args.title)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTask, tt.wantTask) {
+				t.Errorf("Create() gotTask = %v, want %v", gotTask, tt.wantTask)
+			}
+
+			s.mock.AssertExpectations(t)
+		})
+	}
+}
