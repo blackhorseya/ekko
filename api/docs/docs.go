@@ -233,7 +233,7 @@ var doc = `{
                 "summary": "Get a task by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -293,7 +293,7 @@ var doc = `{
                 "summary": "Delete a task by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -343,7 +343,7 @@ var doc = `{
                 "summary": "Update task's status by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -408,7 +408,7 @@ var doc = `{
                 "summary": "Change task's title by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -481,9 +481,12 @@ var doc = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "title": {
+                    "type": "string"
+                },
+                "updated_at": {
                     "type": "string"
                 }
             }
@@ -512,6 +515,9 @@ var doc = `{
         },
         "todo.reqTitle": {
             "type": "object",
+            "required": [
+                "title"
+            ],
             "properties": {
                 "title": {
                     "type": "string"

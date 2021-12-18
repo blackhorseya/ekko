@@ -1,23 +1,25 @@
 package models
 
 import (
-	"github.com/blackhorseya/todo-app/pb"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 )
 
 // TaskResponse declare presentation layer task response struct
 type TaskResponse struct {
-	ID        int64  `json:"id"`
+	ID        string `json:"id"`
 	Title     string `json:"title"`
 	Completed bool   `json:"completed"`
 	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }
 
 // NewTaskResponse serve caller to create a task response from pb.Task
-func NewTaskResponse(t *pb.Task) *TaskResponse {
+func NewTaskResponse(t *todo.Task) *TaskResponse {
 	return &TaskResponse{
-		ID:        t.Id,
+		ID:        t.ID.Hex(),
 		Title:     t.Title,
 		Completed: t.Completed,
-		CreatedAt: t.CreateAt.AsTime().UTC().Format(rfc3339Mill),
+		CreatedAt: t.CreatedAt.UTC().Format(rfc3339Mill),
+		UpdatedAt: t.UpdatedAt.UTC().Format(rfc3339Mill),
 	}
 }

@@ -70,7 +70,7 @@ deploy:
 	--set image.tag=$(VERSION)
 
 .PHONY: gen
-gen: gen-wire gen-pb gen-swagger
+gen: gen-wire gen-swagger
 
 .PHONY: gen-pb
 gen-pb:

@@ -10,31 +10,13 @@ import (
 
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/mocks"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http/middlewares"
-	"github.com/blackhorseya/todo-app/pb"
+	"github.com/blackhorseya/todo-app/test/testdata"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
-)
-
-var (
-	uuid1 = int64(1)
-
-	task1 = &pb.Task{
-		Id:    uuid1,
-		Title: "title",
-	}
-
-	updated1 = &pb.Task{
-		Id:        uuid1,
-		Completed: true,
-	}
-
-	updated2 = &pb.Task{
-		Id:    uuid1,
-		Title: "title",
-	}
 )
 
 type handlerSuite struct {
@@ -73,7 +55,7 @@ func (s *handlerSuite) Test_impl_GetByID() {
 	s.r.GET("/api/v1/tasks/:id", s.handler.GetByID)
 
 	type args struct {
-		id   int64
+		id   string
 		mock func()
 	}
 	tests := []struct {
@@ -82,23 +64,21 @@ func (s *handlerSuite) Test_impl_GetByID() {
 		wantCode int
 	}{
 		{
-			name: "get by id then error",
-			args: args{id: uuid1, mock: func() {
-				s.mock.On("GetByID", mock.Anything, uuid1).Return(nil, er.ErrGetTask).Once()
+			name:     "id is invalid then 400",
+			args:     args{id: "xxx"},
+			wantCode: 400,
+		},
+		{
+			name: "get by id then 500",
+			args: args{id: testdata.TaskOID1.Hex(), mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(nil, er.ErrGetTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
-			name: "get by id then not found error",
-			args: args{id: uuid1, mock: func() {
-				s.mock.On("GetByID", mock.Anything, uuid1).Return(nil, er.ErrTaskNotExists).Once()
-			}},
-			wantCode: 404,
-		},
-		{
-			name: "get by id then success",
-			args: args{id: uuid1, mock: func() {
-				s.mock.On("GetByID", mock.Anything, uuid1).Return(task1, nil).Once()
+			name: "get by id then 200",
+			args: args{id: testdata.TaskOID1.Hex(), mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(testdata.Task1, nil).Once()
 			}},
 			wantCode: 200,
 		},
@@ -164,7 +144,7 @@ func (s *handlerSuite) Test_impl_List() {
 		{
 			name: "list then success",
 			args: args{start: "0", end: "3", mock: func() {
-				s.mock.On("List", mock.Anything, 0, 3).Return([]*pb.Task{task1}, 10, nil).Once()
+				s.mock.On("List", mock.Anything, 0, 3).Return([]*todo.Task{testdata.Task1}, 10, nil).Once()
 			}},
 			wantCode: 200,
 		},
@@ -194,8 +174,8 @@ func (s *handlerSuite) Test_impl_Create() {
 	s.r.POST("/api/v1/tasks", s.handler.Create)
 
 	type args struct {
-		created *pb.Task
-		mock    func()
+		title string
+		mock  func()
 	}
 	tests := []struct {
 		name     string
@@ -203,16 +183,21 @@ func (s *handlerSuite) Test_impl_Create() {
 		wantCode int
 	}{
 		{
-			name: "create then error",
-			args: args{created: task1, mock: func() {
-				s.mock.On("Create", mock.Anything, task1.Title).Return(nil, er.ErrCreateTask).Once()
+			name:     "missing title then 400",
+			args:     args{title: ""},
+			wantCode: 400,
+		},
+		{
+			name: "create task by title then 500",
+			args: args{title: testdata.Task1.Title, mock: func() {
+				s.mock.On("Create", mock.Anything, testdata.Task1.Title).Return(nil, er.ErrCreateTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
-			name: "create then success",
-			args: args{created: task1, mock: func() {
-				s.mock.On("Create", mock.Anything, task1.Title).Return(task1, nil).Once()
+			name: "create task by title then 201",
+			args: args{title: testdata.Task1.Title, mock: func() {
+				s.mock.On("Create", mock.Anything, testdata.Task1.Title).Return(testdata.Task1, nil).Once()
 			}},
 			wantCode: 201,
 		},
@@ -223,8 +208,8 @@ func (s *handlerSuite) Test_impl_Create() {
 				tt.args.mock()
 			}
 
-			uri := fmt.Sprintf("/api/v1/tasks")
-			data, _ := json.Marshal(tt.args.created)
+			uri := "/api/v1/tasks"
+			data, _ := json.Marshal(&reqTitle{Title: tt.args.title})
 			req := httptest.NewRequest(http.MethodPost, uri, bytes.NewBuffer(data))
 			w := httptest.NewRecorder()
 			s.r.ServeHTTP(w, req)
@@ -243,9 +228,9 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 	s.r.PATCH("/api/v1/tasks/:id/status", s.handler.UpdateStatus)
 
 	type args struct {
-		id      int64
-		updated *reqStatus
-		mock    func()
+		id     string
+		status bool
+		mock   func()
 	}
 	tests := []struct {
 		name     string
@@ -253,16 +238,26 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 		wantCode int
 	}{
 		{
-			name: "update status then error",
-			args: args{id: uuid1, updated: &reqStatus{Status: true}, mock: func() {
-				s.mock.On("UpdateStatus", mock.Anything, uuid1, updated1.Completed).Return(nil, er.ErrUpdateStatusTask).Once()
+			name:     "missing id then 400",
+			args:     args{id: ""},
+			wantCode: 400,
+		},
+		{
+			name:     "invalid id then 400",
+			args:     args{id: "xxx"},
+			wantCode: 400,
+		},
+		{
+			name: "update status then 500",
+			args: args{id: testdata.Task1.ID.Hex(), status: false, mock: func() {
+				s.mock.On("UpdateStatus", mock.Anything, testdata.Task1.ID, false).Return(nil, er.ErrUpdateStatusTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
-			name: "update status then success",
-			args: args{id: uuid1, updated: &reqStatus{Status: true}, mock: func() {
-				s.mock.On("UpdateStatus", mock.Anything, uuid1, updated1.Completed).Return(updated1, nil).Once()
+			name: "update status then 200",
+			args: args{id: testdata.Task1.ID.Hex(), status: false, mock: func() {
+				s.mock.On("UpdateStatus", mock.Anything, testdata.Task1.ID, false).Return(testdata.Task1, nil).Once()
 			}},
 			wantCode: 200,
 		},
@@ -274,7 +269,7 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 			}
 
 			uri := fmt.Sprintf("/api/v1/tasks/%v/status", tt.args.id)
-			data, _ := json.Marshal(tt.args.updated)
+			data, _ := json.Marshal(&reqStatus{Status: tt.args.status})
 			req := httptest.NewRequest(http.MethodPatch, uri, bytes.NewBuffer(data))
 			w := httptest.NewRecorder()
 			s.r.ServeHTTP(w, req)
@@ -293,9 +288,9 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 	s.r.PATCH("/api/v1/tasks/:id/title", s.handler.ChangeTitle)
 
 	type args struct {
-		id      int64
-		updated *reqTitle
-		mock    func()
+		id    string
+		title string
+		mock  func()
 	}
 	tests := []struct {
 		name     string
@@ -303,16 +298,31 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 		wantCode int
 	}{
 		{
+			name:     "missing id then 400",
+			args:     args{id: "", title: "title"},
+			wantCode: 400,
+		},
+		{
+			name:     "invalid id then 400",
+			args:     args{id: "xxx", title: "title"},
+			wantCode: 400,
+		},
+		{
+			name:     "missing title then 400",
+			args:     args{id: testdata.Task1.ID.Hex(), title: ""},
+			wantCode: 400,
+		},
+		{
 			name: "change title then 500",
-			args: args{id: uuid1, updated: &reqTitle{Title: ""}, mock: func() {
-				s.mock.On("ChangeTitle", mock.Anything, uuid1, updated1.Title).Return(nil, er.ErrChangeTitleTask).Once()
+			args: args{id: testdata.Task1.ID.Hex(), title: "title", mock: func() {
+				s.mock.On("ChangeTitle", mock.Anything, testdata.Task1.ID, "title").Return(nil, er.ErrChangeTitleTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
-			name: "change title then success",
-			args: args{id: uuid1, updated: &reqTitle{Title: "title"}, mock: func() {
-				s.mock.On("ChangeTitle", mock.Anything, uuid1, updated2.Title).Return(updated1, nil).Once()
+			name: "change title then 200",
+			args: args{id: testdata.Task1.ID.Hex(), title: "title", mock: func() {
+				s.mock.On("ChangeTitle", mock.Anything, testdata.Task1.ID, "title").Return(testdata.Task1, nil).Once()
 			}},
 			wantCode: 200,
 		},
@@ -324,7 +334,7 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 			}
 
 			uri := fmt.Sprintf("/api/v1/tasks/%v/title", tt.args.id)
-			data, _ := json.Marshal(tt.args.updated)
+			data, _ := json.Marshal(&reqTitle{Title: tt.args.title})
 			req := httptest.NewRequest(http.MethodPatch, uri, bytes.NewBuffer(data))
 			w := httptest.NewRecorder()
 			s.r.ServeHTTP(w, req)
@@ -343,7 +353,7 @@ func (s *handlerSuite) Test_impl_Delete() {
 	s.r.DELETE("/api/v1/tasks/:id", s.handler.Delete)
 
 	type args struct {
-		id   int64
+		id   string
 		mock func()
 	}
 	tests := []struct {
@@ -352,16 +362,26 @@ func (s *handlerSuite) Test_impl_Delete() {
 		wantCode int
 	}{
 		{
-			name: "delete then error",
-			args: args{id: uuid1, mock: func() {
-				s.mock.On("Delete", mock.Anything, uuid1).Return(er.ErrDeleteTask).Once()
+			name:     "missing id then 404",
+			args:     args{id: ""},
+			wantCode: 404,
+		},
+		{
+			name:     "invalid id then 400",
+			args:     args{id: "xxx"},
+			wantCode: 400,
+		},
+		{
+			name: "delete task by id then 500",
+			args: args{id: testdata.Task1.ID.Hex(), mock: func() {
+				s.mock.On("Delete", mock.Anything, testdata.Task1.ID).Return(er.ErrDeleteTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
-			name: "delete then success",
-			args: args{id: uuid1, mock: func() {
-				s.mock.On("Delete", mock.Anything, uuid1).Return(nil).Once()
+			name: "delete task by id then 204",
+			args: args{id: testdata.Task1.ID.Hex(), mock: func() {
+				s.mock.On("Delete", mock.Anything, testdata.Task1.ID).Return(nil).Once()
 			}},
 			wantCode: 204,
 		},
