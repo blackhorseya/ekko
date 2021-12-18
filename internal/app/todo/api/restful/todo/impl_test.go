@@ -12,6 +12,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http/middlewares"
 	"github.com/blackhorseya/todo-app/pb"
+	"github.com/blackhorseya/todo-app/test/testdata"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -73,7 +74,7 @@ func (s *handlerSuite) Test_impl_GetByID() {
 	s.r.GET("/api/v1/tasks/:id", s.handler.GetByID)
 
 	type args struct {
-		id   int64
+		id   string
 		mock func()
 	}
 	tests := []struct {
@@ -82,23 +83,21 @@ func (s *handlerSuite) Test_impl_GetByID() {
 		wantCode int
 	}{
 		{
-			name: "get by id then error",
-			args: args{id: uuid1, mock: func() {
-				s.mock.On("GetByID", mock.Anything, uuid1).Return(nil, er.ErrGetTask).Once()
+			name:     "id is invalid then 400",
+			args:     args{id: "xxx"},
+			wantCode: 400,
+		},
+		{
+			name: "get by id then 500",
+			args: args{id: testdata.TaskOID1.Hex(), mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(nil, er.ErrGetTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
-			name: "get by id then not found error",
-			args: args{id: uuid1, mock: func() {
-				s.mock.On("GetByID", mock.Anything, uuid1).Return(nil, er.ErrTaskNotExists).Once()
-			}},
-			wantCode: 404,
-		},
-		{
-			name: "get by id then success",
-			args: args{id: uuid1, mock: func() {
-				s.mock.On("GetByID", mock.Anything, uuid1).Return(task1, nil).Once()
+			name: "get by id then 200",
+			args: args{id: testdata.TaskOID1.Hex(), mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(testdata.Task1, nil).Once()
 			}},
 			wantCode: 200,
 		},
