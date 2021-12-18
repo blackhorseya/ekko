@@ -78,9 +78,9 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *pb.Task, err e
 	}
 
 	newTask := &pb.Task{
-		Id:       i.node.Generate().Int64(),
-		Title:    title,
-		CreateAt: timestamppb.New(time.Now()),
+		Id:        i.node.Generate().Int64(),
+		Title:     title,
+		CreatedAt: timestamppb.New(time.Now()),
 	}
 	ret, err := i.repo.Create(ctx, newTask)
 	if err != nil {
