@@ -12,31 +12,11 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http/middlewares"
-	"github.com/blackhorseya/todo-app/pb"
 	"github.com/blackhorseya/todo-app/test/testdata"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
-)
-
-var (
-	uuid1 = int64(1)
-
-	task1 = &pb.Task{
-		Id:    uuid1,
-		Title: "title",
-	}
-
-	updated1 = &pb.Task{
-		Id:        uuid1,
-		Completed: true,
-	}
-
-	updated2 = &pb.Task{
-		Id:    uuid1,
-		Title: "title",
-	}
 )
 
 type handlerSuite struct {
