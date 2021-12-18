@@ -58,7 +58,7 @@ function remove(id) {
 function changeStatus(id, status) {
   const opts = {
     method: 'PATCH',
-    body: JSON.stringify({completed: status}),
+    body: JSON.stringify({status: status}),
   };
 
   return fetch(`${endpoint}/api/v1/tasks/${id}/status`, opts).then(handlerResp);
