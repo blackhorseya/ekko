@@ -96,6 +96,10 @@ func (i *impl) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Tas
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
+	now := time.Now()
+	newTask.ID = primitive.NewObjectIDFromTimestamp(now)
+	newTask.CreatedAt = now
+	newTask.UpdatedAt = now
 	coll := i.client.Database(dbName).Collection(collName)
 	_, err = coll.InsertOne(timeout, newTask)
 	if err != nil {

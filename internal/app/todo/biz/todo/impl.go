@@ -2,7 +2,6 @@ package todo
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
@@ -11,7 +10,6 @@ import (
 	"github.com/blackhorseya/todo-app/pb"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type impl struct {
@@ -78,26 +76,23 @@ func (i *impl) List(ctx contextx.Contextx, start, end int) (tasks []*pb.Task, to
 	// return ret, total, nil
 }
 
-func (i *impl) Create(ctx contextx.Contextx, title string) (task *pb.Task, err error) {
+func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err error) {
 	if len(title) == 0 {
-		i.logger.Error(er.ErrMissingTitle.Error())
-		return nil, er.ErrMissingTitle
+		i.logger.Error(er.ErrEmptyTitle.Error())
+		return nil, er.ErrEmptyTitle
 	}
 
-	newTask := &pb.Task{
+	newTask := &todo.Task{
 		Title:     title,
-		CreatedAt: timestamppb.New(time.Now()),
+		Completed: false,
 	}
-	ret, err := i.repo.Create(ctx, nil)
+	ret, err := i.repo.Create(ctx, newTask)
 	if err != nil {
 		i.logger.Error(er.ErrCreateTask.Error(), zap.Error(err), zap.String("title", title))
 		return nil, er.ErrCreateTask
 	}
 
-	fmt.Println(newTask, ret)
-	// todo: 2021-12-19|00:50|Sean|impl me
-	panic("impl me")
-	// return ret, nil
+	return ret, nil
 }
 
 func (i *impl) UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status bool) (task *pb.Task, err error) {
@@ -126,8 +121,8 @@ func (i *impl) UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status
 
 func (i *impl) ChangeTitle(ctx contextx.Contextx, id primitive.ObjectID, title string) (task *pb.Task, err error) {
 	if len(title) == 0 {
-		i.logger.Error(er.ErrMissingTitle.Error())
-		return nil, er.ErrMissingTitle
+		i.logger.Error(er.ErrEmptyTitle.Error())
+		return nil, er.ErrEmptyTitle
 	}
 
 	exists, err := i.repo.GetByID(ctx, primitive.ObjectID{})

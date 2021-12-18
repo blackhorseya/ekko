@@ -18,7 +18,7 @@ type IBiz interface {
 	List(ctx contextx.Contextx, start, end int) (tasks []*pb.Task, total int, err error)
 
 	// Create serve caller to create a task
-	Create(ctx contextx.Contextx, title string) (task *pb.Task, err error)
+	Create(ctx contextx.Contextx, title string) (task *todo.Task, err error)
 
 	// UpdateStatus serve caller to update the task's status by id
 	UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status bool) (task *pb.Task, err error)

@@ -14,4 +14,7 @@ var (
 
 	// ErrEmptyID means id must be NOT empty
 	ErrEmptyID = newAPPError(http.StatusBadRequest, 40013, "id must be NOT empty")
+
+	// ErrEmptyTitle means title must be NOT empty
+	ErrEmptyTitle = newAPPError(http.StatusBadRequest, 40014, "title must be NOT empty")
 )
