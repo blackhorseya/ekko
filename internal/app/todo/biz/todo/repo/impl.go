@@ -10,6 +10,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+const (
+	dbName = "todo-db"
+
+	collName = "tasks"
+)
+
 type impl struct {
 	client *mongo.Client
 }
@@ -23,7 +29,7 @@ func (i *impl) GetByID(ctx contextx.Contextx, id int64) (task *pb.Task, err erro
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	coll := i.client.Database("todo-db").Collection("tasks")
+	coll := i.client.Database(dbName).Collection(collName)
 	res := coll.FindOne(timeout, bson.D{{"id", id}})
 	if res.Err() != nil {
 		if res.Err() == mongo.ErrNoDocuments {
@@ -46,7 +52,7 @@ func (i *impl) List(ctx contextx.Contextx, limit, offset int) (tasks []*pb.Task,
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	coll := i.client.Database("todo-db").Collection("tasks")
+	coll := i.client.Database(dbName).Collection(collName)
 	cur, err := coll.Find(timeout, bson.D{}, options.Find().SetLimit(int64(limit)).SetSkip(int64(offset)))
 	if err != nil {
 		return nil, err
@@ -84,7 +90,7 @@ func (i *impl) Create(ctx contextx.Contextx, newTask *pb.Task) (task *pb.Task, e
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	coll := i.client.Database("todo-db").Collection("tasks")
+	coll := i.client.Database(dbName).Collection(collName)
 	_, err = coll.InsertOne(timeout, newTask)
 	if err != nil {
 		return nil, err
@@ -97,7 +103,7 @@ func (i *impl) Update(ctx contextx.Contextx, updated *pb.Task) (task *pb.Task, e
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	coll := i.client.Database("todo-db").Collection("tasks")
+	coll := i.client.Database(dbName).Collection(collName)
 	res := coll.FindOneAndUpdate(timeout, bson.D{{"id", updated.Id}}, bson.D{{"$set", updated}})
 	if res.Err() != nil {
 		return nil, res.Err()
@@ -110,7 +116,7 @@ func (i *impl) Remove(ctx contextx.Contextx, id int64) error {
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	coll := i.client.Database("todo-db").Collection("tasks")
+	coll := i.client.Database(dbName).Collection(collName)
 	_, err := coll.DeleteOne(timeout, bson.D{{"id", id}})
 	if err != nil {
 		return err
