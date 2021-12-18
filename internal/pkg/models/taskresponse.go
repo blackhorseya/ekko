@@ -18,6 +18,6 @@ func NewTaskResponse(t *pb.Task) *TaskResponse {
 		ID:        t.Id,
 		Title:     t.Title,
 		Completed: t.Completed,
-		CreatedAt: t.CreateAt.AsTime().UTC().Format(rfc3339Mill),
+		CreatedAt: t.CreatedAt.AsTime().UTC().Format(rfc3339Mill),
 	}
 }
