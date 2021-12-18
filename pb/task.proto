@@ -8,5 +8,5 @@ message Task {
   int64 id = 1;
   string title = 2;
   bool completed = 3;
-  google.protobuf.Timestamp createAt = 4;
+  google.protobuf.Timestamp createdAt = 4;
 }
