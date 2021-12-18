@@ -11,7 +11,6 @@ RUN go mod download
 COPY cmd ./cmd
 COPY internal ./internal
 COPY api ./api
-COPY pb ./pb
 RUN go build -o app ./cmd/${APP_NAME}
 
 # build frontend
