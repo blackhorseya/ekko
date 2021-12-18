@@ -373,7 +373,7 @@ func (s *handlerSuite) Test_impl_Delete() {
 	s.r.DELETE("/api/v1/tasks/:id", s.handler.Delete)
 
 	type args struct {
-		id   int64
+		id   string
 		mock func()
 	}
 	tests := []struct {
@@ -382,16 +382,26 @@ func (s *handlerSuite) Test_impl_Delete() {
 		wantCode int
 	}{
 		{
-			name: "delete then error",
-			args: args{id: uuid1, mock: func() {
-				s.mock.On("Delete", mock.Anything, uuid1).Return(er.ErrDeleteTask).Once()
+			name:     "missing id then 404",
+			args:     args{id: ""},
+			wantCode: 404,
+		},
+		{
+			name:     "invalid id then 400",
+			args:     args{id: "xxx"},
+			wantCode: 400,
+		},
+		{
+			name: "delete task by id then 500",
+			args: args{id: testdata.Task1.ID.Hex(), mock: func() {
+				s.mock.On("Delete", mock.Anything, testdata.Task1.ID).Return(er.ErrDeleteTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
-			name: "delete then success",
-			args: args{id: uuid1, mock: func() {
-				s.mock.On("Delete", mock.Anything, uuid1).Return(nil).Once()
+			name: "delete task by id then 204",
+			args: args{id: testdata.Task1.ID.Hex(), mock: func() {
+				s.mock.On("Delete", mock.Anything, testdata.Task1.ID).Return(nil).Once()
 			}},
 			wantCode: 204,
 		},
