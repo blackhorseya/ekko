@@ -5,7 +5,6 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
-	"github.com/blackhorseya/todo-app/pb"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 )
@@ -42,7 +41,7 @@ func (i *impl) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo
 	return ret, nil
 }
 
-func (i *impl) List(ctx contextx.Contextx, start, end int) (tasks []*pb.Task, total int, err error) {
+func (i *impl) List(ctx contextx.Contextx, start, end int) (tasks []*todo.Task, total int, err error) {
 	if start < 0 {
 		i.logger.Error(er.ErrInvalidStart.Error(), zap.Int("start", start), zap.Int("end", end))
 		return nil, 0, er.ErrInvalidStart
@@ -69,9 +68,7 @@ func (i *impl) List(ctx contextx.Contextx, start, end int) (tasks []*pb.Task, to
 		return nil, 0, er.ErrCountTask
 	}
 
-	// todo: 2021-12-19|00:50|Sean|impl me
-	panic("impl me")
-	// return ret, total, nil
+	return ret, total, nil
 }
 
 func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err error) {
