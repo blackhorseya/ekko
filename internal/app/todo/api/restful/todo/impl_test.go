@@ -248,9 +248,9 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 	s.r.PATCH("/api/v1/tasks/:id/status", s.handler.UpdateStatus)
 
 	type args struct {
-		id      int64
-		updated *reqStatus
-		mock    func()
+		id     string
+		status bool
+		mock   func()
 	}
 	tests := []struct {
 		name     string
@@ -258,16 +258,26 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 		wantCode int
 	}{
 		{
-			name: "update status then error",
-			args: args{id: uuid1, updated: &reqStatus{Status: true}, mock: func() {
-				s.mock.On("UpdateStatus", mock.Anything, uuid1, updated1.Completed).Return(nil, er.ErrUpdateStatusTask).Once()
+			name:     "missing id then 400",
+			args:     args{id: ""},
+			wantCode: 400,
+		},
+		{
+			name:     "invalid id then 400",
+			args:     args{id: "xxx"},
+			wantCode: 400,
+		},
+		{
+			name: "update status then 500",
+			args: args{id: testdata.Task1.ID.Hex(), status: false, mock: func() {
+				s.mock.On("UpdateStatus", mock.Anything, testdata.Task1.ID, false).Return(nil, er.ErrUpdateStatusTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
-			name: "update status then success",
-			args: args{id: uuid1, updated: &reqStatus{Status: true}, mock: func() {
-				s.mock.On("UpdateStatus", mock.Anything, uuid1, updated1.Completed).Return(updated1, nil).Once()
+			name: "update status then 200",
+			args: args{id: testdata.Task1.ID.Hex(), status: false, mock: func() {
+				s.mock.On("UpdateStatus", mock.Anything, testdata.Task1.ID, false).Return(testdata.Task1, nil).Once()
 			}},
 			wantCode: 200,
 		},
@@ -279,7 +289,7 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 			}
 
 			uri := fmt.Sprintf("/api/v1/tasks/%v/status", tt.args.id)
-			data, _ := json.Marshal(tt.args.updated)
+			data, _ := json.Marshal(&reqStatus{Status: tt.args.status})
 			req := httptest.NewRequest(http.MethodPatch, uri, bytes.NewBuffer(data))
 			w := httptest.NewRecorder()
 			s.r.ServeHTTP(w, req)

@@ -157,20 +157,29 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
 
 	var req reqID
-	if err := c.ShouldBindUri(&req); err != nil {
-		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
+	err := c.ShouldBindUri(&req)
+	if err != nil {
+		i.logger.Error(er.ErrBindID.Error(), zap.Error(err))
+		_ = c.Error(er.ErrBindID)
+		return
+	}
+
+	id, err := primitive.ObjectIDFromHex(req.ID)
+	if err != nil {
+		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
 		_ = c.Error(er.ErrInvalidID)
 		return
 	}
 
 	var data *reqStatus
-	if err := c.ShouldBindJSON(&data); err != nil {
+	err = c.ShouldBindJSON(&data)
+	if err != nil {
 		i.logger.Error(er.ErrBindStatus.Error(), zap.Error(err))
 		_ = c.Error(er.ErrBindStatus)
 		return
 	}
 
-	ret, err := i.biz.UpdateStatus(ctx, primitive.NilObjectID, data.Status)
+	ret, err := i.biz.UpdateStatus(ctx, id, data.Status)
 	if err != nil {
 		_ = c.Error(err)
 		return
