@@ -14,8 +14,10 @@ definitions:
       created_at:
         type: string
       id:
-        type: integer
+        type: string
       title:
+        type: string
+      updated_at:
         type: string
     type: object
   response.Response:
@@ -36,6 +38,8 @@ definitions:
     properties:
       title:
         type: string
+    required:
+    - title
     type: object
 info:
   contact:
@@ -176,7 +180,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -208,7 +212,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -246,7 +250,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: updated task
         in: body
         name: updated
@@ -286,7 +290,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: updated task
         in: body
         name: updated
