@@ -10,6 +10,7 @@ import (
 
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/mocks"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http/middlewares"
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/blackhorseya/todo-app/test/testdata"
@@ -163,7 +164,7 @@ func (s *handlerSuite) Test_impl_List() {
 		{
 			name: "list then success",
 			args: args{start: "0", end: "3", mock: func() {
-				s.mock.On("List", mock.Anything, 0, 3).Return([]*pb.Task{task1}, 10, nil).Once()
+				s.mock.On("List", mock.Anything, 0, 3).Return([]*todo.Task{testdata.Task1}, 10, nil).Once()
 			}},
 			wantCode: 200,
 		},
@@ -193,8 +194,8 @@ func (s *handlerSuite) Test_impl_Create() {
 	s.r.POST("/api/v1/tasks", s.handler.Create)
 
 	type args struct {
-		created *pb.Task
-		mock    func()
+		title string
+		mock  func()
 	}
 	tests := []struct {
 		name     string
@@ -202,16 +203,21 @@ func (s *handlerSuite) Test_impl_Create() {
 		wantCode int
 	}{
 		{
-			name: "create then error",
-			args: args{created: task1, mock: func() {
-				s.mock.On("Create", mock.Anything, task1.Title).Return(nil, er.ErrCreateTask).Once()
+			name:     "missing title then 400",
+			args:     args{title: ""},
+			wantCode: 400,
+		},
+		{
+			name: "create task by title then 500",
+			args: args{title: testdata.Task1.Title, mock: func() {
+				s.mock.On("Create", mock.Anything, testdata.Task1.Title).Return(nil, er.ErrCreateTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
-			name: "create then success",
-			args: args{created: task1, mock: func() {
-				s.mock.On("Create", mock.Anything, task1.Title).Return(task1, nil).Once()
+			name: "create task by title then 201",
+			args: args{title: testdata.Task1.Title, mock: func() {
+				s.mock.On("Create", mock.Anything, testdata.Task1.Title).Return(testdata.Task1, nil).Once()
 			}},
 			wantCode: 201,
 		},
@@ -222,8 +228,8 @@ func (s *handlerSuite) Test_impl_Create() {
 				tt.args.mock()
 			}
 
-			uri := fmt.Sprintf("/api/v1/tasks")
-			data, _ := json.Marshal(tt.args.created)
+			uri := "/api/v1/tasks"
+			data, _ := json.Marshal(&reqTitle{Title: tt.args.title})
 			req := httptest.NewRequest(http.MethodPost, uri, bytes.NewBuffer(data))
 			w := httptest.NewRecorder()
 			s.r.ServeHTTP(w, req)
