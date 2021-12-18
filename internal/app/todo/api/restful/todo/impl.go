@@ -10,6 +10,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/response"
 	"github.com/blackhorseya/todo-app/internal/pkg/models"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 )
 
@@ -32,7 +33,7 @@ func NewImpl(logger *zap.Logger, biz todo.IBiz) IHandler {
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param id path integer true "ID of task"
+// @Param id path string true "ID of task"
 // @Success 200 {object} response.Response{data=models.TaskResponse}
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
@@ -42,13 +43,21 @@ func (i *impl) GetByID(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
 
 	var req reqID
-	if err := c.ShouldBindUri(&req); err != nil {
-		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
+	err := c.ShouldBindUri(&req)
+	if err != nil {
+		i.logger.Error(er.ErrBindID.Error(), zap.Error(err))
+		_ = c.Error(er.ErrBindID)
+		return
+	}
+
+	id, err := primitive.ObjectIDFromHex(req.ID)
+	if err != nil {
+		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
 		_ = c.Error(er.ErrInvalidID)
 		return
 	}
 
-	ret, err := i.biz.GetByID(ctx, req.ID)
+	ret, err := i.biz.GetByID(ctx, id)
 	if err != nil {
 		_ = c.Error(err)
 		return
@@ -138,7 +147,7 @@ func (i *impl) Create(c *gin.Context) {
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param id path integer true "ID of task"
+// @Param id path string true "ID of task"
 // @Param updated body reqStatus true "updated task"
 // @Success 200 {object} response.Response{data=models.TaskResponse}
 // @Failure 400 {object} er.APPError
@@ -148,20 +157,29 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
 
 	var req reqID
-	if err := c.ShouldBindUri(&req); err != nil {
-		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
+	err := c.ShouldBindUri(&req)
+	if err != nil {
+		i.logger.Error(er.ErrBindID.Error(), zap.Error(err))
+		_ = c.Error(er.ErrBindID)
+		return
+	}
+
+	id, err := primitive.ObjectIDFromHex(req.ID)
+	if err != nil {
+		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
 		_ = c.Error(er.ErrInvalidID)
 		return
 	}
 
 	var data *reqStatus
-	if err := c.ShouldBindJSON(&data); err != nil {
+	err = c.ShouldBindJSON(&data)
+	if err != nil {
 		i.logger.Error(er.ErrBindStatus.Error(), zap.Error(err))
 		_ = c.Error(er.ErrBindStatus)
 		return
 	}
 
-	ret, err := i.biz.UpdateStatus(ctx, req.ID, data.Status)
+	ret, err := i.biz.UpdateStatus(ctx, id, data.Status)
 	if err != nil {
 		_ = c.Error(err)
 		return
@@ -176,7 +194,7 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param id path integer true "ID of task"
+// @Param id path string true "ID of task"
 // @Param updated body reqTitle true "updated task"
 // @Success 200 {object} response.Response{data=models.TaskResponse}
 // @Failure 400 {object} er.APPError
@@ -186,20 +204,29 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
 
 	var req reqID
-	if err := c.ShouldBindUri(&req); err != nil {
-		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
+	err := c.ShouldBindUri(&req)
+	if err != nil {
+		i.logger.Error(er.ErrBindID.Error(), zap.Error(err))
+		_ = c.Error(er.ErrBindID)
+		return
+	}
+
+	id, err := primitive.ObjectIDFromHex(req.ID)
+	if err != nil {
+		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
 		_ = c.Error(er.ErrInvalidID)
 		return
 	}
 
 	var data *reqTitle
-	if err := c.ShouldBindJSON(&data); err != nil {
+	err = c.ShouldBindJSON(&data)
+	if err != nil {
 		i.logger.Error(er.ErrBindTitle.Error(), zap.Error(err))
 		_ = c.Error(er.ErrBindTitle)
 		return
 	}
 
-	ret, err := i.biz.ChangeTitle(ctx, req.ID, data.Title)
+	ret, err := i.biz.ChangeTitle(ctx, id, data.Title)
 	if err != nil {
 		_ = c.Error(err)
 		return
@@ -214,7 +241,7 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param id path integer true "ID of task"
+// @Param id path string true "ID of task"
 // @Success 204 {object} response.Response
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
@@ -224,13 +251,21 @@ func (i *impl) Delete(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
 
 	var req reqID
-	if err := c.ShouldBindUri(&req); err != nil {
-		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err))
+	err := c.ShouldBindUri(&req)
+	if err != nil {
+		i.logger.Error(er.ErrBindID.Error(), zap.Error(err))
+		_ = c.Error(er.ErrBindID)
+		return
+	}
+
+	id, err := primitive.ObjectIDFromHex(req.ID)
+	if err != nil {
+		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
 		_ = c.Error(er.ErrInvalidID)
 		return
 	}
 
-	err := i.biz.Delete(ctx, req.ID)
+	err = i.biz.Delete(ctx, id)
 	if err != nil {
 		_ = c.Error(err)
 		return
