@@ -23,7 +23,7 @@ var (
 	// TaskUpdate1 task update 1
 	TaskUpdate1 = &todo.Task{
 		ID:        TaskOID1,
-		Title:     "task 1",
+		Title:     "task 1 update",
 		Completed: true,
 		CreatedAt: time.Time{},
 		UpdatedAt: time.Time{},
