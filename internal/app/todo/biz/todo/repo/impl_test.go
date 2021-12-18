@@ -211,3 +211,42 @@ func (s *repoSuite) Test_impl_Create() {
 		})
 	}
 }
+
+func (s *repoSuite) Test_impl_Count() {
+	type args struct {
+		mock func()
+	}
+	tests := []struct {
+		name      string
+		args      args
+		wantTotal int
+		wantErr   bool
+	}{
+		{
+			name: "count all tasks then 1",
+			args: args{mock: func() {
+				_, _ = s.client.Database(dbName).Collection(collName).InsertOne(contextx.Background(), testdata.Task1)
+			}},
+			wantTotal: 1,
+			wantErr:   false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTotal, err := s.repo.Count(contextx.Background())
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Count() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if gotTotal != tt.wantTotal {
+				t.Errorf("Count() gotTotal = %v, want %v", gotTotal, tt.wantTotal)
+			}
+
+			_ = s.client.Database(dbName).Collection(collName).Drop(contextx.Background())
+		})
+	}
+}
