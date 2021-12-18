@@ -217,7 +217,7 @@
                 "summary": "Get a task by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -277,7 +277,7 @@
                 "summary": "Delete a task by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -327,7 +327,7 @@
                 "summary": "Update task's status by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -392,7 +392,7 @@
                 "summary": "Change task's title by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -465,9 +465,12 @@
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "title": {
+                    "type": "string"
+                },
+                "updated_at": {
                     "type": "string"
                 }
             }
@@ -496,6 +499,9 @@
         },
         "todo.reqTitle": {
             "type": "object",
+            "required": [
+                "title"
+            ],
             "properties": {
                 "title": {
                     "type": "string"
