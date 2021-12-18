@@ -151,7 +151,12 @@ func (i *impl) ChangeTitle(ctx contextx.Contextx, id primitive.ObjectID, title s
 }
 
 func (i *impl) Delete(ctx contextx.Contextx, id primitive.ObjectID) error {
-	err := i.repo.Remove(ctx, primitive.ObjectID{})
+	if id == primitive.NilObjectID {
+		i.logger.Error(er.ErrEmptyID.Error())
+		return er.ErrEmptyID
+	}
+
+	err := i.repo.Remove(ctx, id)
 	if err != nil {
 		i.logger.Error(er.ErrDeleteTask.Error(), zap.Error(err), zap.String("id", id.Hex()))
 		return er.ErrDeleteTask
