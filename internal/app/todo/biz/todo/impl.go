@@ -95,28 +95,30 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err
 	return ret, nil
 }
 
-func (i *impl) UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status bool) (task *pb.Task, err error) {
-	exists, err := i.repo.GetByID(ctx, primitive.ObjectID{})
+func (i *impl) UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status bool) (task *todo.Task, err error) {
+	if id == primitive.NilObjectID {
+		i.logger.Error(er.ErrEmptyID.Error())
+		return nil, er.ErrEmptyID
+	}
+
+	found, err := i.repo.GetByID(ctx, id)
 	if err != nil {
 		i.logger.Error(er.ErrGetTask.Error(), zap.Error(err), zap.String("id", id.Hex()))
 		return nil, er.ErrGetTask
 	}
-	if exists == nil {
+	if found == nil {
 		i.logger.Error(er.ErrTaskNotExists.Error(), zap.String("id", id.Hex()))
 		return nil, er.ErrTaskNotExists
 	}
 
-	exists.Completed = status
-	ret, err := i.repo.Update(ctx, exists)
+	found.Completed = status
+	ret, err := i.repo.Update(ctx, found)
 	if err != nil {
-		i.logger.Error(er.ErrUpdateStatusTask.Error(), zap.Error(err), zap.String("id", id.Hex()), zap.Bool("status", status))
+		i.logger.Error(er.ErrUpdateStatusTask.Error(), zap.Error(err), zap.Any("updated", found))
 		return nil, er.ErrUpdateStatusTask
 	}
 
-	fmt.Println(ret)
-	// todo: 2021-12-19|00:50|Sean|impl me
-	panic("impl me")
-	// return ret, nil
+	return ret, nil
 }
 
 func (i *impl) ChangeTitle(ctx contextx.Contextx, id primitive.ObjectID, title string) (task *pb.Task, err error) {

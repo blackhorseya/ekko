@@ -113,6 +113,7 @@ func (i *impl) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Tas
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
+	updated.UpdatedAt = time.Now()
 	filter := bson.M{"_id": updated.ID}
 	update := bson.M{"$set": updated}
 	coll := i.client.Database(dbName).Collection(collName)

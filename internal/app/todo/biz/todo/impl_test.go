@@ -151,3 +151,82 @@ func (s *bizSuite) Test_impl_Create() {
 		})
 	}
 }
+
+func (s *bizSuite) Test_impl_UpdateStatus() {
+	type args struct {
+		id     primitive.ObjectID
+		status bool
+		mock   func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantTask *todo.Task
+		wantErr  bool
+	}{
+		{
+			name:     "nil object id then error",
+			args:     args{id: primitive.NilObjectID},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "get task by id then error",
+			args: args{id: testdata.TaskOID1, mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(nil, errors.New("error")).Once()
+			}},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "get task by id not found then error",
+			args: args{id: testdata.TaskOID1, mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(nil, nil).Once()
+			}},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "update status then error",
+			args: args{id: testdata.TaskOID1, status: true, mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(testdata.Task1, nil).Once()
+
+				updated := testdata.Task1
+				updated.Completed = true
+				s.mock.On("Update", mock.Anything, updated).Return(nil, errors.New("error")).Once()
+			}},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "update status then success",
+			args: args{id: testdata.TaskOID1, status: true, mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(testdata.Task1, nil).Once()
+
+				updated := testdata.Task1
+				updated.Completed = true
+				s.mock.On("Update", mock.Anything, updated).Return(testdata.Task1, nil).Once()
+			}},
+			wantTask: testdata.Task1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTask, err := s.biz.UpdateStatus(contextx.Background(), tt.args.id, tt.args.status)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("UpdateStatus() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTask, tt.wantTask) {
+				t.Errorf("UpdateStatus() gotTask = %v, want %v", gotTask, tt.wantTask)
+			}
+
+			s.mock.AssertExpectations(t)
+		})
+	}
+}
