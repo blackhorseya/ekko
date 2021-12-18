@@ -60,15 +60,7 @@ func CreateApp(path2 string) (*app.Application, error) {
 	iBiz := health.NewImpl(logger, iRepo)
 	iHandler := health2.NewImpl(iBiz)
 	repoIRepo := repo2.NewImpl(logger, client)
-	generatorOptions, err := generator.NewOptions(viper)
-	if err != nil {
-		return nil, err
-	}
-	node, err := generator.New(generatorOptions)
-	if err != nil {
-		return nil, err
-	}
-	todoIBiz := todo2.NewImpl(logger, repoIRepo, node)
+	todoIBiz := todo2.NewImpl(logger, repoIRepo)
 	todoIHandler := todo3.NewImpl(logger, todoIBiz)
 	initHandlers := restful.CreateInitHandlerFn(iHandler, todoIHandler)
 	engine := http.NewRouter(httpOptions, logger, initHandlers)

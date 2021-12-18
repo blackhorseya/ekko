@@ -12,9 +12,6 @@ var (
 	// ErrMissingID means given id is empty
 	ErrMissingID = newAPPError(http.StatusBadRequest, 40002, "id is empty")
 
-	// ErrInvalidID means id is invalid
-	ErrInvalidID = newAPPError(http.StatusBadRequest, 40003, "id is invalid")
-
 	// ErrMissingTitle means title is empty
 	ErrMissingTitle = newAPPError(http.StatusBadRequest, 40004, "title is empty")
 
