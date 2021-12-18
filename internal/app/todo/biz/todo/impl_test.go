@@ -315,3 +315,48 @@ func (s *bizSuite) Test_impl_ChangeTitle() {
 		})
 	}
 }
+
+func (s *bizSuite) Test_impl_Delete() {
+	type args struct {
+		id   primitive.ObjectID
+		mock func()
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name:    "nil object id then error",
+			args:    args{id: primitive.NilObjectID},
+			wantErr: true,
+		},
+		{
+			name: "delete task by id then error",
+			args: args{id: testdata.TaskOID1, mock: func() {
+				s.mock.On("Remove", mock.Anything, testdata.TaskOID1).Return(errors.New("error")).Once()
+			}},
+			wantErr: true,
+		},
+		{
+			name: "delete task by id then success",
+			args: args{id: testdata.TaskOID1, mock: func() {
+				s.mock.On("Remove", mock.Anything, testdata.TaskOID1).Return(nil).Once()
+			}},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			if err := s.biz.Delete(contextx.Background(), tt.args.id); (err != nil) != tt.wantErr {
+				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			s.mock.AssertExpectations(t)
+		})
+	}
+}
