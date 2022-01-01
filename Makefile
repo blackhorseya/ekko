@@ -1,12 +1,12 @@
-APP_NAME = todo
-VERSION = latest
-PROJECT_ID = sean-side
-NS = side
-DEPLOY_TO = uat
-REGISTRY = gcr.io/$(PROJECT_ID)
-HELM_REPO_NAME = blackhorseya
-CHART_NAME = todo-app
-RELEASE_NAME = todo
+APP_NAME=todo
+VERSION=latest
+PROJECT_ID=sean-side
+NS=side
+DEPLOY_TO=uat
+REGISTRY=gcr.io
+IMAGE_NAME=$(REGISTRY)/$(PROJECT_ID)/$(APP_NAME)
+HELM_REPO_NAME=blackhorseya
+CHART_NAME=todo-app
 
 DB_URI="mongodb://todo-app:changeme@localhost:27017/todo-db"
 
@@ -32,11 +32,11 @@ report:
 .PHONY: build-image
 build-image:
 	$(call check_defined,VERSION)
-	@docker build -t $(REGISTRY)/$(APP_NAME):$(VERSION) \
+	@docker build -t $(IMAGE_NAME):$(VERSION) \
 	--label "app.name=$(APP_NAME)" \
 	--label "app.version=$(VERSION)" \
 	--build-arg APP_NAME=$(APP_NAME) \
-	--pull \
+	--pull --cache-from=$(IMAGE_NAME) \
 	-f Dockerfile .
 
 .PHONY: list-images
@@ -50,7 +50,9 @@ prune-images:
 .PHONY: push-image
 push-image:
 	$(call check_defined,VERSION)
-	@docker push $(REGISTRY)/$(APP_NAME):$(VERSION)
+	@docker tag $(IMAGE_NAME):$(VERSION) $(IMAGE_NAME):latest
+	@docker push $(IMAGE_NAME):$(VERSION)
+	@docker push $(IMAGE_NAME):latest
 
 .PHONY: up-local-db
 up-local-db:
@@ -66,7 +68,7 @@ deploy:
 	$(call check_defined,DEPLOY_TO)
 	@helm --namespace $(NS) \
 	upgrade --install $(APP_NAME) $(HELM_REPO_NAME)/$(CHART_NAME) \
-	--values ./deployments/configs/$(DEPLOY_TO)/todo.yaml \
+	--values ./deployments/configs/$(DEPLOY_TO)/$(APP_NAME).yaml \
 	--set image.tag=$(VERSION)
 
 .PHONY: gen
