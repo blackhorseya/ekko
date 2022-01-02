@@ -10,7 +10,6 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/app"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/config"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/database"
-	"github.com/blackhorseya/todo-app/internal/pkg/infra/generator"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/log"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http"
 	"github.com/google/wire"
@@ -19,7 +18,6 @@ import (
 var providerSet = wire.NewSet(
 	log.ProviderSet,
 	config.ProviderSet,
-	generator.ProviderSet,
 	http.ProviderSet,
 	database.ProviderSet,
 	todo.ProviderSet,
