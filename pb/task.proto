@@ -1,0 +1,18 @@
+syntax = "proto3";
+package pb;
+option go_package = "./pb;pb";
+
+enum TaskStatus {
+  TASK_STATUS_UNSPECIFIED = 0;
+  TASK_STATUS_TODO = 1;
+  TASK_STATUS_INPROGRESS = 2;
+  TASK_STATUS_DONE = 3;
+}
+
+message Task {
+  string id = 1;
+  string title = 2;
+  TaskStatus status = 3;
+  string created_at = 4;
+  string updated_at = 5;
+}
