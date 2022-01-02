@@ -9,12 +9,12 @@ definitions:
     type: object
   models.TaskResponse:
     properties:
-      completed:
-        type: boolean
       created_at:
         type: string
       id:
         type: string
+      status:
+        type: integer
       title:
         type: string
       updated_at:
@@ -32,7 +32,7 @@ definitions:
   todo.reqStatus:
     properties:
       status:
-        type: boolean
+        type: integer
     type: object
   todo.reqTitle:
     properties:

@@ -98,8 +98,8 @@ func (i *impl) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Tas
 
 	now := time.Now()
 	newTask.ID = primitive.NewObjectIDFromTimestamp(now)
-	newTask.CreatedAt = now
-	newTask.UpdatedAt = now
+	newTask.CreatedAt = primitive.NewDateTimeFromTime(now)
+	newTask.UpdatedAt = primitive.NewDateTimeFromTime(now)
 	coll := i.client.Database(dbName).Collection(collName)
 	_, err = coll.InsertOne(timeout, newTask)
 	if err != nil {
@@ -113,7 +113,7 @@ func (i *impl) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Tas
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	updated.UpdatedAt = time.Now()
+	updated.UpdatedAt = primitive.NewDateTimeFromTime(time.Now())
 	filter := bson.M{"_id": updated.ID}
 	update := bson.M{"$set": updated}
 	coll := i.client.Database(dbName).Collection(collName)

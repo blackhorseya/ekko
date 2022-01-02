@@ -474,14 +474,14 @@ var doc = `{
         "models.TaskResponse": {
             "type": "object",
             "properties": {
-                "completed": {
-                    "type": "boolean"
-                },
                 "created_at": {
                     "type": "string"
                 },
                 "id": {
                     "type": "string"
+                },
+                "status": {
+                    "type": "integer"
                 },
                 "title": {
                     "type": "string"
@@ -509,7 +509,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "status": {
-                    "type": "boolean"
+                    "type": "integer"
                 }
             }
         },
