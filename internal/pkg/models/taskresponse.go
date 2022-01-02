@@ -19,7 +19,7 @@ func NewTaskResponse(t *todo.Task) *TaskResponse {
 		ID:        t.ID.Hex(),
 		Title:     t.Title,
 		Completed: t.Completed,
-		CreatedAt: t.CreatedAt.UTC().Format(rfc3339Mill),
-		UpdatedAt: t.UpdatedAt.UTC().Format(rfc3339Mill),
+		CreatedAt: t.CreatedAt.Time().UTC().Format(rfc3339Mill),
+		UpdatedAt: t.UpdatedAt.Time().UTC().Format(rfc3339Mill),
 	}
 }

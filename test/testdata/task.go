@@ -1,8 +1,6 @@
 package testdata
 
 import (
-	"time"
-
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -16,8 +14,6 @@ var (
 		ID:        TaskOID1,
 		Title:     "task 1",
 		Completed: false,
-		CreatedAt: time.Time{},
-		UpdatedAt: time.Time{},
 	}
 
 	// TaskUpdate1 task update 1
@@ -25,8 +21,6 @@ var (
 		ID:        TaskOID1,
 		Title:     "task 1 update",
 		Completed: true,
-		CreatedAt: time.Time{},
-		UpdatedAt: time.Time{},
 	}
 
 	// TaskCreate1 task create 1
@@ -34,7 +28,5 @@ var (
 		ID:        primitive.ObjectID{},
 		Title:     "task 1",
 		Completed: false,
-		CreatedAt: time.Time{},
-		UpdatedAt: time.Time{},
 	}
 )
