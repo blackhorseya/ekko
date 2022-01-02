@@ -10,6 +10,7 @@ RUN go mod download
 
 COPY cmd ./cmd
 COPY internal ./internal
+COPY pb ./pb
 COPY api ./api
 RUN go build -o app ./cmd/${APP_NAME}
 
