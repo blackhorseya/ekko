@@ -1,11 +1,11 @@
 package todo
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
+	"strings"
 	"testing"
 
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/mocks"
@@ -184,11 +184,6 @@ func (s *handlerSuite) Test_impl_Create() {
 		wantCode int
 	}{
 		{
-			name:     "missing title then 400",
-			args:     args{title: ""},
-			wantCode: 400,
-		},
-		{
 			name: "create task by title then 500",
 			args: args{title: testdata.Task1.Title, mock: func() {
 				s.mock.On("Create", mock.Anything, testdata.Task1.Title).Return(nil, er.ErrCreateTask).Once()
@@ -210,8 +205,10 @@ func (s *handlerSuite) Test_impl_Create() {
 			}
 
 			uri := "/api/v1/tasks"
-			data, _ := json.Marshal(&reqTitle{Title: tt.args.title})
-			req := httptest.NewRequest(http.MethodPost, uri, bytes.NewBuffer(data))
+			val := url.Values{}
+			val.Add("title", tt.args.title)
+			req := httptest.NewRequest(http.MethodPost, uri, strings.NewReader(val.Encode()))
+			req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 			w := httptest.NewRecorder()
 			s.r.ServeHTTP(w, req)
 
@@ -230,7 +227,7 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 
 	type args struct {
 		id     string
-		status int32
+		status string
 		mock   func()
 	}
 	tests := []struct {
@@ -250,14 +247,14 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 		},
 		{
 			name: "update status then 500",
-			args: args{id: testdata.Task1.ID.Hex(), status: int32(3), mock: func() {
+			args: args{id: testdata.Task1.ID.Hex(), status: "3", mock: func() {
 				s.mock.On("UpdateStatus", mock.Anything, testdata.Task1.ID, pb.TaskStatus_TASK_STATUS_DONE).Return(nil, er.ErrUpdateStatusTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
 			name: "update status then 200",
-			args: args{id: testdata.Task1.ID.Hex(), status: int32(3), mock: func() {
+			args: args{id: testdata.Task1.ID.Hex(), status: "3", mock: func() {
 				s.mock.On("UpdateStatus", mock.Anything, testdata.Task1.ID, pb.TaskStatus_TASK_STATUS_DONE).Return(testdata.Task1, nil).Once()
 			}},
 			wantCode: 200,
@@ -270,8 +267,10 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 			}
 
 			uri := fmt.Sprintf("/api/v1/tasks/%v/status", tt.args.id)
-			data, _ := json.Marshal(&reqStatus{Status: tt.args.status})
-			req := httptest.NewRequest(http.MethodPatch, uri, bytes.NewBuffer(data))
+			val := url.Values{}
+			val.Add("status", tt.args.status)
+			req := httptest.NewRequest(http.MethodPatch, uri, strings.NewReader(val.Encode()))
+			req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 			w := httptest.NewRecorder()
 			s.r.ServeHTTP(w, req)
 
@@ -309,11 +308,6 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 			wantCode: 400,
 		},
 		{
-			name:     "missing title then 400",
-			args:     args{id: testdata.Task1.ID.Hex(), title: ""},
-			wantCode: 400,
-		},
-		{
 			name: "change title then 500",
 			args: args{id: testdata.Task1.ID.Hex(), title: "title", mock: func() {
 				s.mock.On("ChangeTitle", mock.Anything, testdata.Task1.ID, "title").Return(nil, er.ErrChangeTitleTask).Once()
@@ -335,8 +329,10 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 			}
 
 			uri := fmt.Sprintf("/api/v1/tasks/%v/title", tt.args.id)
-			data, _ := json.Marshal(&reqTitle{Title: tt.args.title})
-			req := httptest.NewRequest(http.MethodPatch, uri, bytes.NewBuffer(data))
+			val := url.Values{}
+			val.Add("title", tt.args.title)
+			req := httptest.NewRequest(http.MethodPatch, uri, strings.NewReader(val.Encode()))
+			req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 			w := httptest.NewRecorder()
 			s.r.ServeHTTP(w, req)
 
