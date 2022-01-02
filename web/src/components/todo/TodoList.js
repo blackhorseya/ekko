@@ -39,7 +39,7 @@ class TodoList extends React.Component {
 
   handleChangeStatus(id, status) {
     if (id) {
-      this.props.changeStatus(id, !status);
+      this.props.changeStatus(id, status === 3 ? 1 : 3);
     }
   }
 
@@ -92,9 +92,9 @@ class TodoList extends React.Component {
                     {todo.data.map((item, _) =>
                         <ListItem key={item.id} role={undefined} dense button
                                   onClick={() => this.handleChangeStatus(
-                                      item.id, item.completed)}>
+                                      item.id, item.status)}>
                           <ListItemIcon>
-                            {item.completed ? <Close/> : <Check/>}
+                            {item.status === 1 ? <Close/> : <Check/>}
                           </ListItemIcon>
                           <ListItemText id={item.id} primary={item.title}/>
                           <ListItemSecondaryAction>
