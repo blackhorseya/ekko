@@ -483,6 +483,9 @@ var doc = `{
                 "id": {
                     "type": "string"
                 },
+                "status": {
+                    "type": "integer"
+                },
                 "title": {
                     "type": "string"
                 },
