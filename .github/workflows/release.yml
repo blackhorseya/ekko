@@ -7,6 +7,7 @@ on:
 
 jobs:
   test:
+    if: ${{ startsWith(github.event.base_ref, 'refs/heads/release') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
@@ -14,7 +15,7 @@ jobs:
       - name: Setup go
         uses: actions/setup-go@v2
         with:
-          go-version: '1.17'
+          go-version: '^1.17'
       - name: Setup cache
         uses: actions/cache@v2
         with:
@@ -22,23 +23,9 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-      - name: Checkout submodules
-        run: |
-          sed -i 's/git@github.com:/https:\/\/'"${{ secrets.USERNAME }}"':'"${{ secrets.TOKEN }}"'@github.com\//' .gitmodules
-          git submodule update --init --recursive
-      - name: Lint
-        run: |
-          go get -u golang.org/x/lint/golint
-          make lint
-          make report
       - name: Test
         run: |
           make test-unit
-      - name: Send code coverage report
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-
   publish:
     runs-on: ubuntu-latest
     needs:
@@ -74,8 +61,8 @@ jobs:
       - name: Prepare
         run: |
           echo "VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
           helm repo add blackhorseya https://blackhorseya.github.io/helm-charts/
       - name: Deploy
         env:

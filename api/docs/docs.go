@@ -164,7 +164,7 @@ var doc = `{
             "post": {
                 "description": "Create a task",
                 "consumes": [
-                    "application/json"
+                    "application/x-www-form-urlencoded"
                 ],
                 "produces": [
                     "application/json"
@@ -175,13 +175,11 @@ var doc = `{
                 "summary": "Create a task",
                 "parameters": [
                     {
-                        "description": "created task",
-                        "name": "created",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/todo.reqTitle"
-                        }
+                        "type": "string",
+                        "description": "title",
+                        "name": "title",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -332,7 +330,7 @@ var doc = `{
             "patch": {
                 "description": "Update task's status by id",
                 "consumes": [
-                    "application/json"
+                    "application/x-www-form-urlencoded"
                 ],
                 "produces": [
                     "application/json"
@@ -350,13 +348,11 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "description": "updated task",
-                        "name": "updated",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/todo.reqStatus"
-                        }
+                        "type": "integer",
+                        "description": "status",
+                        "name": "status",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -397,7 +393,7 @@ var doc = `{
             "patch": {
                 "description": "Change task's title by id",
                 "consumes": [
-                    "application/json"
+                    "application/x-www-form-urlencoded"
                 ],
                 "produces": [
                     "application/json"
@@ -415,13 +411,11 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "description": "updated task",
-                        "name": "updated",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/todo.reqTitle"
-                        }
+                        "type": "string",
+                        "description": "title",
+                        "name": "title",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -474,14 +468,14 @@ var doc = `{
         "models.TaskResponse": {
             "type": "object",
             "properties": {
-                "completed": {
-                    "type": "boolean"
-                },
                 "created_at": {
                     "type": "string"
                 },
                 "id": {
                     "type": "string"
+                },
+                "status": {
+                    "type": "integer"
                 },
                 "title": {
                     "type": "string"
@@ -501,25 +495,6 @@ var doc = `{
                     "type": "object"
                 },
                 "msg": {
-                    "type": "string"
-                }
-            }
-        },
-        "todo.reqStatus": {
-            "type": "object",
-            "properties": {
-                "status": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "todo.reqTitle": {
-            "type": "object",
-            "required": [
-                "title"
-            ],
-            "properties": {
-                "title": {
                     "type": "string"
                 }
             }

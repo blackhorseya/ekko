@@ -40,4 +40,7 @@ var (
 
 	// ErrEmptyTitle means title must be NOT empty
 	ErrEmptyTitle = newAPPError(http.StatusBadRequest, 40015, "title must be NOT empty")
+
+	// ErrInvalidStatus means status value is invalid
+	ErrInvalidStatus = newAPPError(http.StatusBadRequest, 40016, "status value is invalid")
 )

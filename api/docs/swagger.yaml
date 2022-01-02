@@ -9,12 +9,12 @@ definitions:
     type: object
   models.TaskResponse:
     properties:
-      completed:
-        type: boolean
       created_at:
         type: string
       id:
         type: string
+      status:
+        type: integer
       title:
         type: string
       updated_at:
@@ -28,18 +28,6 @@ definitions:
         type: object
       msg:
         type: string
-    type: object
-  todo.reqStatus:
-    properties:
-      status:
-        type: boolean
-    type: object
-  todo.reqTitle:
-    properties:
-      title:
-        type: string
-    required:
-    - title
     type: object
 info:
   contact:
@@ -138,15 +126,14 @@ paths:
       - Tasks
     post:
       consumes:
-      - application/json
+      - application/x-www-form-urlencoded
       description: Create a task
       parameters:
-      - description: created task
-        in: body
-        name: created
+      - description: title
+        in: formData
+        name: title
         required: true
-        schema:
-          $ref: '#/definitions/todo.reqTitle'
+        type: string
       produces:
       - application/json
       responses:
@@ -243,7 +230,7 @@ paths:
   /v1/tasks/{id}/status:
     patch:
       consumes:
-      - application/json
+      - application/x-www-form-urlencoded
       description: Update task's status by id
       parameters:
       - description: ID of task
@@ -251,12 +238,11 @@ paths:
         name: id
         required: true
         type: string
-      - description: updated task
-        in: body
-        name: updated
+      - description: status
+        in: formData
+        name: status
         required: true
-        schema:
-          $ref: '#/definitions/todo.reqStatus'
+        type: integer
       produces:
       - application/json
       responses:
@@ -283,7 +269,7 @@ paths:
   /v1/tasks/{id}/title:
     patch:
       consumes:
-      - application/json
+      - application/x-www-form-urlencoded
       description: Change task's title by id
       parameters:
       - description: ID of task
@@ -291,12 +277,11 @@ paths:
         name: id
         required: true
         type: string
-      - description: updated task
-        in: body
-        name: updated
+      - description: title
+        in: formData
+        name: title
         required: true
-        schema:
-          $ref: '#/definitions/todo.reqTitle'
+        type: string
       produces:
       - application/json
       responses:

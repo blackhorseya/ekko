@@ -9,6 +9,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/response"
 	"github.com/blackhorseya/todo-app/internal/pkg/models"
+	"github.com/blackhorseya/todo-app/pb"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
@@ -115,9 +116,9 @@ func (i *impl) List(c *gin.Context) {
 // @Summary Create a task
 // @Description Create a task
 // @Tags Tasks
-// @Accept application/json
+// @Accept application/x-www-form-urlencoded
 // @Produce application/json
-// @Param created body reqTitle true "created task"
+// @Param title formData string true "title"
 // @Success 201 {object} response.Response{data=models.TaskResponse}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
@@ -125,14 +126,9 @@ func (i *impl) List(c *gin.Context) {
 func (i *impl) Create(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
 
-	var data *reqTitle
-	if err := c.ShouldBindJSON(&data); err != nil {
-		i.logger.Error(er.ErrBindTitle.Error(), zap.Error(err))
-		_ = c.Error(er.ErrBindTitle)
-		return
-	}
+	title := c.PostForm("title")
 
-	ret, err := i.biz.Create(ctx, data.Title)
+	ret, err := i.biz.Create(ctx, title)
 	if err != nil {
 		_ = c.Error(err)
 		return
@@ -145,10 +141,10 @@ func (i *impl) Create(c *gin.Context) {
 // @Summary Update task's status by id
 // @Description Update task's status by id
 // @Tags Tasks
-// @Accept application/json
+// @Accept application/x-www-form-urlencoded
 // @Produce application/json
 // @Param id path string true "ID of task"
-// @Param updated body reqStatus true "updated task"
+// @Param status formData integer true "status"
 // @Success 200 {object} response.Response{data=models.TaskResponse}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
@@ -171,15 +167,14 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 		return
 	}
 
-	var data *reqStatus
-	err = c.ShouldBindJSON(&data)
+	statusStr := c.PostForm("status")
+	statusVal, err := strconv.Atoi(statusStr)
 	if err != nil {
-		i.logger.Error(er.ErrBindStatus.Error(), zap.Error(err))
-		_ = c.Error(er.ErrBindStatus)
+		_ = c.Error(er.ErrInvalidStatus)
 		return
 	}
 
-	ret, err := i.biz.UpdateStatus(ctx, id, data.Status)
+	ret, err := i.biz.UpdateStatus(ctx, id, pb.TaskStatus(int32(statusVal)))
 	if err != nil {
 		_ = c.Error(err)
 		return
@@ -192,10 +187,10 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 // @Summary Change task's title by id
 // @Description Change task's title by id
 // @Tags Tasks
-// @Accept application/json
+// @Accept application/x-www-form-urlencoded
 // @Produce application/json
 // @Param id path string true "ID of task"
-// @Param updated body reqTitle true "updated task"
+// @Param title formData string true "title"
 // @Success 200 {object} response.Response{data=models.TaskResponse}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
@@ -218,15 +213,9 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 		return
 	}
 
-	var data *reqTitle
-	err = c.ShouldBindJSON(&data)
-	if err != nil {
-		i.logger.Error(er.ErrBindTitle.Error(), zap.Error(err))
-		_ = c.Error(er.ErrBindTitle)
-		return
-	}
+	title := c.PostForm("title")
 
-	ret, err := i.biz.ChangeTitle(ctx, id, data.Title)
+	ret, err := i.biz.ChangeTitle(ctx, id, title)
 	if err != nil {
 		_ = c.Error(err)
 		return
