@@ -6,6 +6,8 @@ import (
 	contextx "github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	mock "github.com/stretchr/testify/mock"
 
+	pb "github.com/blackhorseya/todo-app/pb"
+
 	primitive "go.mongodb.org/mongo-driver/bson/primitive"
 
 	todo "github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
@@ -130,11 +132,11 @@ func (_m *IBiz) List(ctx contextx.Contextx, start int, end int) ([]*todo.Task, i
 }
 
 // UpdateStatus provides a mock function with given fields: ctx, id, status
-func (_m *IBiz) UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status bool) (*todo.Task, error) {
+func (_m *IBiz) UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status pb.TaskStatus) (*todo.Task, error) {
 	ret := _m.Called(ctx, id, status)
 
 	var r0 *todo.Task
-	if rf, ok := ret.Get(0).(func(contextx.Contextx, primitive.ObjectID, bool) *todo.Task); ok {
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, primitive.ObjectID, pb.TaskStatus) *todo.Task); ok {
 		r0 = rf(ctx, id, status)
 	} else {
 		if ret.Get(0) != nil {
@@ -143,7 +145,7 @@ func (_m *IBiz) UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, statu
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(contextx.Contextx, primitive.ObjectID, bool) error); ok {
+	if rf, ok := ret.Get(1).(func(contextx.Contextx, primitive.ObjectID, pb.TaskStatus) error); ok {
 		r1 = rf(ctx, id, status)
 	} else {
 		r1 = ret.Error(1)

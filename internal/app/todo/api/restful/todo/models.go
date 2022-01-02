@@ -9,5 +9,5 @@ type reqTitle struct {
 }
 
 type reqStatus struct {
-	Status bool `json:"status"`
+	Status int32 `json:"status"`
 }

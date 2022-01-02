@@ -9,7 +9,6 @@ import (
 type Task struct {
 	ID        primitive.ObjectID `json:"id" bson:"_id"`
 	Title     string             `json:"title" bson:"title"`
-	Completed bool               `json:"completed" bson:"completed"`
 	Status    pb.TaskStatus      `json:"status" bson:"status"`
 	CreatedAt primitive.DateTime `json:"created_at" bson:"created_at"`
 	UpdatedAt primitive.DateTime `json:"updated_at" bson:"updated_at"`

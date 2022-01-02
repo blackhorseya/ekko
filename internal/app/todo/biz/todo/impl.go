@@ -5,6 +5,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/pb"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 )
@@ -78,8 +79,8 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err
 	}
 
 	newTask := &todo.Task{
-		Title:     title,
-		Completed: false,
+		Title:  title,
+		Status: pb.TaskStatus_TASK_STATUS_TODO,
 	}
 	ret, err := i.repo.Create(ctx, newTask)
 	if err != nil {
@@ -90,7 +91,7 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err
 	return ret, nil
 }
 
-func (i *impl) UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status bool) (task *todo.Task, err error) {
+func (i *impl) UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status pb.TaskStatus) (task *todo.Task, err error) {
 	if id == primitive.NilObjectID {
 		i.logger.Error(er.ErrEmptyID.Error())
 		return nil, er.ErrEmptyID
@@ -106,7 +107,7 @@ func (i *impl) UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status
 		return nil, er.ErrTaskNotExists
 	}
 
-	found.Completed = status
+	found.Status = status
 	ret, err := i.repo.Update(ctx, found)
 	if err != nil {
 		i.logger.Error(er.ErrUpdateStatusTask.Error(), zap.Error(err), zap.Any("updated", found))

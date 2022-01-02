@@ -4,6 +4,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/pb"
 	"github.com/google/wire"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -20,7 +21,7 @@ type IBiz interface {
 	Create(ctx contextx.Contextx, title string) (task *todo.Task, err error)
 
 	// UpdateStatus serve caller to update the task's status by id
-	UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status bool) (task *todo.Task, err error)
+	UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status pb.TaskStatus) (task *todo.Task, err error)
 
 	// ChangeTitle serve caller to change the task's title by id
 	ChangeTitle(ctx contextx.Contextx, id primitive.ObjectID, title string) (task *todo.Task, err error)
