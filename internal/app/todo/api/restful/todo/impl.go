@@ -9,6 +9,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/response"
 	"github.com/blackhorseya/todo-app/internal/pkg/models"
+	"github.com/blackhorseya/todo-app/pb"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
@@ -179,7 +180,8 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 		return
 	}
 
-	ret, err := i.biz.UpdateStatus(ctx, id, data.Status)
+	status := pb.TaskStatus(data.Status)
+	ret, err := i.biz.UpdateStatus(ctx, id, status)
 	if err != nil {
 		_ = c.Error(err)
 		return

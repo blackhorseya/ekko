@@ -7,6 +7,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo/mocks"
 	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/pb"
 	"github.com/blackhorseya/todo-app/test/testdata"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/mock"
@@ -155,7 +156,7 @@ func (s *bizSuite) Test_impl_Create() {
 func (s *bizSuite) Test_impl_UpdateStatus() {
 	type args struct {
 		id     primitive.ObjectID
-		status bool
+		status pb.TaskStatus
 		mock   func()
 	}
 	tests := []struct {
@@ -188,11 +189,10 @@ func (s *bizSuite) Test_impl_UpdateStatus() {
 		},
 		{
 			name: "update status then error",
-			args: args{id: testdata.TaskOID1, status: true, mock: func() {
+			args: args{id: testdata.TaskOID1, status: pb.TaskStatus_TASK_STATUS_DONE, mock: func() {
 				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(testdata.Task1, nil).Once()
 
 				updated := testdata.Task1
-				updated.Completed = true
 				s.mock.On("Update", mock.Anything, updated).Return(nil, errors.New("error")).Once()
 			}},
 			wantTask: nil,
@@ -200,11 +200,10 @@ func (s *bizSuite) Test_impl_UpdateStatus() {
 		},
 		{
 			name: "update status then success",
-			args: args{id: testdata.TaskOID1, status: true, mock: func() {
+			args: args{id: testdata.TaskOID1, status: pb.TaskStatus_TASK_STATUS_DONE, mock: func() {
 				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(testdata.Task1, nil).Once()
 
 				updated := testdata.Task1
-				updated.Completed = true
 				s.mock.On("Update", mock.Anything, updated).Return(testdata.Task1, nil).Once()
 			}},
 			wantTask: testdata.Task1,

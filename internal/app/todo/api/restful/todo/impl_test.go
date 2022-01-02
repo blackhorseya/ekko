@@ -12,6 +12,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http/middlewares"
+	"github.com/blackhorseya/todo-app/pb"
 	"github.com/blackhorseya/todo-app/test/testdata"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
@@ -229,7 +230,7 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 
 	type args struct {
 		id     string
-		status bool
+		status int32
 		mock   func()
 	}
 	tests := []struct {
@@ -249,15 +250,15 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 		},
 		{
 			name: "update status then 500",
-			args: args{id: testdata.Task1.ID.Hex(), status: false, mock: func() {
-				s.mock.On("UpdateStatus", mock.Anything, testdata.Task1.ID, false).Return(nil, er.ErrUpdateStatusTask).Once()
+			args: args{id: testdata.Task1.ID.Hex(), status: int32(3), mock: func() {
+				s.mock.On("UpdateStatus", mock.Anything, testdata.Task1.ID, pb.TaskStatus_TASK_STATUS_DONE).Return(nil, er.ErrUpdateStatusTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
 			name: "update status then 200",
-			args: args{id: testdata.Task1.ID.Hex(), status: false, mock: func() {
-				s.mock.On("UpdateStatus", mock.Anything, testdata.Task1.ID, false).Return(testdata.Task1, nil).Once()
+			args: args{id: testdata.Task1.ID.Hex(), status: int32(3), mock: func() {
+				s.mock.On("UpdateStatus", mock.Anything, testdata.Task1.ID, pb.TaskStatus_TASK_STATUS_DONE).Return(testdata.Task1, nil).Once()
 			}},
 			wantCode: 200,
 		},
