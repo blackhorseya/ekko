@@ -1,10 +1,7 @@
 const endpoint = `${process.env.REACT_APP_API_ENDPOINT || ''}`;
 
 export const todoService = {
-  list,
-  add,
-  remove,
-  changeStatus,
+  list, add, remove, changeStatus,
 };
 
 function list(start, end) {
@@ -12,7 +9,8 @@ function list(start, end) {
     method: 'GET',
   };
 
-  return fetch(`${endpoint}/api/v1/tasks?start=${start}&end=${end}`, opts).then((resp) => {
+  return fetch(`${endpoint}/api/v1/tasks?start=${start}&end=${end}`, opts).
+      then((resp) => {
         return resp.json().then(body => {
           if (!resp.ok) {
             const error = (body && body.msg) || resp.statusText;
@@ -20,8 +18,7 @@ function list(start, end) {
           }
 
           return {
-            data: body.data,
-            total: resp.headers.get('X-Total-Count'),
+            data: body.data, total: resp.headers.get('X-Total-Count'),
           };
         });
       });
@@ -30,7 +27,8 @@ function list(start, end) {
 function add(task) {
   const opts = {
     method: 'POST',
-    body: JSON.stringify(task),
+    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+    body: new URLSearchParams({'title': task.title}),
   };
 
   return fetch(`${endpoint}/api/v1/tasks`, opts).then(handlerResp);
@@ -58,7 +56,8 @@ function remove(id) {
 function changeStatus(id, status) {
   const opts = {
     method: 'PATCH',
-    body: JSON.stringify({status: status}),
+    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+    body: new URLSearchParams({'status': status}),
   };
 
   return fetch(`${endpoint}/api/v1/tasks/${id}/status`, opts).then(handlerResp);
