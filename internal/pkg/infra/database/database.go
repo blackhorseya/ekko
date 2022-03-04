@@ -3,7 +3,7 @@ package database
 import (
 	"time"
 
-	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
+	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/google/wire"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"

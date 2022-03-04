@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/blackhorseya/gocommon/pkg/ginhttp"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/mocks"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
-	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http/middlewares"
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/blackhorseya/todo-app/test/testdata"
 	"github.com/gin-gonic/gin"
@@ -32,8 +32,8 @@ func (s *handlerSuite) SetupTest() {
 
 	gin.SetMode(gin.TestMode)
 	s.r = gin.New()
-	s.r.Use(middlewares.ContextMiddleware())
-	s.r.Use(middlewares.ErrorMiddleware())
+	s.r.Use(ginhttp.AddContextx())
+	s.r.Use(ginhttp.HandleError())
 
 	s.mock = new(mocks.IBiz)
 	handler, err := CreateIHandler(logger, s.mock)

@@ -3,10 +3,13 @@ package health
 import (
 	"net/http"
 
+	"github.com/blackhorseya/gocommon/pkg/contextx"
+	"github.com/blackhorseya/gocommon/pkg/response"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health"
-	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/response"
 	"github.com/gin-gonic/gin"
+
+	// import entity
+	_ "github.com/blackhorseya/gocommon/pkg/er"
 )
 
 type impl struct {
@@ -36,7 +39,7 @@ func (i *impl) Readiness(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, response.OK)
+	c.JSON(http.StatusOK, response.OK.WithData("success"))
 }
 
 // Liveness to know when to restart an application
@@ -57,5 +60,5 @@ func (i *impl) Liveness(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, response.OK)
+	c.JSON(http.StatusOK, response.OK.WithData("success"))
 }

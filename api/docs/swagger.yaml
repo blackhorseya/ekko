@@ -4,6 +4,7 @@ definitions:
     properties:
       code:
         type: integer
+      data: {}
       msg:
         type: string
     type: object
@@ -24,8 +25,7 @@ definitions:
     properties:
       code:
         type: integer
-      data:
-        type: object
+      data: {}
       msg:
         type: string
     type: object

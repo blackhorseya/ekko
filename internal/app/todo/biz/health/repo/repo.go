@@ -3,7 +3,7 @@ package repo
 import (
 	"time"
 
-	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
+	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/google/wire"
 )
 

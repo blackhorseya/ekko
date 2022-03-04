@@ -4,15 +4,18 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/blackhorseya/gocommon/pkg/contextx"
+	"github.com/blackhorseya/gocommon/pkg/response"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo"
-	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/response"
 	"github.com/blackhorseya/todo-app/internal/pkg/models"
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
+
+	// import entity
+	_ "github.com/blackhorseya/gocommon/pkg/er"
 )
 
 type impl struct {

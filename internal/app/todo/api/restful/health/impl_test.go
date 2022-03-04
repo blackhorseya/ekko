@@ -6,9 +6,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/blackhorseya/gocommon/pkg/ginhttp"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/mocks"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
-	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http/middlewares"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -24,8 +24,8 @@ type handlerSuite struct {
 func (s *handlerSuite) SetupTest() {
 	gin.SetMode(gin.TestMode)
 	s.r = gin.New()
-	s.r.Use(middlewares.ContextMiddleware())
-	s.r.Use(middlewares.ErrorMiddleware())
+	s.r.Use(ginhttp.AddContextx())
+	s.r.Use(ginhttp.HandleError())
 
 	s.mock = new(mocks.IBiz)
 	if handler, err := CreateIHandler(s.mock); err != nil {

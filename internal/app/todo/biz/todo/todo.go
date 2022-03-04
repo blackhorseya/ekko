@@ -2,7 +2,7 @@ package todo
 
 import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
-	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
+	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/google/wire"

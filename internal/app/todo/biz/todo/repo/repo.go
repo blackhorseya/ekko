@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
+	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/google/wire"
 	"go.mongodb.org/mongo-driver/bson/primitive"
