@@ -1,12 +1,13 @@
 package health
 
 import (
-	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo"
 	"github.com/blackhorseya/gocommon/pkg/contextx"
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo"
 	"github.com/google/wire"
 )
 
 // IBiz describe health business service function
+//go:generate mockery --name=IBiz
 type IBiz interface {
 	Readiness(ctx contextx.Contextx) (ok bool, err error)
 	Liveness(ctx contextx.Contextx) (ok bool, err error)

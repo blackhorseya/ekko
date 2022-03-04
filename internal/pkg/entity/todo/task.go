@@ -15,6 +15,7 @@ type Task struct {
 	UpdatedAt primitive.DateTime `json:"updated_at" bson:"updated_at"`
 }
 
+// NewTaskResponse return *pb.Task
 func NewTaskResponse(t *Task) *pb.Task {
 	return &pb.Task{
 		Id:        t.ID.Hex(),

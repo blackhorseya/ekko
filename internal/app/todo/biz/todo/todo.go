@@ -1,8 +1,8 @@
 package todo
 
 import (
-	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/blackhorseya/gocommon/pkg/contextx"
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/google/wire"
@@ -10,6 +10,7 @@ import (
 )
 
 // IBiz describe todo business service function
+//go:generate mockery --name=IBiz
 type IBiz interface {
 	// GetByID serve caller to given task's id to get a task
 	GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo.Task, err error)

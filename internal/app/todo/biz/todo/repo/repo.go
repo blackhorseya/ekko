@@ -8,6 +8,7 @@ import (
 )
 
 // IRepo declare repository service function
+//go:generate mockery --name=IRepo
 type IRepo interface {
 	// GetByID serve caller to get a task by id
 	GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo.Task, err error)

@@ -8,6 +8,7 @@ import (
 )
 
 // IRepo is a repo to health Business
+//go:generate mockery --name=IRepo
 type IRepo interface {
 	Ping(ctx contextx.Contextx, timeout time.Duration) error
 }
