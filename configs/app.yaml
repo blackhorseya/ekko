@@ -1,13 +1,12 @@
 app:
   name: todo
-  nodeID: 1
 
 http:
-  host: ""
   port: 8080
 
 log:
-  level: "debug"
+  encoding: console
+  level: debug
 
 db:
   debug: true
