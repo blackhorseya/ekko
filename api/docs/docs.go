@@ -132,7 +132,7 @@ var doc = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.TaskResponse"
+                                                "$ref": "#/definitions/pb.Task"
                                             }
                                         }
                                     }
@@ -193,7 +193,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.TaskResponse"
+                                            "$ref": "#/definitions/pb.Task"
                                         }
                                     }
                                 }
@@ -249,7 +249,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.TaskResponse"
+                                            "$ref": "#/definitions/pb.Task"
                                         }
                                     }
                                 }
@@ -298,10 +298,22 @@ var doc = `{
                     }
                 ],
                 "responses": {
-                    "204": {
-                        "description": "No Content",
+                    "200": {
+                        "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -366,7 +378,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.TaskResponse"
+                                            "$ref": "#/definitions/pb.Task"
                                         }
                                     }
                                 }
@@ -429,7 +441,7 @@ var doc = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.TaskResponse"
+                                            "$ref": "#/definitions/pb.Task"
                                         }
                                     }
                                 }
@@ -465,7 +477,7 @@ var doc = `{
                 }
             }
         },
-        "models.TaskResponse": {
+        "pb.Task": {
             "type": "object",
             "properties": {
                 "created_at": {

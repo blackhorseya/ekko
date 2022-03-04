@@ -376,11 +376,11 @@ func (s *handlerSuite) Test_impl_Delete() {
 			wantCode: 500,
 		},
 		{
-			name: "delete task by id then 204",
+			name: "delete task by id then 200",
 			args: args{id: testdata.Task1.ID.Hex(), mock: func() {
 				s.mock.On("Delete", mock.Anything, testdata.Task1.ID).Return(nil).Once()
 			}},
-			wantCode: 204,
+			wantCode: 200,
 		},
 	}
 	for _, tt := range tests {

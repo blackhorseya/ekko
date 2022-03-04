@@ -8,7 +8,7 @@ definitions:
       msg:
         type: string
     type: object
-  models.TaskResponse:
+  pb.Task:
     properties:
       created_at:
         type: string
@@ -106,7 +106,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/models.TaskResponse'
+                    $ref: '#/definitions/pb.Task'
                   type: array
               type: object
         "400":
@@ -144,7 +144,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/models.TaskResponse'
+                  $ref: '#/definitions/pb.Task'
               type: object
         "400":
           description: Bad Request
@@ -171,10 +171,15 @@ paths:
       produces:
       - application/json
       responses:
-        "204":
-          description: No Content
+        "200":
+          description: OK
           schema:
-            $ref: '#/definitions/response.Response'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -210,7 +215,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/models.TaskResponse'
+                  $ref: '#/definitions/pb.Task'
               type: object
         "400":
           description: Bad Request
@@ -253,7 +258,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/models.TaskResponse'
+                  $ref: '#/definitions/pb.Task'
               type: object
         "400":
           description: Bad Request
@@ -292,7 +297,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/models.TaskResponse'
+                  $ref: '#/definitions/pb.Task'
               type: object
         "400":
           description: Bad Request
