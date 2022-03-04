@@ -1,4 +1,4 @@
-# TodoList List
+# Todo List
 
 [![Build](https://github.com/blackhorseya/todo-app/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/blackhorseya/todo-app/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/blackhorseya/todo-app/branch/main/graph/badge.svg?token=SV4V6G6QZJ)](https://codecov.io/gh/blackhorseya/todo-app)
@@ -22,7 +22,7 @@ practice TodoList application using `golang`
 
 ## Live Preview
 
-[Example](https://todo.seancheng.space)
+[Demo](https://todo.seancheng.space)
 
 ## Functional
 
@@ -62,8 +62,7 @@ practice TodoList application using `golang`
 - Terraform
 - Helm 3
 
-### CI/CD
+### CI CD
 
-- [Travis CI](https://travis-ci.com)
+- GitHub Action
 - [Codecov](https://codecov.io/)
-- [Codacy](https://www.codacy.com/)
