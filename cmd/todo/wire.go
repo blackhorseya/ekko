@@ -4,13 +4,13 @@
 package main
 
 import (
+	"github.com/blackhorseya/gocommon/pkg/config"
+	"github.com/blackhorseya/gocommon/pkg/log"
 	"github.com/blackhorseya/todo-app/internal/app/todo"
 	"github.com/blackhorseya/todo-app/internal/app/todo/api/restful"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz"
 	"github.com/blackhorseya/todo-app/internal/pkg/app"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/config"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/database"
-	"github.com/blackhorseya/todo-app/internal/pkg/infra/log"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http"
 	"github.com/google/wire"
 )

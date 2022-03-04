@@ -1,22 +1,16 @@
+//go:build wireinject
 // +build wireinject
 
 package repo
 
 import (
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/config"
-	"github.com/blackhorseya/todo-app/internal/pkg/infra/database"
-	"github.com/blackhorseya/todo-app/internal/pkg/infra/log"
 	"github.com/google/wire"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.uber.org/zap"
 )
 
-var testProviderSet = wire.NewSet(
-	log.ProviderSet,
-	config.ProviderSet,
-	database.ProviderSet,
-	NewImpl,
-)
+var testProviderSet = wire.NewSet(NewImpl)
 
-// CreateIRepo serve caller to create an IRepo
-func CreateIRepo(path string) (IRepo, error) {
+func CreateIRepo(logger *zap.Logger, client *mongo.Client) (IRepo, error) {
 	panic(wire.Build(testProviderSet))
 }

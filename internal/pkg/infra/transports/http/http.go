@@ -5,10 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
-	"github.com/blackhorseya/todo-app/internal/pkg/base/netutil"
-	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http/middlewares"
-	"github.com/gin-contrib/cors"
+	"github.com/blackhorseya/gocommon/pkg/contextx"
+	"github.com/blackhorseya/gocommon/pkg/ginhttp"
+	"github.com/blackhorseya/gocommon/pkg/utils/netutil"
 	"github.com/gin-contrib/static"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
@@ -59,20 +58,14 @@ func NewRouter(o *Options, logger *zap.Logger, init InitHandlers) *gin.Engine {
 
 	r := gin.New()
 
-	defaultCORS := cors.DefaultConfig()
-	defaultCORS.AllowAllOrigins = true
-	defaultCORS.AddExposeHeaders("X-Total-Count")
-
-	r.Use(cors.New(defaultCORS))
-	r.Use(middlewares.ContextMiddleware())
+	r.Use(ginhttp.AddCors())
 	r.Use(gin.Recovery())
 	r.Use(ginzap.Ginzap(logger, time.RFC3339, true))
 	r.Use(ginzap.RecoveryWithZap(logger, true))
-	r.Use(middlewares.ErrorMiddleware())
-	// r.Use(rate.IPRateLimitMiddleware(1, 60))
+	r.Use(ginhttp.AddContextx())
+	r.Use(ginhttp.HandleError())
 
 	r.Use(static.Serve("/", static.LocalFile("./web/build", true)))
-	// r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	init(r)
 

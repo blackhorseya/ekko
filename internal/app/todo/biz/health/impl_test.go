@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo/mocks"
-	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
+	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"

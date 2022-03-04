@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/blackhorseya/gocommon/pkg/ginhttp"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/mocks"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
-	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http/middlewares"
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/blackhorseya/todo-app/test/testdata"
 	"github.com/gin-gonic/gin"
@@ -32,8 +32,8 @@ func (s *handlerSuite) SetupTest() {
 
 	gin.SetMode(gin.TestMode)
 	s.r = gin.New()
-	s.r.Use(middlewares.ContextMiddleware())
-	s.r.Use(middlewares.ErrorMiddleware())
+	s.r.Use(ginhttp.AddContextx())
+	s.r.Use(ginhttp.HandleError())
 
 	s.mock = new(mocks.IBiz)
 	handler, err := CreateIHandler(logger, s.mock)
@@ -376,11 +376,11 @@ func (s *handlerSuite) Test_impl_Delete() {
 			wantCode: 500,
 		},
 		{
-			name: "delete task by id then 204",
+			name: "delete task by id then 200",
 			args: args{id: testdata.Task1.ID.Hex(), mock: func() {
 				s.mock.On("Delete", mock.Anything, testdata.Task1.ID).Return(nil).Once()
 			}},
-			wantCode: 204,
+			wantCode: 200,
 		},
 	}
 	for _, tt := range tests {

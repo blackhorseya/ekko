@@ -117,7 +117,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/models.TaskResponse"
+                                                "$ref": "#/definitions/pb.Task"
                                             }
                                         }
                                     }
@@ -178,7 +178,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.TaskResponse"
+                                            "$ref": "#/definitions/pb.Task"
                                         }
                                     }
                                 }
@@ -234,7 +234,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.TaskResponse"
+                                            "$ref": "#/definitions/pb.Task"
                                         }
                                     }
                                 }
@@ -283,10 +283,22 @@
                     }
                 ],
                 "responses": {
-                    "204": {
-                        "description": "No Content",
+                    "200": {
+                        "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -351,7 +363,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.TaskResponse"
+                                            "$ref": "#/definitions/pb.Task"
                                         }
                                     }
                                 }
@@ -414,7 +426,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.TaskResponse"
+                                            "$ref": "#/definitions/pb.Task"
                                         }
                                     }
                                 }
@@ -444,12 +456,13 @@
                 "code": {
                     "type": "integer"
                 },
+                "data": {},
                 "msg": {
                     "type": "string"
                 }
             }
         },
-        "models.TaskResponse": {
+        "pb.Task": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -475,9 +488,7 @@
                 "code": {
                     "type": "integer"
                 },
-                "data": {
-                    "type": "object"
-                },
+                "data": {},
                 "msg": {
                     "type": "string"
                 }

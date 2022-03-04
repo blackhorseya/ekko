@@ -11,7 +11,6 @@ import (
 
 var testProviderSet = wire.NewSet(NewImpl)
 
-// CreateIRepo serve caller to create an IRepo
 func CreateIRepo(logger *zap.Logger, client *mongo.Client) (IRepo, error) {
 	panic(wire.Build(testProviderSet))
 }

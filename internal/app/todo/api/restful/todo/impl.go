@@ -4,15 +4,18 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/blackhorseya/gocommon/pkg/contextx"
+	"github.com/blackhorseya/gocommon/pkg/response"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo"
-	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/response"
-	"github.com/blackhorseya/todo-app/internal/pkg/models"
+	todoE "github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
+
+	// import entity
+	_ "github.com/blackhorseya/gocommon/pkg/er"
 )
 
 type impl struct {
@@ -35,7 +38,7 @@ func NewImpl(logger *zap.Logger, biz todo.IBiz) IHandler {
 // @Accept application/json
 // @Produce application/json
 // @Param id path string true "ID of task"
-// @Success 200 {object} response.Response{data=models.TaskResponse}
+// @Success 200 {object} response.Response{data=pb.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
 // @Failure 500 {object} er.APPError
@@ -64,7 +67,7 @@ func (i *impl) GetByID(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, response.OK.WithData(models.NewTaskResponse(ret)))
+	c.JSON(http.StatusOK, response.OK.WithData(todoE.NewTaskResponse(ret)))
 }
 
 // List
@@ -75,7 +78,7 @@ func (i *impl) GetByID(c *gin.Context) {
 // @Produce application/json
 // @Param start query integer false "start" default(0)
 // @Param end query integer false "end" default(10)
-// @Success 200 {object} response.Response{data=[]models.TaskResponse}
+// @Success 200 {object} response.Response{data=[]pb.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
 // @Failure 500 {object} er.APPError
@@ -103,9 +106,9 @@ func (i *impl) List(c *gin.Context) {
 		return
 	}
 
-	var ret []*models.TaskResponse
+	var ret []*pb.Task
 	for _, task := range tasks {
-		ret = append(ret, models.NewTaskResponse(task))
+		ret = append(ret, todoE.NewTaskResponse(task))
 	}
 
 	c.Header("X-Total-Count", strconv.Itoa(total))
@@ -119,7 +122,7 @@ func (i *impl) List(c *gin.Context) {
 // @Accept application/x-www-form-urlencoded
 // @Produce application/json
 // @Param title formData string true "title"
-// @Success 201 {object} response.Response{data=models.TaskResponse}
+// @Success 201 {object} response.Response{data=pb.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks [post]
@@ -134,7 +137,7 @@ func (i *impl) Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, response.OK.WithData(models.NewTaskResponse(ret)))
+	c.JSON(http.StatusCreated, response.OK.WithData(todoE.NewTaskResponse(ret)))
 }
 
 // UpdateStatus
@@ -145,7 +148,7 @@ func (i *impl) Create(c *gin.Context) {
 // @Produce application/json
 // @Param id path string true "ID of task"
 // @Param status formData integer true "status"
-// @Success 200 {object} response.Response{data=models.TaskResponse}
+// @Success 200 {object} response.Response{data=pb.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks/{id}/status [patch]
@@ -180,7 +183,7 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, response.OK.WithData(models.NewTaskResponse(ret)))
+	c.JSON(http.StatusOK, response.OK.WithData(todoE.NewTaskResponse(ret)))
 }
 
 // ChangeTitle
@@ -191,7 +194,7 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 // @Produce application/json
 // @Param id path string true "ID of task"
 // @Param title formData string true "title"
-// @Success 200 {object} response.Response{data=models.TaskResponse}
+// @Success 200 {object} response.Response{data=pb.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 500 {object} er.APPError
 // @Router /v1/tasks/{id}/title [patch]
@@ -221,7 +224,7 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, response.OK.WithData(models.NewTaskResponse(ret)))
+	c.JSON(http.StatusOK, response.OK.WithData(todoE.NewTaskResponse(ret)))
 }
 
 // Delete
@@ -231,7 +234,7 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 // @Accept application/json
 // @Produce application/json
 // @Param id path string true "ID of task"
-// @Success 204 {object} response.Response
+// @Success 200 {object} response.Response{data=string}
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
 // @Failure 500 {object} er.APPError
@@ -260,5 +263,5 @@ func (i *impl) Delete(c *gin.Context) {
 		return
 	}
 
-	c.Status(http.StatusNoContent)
+	c.JSON(http.StatusOK, response.OK.WithData(req.ID))
 }
