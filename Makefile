@@ -72,7 +72,7 @@ deploy:
 	--set image.tag=$(VERSION)
 
 .PHONY: gen
-gen: gen-wire gen-swagger gen-pb
+gen: gen-wire gen-swagger gen-pb gen-mocks
 
 .PHONY: gen-pb
 gen-pb:
@@ -86,6 +86,10 @@ gen-wire:
 .PHONY: gen-swagger
 gen-swagger:
 	@swag init -g cmd/$(APP_NAME)/main.go --parseInternal --parseDependency --parseDepth 1 -o api/docs
+
+.PHONY: gen-mocks # generate mocks code via mockery
+gen-mocks:
+	@go generate -x ./...
 
 .PHONY: migrate-up
 migrate-up:

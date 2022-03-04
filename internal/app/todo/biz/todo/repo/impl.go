@@ -35,23 +35,19 @@ func (i *impl) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
+	filter := bson.M{"_id": id}
+	var ret todo.Task
 	coll := i.client.Database(dbName).Collection(collName)
-	res := coll.FindOne(timeout, bson.M{"_id": id})
-	if res.Err() != nil {
-		if res.Err() == mongo.ErrNoDocuments {
+	err = coll.FindOne(timeout, filter).Decode(&ret)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
 			return nil, nil
 		}
 
-		return nil, res.Err()
-	}
-
-	var ret *todo.Task
-	err = res.Decode(&ret)
-	if err != nil {
 		return nil, err
 	}
 
-	return ret, nil
+	return &ret, nil
 }
 
 func (i *impl) List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Task, err error) {
@@ -66,14 +62,13 @@ func (i *impl) List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Tas
 	defer cur.Close(timeout)
 
 	var ret []*todo.Task
-	for cur.Next(timeout) {
-		var task *todo.Task
-		err := cur.Decode(&task)
-		if err != nil {
-			continue
+	err = cur.All(timeout, &ret)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, nil
 		}
 
-		ret = append(ret, task)
+		return nil, err
 	}
 
 	return ret, nil
@@ -97,14 +92,16 @@ func (i *impl) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Tas
 	defer cancel()
 
 	now := time.Now()
-	newTask.ID = primitive.NewObjectIDFromTimestamp(now)
 	newTask.CreatedAt = primitive.NewDateTimeFromTime(now)
 	newTask.UpdatedAt = primitive.NewDateTimeFromTime(now)
+
 	coll := i.client.Database(dbName).Collection(collName)
-	_, err = coll.InsertOne(timeout, newTask)
+	res, err := coll.InsertOne(timeout, newTask)
 	if err != nil {
 		return nil, err
 	}
+
+	newTask.ID = res.InsertedID.(primitive.ObjectID)
 
 	return newTask, nil
 }
@@ -114,15 +111,17 @@ func (i *impl) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Tas
 	defer cancel()
 
 	updated.UpdatedAt = primitive.NewDateTimeFromTime(time.Now())
+
 	filter := bson.M{"_id": updated.ID}
-	update := bson.M{"$set": updated}
+	opt := options.FindOneAndReplace().SetUpsert(false).SetReturnDocument(options.After)
 	coll := i.client.Database(dbName).Collection(collName)
-	res := coll.FindOneAndUpdate(timeout, filter, update)
-	if res.Err() != nil {
-		return nil, res.Err()
+	var ret *todo.Task
+	err = coll.FindOneAndReplace(timeout, filter, updated, opt).Decode(&ret)
+	if err != nil {
+		return nil, err
 	}
 
-	return updated, nil
+	return ret, nil
 }
 
 func (i *impl) Remove(ctx contextx.Contextx, id primitive.ObjectID) error {
