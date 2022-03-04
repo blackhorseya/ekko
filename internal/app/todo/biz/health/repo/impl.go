@@ -3,7 +3,7 @@ package repo
 import (
 	"time"
 
-	"github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
+	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )

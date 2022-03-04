@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	contextx "github.com/blackhorseya/todo-app/internal/pkg/base/contextx"
+	contextx "github.com/blackhorseya/gocommon/pkg/contextx"
 	mock "github.com/stretchr/testify/mock"
 
 	time "time"

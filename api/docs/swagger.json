@@ -444,6 +444,7 @@
                 "code": {
                     "type": "integer"
                 },
+                "data": {},
                 "msg": {
                     "type": "string"
                 }
@@ -475,9 +476,7 @@
                 "code": {
                     "type": "integer"
                 },
-                "data": {
-                    "type": "object"
-                },
+                "data": {},
                 "msg": {
                     "type": "string"
                 }
