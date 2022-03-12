@@ -1,4 +1,4 @@
-APP_NAME=todo
+APP_NAME=todo-app
 VERSION=latest
 PROJECT_ID=sean-side
 NS=side
