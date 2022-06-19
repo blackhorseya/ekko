@@ -213,14 +213,6 @@ func (s *suiteRepo) Test_impl_Create() {
 		wantErr  bool
 	}{
 		{
-			name: "create then error",
-			args: args{newTask: testdata.Task1, mock: func() {
-				_, _ = s.client.Database(dbName).Collection(collName).InsertOne(contextx.Background(), testdata.Task1)
-			}},
-			wantTask: nil,
-			wantErr:  true,
-		},
-		{
 			name:     "create then success",
 			args:     args{newTask: testdata.Task1},
 			wantTask: testdata.Task1,
