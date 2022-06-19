@@ -35,8 +35,6 @@ jobs:
             ${{ runner.os }}-go-
       - name: Lint
         run: |
-          go get -u golang.org/x/lint/golint
-          make lint
           make report
       - name: Test
         run: |

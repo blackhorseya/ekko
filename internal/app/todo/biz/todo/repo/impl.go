@@ -92,6 +92,7 @@ func (i *impl) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Tas
 	defer cancel()
 
 	now := time.Now()
+	newTask.ID = primitive.NewObjectIDFromTimestamp(now)
 	newTask.CreatedAt = primitive.NewDateTimeFromTime(now)
 	newTask.UpdatedAt = primitive.NewDateTimeFromTime(now)
 
