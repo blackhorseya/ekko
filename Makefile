@@ -101,3 +101,10 @@ migrate-up: ## run migration up
 .PHONY: migrate-down
 migrate-down: ## run migration down
 	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migrations down
+
+.PHONY: update-package
+update-package: ## update package and commit
+	@go get -u ./...
+	@go mod tidy
+	@git add go.mod go.sum
+	@git commit -m "build: update package"
