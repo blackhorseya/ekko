@@ -91,8 +91,8 @@ github.com/beorn7/perks v1.0.0/go.mod h1:KWe93zE9D1o94FZ5RNwFwVgaQK1VOXiVxmqh+Ce
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=
 github.com/bgentry/speakeasy v0.1.0/go.mod h1:+zsyZBPWlz7T6j88CTgSN5bM796AkVf0kBD4zp0CCIs=
 github.com/bits-and-blooms/bitset v1.2.0/go.mod h1:gIdJ4wp64HaoK2YrL1Q5/N7Y16edYb8uY+O0FJTyyDA=
-github.com/blackhorseya/gocommon v0.0.0-20220930020300-7a8b2f8fc13d h1:DbboVYix215zsIF6MY/rvjTsdu6sLFAl3BbCBG8B6hg=
-github.com/blackhorseya/gocommon v0.0.0-20220930020300-7a8b2f8fc13d/go.mod h1:1ruJEqZYC9fukGW4Krp4f5FV+vhKK7vd5GehZX3RGO4=
+github.com/blackhorseya/gocommon v0.0.0-20220930051018-de6084c73334 h1:Tegcv3qj3r/ooiE9yXmzkPdm8teb9MLA9HsXshnhcjE=
+github.com/blackhorseya/gocommon v0.0.0-20220930051018-de6084c73334/go.mod h1:1ruJEqZYC9fukGW4Krp4f5FV+vhKK7vd5GehZX3RGO4=
 github.com/cenkalti/backoff/v4 v4.1.2 h1:6Yo7N8UP2K6LWZnW94DLVSSrbobcWdVzAYOisuDPIFo=
 github.com/cenkalti/backoff/v4 v4.1.2/go.mod h1:scbssz8iZGpm3xbr14ovlUdkxfGXNInqkPWOWmG2CLw=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
