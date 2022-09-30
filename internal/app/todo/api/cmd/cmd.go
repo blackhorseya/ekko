@@ -12,10 +12,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-func init() {
-	rootCmd.AddCommand(getCmd)
-}
-
 var rootCmd = &cobra.Command{
 	Use:   "todo-cli",
 	Short: "Todo APP cli",
