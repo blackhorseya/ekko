@@ -14,15 +14,16 @@ import (
 
 type bizTestSuite struct {
 	suite.Suite
-	mock *repo.MockIRepo
-	biz  IBiz
+	logger *zap.Logger
+	mock   *repo.MockIRepo
+	biz    IBiz
 }
 
 func (s *bizTestSuite) SetupTest() {
-	logger, _ := zap.NewDevelopment()
+	s.logger, _ = zap.NewDevelopment()
 
 	s.mock = new(repo.MockIRepo)
-	biz, err := CreateIBiz(logger, s.mock)
+	biz, err := CreateIBiz(s.mock)
 	if err != nil {
 		panic(err)
 	}
@@ -32,6 +33,10 @@ func (s *bizTestSuite) SetupTest() {
 
 func (s *bizTestSuite) TearDownTest() {
 	s.mock.AssertExpectations(s.T())
+}
+
+func TestSuiteTest(t *testing.T) {
+	suite.Run(t, new(bizTestSuite))
 }
 
 func (s *bizTestSuite) Test_impl_Readiness() {
@@ -61,7 +66,7 @@ func (s *bizTestSuite) Test_impl_Readiness() {
 	for _, tt := range tests {
 		s.Run(tt.name, func() {
 			tt.mockFunc()
-			gotOk, err := s.biz.Readiness(contextx.Background())
+			gotOk, err := s.biz.Readiness(contextx.BackgroundWithLogger(s.logger))
 			if err != nil {
 				s.EqualErrorf(err, tt.wantErr, "Readiness() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -98,7 +103,7 @@ func (s *bizTestSuite) Test_impl_Liveness() {
 	for _, tt := range tests {
 		s.Run(tt.name, func() {
 			tt.mockFunc()
-			gotOk, err := s.biz.Liveness(contextx.Background())
+			gotOk, err := s.biz.Liveness(contextx.BackgroundWithLogger(s.logger))
 			if err != nil {
 				s.EqualErrorf(err, tt.wantErr, "Liveness() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -106,8 +111,4 @@ func (s *bizTestSuite) Test_impl_Liveness() {
 			s.TearDownTest()
 		})
 	}
-}
-
-func TestHealthBiz(t *testing.T) {
-	suite.Run(t, new(bizTestSuite))
 }

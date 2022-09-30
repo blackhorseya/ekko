@@ -58,7 +58,7 @@ func CreateApp(path2 string) (*app.Application, error) {
 		return nil, err
 	}
 	iRepo := repo.NewImpl(client)
-	iBiz := health.NewImpl(logger, iRepo)
+	iBiz := health.NewImpl(iRepo)
 	iHandler := health2.NewImpl(engine, iBiz)
 	repoIRepo := repo2.NewImpl(logger, client)
 	todoIBiz := todo2.NewImpl(logger, repoIRepo)

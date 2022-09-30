@@ -16,6 +16,7 @@ import (
 
 type suiteRepo struct {
 	suite.Suite
+	logger   *zap.Logger
 	pool     *dockertest.Pool
 	resource *dockertest.Resource
 	client   *mongo.Client
@@ -23,7 +24,7 @@ type suiteRepo struct {
 }
 
 func (s *suiteRepo) SetupTest() {
-	logger := zap.NewNop()
+	s.logger, _ = zap.NewDevelopment()
 	pool, err := dockertest.NewPool("")
 	if err != nil {
 		panic(err)
@@ -49,7 +50,7 @@ func (s *suiteRepo) SetupTest() {
 		panic(err)
 	}
 
-	repo, err := CreateIRepo(logger, s.client)
+	repo, err := CreateIRepo(s.client)
 	if err != nil {
 		panic(err)
 	}
@@ -87,7 +88,7 @@ func (s *suiteRepo) Test_impl_Ping() {
 				tt.args.mock()
 			}
 
-			if err := s.repo.Ping(contextx.Background(), tt.args.timeout); (err != nil) != tt.wantErr {
+			if err := s.repo.Ping(contextx.BackgroundWithLogger(s.logger), tt.args.timeout); (err != nil) != tt.wantErr {
 				t.Errorf("Ping() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
