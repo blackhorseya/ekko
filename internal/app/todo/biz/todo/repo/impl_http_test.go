@@ -214,7 +214,7 @@ func (s *SuiteHTTP) Test_rest_Create() {
 				data, _ := json.Marshal(response.Response{Code: 200, Msg: "ok", Data: testdata.Task1})
 				body := io.NopCloser(bytes.NewReader(data))
 				s.restclient.On("Do", mock.Anything).Return(&http.Response{
-					StatusCode: 200,
+					StatusCode: 201,
 					Body:       body,
 				}, nil).Once()
 			}},
