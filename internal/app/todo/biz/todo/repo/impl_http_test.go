@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"bytes"
 	"io"
 	"net/http"
 	"reflect"
@@ -168,6 +169,72 @@ func (s *SuiteHTTP) Test_rest_List() {
 			}
 			if !reflect.DeepEqual(gotTasks, tt.wantTasks) {
 				t.Errorf("List() gotTasks = %v, want %v", gotTasks, tt.wantTasks)
+			}
+
+			s.restclient.AssertExpectations(t)
+		})
+	}
+}
+
+func (s *SuiteHTTP) Test_rest_Create() {
+	type args struct {
+		newTask *todo.Task
+		mock    func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantTask *todo.Task
+		wantErr  bool
+	}{
+		{
+			name: "do request then error",
+			args: args{newTask: testdata.Task1, mock: func() {
+				s.restclient.On("Do", mock.Anything).Return(nil, errors.New("error")).Once()
+			}},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "resp code not 200 then error",
+			args: args{newTask: testdata.Task1, mock: func() {
+				data, _ := json.Marshal(response.Response{Code: 50010, Msg: "error"})
+				body := io.NopCloser(bytes.NewReader(data))
+				s.restclient.On("Do", mock.Anything).Return(&http.Response{
+					StatusCode: 200,
+					Body:       body,
+				}, nil).Once()
+			}},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "create then success",
+			args: args{newTask: testdata.Task1, mock: func() {
+				data, _ := json.Marshal(response.Response{Code: 200, Msg: "ok", Data: testdata.Task1})
+				body := io.NopCloser(bytes.NewReader(data))
+				s.restclient.On("Do", mock.Anything).Return(&http.Response{
+					StatusCode: 200,
+					Body:       body,
+				}, nil).Once()
+			}},
+			wantTask: testdata.Task1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTask, err := s.repo.Create(contextx.BackgroundWithLogger(s.logger), tt.args.newTask)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTask, tt.wantTask) {
+				t.Errorf("Create() gotTask = %v, want %v", gotTask, tt.wantTask)
 			}
 
 			s.restclient.AssertExpectations(t)
