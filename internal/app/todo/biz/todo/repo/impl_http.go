@@ -1,0 +1,103 @@
+package repo
+
+import (
+	"net/http"
+	"net/url"
+	"strconv"
+
+	"github.com/blackhorseya/gocommon/pkg/contextx"
+	"github.com/blackhorseya/gocommon/pkg/response"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/goccy/go-json"
+	"github.com/pkg/errors"
+	"github.com/spf13/viper"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.uber.org/zap"
+)
+
+// Options define options
+type Options struct {
+	BaseURL string `json:"base_url" yaml:"baseURL"`
+}
+
+// NewOptions return *Options
+func NewOptions(v *viper.Viper) (*Options, error) {
+	ret := new(Options)
+	ret.BaseURL = v.GetString("baseURL")
+
+	if ret.BaseURL == "" {
+		ret.BaseURL = "https://todo.seancheng.space"
+	}
+
+	return ret, nil
+}
+
+type rest struct {
+	opts *Options
+}
+
+// NewHTTP return IRepo
+func NewHTTP(opts *Options) IRepo {
+	return &rest{opts: opts}
+}
+
+func (i *rest) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo.Task, err error) {
+	uri, err := url.Parse(i.opts.BaseURL + "/api/v1/tasks/" + id.String())
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, uri.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var data *response.Response
+	err = json.NewDecoder(resp.Body).Decode(&data)
+	if err != nil {
+		return nil, err
+	}
+
+	if data.Code != 200 {
+		return nil, errors.New(strconv.Itoa(data.Code) + " " + data.Msg)
+	}
+
+	ret, ok := data.Data.(*todo.Task)
+	if !ok {
+		ctx.Error("Cannot cast to *todo.Task", zap.Any("data", data.Data))
+		return nil, errors.New("Cannot cast to *todo.Task")
+	}
+
+	return ret, nil
+}
+
+func (i *rest) List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Task, err error) {
+	// TODO implement me
+	panic("implement me")
+}
+
+func (i *rest) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Task, err error) {
+	// TODO implement me
+	panic("implement me")
+}
+
+func (i *rest) Count(ctx contextx.Contextx) (total int, err error) {
+	// TODO implement me
+	panic("implement me")
+}
+
+func (i *rest) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Task, err error) {
+	// TODO implement me
+	panic("implement me")
+}
+
+func (i *rest) Remove(ctx contextx.Contextx, id primitive.ObjectID) error {
+	// TODO implement me
+	panic("implement me")
+}
