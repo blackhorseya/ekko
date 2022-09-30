@@ -12,7 +12,6 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.uber.org/zap"
 )
 
 // Options define options
@@ -42,7 +41,7 @@ func NewHTTP(opts *Options) IRepo {
 }
 
 func (i *rest) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo.Task, err error) {
-	uri, err := url.Parse(i.opts.BaseURL + "/api/v1/tasks/" + id.String())
+	uri, err := url.Parse(i.opts.BaseURL + "/api/v1/tasks/" + id.Hex())
 	if err != nil {
 		return nil, err
 	}
@@ -68,10 +67,15 @@ func (i *rest) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo
 		return nil, errors.New(strconv.Itoa(data.Code) + " " + data.Msg)
 	}
 
-	ret, ok := data.Data.(*todo.Task)
-	if !ok {
-		ctx.Error("Cannot cast to *todo.Task", zap.Any("data", data.Data))
-		return nil, errors.New("Cannot cast to *todo.Task")
+	str, err := json.Marshal(data.Data)
+	if err != nil {
+		return nil, err
+	}
+
+	var ret *todo.Task
+	err = json.Unmarshal(str, &ret)
+	if err != nil {
+		return nil, err
 	}
 
 	return ret, nil
