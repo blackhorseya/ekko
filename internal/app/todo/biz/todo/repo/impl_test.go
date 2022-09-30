@@ -20,6 +20,7 @@ import (
 
 type suiteRepo struct {
 	suite.Suite
+	logger   *zap.Logger
 	pool     *dockertest.Pool
 	resource *dockertest.Resource
 	client   *mongo.Client
@@ -27,7 +28,7 @@ type suiteRepo struct {
 }
 
 func (s *suiteRepo) SetupTest() {
-	logger := zap.NewNop()
+	s.logger, _ = zap.NewDevelopment()
 	pool, err := dockertest.NewPool("")
 	if err != nil {
 		panic(err)
@@ -42,18 +43,18 @@ func (s *suiteRepo) SetupTest() {
 
 	err = pool.Retry(func() error {
 		uri := fmt.Sprintf("mongodb://localhost:%s/", resource.GetPort("27017/tcp"))
-		s.client, err = mongo.Connect(contextx.Background(), options.Client().ApplyURI(uri))
+		s.client, err = mongo.Connect(contextx.BackgroundWithLogger(s.logger), options.Client().ApplyURI(uri))
 		if err != nil {
 			return err
 		}
 
-		return s.client.Ping(contextx.Background(), readpref.Primary())
+		return s.client.Ping(contextx.BackgroundWithLogger(s.logger), readpref.Primary())
 	})
 	if err != nil {
 		panic(err)
 	}
 
-	repo, err := CreateIRepo(logger, s.client)
+	repo, err := CreateIRepo(s.client)
 	if err != nil {
 		panic(err)
 	}
@@ -61,7 +62,7 @@ func (s *suiteRepo) SetupTest() {
 }
 
 func (s *suiteRepo) TearDownTest() {
-	_ = s.client.Disconnect(contextx.Background())
+	_ = s.client.Disconnect(contextx.BackgroundWithLogger(s.logger))
 	_ = s.pool.Purge(s.resource)
 }
 
@@ -89,7 +90,7 @@ func (s *suiteRepo) Test_impl_GetByID() {
 		{
 			name: "get by id then success",
 			args: args{id: testdata.Task1.ID, mock: func() {
-				_, _ = s.client.Database(dbName).Collection(collName).InsertOne(contextx.Background(), testdata.Task1)
+				_, _ = s.client.Database(dbName).Collection(collName).InsertOne(contextx.BackgroundWithLogger(s.logger), testdata.Task1)
 			}},
 			wantTask: testdata.Task1,
 			wantErr:  false,
@@ -101,7 +102,7 @@ func (s *suiteRepo) Test_impl_GetByID() {
 				tt.args.mock()
 			}
 
-			gotTask, err := s.repo.GetByID(contextx.Background(), tt.args.id)
+			gotTask, err := s.repo.GetByID(contextx.BackgroundWithLogger(s.logger), tt.args.id)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetByID() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -110,7 +111,7 @@ func (s *suiteRepo) Test_impl_GetByID() {
 				t.Errorf("GetByID() gotTask = %v, want %v", gotTask, tt.wantTask)
 			}
 
-			_, _ = s.client.Database(dbName).Collection(collName).DeleteMany(contextx.Background(), bson.M{})
+			_, _ = s.client.Database(dbName).Collection(collName).DeleteMany(contextx.BackgroundWithLogger(s.logger), bson.M{})
 		})
 	}
 }
@@ -136,7 +137,7 @@ func (s *suiteRepo) Test_impl_List() {
 		{
 			name: "list then success",
 			args: args{limit: 1, offset: 0, mock: func() {
-				_, _ = s.client.Database(dbName).Collection(collName).InsertOne(contextx.Background(), testdata.Task1)
+				_, _ = s.client.Database(dbName).Collection(collName).InsertOne(contextx.BackgroundWithLogger(s.logger), testdata.Task1)
 			}},
 			wantTasks: []*todo.Task{testdata.Task1},
 			wantErr:   false,
@@ -148,7 +149,7 @@ func (s *suiteRepo) Test_impl_List() {
 				tt.args.mock()
 			}
 
-			gotTasks, err := s.repo.List(contextx.Background(), tt.args.limit, tt.args.offset)
+			gotTasks, err := s.repo.List(contextx.BackgroundWithLogger(s.logger), tt.args.limit, tt.args.offset)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -157,7 +158,7 @@ func (s *suiteRepo) Test_impl_List() {
 				t.Errorf("List() gotTasks = %v, want %v", gotTasks, tt.wantTasks)
 			}
 
-			_, _ = s.client.Database(dbName).Collection(collName).DeleteMany(contextx.Background(), bson.M{})
+			_, _ = s.client.Database(dbName).Collection(collName).DeleteMany(contextx.BackgroundWithLogger(s.logger), bson.M{})
 		})
 	}
 }
@@ -175,7 +176,7 @@ func (s *suiteRepo) Test_impl_Count() {
 		{
 			name: "count then success",
 			args: args{mock: func() {
-				_, _ = s.client.Database(dbName).Collection(collName).InsertOne(contextx.Background(), testdata.Task1)
+				_, _ = s.client.Database(dbName).Collection(collName).InsertOne(contextx.BackgroundWithLogger(s.logger), testdata.Task1)
 			}},
 			wantTotal: 1,
 			wantErr:   false,
@@ -187,7 +188,7 @@ func (s *suiteRepo) Test_impl_Count() {
 				tt.args.mock()
 			}
 
-			gotTotal, err := s.repo.Count(contextx.Background())
+			gotTotal, err := s.repo.Count(contextx.BackgroundWithLogger(s.logger))
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Count() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -196,7 +197,7 @@ func (s *suiteRepo) Test_impl_Count() {
 				t.Errorf("Count() gotTotal = %v, want %v", gotTotal, tt.wantTotal)
 			}
 
-			_, _ = s.client.Database(dbName).Collection(collName).DeleteMany(contextx.Background(), bson.M{})
+			_, _ = s.client.Database(dbName).Collection(collName).DeleteMany(contextx.BackgroundWithLogger(s.logger), bson.M{})
 		})
 	}
 }
@@ -225,7 +226,7 @@ func (s *suiteRepo) Test_impl_Create() {
 				tt.args.mock()
 			}
 
-			gotTask, err := s.repo.Create(contextx.Background(), tt.args.newTask)
+			gotTask, err := s.repo.Create(contextx.BackgroundWithLogger(s.logger), tt.args.newTask)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -234,7 +235,7 @@ func (s *suiteRepo) Test_impl_Create() {
 				t.Errorf("Create() gotTask = %v, want %v", gotTask, tt.wantTask)
 			}
 
-			_, _ = s.client.Database(dbName).Collection(collName).DeleteMany(contextx.Background(), bson.M{})
+			_, _ = s.client.Database(dbName).Collection(collName).DeleteMany(contextx.BackgroundWithLogger(s.logger), bson.M{})
 		})
 	}
 }
@@ -259,7 +260,7 @@ func (s *suiteRepo) Test_impl_Update() {
 		{
 			name: "update then success",
 			args: args{updated: testdata.Task1, mock: func() {
-				_, _ = s.client.Database(dbName).Collection(collName).InsertOne(contextx.Background(), testdata.Task1)
+				_, _ = s.client.Database(dbName).Collection(collName).InsertOne(contextx.BackgroundWithLogger(s.logger), testdata.Task1)
 			}},
 			wantTask: testdata.Task1,
 			wantErr:  false,
@@ -271,7 +272,7 @@ func (s *suiteRepo) Test_impl_Update() {
 				tt.args.mock()
 			}
 
-			gotTask, err := s.repo.Update(contextx.Background(), tt.args.updated)
+			gotTask, err := s.repo.Update(contextx.BackgroundWithLogger(s.logger), tt.args.updated)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -280,7 +281,7 @@ func (s *suiteRepo) Test_impl_Update() {
 				t.Errorf("Update() gotTask = %v, want %v", gotTask, tt.wantTask)
 			}
 
-			_, _ = s.client.Database(dbName).Collection(collName).DeleteMany(contextx.Background(), bson.M{})
+			_, _ = s.client.Database(dbName).Collection(collName).DeleteMany(contextx.BackgroundWithLogger(s.logger), bson.M{})
 		})
 	}
 }
@@ -298,7 +299,7 @@ func (s *suiteRepo) Test_impl_Remove() {
 		{
 			name: "remove then success",
 			args: args{id: testdata.Task1.ID, mock: func() {
-				_, _ = s.client.Database(dbName).Collection(collName).InsertOne(contextx.Background(), testdata.Task1)
+				_, _ = s.client.Database(dbName).Collection(collName).InsertOne(contextx.BackgroundWithLogger(s.logger), testdata.Task1)
 			}},
 			wantErr: false,
 		},
@@ -309,11 +310,11 @@ func (s *suiteRepo) Test_impl_Remove() {
 				tt.args.mock()
 			}
 
-			if err := s.repo.Remove(contextx.Background(), tt.args.id); (err != nil) != tt.wantErr {
+			if err := s.repo.Remove(contextx.BackgroundWithLogger(s.logger), tt.args.id); (err != nil) != tt.wantErr {
 				t.Errorf("Remove() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			_, _ = s.client.Database(dbName).Collection(collName).DeleteMany(contextx.Background(), bson.M{})
+			_, _ = s.client.Database(dbName).Collection(collName).DeleteMany(contextx.BackgroundWithLogger(s.logger), bson.M{})
 		})
 	}
 }
