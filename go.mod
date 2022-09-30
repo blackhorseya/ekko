@@ -3,7 +3,7 @@ module github.com/blackhorseya/todo-app
 go 1.17
 
 require (
-	github.com/blackhorseya/gocommon v0.0.0-20220930020300-7a8b2f8fc13d
+	github.com/blackhorseya/gocommon v0.0.0-20220930051018-de6084c73334
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-contrib/zap v0.1.0
 	github.com/gin-gonic/gin v1.8.1
