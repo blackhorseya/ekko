@@ -7,13 +7,14 @@
 package repo
 
 import (
+	"github.com/blackhorseya/gocommon/pkg/restclient"
 	"github.com/google/wire"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // Injectors from wire.go:
 
-func CreateIRepo(client *mongo.Client) (IRepo, error) {
+func CreateIRepo(client *mongo.Client, restClient restclient.RestClient) (IRepo, error) {
 	iRepo := NewImpl(client)
 	return iRepo, nil
 }

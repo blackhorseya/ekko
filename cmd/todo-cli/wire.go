@@ -3,6 +3,7 @@
 package main
 
 import (
+	"github.com/blackhorseya/gocommon/pkg/restclient"
 	"github.com/blackhorseya/todo-app/internal/app/todo/api/cmd"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz"
 	"github.com/google/wire"
@@ -10,6 +11,7 @@ import (
 )
 
 var providerSet = wire.NewSet(
+	restclient.ProviderSet,
 	cmd.ProviderSet,
 	biz.ProviderSetViaHTTP,
 )

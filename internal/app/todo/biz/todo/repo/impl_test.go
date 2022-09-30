@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/blackhorseya/gocommon/pkg/contextx"
+	"github.com/blackhorseya/gocommon/pkg/restclient"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/blackhorseya/todo-app/test/testdata"
 	"github.com/ory/dockertest/v3"
@@ -20,15 +21,19 @@ import (
 
 type suiteRepo struct {
 	suite.Suite
-	logger   *zap.Logger
-	pool     *dockertest.Pool
-	resource *dockertest.Resource
-	client   *mongo.Client
-	repo     IRepo
+	logger     *zap.Logger
+	pool       *dockertest.Pool
+	resource   *dockertest.Resource
+	client     *mongo.Client
+	restclient *restclient.MockRestClient
+	repo       IRepo
 }
 
 func (s *suiteRepo) SetupTest() {
 	s.logger, _ = zap.NewDevelopment()
+
+	s.restclient = new(restclient.MockRestClient)
+
 	pool, err := dockertest.NewPool("")
 	if err != nil {
 		panic(err)
@@ -54,7 +59,7 @@ func (s *suiteRepo) SetupTest() {
 		panic(err)
 	}
 
-	repo, err := CreateIRepo(s.client)
+	repo, err := CreateIRepo(s.client, s.restclient)
 	if err != nil {
 		panic(err)
 	}
