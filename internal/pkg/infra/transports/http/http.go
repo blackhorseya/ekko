@@ -53,7 +53,7 @@ func NewOptions(v *viper.Viper) (*Options, error) {
 }
 
 // NewRouter serve caller to create *gin.Engine
-func NewRouter(o *Options, logger *zap.Logger, init InitHandlers) *gin.Engine {
+func NewRouter(o *Options, logger *zap.Logger) *gin.Engine {
 	gin.SetMode(o.Mode)
 
 	r := gin.New()
@@ -67,13 +67,13 @@ func NewRouter(o *Options, logger *zap.Logger, init InitHandlers) *gin.Engine {
 
 	r.Use(static.Serve("/", static.LocalFile("./web/build", true)))
 
-	init(r)
-
 	return r
 }
 
 // New serve caller to create Server
-func New(o *Options, logger *zap.Logger, router *gin.Engine) (*Server, error) {
+func New(o *Options, logger *zap.Logger, router *gin.Engine, init InitHandlers) (*Server, error) {
+	init(router)
+
 	var s = &Server{
 		o:          o,
 		logger:     logger.With(zap.String("type", "http.Server")),
@@ -126,4 +126,4 @@ func (s *Server) Stop() error {
 }
 
 // ProviderSet is a provider set for wire
-var ProviderSet = wire.NewSet(New, NewRouter, NewOptions)
+var ProviderSet = wire.NewSet(NewRouter, New, NewOptions)

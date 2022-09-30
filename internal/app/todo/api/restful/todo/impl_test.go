@@ -36,7 +36,7 @@ func (s *handlerSuite) SetupTest() {
 	s.r.Use(ginhttp.HandleError())
 
 	s.mock = new(todoBiz.MockIBiz)
-	handler, err := CreateIHandler(logger, s.mock)
+	handler, err := CreateIHandler(s.r, logger, s.mock)
 	if err != nil {
 		panic(err)
 	}
@@ -53,8 +53,6 @@ func TestHandlerSuite(t *testing.T) {
 }
 
 func (s *handlerSuite) Test_impl_GetByID() {
-	s.r.GET("/api/v1/tasks/:id", s.handler.GetByID)
-
 	type args struct {
 		id   string
 		mock func()
@@ -106,8 +104,6 @@ func (s *handlerSuite) Test_impl_GetByID() {
 }
 
 func (s *handlerSuite) Test_impl_List() {
-	s.r.GET("/api/v1/tasks", s.handler.List)
-
 	type args struct {
 		start string
 		end   string
@@ -172,8 +168,6 @@ func (s *handlerSuite) Test_impl_List() {
 }
 
 func (s *handlerSuite) Test_impl_Create() {
-	s.r.POST("/api/v1/tasks", s.handler.Create)
-
 	type args struct {
 		title string
 		mock  func()
@@ -223,8 +217,6 @@ func (s *handlerSuite) Test_impl_Create() {
 }
 
 func (s *handlerSuite) Test_impl_UpdateStatus() {
-	s.r.PATCH("/api/v1/tasks/:id/status", s.handler.UpdateStatus)
-
 	type args struct {
 		id     string
 		status string
@@ -285,8 +277,6 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 }
 
 func (s *handlerSuite) Test_impl_ChangeTitle() {
-	s.r.PATCH("/api/v1/tasks/:id/title", s.handler.ChangeTitle)
-
 	type args struct {
 		id    string
 		title string
@@ -347,8 +337,6 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 }
 
 func (s *handlerSuite) Test_impl_Delete() {
-	s.r.DELETE("/api/v1/tasks/:id", s.handler.Delete)
-
 	type args struct {
 		id   string
 		mock func()
