@@ -107,3 +107,70 @@ func (s *SuiteHTTP) Test_rest_GetByID() {
 		})
 	}
 }
+
+func (s *SuiteHTTP) Test_rest_List() {
+	type args struct {
+		limit  int
+		offset int
+		mock   func()
+	}
+	tests := []struct {
+		name      string
+		args      args
+		wantTasks []*todo.Task
+		wantErr   bool
+	}{
+		{
+			name: "do request then error",
+			args: args{limit: 10, offset: 0, mock: func() {
+				s.restclient.On("Do", mock.Anything).Return(nil, errors.New("error")).Once()
+			}},
+			wantTasks: nil,
+			wantErr:   true,
+		},
+		{
+			name: "resp code not 200 then error",
+			args: args{limit: 10, offset: 0, mock: func() {
+				data, _ := json.Marshal(response.Response{Code: 400, Msg: "failed", Data: nil})
+				body := io.NopCloser(strings.NewReader(string(data)))
+				s.restclient.On("Do", mock.Anything).Return(&http.Response{
+					StatusCode: 200,
+					Body:       body,
+				}, nil).Once()
+			}},
+			wantTasks: nil,
+			wantErr:   true,
+		},
+		{
+			name: "list tasks then success",
+			args: args{limit: 10, offset: 0, mock: func() {
+				data, _ := json.Marshal(response.Response{Code: 200, Msg: "ok", Data: []*todo.Task{testdata.Task1}})
+				body := io.NopCloser(strings.NewReader(string(data)))
+				s.restclient.On("Do", mock.Anything).Return(&http.Response{
+					StatusCode: 200,
+					Body:       body,
+				}, nil).Once()
+			}},
+			wantTasks: []*todo.Task{testdata.Task1},
+			wantErr:   false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTasks, err := s.repo.List(contextx.BackgroundWithLogger(s.logger), tt.args.limit, tt.args.offset)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTasks, tt.wantTasks) {
+				t.Errorf("List() gotTasks = %v, want %v", gotTasks, tt.wantTasks)
+			}
+
+			s.restclient.AssertExpectations(t)
+		})
+	}
+}
