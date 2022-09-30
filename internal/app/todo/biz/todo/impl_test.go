@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/blackhorseya/gocommon/pkg/contextx"
-	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo/mocks"
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/blackhorseya/todo-app/test/testdata"
@@ -18,14 +18,14 @@ import (
 
 type bizSuite struct {
 	suite.Suite
-	mock *mocks.IRepo
+	mock *repo.MockIRepo
 	biz  IBiz
 }
 
 func (s *bizSuite) SetupTest() {
 	logger := zap.NewNop()
 
-	s.mock = new(mocks.IRepo)
+	s.mock = new(repo.MockIRepo)
 	biz, err := CreateIBiz(logger, s.mock)
 	if err != nil {
 		panic(err)

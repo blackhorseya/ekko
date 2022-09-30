@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/blackhorseya/gocommon/pkg/ginhttp"
-	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/mocks"
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
@@ -17,7 +17,7 @@ import (
 type handlerSuite struct {
 	suite.Suite
 	r       *gin.Engine
-	mock    *mocks.IBiz
+	mock    *health.MockIBiz
 	handler IHandler
 }
 
@@ -27,7 +27,7 @@ func (s *handlerSuite) SetupTest() {
 	s.r.Use(ginhttp.AddContextx())
 	s.r.Use(ginhttp.HandleError())
 
-	s.mock = new(mocks.IBiz)
+	s.mock = new(health.MockIBiz)
 	if handler, err := CreateIHandler(s.mock); err != nil {
 		panic(err)
 	} else {
