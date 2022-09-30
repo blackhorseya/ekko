@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/consts"
 	"github.com/google/wire"
 	"github.com/mitchellh/go-homedir"
@@ -37,10 +38,12 @@ var (
 	cfgFile string
 	level   string
 	output  string
+
+	todoBiz todo.IBiz
 )
 
-func NewRootCmd() (*cobra.Command, error) {
-	cobra.OnInitialize(initConfig)
+func NewRootCmd(biz todo.IBiz) (*cobra.Command, error) {
+	todoBiz = biz
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", fmt.Sprintf("config file (default is $HOME/.%s.yaml)", consts.AppName))
 	rootCmd.PersistentFlags().StringVar(&level, "log-level", "info", "log level")
@@ -49,6 +52,12 @@ func NewRootCmd() (*cobra.Command, error) {
 	rootCmd.Version = consts.Version
 
 	return rootCmd, nil
+}
+
+func NewViper() (*viper.Viper, error) {
+	initConfig()
+
+	return viper.GetViper(), nil
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -78,4 +87,4 @@ func initConfig() {
 }
 
 // ProviderSet is a provider set for wire
-var ProviderSet = wire.NewSet(NewRootCmd)
+var ProviderSet = wire.NewSet(NewRootCmd, NewViper)

@@ -9,6 +9,8 @@ package main
 import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/api/cmd"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz"
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo"
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/google/wire"
 	"github.com/spf13/cobra"
 )
@@ -16,7 +18,17 @@ import (
 // Injectors from wire.go:
 
 func CreateApp() (*cobra.Command, error) {
-	command, err := cmd.NewRootCmd()
+	viper, err := cmd.NewViper()
+	if err != nil {
+		return nil, err
+	}
+	options, err := repo.NewOptions(viper)
+	if err != nil {
+		return nil, err
+	}
+	iRepo := repo.NewHTTP(options)
+	iBiz := todo.NewImpl(iRepo)
+	command, err := cmd.NewRootCmd(iBiz)
 	if err != nil {
 		return nil, err
 	}
