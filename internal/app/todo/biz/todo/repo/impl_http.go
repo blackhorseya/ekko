@@ -7,6 +7,7 @@ import (
 
 	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/gocommon/pkg/response"
+	"github.com/blackhorseya/gocommon/pkg/restclient"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/goccy/go-json"
 	"github.com/pkg/errors"
@@ -32,11 +33,12 @@ func NewOptions(v *viper.Viper) (*Options, error) {
 }
 
 type rest struct {
-	opts *Options
+	opts       *Options
+	restclient restclient.RestClient
 }
 
 // NewHTTP return IRepo
-func NewHTTP(opts *Options) IRepo {
+func NewHTTP(opts *Options, restclient restclient.RestClient) IRepo {
 	return &rest{opts: opts}
 }
 
@@ -51,7 +53,7 @@ func (i *rest) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo
 		return nil, err
 	}
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := i.restclient.Do(req)
 	if err != nil {
 		return nil, err
 	}

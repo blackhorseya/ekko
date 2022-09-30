@@ -7,6 +7,7 @@
 package main
 
 import (
+	"github.com/blackhorseya/gocommon/pkg/restclient"
 	"github.com/blackhorseya/todo-app/internal/app/todo/api/cmd"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo"
@@ -26,7 +27,8 @@ func CreateApp() (*cobra.Command, error) {
 	if err != nil {
 		return nil, err
 	}
-	iRepo := repo.NewHTTP(options)
+	restClient := restclient.NewClient()
+	iRepo := repo.NewHTTP(options, restClient)
 	iBiz := todo.NewImpl(iRepo)
 	command, err := cmd.NewRootCmd(iBiz)
 	if err != nil {
@@ -37,4 +39,4 @@ func CreateApp() (*cobra.Command, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(cmd.ProviderSet, biz.ProviderSetViaHTTP)
+var providerSet = wire.NewSet(restclient.ProviderSet, cmd.ProviderSet, biz.ProviderSetViaHTTP)
