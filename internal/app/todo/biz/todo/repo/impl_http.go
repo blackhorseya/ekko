@@ -176,8 +176,38 @@ func (i *rest) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Tas
 }
 
 func (i *rest) Count(ctx contextx.Contextx) (total int, err error) {
-	// TODO implement me
-	panic("implement me")
+	uri, err := url.Parse(fmt.Sprintf("%s/api/v1/tasks?page=%v&size=%v", i.opts.BaseURL, 1, 10))
+	if err != nil {
+		return 0, err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, uri.String(), nil)
+	if err != nil {
+		return 0, err
+	}
+
+	resp, err := i.restclient.Do(req)
+	if err != nil {
+		return 0, err
+	}
+	defer resp.Body.Close()
+
+	var data *response.Response
+	err = json.NewDecoder(resp.Body).Decode(&data)
+	if err != nil {
+		return 0, err
+	}
+
+	if data.Code != 200 {
+		return 0, errors.New(strconv.Itoa(data.Code) + " " + data.Msg)
+	}
+
+	ret, err := strconv.Atoi(resp.Header.Get("x-total-count"))
+	if err != nil {
+		return 0, err
+	}
+
+	return ret, nil
 }
 
 func (i *rest) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Task, err error) {
