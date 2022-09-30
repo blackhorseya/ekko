@@ -60,7 +60,11 @@ func NewRouter(o *Options, logger *zap.Logger) *gin.Engine {
 
 	r.Use(ginhttp.AddCors())
 	r.Use(gin.Recovery())
-	r.Use(ginzap.Ginzap(logger, time.RFC3339, true))
+	r.Use(ginzap.GinzapWithConfig(logger, &ginzap.Config{
+		TimeFormat: time.RFC3339,
+		UTC:        true,
+		SkipPaths:  []string{"/api/readiness", "/api/liveness", "/metrics"},
+	}))
 	r.Use(ginzap.RecoveryWithZap(logger, true))
 	r.Use(ginhttp.AddContextx())
 	r.Use(ginhttp.HandleError())
