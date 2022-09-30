@@ -5,11 +5,11 @@ import (
 
 	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.uber.org/zap"
 )
 
 const (
@@ -19,14 +19,12 @@ const (
 )
 
 type impl struct {
-	logger *zap.Logger
 	client *mongo.Client
 }
 
 // NewImpl serve caller to create an IRepo
-func NewImpl(logger *zap.Logger, client *mongo.Client) IRepo {
+func NewImpl(client *mongo.Client) IRepo {
 	return &impl{
-		logger: logger.With(zap.String("type", "TodoRepo")),
 		client: client,
 	}
 }
@@ -64,7 +62,7 @@ func (i *impl) List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Tas
 	var ret []*todo.Task
 	err = cur.All(timeout, &ret)
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
+		if errors.Is(err, mongo.ErrNoDocuments) {
 			return nil, nil
 		}
 
