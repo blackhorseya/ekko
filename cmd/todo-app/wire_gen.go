@@ -62,7 +62,7 @@ func CreateApp(path2 string) (*app.Application, error) {
 	iHandler := health2.NewImpl(engine, iBiz)
 	repoIRepo := repo2.NewImpl(logger, client)
 	todoIBiz := todo2.NewImpl(logger, repoIRepo)
-	todoIHandler := todo3.NewImpl(engine, logger, todoIBiz)
+	todoIHandler := todo3.NewImpl(engine, todoIBiz)
 	initHandlers := restful.CreateInitHandlerFn(iHandler, todoIHandler)
 	server, err := http.New(httpOptions, logger, engine, initHandlers)
 	if err != nil {
