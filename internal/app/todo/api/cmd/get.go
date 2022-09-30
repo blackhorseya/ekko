@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/blackhorseya/gocommon/pkg/contextx"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/goccy/go-json"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -13,7 +14,7 @@ import (
 func init() {
 	rootCmd.AddCommand(getCmd)
 
-	getCmd.AddCommand(getTaskByIdCmd)
+	getCmd.AddCommand(tasksCmd)
 }
 
 var getCmd = &cobra.Command{
@@ -22,33 +23,48 @@ var getCmd = &cobra.Command{
 	Long:  "Get something",
 }
 
-var getTaskByIdCmd = &cobra.Command{
+var tasksCmd = &cobra.Command{
 	Use:   "tasks [id]",
-	Short: "Get a task by id",
-	Long:  "Get a task by id",
+	Short: "Display one or many tasks",
+	Long:  "Display one or many tasks",
 	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) != 1 {
-			return errors.New("arguments len must be 1")
-		}
-
-		id := args[0]
-		_, err := primitive.ObjectIDFromHex(id)
-		if err != nil {
-			return err
+		if len(args) > 1 {
+			return errors.New("arguments len must be less than 1")
 		}
 
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		id := args[0]
-		oid, _ := primitive.ObjectIDFromHex(id)
+		var ret []*todo.Task
+		var total int
+		var err error
 
-		ret, err := todoBiz.GetByID(contextx.Background(), oid)
-		if err != nil {
-			return err
+		if len(args) == 0 {
+			ret, total, err = todoBiz.List(contextx.Background(), 0, 10)
+			if err != nil {
+				return err
+			}
 		}
 
-		output, err := json.Marshal(ret)
+		if len(args) == 1 {
+			id := args[0]
+			oid, err := primitive.ObjectIDFromHex(id)
+			if err != nil {
+				return err
+			}
+
+			task, err := todoBiz.GetByID(contextx.Background(), oid)
+			if err != nil {
+				return err
+			}
+
+			ret = append(ret, task)
+		}
+
+		output, err := json.Marshal(map[string]interface{}{
+			"total": total,
+			"list":  ret,
+		})
 		if err != nil {
 			return err
 		}
