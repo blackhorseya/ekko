@@ -1,12 +1,20 @@
 package repo
 
 import (
+	"io"
+	"net/http"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/blackhorseya/gocommon/pkg/contextx"
+	"github.com/blackhorseya/gocommon/pkg/response"
 	"github.com/blackhorseya/gocommon/pkg/restclient"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/test/testdata"
+	"github.com/goccy/go-json"
+	"github.com/pkg/errors"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
@@ -45,7 +53,40 @@ func (s *SuiteHTTP) Test_rest_GetByID() {
 		wantTask *todo.Task
 		wantErr  bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "do request then error",
+			args: args{id: testdata.TaskOID1, mock: func() {
+				s.restclient.On("Do", mock.Anything).Return(nil, errors.New("error")).Once()
+			}},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "resp code not 200 then error",
+			args: args{id: testdata.TaskOID1, mock: func() {
+				data, _ := json.Marshal(response.Response{Code: 400, Msg: "failed", Data: nil})
+				body := io.NopCloser(strings.NewReader(string(data)))
+				s.restclient.On("Do", mock.Anything).Return(&http.Response{
+					StatusCode: 200,
+					Body:       body,
+				}, nil).Once()
+			}},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "resp data then success",
+			args: args{id: testdata.TaskOID1, mock: func() {
+				data, _ := json.Marshal(response.OK.WithData(testdata.Task1))
+				body := io.NopCloser(strings.NewReader(string(data)))
+				s.restclient.On("Do", mock.Anything).Return(&http.Response{
+					StatusCode: 200,
+					Body:       body,
+				}, nil).Once()
+			}},
+			wantTask: testdata.Task1,
+			wantErr:  false,
+		},
 	}
 	for _, tt := range tests {
 		s.T().Run(tt.name, func(t *testing.T) {

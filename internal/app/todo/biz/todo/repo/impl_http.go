@@ -39,7 +39,10 @@ type rest struct {
 
 // NewHTTP return IRepo
 func NewHTTP(opts *Options, restclient restclient.RestClient) IRepo {
-	return &rest{opts: opts}
+	return &rest{
+		opts:       opts,
+		restclient: restclient,
+	}
 }
 
 func (i *rest) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo.Task, err error) {
