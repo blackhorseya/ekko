@@ -3,10 +3,17 @@
 package main
 
 import (
+	"github.com/blackhorseya/todo-app/internal/app/todo/api/cmd"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz"
 	"github.com/google/wire"
+	"github.com/spf13/cobra"
 )
 
 var providerSet = wire.NewSet(
+	cmd.ProviderSet,
 	biz.ProviderSetViaHTTP,
 )
+
+func CreateApp() (*cobra.Command, error) {
+	panic(wire.Build(providerSet))
+}
