@@ -14,11 +14,18 @@ import (
 
 // Injectors from wire.go:
 
-func CreateIRepo(client *mongo.Client, restClient restclient.RestClient) (IRepo, error) {
+func CreateIRepo(client *mongo.Client) (IRepo, error) {
 	iRepo := NewImpl(client)
+	return iRepo, nil
+}
+
+func CreateHTTP(opts *Options, client restclient.RestClient) (IRepo, error) {
+	iRepo := NewHTTP(opts, client)
 	return iRepo, nil
 }
 
 // wire.go:
 
 var testProviderSet = wire.NewSet(NewImpl)
+
+var httpProviderSet = wire.NewSet(NewHTTP)

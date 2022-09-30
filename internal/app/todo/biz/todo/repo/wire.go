@@ -10,6 +10,12 @@ import (
 
 var testProviderSet = wire.NewSet(NewImpl)
 
-func CreateIRepo(client *mongo.Client, restClient restclient.RestClient) (IRepo, error) {
+func CreateIRepo(client *mongo.Client) (IRepo, error) {
 	panic(wire.Build(testProviderSet))
+}
+
+var httpProviderSet = wire.NewSet(NewHTTP)
+
+func CreateHTTP(opts *Options, client restclient.RestClient) (IRepo, error) {
+	panic(wire.Build(httpProviderSet))
 }
