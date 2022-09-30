@@ -14,7 +14,7 @@ import (
 func init() {
 	rootCmd.AddCommand(getCmd)
 
-	getCmd.AddCommand(tasksCmd)
+	getCmd.AddCommand(getTasksCmd)
 }
 
 var getCmd = &cobra.Command{
@@ -23,7 +23,7 @@ var getCmd = &cobra.Command{
 	Long:  "Get something",
 }
 
-var tasksCmd = &cobra.Command{
+var getTasksCmd = &cobra.Command{
 	Use:   "tasks [id]",
 	Short: "Display one or many tasks",
 	Long:  "Display one or many tasks",
