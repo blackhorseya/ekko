@@ -30,5 +30,10 @@ type IRepo interface {
 	Remove(ctx contextx.Contextx, id primitive.ObjectID) error
 }
 
-// ProviderSet is a provider set for wire
-var ProviderSet = wire.NewSet(NewImpl)
+var (
+	// ProviderSetViaDatabase is a provider set for wire
+	ProviderSetViaDatabase = wire.NewSet(NewImpl)
+
+	// ProviderSetViaHTTP is a http provider set for wire
+	ProviderSetViaHTTP = wire.NewSet(NewHTTP, NewOptions)
+)
