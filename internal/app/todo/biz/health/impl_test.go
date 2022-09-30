@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo/mocks"
 	"github.com/blackhorseya/gocommon/pkg/contextx"
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
@@ -14,14 +14,14 @@ import (
 
 type bizTestSuite struct {
 	suite.Suite
-	mock *mocks.IRepo
+	mock *repo.MockIRepo
 	biz  IBiz
 }
 
 func (s *bizTestSuite) SetupTest() {
 	logger, _ := zap.NewDevelopment()
 
-	s.mock = new(mocks.IRepo)
+	s.mock = new(repo.MockIRepo)
 	biz, err := CreateIBiz(logger, s.mock)
 	if err != nil {
 		panic(err)

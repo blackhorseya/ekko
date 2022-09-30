@@ -7,7 +7,8 @@ import (
 )
 
 // IBiz describe health business service function
-//go:generate mockery --name=IBiz
+//
+//go:generate mockery --all --inpackage
 type IBiz interface {
 	Readiness(ctx contextx.Contextx) (ok bool, err error)
 	Liveness(ctx contextx.Contextx) (ok bool, err error)

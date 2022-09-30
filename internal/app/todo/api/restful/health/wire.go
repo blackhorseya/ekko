@@ -1,4 +1,4 @@
-// +build wireinject
+//go:build wireinject
 
 package health
 
