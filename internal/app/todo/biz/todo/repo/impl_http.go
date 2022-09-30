@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -87,8 +88,44 @@ func (i *rest) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo
 }
 
 func (i *rest) List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Task, err error) {
-	// TODO implement me
-	panic("implement me")
+	uri, err := url.Parse(fmt.Sprintf("%s/api/v1/tasks?page=%v&size=%v", i.opts.BaseURL, (offset+1)/10, limit))
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, uri.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := i.restclient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var data *response.Response
+	err = json.NewDecoder(resp.Body).Decode(&data)
+	if err != nil {
+		return nil, err
+	}
+
+	if data.Code != 200 {
+		return nil, errors.New(strconv.Itoa(data.Code) + " " + data.Msg)
+	}
+
+	str, err := json.Marshal(data.Data)
+	if err != nil {
+		return nil, err
+	}
+
+	var ret []*todo.Task
+	err = json.Unmarshal(str, &ret)
+	if err != nil {
+		return nil, err
+	}
+
+	return ret, nil
 }
 
 func (i *rest) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Task, err error) {
