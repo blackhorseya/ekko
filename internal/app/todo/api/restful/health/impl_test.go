@@ -28,7 +28,7 @@ func (s *handlerSuite) SetupTest() {
 	s.r.Use(ginhttp.HandleError())
 
 	s.mock = new(health.MockIBiz)
-	if handler, err := CreateIHandler(s.mock); err != nil {
+	if handler, err := CreateIHandler(s.r, s.mock); err != nil {
 		panic(err)
 	} else {
 		s.handler = handler
@@ -44,8 +44,6 @@ func TestHandlerSuite(t *testing.T) {
 }
 
 func (s *handlerSuite) Test_impl_Readiness() {
-	s.r.GET("/api/readiness", s.handler.Readiness)
-
 	type args struct {
 		mock func()
 	}
@@ -91,8 +89,6 @@ func (s *handlerSuite) Test_impl_Readiness() {
 }
 
 func (s *handlerSuite) Test_impl_Liveness() {
-	s.r.GET("/api/liveness", s.handler.Liveness)
-
 	type args struct {
 		mock func()
 	}

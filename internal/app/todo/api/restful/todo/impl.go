@@ -24,11 +24,29 @@ type impl struct {
 }
 
 // NewImpl serve caller to create an IHandler
-func NewImpl(logger *zap.Logger, biz todo.IBiz) IHandler {
-	return &impl{
+func NewImpl(e *gin.Engine, logger *zap.Logger, biz todo.IBiz) IHandler {
+	ret := &impl{
 		logger: logger.With(zap.String("type", "TodoHandler")),
 		biz:    biz,
 	}
+
+	api := e.Group("api")
+	{
+		v1 := api.Group("v1")
+		{
+			tasks := v1.Group("tasks")
+			{
+				tasks.GET("", ret.List)
+				tasks.GET(":id", ret.GetByID)
+				tasks.POST("", ret.Create)
+				tasks.PATCH(":id/status", ret.UpdateStatus)
+				tasks.PATCH(":id/title", ret.ChangeTitle)
+				tasks.DELETE(":id", ret.Delete)
+			}
+		}
+	}
+
+	return ret
 }
 
 // GetByID
