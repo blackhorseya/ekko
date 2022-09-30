@@ -8,8 +8,8 @@ package todo
 
 import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo"
+	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
-	"go.uber.org/zap"
 )
 
 import (
@@ -19,8 +19,8 @@ import (
 // Injectors from wire.go:
 
 // CreateIHandler serve user to create health api handler
-func CreateIHandler(logger *zap.Logger, biz todo.IBiz) (IHandler, error) {
-	iHandler := NewImpl(logger, biz)
+func CreateIHandler(e *gin.Engine, biz todo.IBiz) (IHandler, error) {
+	iHandler := NewImpl(e, biz)
 	return iHandler, nil
 }
 

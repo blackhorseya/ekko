@@ -48,6 +48,7 @@ func CreateApp(path2 string) (*app.Application, error) {
 	if err != nil {
 		return nil, err
 	}
+	engine := http.NewRouter(httpOptions, logger)
 	databaseOptions, err := database.NewOptions(viper, logger)
 	if err != nil {
 		return nil, err
@@ -57,14 +58,13 @@ func CreateApp(path2 string) (*app.Application, error) {
 		return nil, err
 	}
 	iRepo := repo.NewImpl(client)
-	iBiz := health.NewImpl(logger, iRepo)
-	iHandler := health2.NewImpl(iBiz)
-	repoIRepo := repo2.NewImpl(logger, client)
-	todoIBiz := todo2.NewImpl(logger, repoIRepo)
-	todoIHandler := todo3.NewImpl(logger, todoIBiz)
+	iBiz := health.NewImpl(iRepo)
+	iHandler := health2.NewImpl(engine, iBiz)
+	repoIRepo := repo2.NewImpl(client)
+	todoIBiz := todo2.NewImpl(repoIRepo)
+	todoIHandler := todo3.NewImpl(engine, todoIBiz)
 	initHandlers := restful.CreateInitHandlerFn(iHandler, todoIHandler)
-	engine := http.NewRouter(httpOptions, logger, initHandlers)
-	server, err := http.New(httpOptions, logger, engine)
+	server, err := http.New(httpOptions, logger, engine, initHandlers)
 	if err != nil {
 		return nil, err
 	}

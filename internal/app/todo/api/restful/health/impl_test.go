@@ -1,34 +1,36 @@
 package health
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/blackhorseya/gocommon/pkg/ginhttp"
-	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/mocks"
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
+	"go.uber.org/zap"
 )
 
 type handlerSuite struct {
 	suite.Suite
 	r       *gin.Engine
-	mock    *mocks.IBiz
+	mock    *health.MockIBiz
 	handler IHandler
 }
 
 func (s *handlerSuite) SetupTest() {
+	logger, _ := zap.NewDevelopment()
+
 	gin.SetMode(gin.TestMode)
 	s.r = gin.New()
-	s.r.Use(ginhttp.AddContextx())
+	s.r.Use(ginhttp.AddContextxWithLogger(logger))
 	s.r.Use(ginhttp.HandleError())
 
-	s.mock = new(mocks.IBiz)
-	if handler, err := CreateIHandler(s.mock); err != nil {
+	s.mock = new(health.MockIBiz)
+	if handler, err := CreateIHandler(s.r, s.mock); err != nil {
 		panic(err)
 	} else {
 		s.handler = handler
@@ -44,8 +46,6 @@ func TestHandlerSuite(t *testing.T) {
 }
 
 func (s *handlerSuite) Test_impl_Readiness() {
-	s.r.GET("/api/readiness", s.handler.Readiness)
-
 	type args struct {
 		mock func()
 	}
@@ -75,7 +75,7 @@ func (s *handlerSuite) Test_impl_Readiness() {
 				tt.args.mock()
 			}
 
-			uri := fmt.Sprintf("/api/readiness")
+			uri := "/api/readiness"
 			req := httptest.NewRequest(http.MethodGet, uri, nil)
 			w := httptest.NewRecorder()
 			s.r.ServeHTTP(w, req)
@@ -91,8 +91,6 @@ func (s *handlerSuite) Test_impl_Readiness() {
 }
 
 func (s *handlerSuite) Test_impl_Liveness() {
-	s.r.GET("/api/liveness", s.handler.Liveness)
-
 	type args struct {
 		mock func()
 	}
@@ -122,7 +120,7 @@ func (s *handlerSuite) Test_impl_Liveness() {
 				tt.args.mock()
 			}
 
-			uri := fmt.Sprintf("/api/liveness")
+			uri := "/api/liveness"
 			req := httptest.NewRequest(http.MethodGet, uri, nil)
 			w := httptest.NewRecorder()
 			s.r.ServeHTTP(w, req)

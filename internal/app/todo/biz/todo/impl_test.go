@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/blackhorseya/gocommon/pkg/contextx"
-	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo/mocks"
+	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/blackhorseya/todo-app/test/testdata"
@@ -18,15 +18,16 @@ import (
 
 type bizSuite struct {
 	suite.Suite
-	mock *mocks.IRepo
-	biz  IBiz
+	logger *zap.Logger
+	mock   *repo.MockIRepo
+	biz    IBiz
 }
 
 func (s *bizSuite) SetupTest() {
-	logger := zap.NewNop()
+	s.logger, _ = zap.NewDevelopment()
 
-	s.mock = new(mocks.IRepo)
-	biz, err := CreateIBiz(logger, s.mock)
+	s.mock = new(repo.MockIRepo)
+	biz, err := CreateIBiz(s.mock)
 	if err != nil {
 		panic(err)
 	}
@@ -85,7 +86,7 @@ func (s *bizSuite) Test_impl_GetByID() {
 				tt.args.mock()
 			}
 
-			gotTask, err := s.biz.GetByID(contextx.Background(), tt.args.id)
+			gotTask, err := s.biz.GetByID(contextx.BackgroundWithLogger(s.logger), tt.args.id)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetByID() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -139,7 +140,7 @@ func (s *bizSuite) Test_impl_Create() {
 				tt.args.mock()
 			}
 
-			gotTask, err := s.biz.Create(contextx.Background(), tt.args.title)
+			gotTask, err := s.biz.Create(contextx.BackgroundWithLogger(s.logger), tt.args.title)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -216,7 +217,7 @@ func (s *bizSuite) Test_impl_UpdateStatus() {
 				tt.args.mock()
 			}
 
-			gotTask, err := s.biz.UpdateStatus(contextx.Background(), tt.args.id, tt.args.status)
+			gotTask, err := s.biz.UpdateStatus(contextx.BackgroundWithLogger(s.logger), tt.args.id, tt.args.status)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("UpdateStatus() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -301,7 +302,7 @@ func (s *bizSuite) Test_impl_ChangeTitle() {
 				tt.args.mock()
 			}
 
-			gotTask, err := s.biz.ChangeTitle(contextx.Background(), tt.args.id, tt.args.title)
+			gotTask, err := s.biz.ChangeTitle(contextx.BackgroundWithLogger(s.logger), tt.args.id, tt.args.title)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ChangeTitle() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -351,7 +352,7 @@ func (s *bizSuite) Test_impl_Delete() {
 				tt.args.mock()
 			}
 
-			if err := s.biz.Delete(contextx.Background(), tt.args.id); (err != nil) != tt.wantErr {
+			if err := s.biz.Delete(contextx.BackgroundWithLogger(s.logger), tt.args.id); (err != nil) != tt.wantErr {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
@@ -434,7 +435,7 @@ func (s *bizSuite) Test_impl_List() {
 				tt.args.mock()
 			}
 
-			gotTasks, gotTotal, err := s.biz.List(contextx.Background(), tt.args.start, tt.args.end)
+			gotTasks, gotTotal, err := s.biz.List(contextx.BackgroundWithLogger(s.logger), tt.args.start, tt.args.end)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return

@@ -9,12 +9,11 @@ package repo
 import (
 	"github.com/google/wire"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.uber.org/zap"
 )
 
 // Injectors from wire.go:
 
-func CreateIRepo(logger *zap.Logger, client *mongo.Client) (IRepo, error) {
+func CreateIRepo(client *mongo.Client) (IRepo, error) {
 	iRepo := NewImpl(client)
 	return iRepo, nil
 }

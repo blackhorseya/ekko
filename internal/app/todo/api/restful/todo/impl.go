@@ -19,16 +19,30 @@ import (
 )
 
 type impl struct {
-	logger *zap.Logger
-	biz    todo.IBiz
+	biz todo.IBiz
 }
 
 // NewImpl serve caller to create an IHandler
-func NewImpl(logger *zap.Logger, biz todo.IBiz) IHandler {
-	return &impl{
-		logger: logger.With(zap.String("type", "TodoHandler")),
-		biz:    biz,
+func NewImpl(e *gin.Engine, biz todo.IBiz) IHandler {
+	ret := &impl{biz: biz}
+
+	api := e.Group("api")
+	{
+		v1 := api.Group("v1")
+		{
+			tasks := v1.Group("tasks")
+			{
+				tasks.GET("", ret.List)
+				tasks.GET(":id", ret.GetByID)
+				tasks.POST("", ret.Create)
+				tasks.PATCH(":id/status", ret.UpdateStatus)
+				tasks.PATCH(":id/title", ret.ChangeTitle)
+				tasks.DELETE(":id", ret.Delete)
+			}
+		}
 	}
+
+	return ret
 }
 
 // GetByID
@@ -49,14 +63,14 @@ func (i *impl) GetByID(c *gin.Context) {
 	var req reqID
 	err := c.ShouldBindUri(&req)
 	if err != nil {
-		i.logger.Error(er.ErrBindID.Error(), zap.Error(err))
+		ctx.Error(er.ErrBindID.Error(), zap.Error(err))
 		_ = c.Error(er.ErrBindID)
 		return
 	}
 
 	id, err := primitive.ObjectIDFromHex(req.ID)
 	if err != nil {
-		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
+		ctx.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
 		_ = c.Error(er.ErrInvalidID)
 		return
 	}
@@ -88,14 +102,14 @@ func (i *impl) List(c *gin.Context) {
 
 	start, err := strconv.Atoi(c.DefaultQuery("start", "0"))
 	if err != nil {
-		i.logger.Error(er.ErrInvalidStart.Error(), zap.Error(err), zap.String("start", c.Query("start")))
+		ctx.Error(er.ErrInvalidStart.Error(), zap.Error(err), zap.String("start", c.Query("start")))
 		_ = c.Error(er.ErrInvalidStart)
 		return
 	}
 
 	end, err := strconv.Atoi(c.DefaultQuery("end", "10"))
 	if err != nil {
-		i.logger.Error(er.ErrInvalidEnd.Error(), zap.Error(err), zap.String("end", c.Query("end")))
+		ctx.Error(er.ErrInvalidEnd.Error(), zap.Error(err), zap.String("end", c.Query("end")))
 		_ = c.Error(er.ErrInvalidEnd)
 		return
 	}
@@ -158,14 +172,14 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 	var req reqID
 	err := c.ShouldBindUri(&req)
 	if err != nil {
-		i.logger.Error(er.ErrBindID.Error(), zap.Error(err))
+		ctx.Error(er.ErrBindID.Error(), zap.Error(err))
 		_ = c.Error(er.ErrBindID)
 		return
 	}
 
 	id, err := primitive.ObjectIDFromHex(req.ID)
 	if err != nil {
-		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
+		ctx.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
 		_ = c.Error(er.ErrInvalidID)
 		return
 	}
@@ -204,14 +218,14 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 	var req reqID
 	err := c.ShouldBindUri(&req)
 	if err != nil {
-		i.logger.Error(er.ErrBindID.Error(), zap.Error(err))
+		ctx.Error(er.ErrBindID.Error(), zap.Error(err))
 		_ = c.Error(er.ErrBindID)
 		return
 	}
 
 	id, err := primitive.ObjectIDFromHex(req.ID)
 	if err != nil {
-		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
+		ctx.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
 		_ = c.Error(er.ErrInvalidID)
 		return
 	}
@@ -245,14 +259,14 @@ func (i *impl) Delete(c *gin.Context) {
 	var req reqID
 	err := c.ShouldBindUri(&req)
 	if err != nil {
-		i.logger.Error(er.ErrBindID.Error(), zap.Error(err))
+		ctx.Error(er.ErrBindID.Error(), zap.Error(err))
 		_ = c.Error(er.ErrBindID)
 		return
 	}
 
 	id, err := primitive.ObjectIDFromHex(req.ID)
 	if err != nil {
-		i.logger.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
+		ctx.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
 		_ = c.Error(er.ErrInvalidID)
 		return
 	}

@@ -17,8 +17,13 @@ type impl struct {
 }
 
 // NewImpl is a constructor of implement health api handler
-func NewImpl(biz health.IBiz) IHandler {
-	return &impl{biz: biz}
+func NewImpl(e *gin.Engine, biz health.IBiz) IHandler {
+	ret := &impl{biz: biz}
+
+	e.GET("/api/readiness", ret.Readiness)
+	e.GET("/api/liveness", ret.Liveness)
+
+	return ret
 }
 
 // Readiness to know when an application is ready to start accepting traffic
