@@ -32,11 +32,11 @@ func (s *handlerSuite) SetupTest() {
 
 	gin.SetMode(gin.TestMode)
 	s.r = gin.New()
-	s.r.Use(ginhttp.AddContextx())
+	s.r.Use(ginhttp.AddContextxWithLogger(logger))
 	s.r.Use(ginhttp.HandleError())
 
 	s.mock = new(todoBiz.MockIBiz)
-	handler, err := CreateIHandler(s.r, logger, s.mock)
+	handler, err := CreateIHandler(s.r, s.mock)
 	if err != nil {
 		panic(err)
 	}

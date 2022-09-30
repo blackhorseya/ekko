@@ -66,7 +66,7 @@ func NewRouter(o *Options, logger *zap.Logger) *gin.Engine {
 		SkipPaths:  []string{"/api/readiness", "/api/liveness", "/metrics"},
 	}))
 	r.Use(ginzap.RecoveryWithZap(logger, true))
-	r.Use(ginhttp.AddContextx())
+	r.Use(ginhttp.AddContextxWithLogger(logger))
 	r.Use(ginhttp.HandleError())
 
 	r.Use(static.Serve("/", static.LocalFile("./web/build", true)))

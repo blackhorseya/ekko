@@ -1,7 +1,6 @@
 package health
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -12,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
+	"go.uber.org/zap"
 )
 
 type handlerSuite struct {
@@ -22,9 +22,11 @@ type handlerSuite struct {
 }
 
 func (s *handlerSuite) SetupTest() {
+	logger, _ := zap.NewDevelopment()
+
 	gin.SetMode(gin.TestMode)
 	s.r = gin.New()
-	s.r.Use(ginhttp.AddContextx())
+	s.r.Use(ginhttp.AddContextxWithLogger(logger))
 	s.r.Use(ginhttp.HandleError())
 
 	s.mock = new(health.MockIBiz)
@@ -73,7 +75,7 @@ func (s *handlerSuite) Test_impl_Readiness() {
 				tt.args.mock()
 			}
 
-			uri := fmt.Sprintf("/api/readiness")
+			uri := "/api/readiness"
 			req := httptest.NewRequest(http.MethodGet, uri, nil)
 			w := httptest.NewRecorder()
 			s.r.ServeHTTP(w, req)
@@ -118,7 +120,7 @@ func (s *handlerSuite) Test_impl_Liveness() {
 				tt.args.mock()
 			}
 
-			uri := fmt.Sprintf("/api/liveness")
+			uri := "/api/liveness"
 			req := httptest.NewRequest(http.MethodGet, uri, nil)
 			w := httptest.NewRecorder()
 			s.r.ServeHTTP(w, req)
