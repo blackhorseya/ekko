@@ -92,7 +92,7 @@ gen-swagger: ## generate swagger spec
 
 .PHONY: gen-mocks # generate mocks code via mockery
 gen-mocks: ## generate mocks
-	@go generate -x ./...
+	@go generate -tags=wireinject -x ./...
 
 .PHONY: migrate-up
 migrate-up: ## run migration up
