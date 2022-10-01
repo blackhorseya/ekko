@@ -32,5 +32,10 @@ type IBiz interface {
 	Delete(ctx contextx.Contextx, id primitive.ObjectID) error
 }
 
-// ProviderSet is a provider set for wire
-var ProviderSet = wire.NewSet(NewImpl, repo.ProviderSet)
+var (
+	// ProviderSet is a provider set for wire
+	ProviderSet = wire.NewSet(NewImpl, repo.ProviderSetViaDatabase)
+
+	// ProviderSetViaHTTP is a http provider set for wire
+	ProviderSetViaHTTP = wire.NewSet(NewImpl, repo.ProviderSetViaHTTP)
+)

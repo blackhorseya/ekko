@@ -29,6 +29,7 @@ type suiteRepo struct {
 
 func (s *suiteRepo) SetupTest() {
 	s.logger, _ = zap.NewDevelopment()
+
 	pool, err := dockertest.NewPool("")
 	if err != nil {
 		panic(err)

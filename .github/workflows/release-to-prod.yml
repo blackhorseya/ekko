@@ -77,3 +77,7 @@ jobs:
         run: |
           echo $KUBECONFIG_FILE | base64 --decode > ./kubeconfig.yaml && export KUBECONFIG=./kubeconfig.yaml
           make deploy DEPLOY_TO=prod VERSION=$VERSION
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

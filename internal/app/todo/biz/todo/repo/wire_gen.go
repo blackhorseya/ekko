@@ -7,6 +7,7 @@
 package repo
 
 import (
+	"github.com/blackhorseya/gocommon/pkg/restclient"
 	"github.com/google/wire"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -18,6 +19,13 @@ func CreateIRepo(client *mongo.Client) (IRepo, error) {
 	return iRepo, nil
 }
 
+func CreateHTTP(opts *Options, client restclient.RestClient) (IRepo, error) {
+	iRepo := NewHTTP(opts, client)
+	return iRepo, nil
+}
+
 // wire.go:
 
 var testProviderSet = wire.NewSet(NewImpl)
+
+var httpProviderSet = wire.NewSet(NewHTTP)

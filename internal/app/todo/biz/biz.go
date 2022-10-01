@@ -6,8 +6,10 @@ import (
 	"github.com/google/wire"
 )
 
-// ProviderSet is a business provider set
-var ProviderSet = wire.NewSet(
-	health.ProviderSet,
-	todo.ProviderSet,
+var (
+	// ProviderSet is a business provider set
+	ProviderSet = wire.NewSet(health.ProviderSet, todo.ProviderSet)
+
+	// ProviderSetViaHTTP is a http provider set for wire
+	ProviderSetViaHTTP = wire.NewSet(health.ProviderSet, todo.ProviderSetViaHTTP)
 )
