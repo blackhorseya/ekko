@@ -135,15 +135,14 @@ func (i *rest) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Tas
 		return nil, err
 	}
 
-	payload, err := json.Marshal(newTask)
-	if err != nil {
-		return nil, err
-	}
+	values := url.Values{}
+	values.Add("title", newTask.Title)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, uri.String(), bytes.NewReader(payload))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, uri.String(), bytes.NewReader([]byte(values.Encode())))
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	resp, err := i.restclient.Do(req)
 	if err != nil {
