@@ -10,7 +10,7 @@ type IHandler interface {
 	// GetByID serve caller to given id to get a task
 	GetByID(c *gin.Context)
 
-	// List serve caller to list all task by start and end
+	// List serve caller to list all task by page and size
 	List(c *gin.Context)
 
 	// Create serve caller to create a task

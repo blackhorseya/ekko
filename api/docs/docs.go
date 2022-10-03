@@ -98,16 +98,16 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "default": 0,
-                        "description": "start",
-                        "name": "start",
+                        "default": 1,
+                        "description": "page",
+                        "name": "page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
                         "default": 10,
-                        "description": "end",
-                        "name": "end",
+                        "description": "size",
+                        "name": "size",
                         "in": "query"
                     }
                 ],
@@ -223,7 +223,7 @@ const docTemplate = `{
                 "summary": "Get a task by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -283,7 +283,7 @@ const docTemplate = `{
                 "summary": "Delete a task by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -345,7 +345,7 @@ const docTemplate = `{
                 "summary": "Update task's status by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",
@@ -408,7 +408,7 @@ const docTemplate = `{
                 "summary": "Change task's title by id",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "ID of task",
                         "name": "id",
                         "in": "path",

@@ -85,15 +85,15 @@ paths:
       - application/json
       description: List all tasks
       parameters:
-      - default: 0
-        description: start
+      - default: 1
+        description: page
         in: query
-        name: start
+        name: page
         type: integer
       - default: 10
-        description: end
+        description: size
         in: query
-        name: end
+        name: size
         type: integer
       produces:
       - application/json
@@ -167,7 +167,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -204,7 +204,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -242,7 +242,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       - description: status
         in: formData
         name: status
@@ -281,7 +281,7 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       - description: title
         in: formData
         name: title

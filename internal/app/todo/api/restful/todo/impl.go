@@ -50,7 +50,7 @@ func NewImpl(e *gin.Engine, biz todo.ITodoBiz) IHandler {
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param id path string true "ID of task"
+// @Param id path int true "ID of task"
 // @Success 200 {object} response.Response{data=pb.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
@@ -82,8 +82,8 @@ func (i *impl) GetByID(c *gin.Context) {
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param start query integer false "start" default(0)
-// @Param end query integer false "end" default(10)
+// @Param page query integer false "page" default(1)
+// @Param size query integer false "size" default(10)
 // @Success 200 {object} response.Response{data=[]pb.Task}
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
@@ -92,29 +92,29 @@ func (i *impl) GetByID(c *gin.Context) {
 func (i *impl) List(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
 
-	start, err := strconv.Atoi(c.DefaultQuery("start", "0"))
+	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
 	if err != nil {
-		ctx.Error(er.ErrInvalidPage.Error(), zap.Error(err), zap.String("start", c.Query("start")))
+		ctx.Error(er.ErrInvalidPage.Error(), zap.Error(err), zap.String("page", c.Query("page")))
 		_ = c.Error(er.ErrInvalidPage)
 		return
 	}
 
-	end, err := strconv.Atoi(c.DefaultQuery("end", "10"))
+	size, err := strconv.Atoi(c.DefaultQuery("size", "10"))
 	if err != nil {
-		ctx.Error(er.ErrInvalidSize.Error(), zap.Error(err), zap.String("end", c.Query("end")))
+		ctx.Error(er.ErrInvalidSize.Error(), zap.Error(err), zap.String("size", c.Query("size")))
 		_ = c.Error(er.ErrInvalidSize)
 		return
 	}
 
-	tasks, total, err := i.biz.List(ctx, start, end)
+	tasks, total, err := i.biz.List(ctx, page, size)
 	if err != nil {
 		_ = c.Error(err)
 		return
 	}
 
-	var ret []*pb.Task
-	for _, task := range tasks {
-		ret = append(ret, ticket.NewTaskResponse(task))
+	ret := make([]*pb.Task, len(tasks))
+	for idx, task := range tasks {
+		ret[idx] = ticket.NewTaskResponse(task)
 	}
 
 	c.Header("X-Total-Count", strconv.Itoa(total))
@@ -152,7 +152,7 @@ func (i *impl) Create(c *gin.Context) {
 // @Tags Tasks
 // @Accept application/x-www-form-urlencoded
 // @Produce application/json
-// @Param id path string true "ID of task"
+// @Param id path int true "ID of task"
 // @Param status formData integer true "status"
 // @Success 200 {object} response.Response{data=pb.Task}
 // @Failure 400 {object} er.APPError
@@ -191,7 +191,7 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 // @Tags Tasks
 // @Accept application/x-www-form-urlencoded
 // @Produce application/json
-// @Param id path string true "ID of task"
+// @Param id path int true "ID of task"
 // @Param title formData string true "title"
 // @Success 200 {object} response.Response{data=pb.Task}
 // @Failure 400 {object} er.APPError
@@ -225,7 +225,7 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param id path string true "ID of task"
+// @Param id path int true "ID of task"
 // @Success 200 {object} response.Response{data=string}
 // @Failure 400 {object} er.APPError
 // @Failure 404 {object} er.APPError
