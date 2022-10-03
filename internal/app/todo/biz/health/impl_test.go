@@ -15,14 +15,14 @@ import (
 type bizTestSuite struct {
 	suite.Suite
 	logger *zap.Logger
-	mock   *repo.MockIRepo
+	mock   *repo.MockIHealthRepo
 	biz    IBiz
 }
 
 func (s *bizTestSuite) SetupTest() {
 	s.logger, _ = zap.NewDevelopment()
 
-	s.mock = new(repo.MockIRepo)
+	s.mock = new(repo.MockIHealthRepo)
 	biz, err := CreateIBiz(s.mock)
 	if err != nil {
 		panic(err)

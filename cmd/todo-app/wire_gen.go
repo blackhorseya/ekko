@@ -49,11 +49,19 @@ func CreateApp(path2 string) (*app.Application, error) {
 		return nil, err
 	}
 	engine := http.NewRouter(httpOptions, logger)
-	iRepo := repo.NewImpl()
-	iBiz := health.NewImpl(iRepo)
+	databasesOptions, err := databases.NewOptions(viper, logger)
+	if err != nil {
+		return nil, err
+	}
+	db, err := databases.NewMariadb(databasesOptions, logger)
+	if err != nil {
+		return nil, err
+	}
+	iHealthRepo := repo.NewMariadb(db)
+	iBiz := health.NewImpl(iHealthRepo)
 	iHandler := health2.NewImpl(engine, iBiz)
-	repoIRepo := repo2.NewImpl()
-	todoIBiz := todo2.NewImpl(repoIRepo)
+	iRepo := repo2.NewImpl()
+	todoIBiz := todo2.NewImpl(iRepo)
 	todoIHandler := todo3.NewImpl(engine, todoIBiz)
 	initHandlers := restful.CreateInitHandlerFn(iHandler, todoIHandler)
 	server, err := http.New(httpOptions, logger, engine, initHandlers)

@@ -4,11 +4,11 @@ package repo
 
 import (
 	"github.com/google/wire"
-	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/jmoiron/sqlx"
 )
 
-var testProviderSet = wire.NewSet(NewImpl)
+var testProviderSet = wire.NewSet(NewMariadb)
 
-func CreateIRepo(client *mongo.Client) (IRepo, error) {
+func CreateMariadb(rw *sqlx.DB) (IHealthRepo, error) {
 	panic(wire.Build(testProviderSet))
 }
