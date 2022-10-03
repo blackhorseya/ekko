@@ -28,9 +28,9 @@ func CreateApp() (*cobra.Command, error) {
 		return nil, err
 	}
 	restClient := restclient.NewClient()
-	iRepo := repo.NewHTTP(options, restClient)
-	iBiz := todo.NewImpl(iRepo)
-	command, err := cmd.NewRootCmd(iBiz)
+	iTodoRepo := repo.NewHTTP(options, restClient)
+	iTodoBiz := todo.NewImpl(iTodoRepo)
+	command, err := cmd.NewRootCmd(iTodoBiz)
 	if err != nil {
 		return nil, err
 	}

@@ -11,11 +11,11 @@ import (
 )
 
 type impl struct {
-	repo repo.IRepo
+	repo repo.ITodoRepo
 }
 
 // NewImpl serve caller to create an ITodoBiz
-func NewImpl(repo repo.IRepo) ITodoBiz {
+func NewImpl(repo repo.ITodoRepo) ITodoBiz {
 	return &impl{
 		repo: repo,
 	}

@@ -25,7 +25,7 @@ type SuiteHTTP struct {
 	suite.Suite
 	logger     *zap.Logger
 	restclient *restclient.MockRestClient
-	repo       IRepo
+	repo       ITodoRepo
 }
 
 func (s *SuiteHTTP) SetupTest() {
