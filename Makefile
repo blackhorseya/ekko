@@ -8,7 +8,7 @@ IMAGE_NAME=$(REGISTRY)/$(PROJECT_ID)/$(APP_NAME)
 HELM_REPO_NAME=blackhorseya
 CHART_NAME=todo-app
 
-DB_URI="mongodb://todo-app:changeme@localhost:27017/todo-db"
+DB_URI='mysql://root:changeme@tcp(localhost:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local'
 
 .PHONY: check-%
 check-%: ## check environment variable is exists
