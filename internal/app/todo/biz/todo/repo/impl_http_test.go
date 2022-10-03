@@ -11,13 +11,12 @@ import (
 	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/gocommon/pkg/response"
 	"github.com/blackhorseya/gocommon/pkg/restclient"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/ticket"
 	"github.com/blackhorseya/todo-app/test/testdata"
 	"github.com/goccy/go-json"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 )
 
@@ -45,18 +44,18 @@ func TestSuiteHTTP(t *testing.T) {
 
 func (s *SuiteHTTP) Test_rest_GetByID() {
 	type args struct {
-		id   primitive.ObjectID
+		id   uint64
 		mock func()
 	}
 	tests := []struct {
 		name     string
 		args     args
-		wantTask *todo.Task
+		wantTask *ticket.Task
 		wantErr  bool
 	}{
 		{
 			name: "do request then error",
-			args: args{id: testdata.TaskOID1, mock: func() {
+			args: args{id: testdata.Task1.ID, mock: func() {
 				s.restclient.On("Do", mock.Anything).Return(nil, errors.New("error")).Once()
 			}},
 			wantTask: nil,
@@ -64,7 +63,7 @@ func (s *SuiteHTTP) Test_rest_GetByID() {
 		},
 		{
 			name: "resp code not 200 then error",
-			args: args{id: testdata.TaskOID1, mock: func() {
+			args: args{id: testdata.Task1.ID, mock: func() {
 				data, _ := json.Marshal(response.Response{Code: 400, Msg: "failed", Data: nil})
 				body := io.NopCloser(strings.NewReader(string(data)))
 				s.restclient.On("Do", mock.Anything).Return(&http.Response{
@@ -77,7 +76,7 @@ func (s *SuiteHTTP) Test_rest_GetByID() {
 		},
 		{
 			name: "resp data then success",
-			args: args{id: testdata.TaskOID1, mock: func() {
+			args: args{id: testdata.Task1.ID, mock: func() {
 				data, _ := json.Marshal(response.OK.WithData(testdata.Task1))
 				body := io.NopCloser(strings.NewReader(string(data)))
 				s.restclient.On("Do", mock.Anything).Return(&http.Response{
@@ -111,19 +110,18 @@ func (s *SuiteHTTP) Test_rest_GetByID() {
 
 func (s *SuiteHTTP) Test_rest_List() {
 	type args struct {
-		limit  int
-		offset int
-		mock   func()
+		condition QueryTodoCondition
+		mock      func()
 	}
 	tests := []struct {
 		name      string
 		args      args
-		wantTasks []*todo.Task
+		wantTasks []*ticket.Task
 		wantErr   bool
 	}{
 		{
 			name: "do request then error",
-			args: args{limit: 10, offset: 0, mock: func() {
+			args: args{condition: QueryTodoCondition{Limit: 10, Offset: 0}, mock: func() {
 				s.restclient.On("Do", mock.Anything).Return(nil, errors.New("error")).Once()
 			}},
 			wantTasks: nil,
@@ -131,7 +129,7 @@ func (s *SuiteHTTP) Test_rest_List() {
 		},
 		{
 			name: "resp code not 200 then error",
-			args: args{limit: 10, offset: 0, mock: func() {
+			args: args{condition: QueryTodoCondition{Limit: 10, Offset: 0}, mock: func() {
 				data, _ := json.Marshal(response.Response{Code: 400, Msg: "failed", Data: nil})
 				body := io.NopCloser(strings.NewReader(string(data)))
 				s.restclient.On("Do", mock.Anything).Return(&http.Response{
@@ -144,15 +142,15 @@ func (s *SuiteHTTP) Test_rest_List() {
 		},
 		{
 			name: "list tasks then success",
-			args: args{limit: 10, offset: 0, mock: func() {
-				data, _ := json.Marshal(response.Response{Code: 200, Msg: "ok", Data: []*todo.Task{testdata.Task1}})
+			args: args{condition: QueryTodoCondition{Limit: 10, Offset: 0}, mock: func() {
+				data, _ := json.Marshal(response.Response{Code: 200, Msg: "ok", Data: []*ticket.Task{testdata.Task1}})
 				body := io.NopCloser(strings.NewReader(string(data)))
 				s.restclient.On("Do", mock.Anything).Return(&http.Response{
 					StatusCode: 200,
 					Body:       body,
 				}, nil).Once()
 			}},
-			wantTasks: []*todo.Task{testdata.Task1},
+			wantTasks: []*ticket.Task{testdata.Task1},
 			wantErr:   false,
 		},
 	}
@@ -162,7 +160,7 @@ func (s *SuiteHTTP) Test_rest_List() {
 				tt.args.mock()
 			}
 
-			gotTasks, err := s.repo.List(contextx.BackgroundWithLogger(s.logger), tt.args.limit, tt.args.offset)
+			gotTasks, err := s.repo.List(contextx.BackgroundWithLogger(s.logger), tt.args.condition)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -178,13 +176,13 @@ func (s *SuiteHTTP) Test_rest_List() {
 
 func (s *SuiteHTTP) Test_rest_Create() {
 	type args struct {
-		newTask *todo.Task
+		newTask *ticket.Task
 		mock    func()
 	}
 	tests := []struct {
 		name     string
 		args     args
-		wantTask *todo.Task
+		wantTask *ticket.Task
 		wantErr  bool
 	}{
 		{

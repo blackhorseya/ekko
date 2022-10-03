@@ -1,9 +1,13 @@
 package repo
 
 import (
+	"database/sql"
+	"time"
+
 	"github.com/blackhorseya/gocommon/pkg/contextx"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/ticket"
 	"github.com/jmoiron/sqlx"
+	"github.com/pkg/errors"
 )
 
 type mariadb struct {
@@ -17,28 +21,26 @@ func NewMariadb(rw *sqlx.DB) ITodoRepo {
 	}
 }
 
-func (i *mariadb) GetByID(ctx contextx.Contextx, id uint64) (task *todo.Task, err error) {
-	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
-	// defer cancel()
-	//
-	// filter := bson.M{"_id": id}
-	// var ret todo.Task
-	// coll := i.client.Database(dbName).Collection(collName)
-	// err = coll.FindOne(timeout, filter).Decode(&ret)
-	// if err != nil {
-	// 	if err == mongo.ErrNoDocuments {
-	// 		return nil, nil
-	// 	}
-	//
-	// 	return nil, err
-	// }
-	//
-	// return &ret, nil
-	// todo: 2022/10/4|sean|mariadb me
-	panic("mariadb me")
+func (i *mariadb) GetByID(ctx contextx.Contextx, id uint64) (task *ticket.Task, err error) {
+	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	stmt := `select id, title, status, created_at, updated_at from tickets where id = ?`
+
+	var ret ticket.Task
+	err = i.rw.GetContext(timeout, &ret, stmt, id)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	return &ret, nil
 }
 
-func (i *mariadb) List(ctx contextx.Contextx, condition QueryTodoCondition) (tasks []*todo.Task, err error) {
+func (i *mariadb) List(ctx contextx.Contextx, condition QueryTodoCondition) (tasks []*ticket.Task, err error) {
 	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	// defer cancel()
 	//
@@ -49,7 +51,7 @@ func (i *mariadb) List(ctx contextx.Contextx, condition QueryTodoCondition) (tas
 	// }
 	// defer cur.Close(timeout)
 	//
-	// var ret []*todo.Task
+	// var ret []*ticket.Task
 	// err = cur.All(timeout, &ret)
 	// if err != nil {
 	// 	if errors.Is(err, mongo.ErrNoDocuments) {
@@ -81,7 +83,7 @@ func (i *mariadb) Count(ctx contextx.Contextx) (total int, err error) {
 	panic("mariadb me")
 }
 
-func (i *mariadb) Create(ctx contextx.Contextx, created *todo.Task) (task *todo.Task, err error) {
+func (i *mariadb) Create(ctx contextx.Contextx, created *ticket.Task) (task *ticket.Task, err error) {
 	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	// defer cancel()
 	//
@@ -104,7 +106,7 @@ func (i *mariadb) Create(ctx contextx.Contextx, created *todo.Task) (task *todo.
 	panic("mariadb me")
 }
 
-func (i *mariadb) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Task, err error) {
+func (i *mariadb) Update(ctx contextx.Contextx, updated *ticket.Task) (task *ticket.Task, err error) {
 	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	// defer cancel()
 	//
@@ -113,7 +115,7 @@ func (i *mariadb) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.
 	// filter := bson.M{"_id": updated.ID}
 	// opt := options.FindOneAndReplace().SetUpsert(false).SetReturnDocument(options.After)
 	// coll := i.client.Database(dbName).Collection(collName)
-	// var ret *todo.Task
+	// var ret *ticket.Task
 	// err = coll.FindOneAndReplace(timeout, filter, updated, opt).Decode(&ret)
 	// if err != nil {
 	// 	return nil, err

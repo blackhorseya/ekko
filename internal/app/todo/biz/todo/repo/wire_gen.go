@@ -14,7 +14,7 @@ import (
 
 // Injectors from wire.go:
 
-func CreateIRepo(rw *sqlx.DB) (ITodoRepo, error) {
+func CreateMariadb(rw *sqlx.DB) (ITodoRepo, error) {
 	iTodoRepo := NewMariadb(rw)
 	return iTodoRepo, nil
 }
@@ -26,6 +26,6 @@ func CreateHTTP(opts *Options, client restclient.RestClient) (ITodoRepo, error) 
 
 // wire.go:
 
-var testProviderSet = wire.NewSet(NewMariadb)
+var mariadbProviderSet = wire.NewSet(NewMariadb)
 
 var httpProviderSet = wire.NewSet(NewHTTP)

@@ -11,7 +11,7 @@ import (
 	"github.com/blackhorseya/gocommon/pkg/ginhttp"
 	todoBiz "github.com/blackhorseya/todo-app/internal/app/todo/biz/todo"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/ticket"
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/blackhorseya/todo-app/test/testdata"
 	"github.com/gin-gonic/gin"
@@ -69,15 +69,15 @@ func (s *handlerSuite) Test_impl_GetByID() {
 		},
 		{
 			name: "get by id then 500",
-			args: args{id: testdata.TaskOID1.Hex(), mock: func() {
-				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(nil, er.ErrGetTask).Once()
+			args: args{id: "1", mock: func() {
+				s.mock.On("GetByID", mock.Anything, uint64(1)).Return(nil, er.ErrGetTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
 			name: "get by id then 200",
-			args: args{id: testdata.TaskOID1.Hex(), mock: func() {
-				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(testdata.Task1, nil).Once()
+			args: args{id: "1", mock: func() {
+				s.mock.On("GetByID", mock.Anything, uint64(1)).Return(testdata.Task1, nil).Once()
 			}},
 			wantCode: 200,
 		},
@@ -141,7 +141,7 @@ func (s *handlerSuite) Test_impl_List() {
 		{
 			name: "list then success",
 			args: args{start: "0", end: "3", mock: func() {
-				s.mock.On("List", mock.Anything, 0, 3).Return([]*todo.Task{testdata.Task1}, 10, nil).Once()
+				s.mock.On("List", mock.Anything, 0, 3).Return([]*ticket.Task{testdata.Task1}, 10, nil).Once()
 			}},
 			wantCode: 200,
 		},
@@ -239,14 +239,14 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 		},
 		{
 			name: "update status then 500",
-			args: args{id: testdata.Task1.ID.Hex(), status: "3", mock: func() {
+			args: args{id: "1", status: "3", mock: func() {
 				s.mock.On("UpdateStatus", mock.Anything, testdata.Task1.ID, pb.TaskStatus_TASK_STATUS_DONE).Return(nil, er.ErrUpdateStatusTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
 			name: "update status then 200",
-			args: args{id: testdata.Task1.ID.Hex(), status: "3", mock: func() {
+			args: args{id: "1", status: "3", mock: func() {
 				s.mock.On("UpdateStatus", mock.Anything, testdata.Task1.ID, pb.TaskStatus_TASK_STATUS_DONE).Return(testdata.Task1, nil).Once()
 			}},
 			wantCode: 200,
@@ -299,14 +299,14 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 		},
 		{
 			name: "change title then 500",
-			args: args{id: testdata.Task1.ID.Hex(), title: "title", mock: func() {
+			args: args{id: "1", title: "title", mock: func() {
 				s.mock.On("ChangeTitle", mock.Anything, testdata.Task1.ID, "title").Return(nil, er.ErrChangeTitleTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
 			name: "change title then 200",
-			args: args{id: testdata.Task1.ID.Hex(), title: "title", mock: func() {
+			args: args{id: "1", title: "title", mock: func() {
 				s.mock.On("ChangeTitle", mock.Anything, testdata.Task1.ID, "title").Return(testdata.Task1, nil).Once()
 			}},
 			wantCode: 200,
@@ -358,14 +358,14 @@ func (s *handlerSuite) Test_impl_Delete() {
 		},
 		{
 			name: "delete task by id then 500",
-			args: args{id: testdata.Task1.ID.Hex(), mock: func() {
+			args: args{id: "1", mock: func() {
 				s.mock.On("Delete", mock.Anything, testdata.Task1.ID).Return(er.ErrDeleteTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
 			name: "delete task by id then 200",
-			args: args{id: testdata.Task1.ID.Hex(), mock: func() {
+			args: args{id: "1", mock: func() {
 				s.mock.On("Delete", mock.Anything, testdata.Task1.ID).Return(nil).Once()
 			}},
 			wantCode: 200,

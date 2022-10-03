@@ -6,27 +6,26 @@ import (
 
 	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/ticket"
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/blackhorseya/todo-app/test/testdata"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 )
 
 type bizSuite struct {
 	suite.Suite
 	logger *zap.Logger
-	mock   *repo.MockIRepo
+	mock   *repo.MockITodoRepo
 	biz    ITodoBiz
 }
 
 func (s *bizSuite) SetupTest() {
 	s.logger, _ = zap.NewDevelopment()
 
-	s.mock = new(repo.MockIRepo)
+	s.mock = new(repo.MockITodoRepo)
 	biz, err := CreateIBiz(s.mock)
 	if err != nil {
 		panic(err)
@@ -40,41 +39,35 @@ func TestBizSuite(t *testing.T) {
 
 func (s *bizSuite) Test_impl_GetByID() {
 	type args struct {
-		id   primitive.ObjectID
+		id   uint64
 		mock func()
 	}
 	tests := []struct {
 		name     string
 		args     args
-		wantTask *todo.Task
+		wantTask *ticket.Task
 		wantErr  bool
 	}{
 		{
-			name:     "nil object id then error",
-			args:     args{id: primitive.NilObjectID},
-			wantTask: nil,
-			wantErr:  true,
-		},
-		{
 			name: "get by id then error",
-			args: args{id: testdata.TaskOID1, mock: func() {
-				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(nil, errors.New("error")).Once()
+			args: args{id: testdata.Task1.ID, mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.Task1.ID).Return(nil, errors.New("error")).Once()
 			}},
 			wantTask: nil,
 			wantErr:  true,
 		},
 		{
 			name: "get by id not found then error",
-			args: args{id: testdata.TaskOID1, mock: func() {
-				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(nil, nil).Once()
+			args: args{id: testdata.Task1.ID, mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.Task1.ID).Return(nil, nil).Once()
 			}},
 			wantTask: nil,
 			wantErr:  true,
 		},
 		{
 			name: "get by id then success",
-			args: args{id: testdata.TaskOID1, mock: func() {
-				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(testdata.Task1, nil).Once()
+			args: args{id: testdata.Task1.ID, mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.Task1.ID).Return(testdata.Task1, nil).Once()
 			}},
 			wantTask: testdata.Task1,
 			wantErr:  false,
@@ -108,7 +101,7 @@ func (s *bizSuite) Test_impl_Create() {
 	tests := []struct {
 		name     string
 		args     args
-		wantTask *todo.Task
+		wantTask *ticket.Task
 		wantErr  bool
 	}{
 		{
@@ -120,7 +113,7 @@ func (s *bizSuite) Test_impl_Create() {
 		{
 			name: "create task then error",
 			args: args{title: "task 1", mock: func() {
-				s.mock.On("Create", mock.Anything, testdata.TaskCreate1).Return(nil, errors.New("error")).Once()
+				s.mock.On("Create", mock.Anything, testdata.Task1).Return(nil, errors.New("error")).Once()
 			}},
 			wantTask: nil,
 			wantErr:  true,
@@ -128,7 +121,7 @@ func (s *bizSuite) Test_impl_Create() {
 		{
 			name: "create task then success",
 			args: args{title: "task 1", mock: func() {
-				s.mock.On("Create", mock.Anything, testdata.TaskCreate1).Return(testdata.Task1, nil).Once()
+				s.mock.On("Create", mock.Anything, testdata.Task1).Return(testdata.Task1, nil).Once()
 			}},
 			wantTask: testdata.Task1,
 			wantErr:  false,
@@ -156,42 +149,36 @@ func (s *bizSuite) Test_impl_Create() {
 
 func (s *bizSuite) Test_impl_UpdateStatus() {
 	type args struct {
-		id     primitive.ObjectID
+		id     uint64
 		status pb.TaskStatus
 		mock   func()
 	}
 	tests := []struct {
 		name     string
 		args     args
-		wantTask *todo.Task
+		wantTask *ticket.Task
 		wantErr  bool
 	}{
 		{
-			name:     "nil object id then error",
-			args:     args{id: primitive.NilObjectID},
-			wantTask: nil,
-			wantErr:  true,
-		},
-		{
 			name: "get task by id then error",
-			args: args{id: testdata.TaskOID1, mock: func() {
-				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(nil, errors.New("error")).Once()
+			args: args{id: testdata.Task1.ID, mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.Task1.ID).Return(nil, errors.New("error")).Once()
 			}},
 			wantTask: nil,
 			wantErr:  true,
 		},
 		{
 			name: "get task by id not found then error",
-			args: args{id: testdata.TaskOID1, mock: func() {
-				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(nil, nil).Once()
+			args: args{id: testdata.Task1.ID, mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.Task1.ID).Return(nil, nil).Once()
 			}},
 			wantTask: nil,
 			wantErr:  true,
 		},
 		{
 			name: "update status then error",
-			args: args{id: testdata.TaskOID1, status: pb.TaskStatus_TASK_STATUS_DONE, mock: func() {
-				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(testdata.Task1, nil).Once()
+			args: args{id: testdata.Task1.ID, status: pb.TaskStatus_TASK_STATUS_DONE, mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.Task1.ID).Return(testdata.Task1, nil).Once()
 
 				updated := testdata.Task1
 				s.mock.On("Update", mock.Anything, updated).Return(nil, errors.New("error")).Once()
@@ -201,8 +188,8 @@ func (s *bizSuite) Test_impl_UpdateStatus() {
 		},
 		{
 			name: "update status then success",
-			args: args{id: testdata.TaskOID1, status: pb.TaskStatus_TASK_STATUS_DONE, mock: func() {
-				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(testdata.Task1, nil).Once()
+			args: args{id: testdata.Task1.ID, status: pb.TaskStatus_TASK_STATUS_DONE, mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.Task1.ID).Return(testdata.Task1, nil).Once()
 
 				updated := testdata.Task1
 				s.mock.On("Update", mock.Anything, updated).Return(testdata.Task1, nil).Once()
@@ -233,22 +220,16 @@ func (s *bizSuite) Test_impl_UpdateStatus() {
 
 func (s *bizSuite) Test_impl_ChangeTitle() {
 	type args struct {
-		id    primitive.ObjectID
+		id    uint64
 		title string
 		mock  func()
 	}
 	tests := []struct {
 		name     string
 		args     args
-		wantTask *todo.Task
+		wantTask *ticket.Task
 		wantErr  bool
 	}{
-		{
-			name:     "nil object id then error",
-			args:     args{id: primitive.NilObjectID, title: testdata.TaskUpdate1.Title},
-			wantTask: nil,
-			wantErr:  true,
-		},
 		{
 			name:     "empty title then error",
 			args:     args{id: testdata.Task1.ID, title: ""},
@@ -257,27 +238,27 @@ func (s *bizSuite) Test_impl_ChangeTitle() {
 		},
 		{
 			name: "get task by id then error",
-			args: args{id: testdata.Task1.ID, title: testdata.TaskUpdate1.Title, mock: func() {
-				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(nil, errors.New("error")).Once()
+			args: args{id: testdata.Task1.ID, title: testdata.Task1.Title, mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.Task1.ID).Return(nil, errors.New("error")).Once()
 			}},
 			wantTask: nil,
 			wantErr:  true,
 		},
 		{
 			name: "get task by id not found then error",
-			args: args{id: testdata.Task1.ID, title: testdata.TaskUpdate1.Title, mock: func() {
-				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(nil, nil).Once()
+			args: args{id: testdata.Task1.ID, title: testdata.Task1.Title, mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.Task1.ID).Return(nil, nil).Once()
 			}},
 			wantTask: nil,
 			wantErr:  true,
 		},
 		{
 			name: "change task title by id then error",
-			args: args{id: testdata.Task1.ID, title: testdata.TaskUpdate1.Title, mock: func() {
-				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(testdata.Task1, nil).Once()
+			args: args{id: testdata.Task1.ID, title: testdata.Task1.Title, mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.Task1.ID).Return(testdata.Task1, nil).Once()
 
 				updated := testdata.Task1
-				updated.Title = testdata.TaskUpdate1.Title
+				updated.Title = testdata.Task1.Title
 				s.mock.On("Update", mock.Anything, updated).Return(nil, errors.New("error")).Once()
 			}},
 			wantTask: nil,
@@ -285,11 +266,11 @@ func (s *bizSuite) Test_impl_ChangeTitle() {
 		},
 		{
 			name: "change task title by id then success",
-			args: args{id: testdata.Task1.ID, title: testdata.TaskUpdate1.Title, mock: func() {
-				s.mock.On("GetByID", mock.Anything, testdata.TaskOID1).Return(testdata.Task1, nil).Once()
+			args: args{id: testdata.Task1.ID, title: testdata.Task1.Title, mock: func() {
+				s.mock.On("GetByID", mock.Anything, testdata.Task1.ID).Return(testdata.Task1, nil).Once()
 
 				updated := testdata.Task1
-				updated.Title = testdata.TaskUpdate1.Title
+				updated.Title = testdata.Task1.Title
 				s.mock.On("Update", mock.Anything, updated).Return(testdata.Task1, nil).Once()
 			}},
 			wantTask: testdata.Task1,
@@ -318,7 +299,7 @@ func (s *bizSuite) Test_impl_ChangeTitle() {
 
 func (s *bizSuite) Test_impl_Delete() {
 	type args struct {
-		id   primitive.ObjectID
+		id   uint64
 		mock func()
 	}
 	tests := []struct {
@@ -327,21 +308,16 @@ func (s *bizSuite) Test_impl_Delete() {
 		wantErr bool
 	}{
 		{
-			name:    "nil object id then error",
-			args:    args{id: primitive.NilObjectID},
-			wantErr: true,
-		},
-		{
 			name: "delete task by id then error",
-			args: args{id: testdata.TaskOID1, mock: func() {
-				s.mock.On("Remove", mock.Anything, testdata.TaskOID1).Return(errors.New("error")).Once()
+			args: args{id: testdata.Task1.ID, mock: func() {
+				s.mock.On("Remove", mock.Anything, testdata.Task1.ID).Return(errors.New("error")).Once()
 			}},
 			wantErr: true,
 		},
 		{
 			name: "delete task by id then success",
-			args: args{id: testdata.TaskOID1, mock: func() {
-				s.mock.On("Remove", mock.Anything, testdata.TaskOID1).Return(nil).Once()
+			args: args{id: testdata.Task1.ID, mock: func() {
+				s.mock.On("Remove", mock.Anything, testdata.Task1.ID).Return(nil).Once()
 			}},
 			wantErr: false,
 		},
@@ -370,7 +346,7 @@ func (s *bizSuite) Test_impl_List() {
 	tests := []struct {
 		name      string
 		args      args
-		wantTasks []*todo.Task
+		wantTasks []*ticket.Task
 		wantTotal int
 		wantErr   bool
 	}{
@@ -391,7 +367,7 @@ func (s *bizSuite) Test_impl_List() {
 		{
 			name: "list tasks then error",
 			args: args{start: 1, end: 10, mock: func() {
-				s.mock.On("List", mock.Anything, 10, 1).Return(nil, errors.New("error")).Once()
+				s.mock.On("List", mock.Anything, repo.QueryTodoCondition{Limit: 10, Offset: 1}).Return(nil, errors.New("error")).Once()
 			}},
 			wantTasks: nil,
 			wantTotal: 0,
@@ -400,7 +376,7 @@ func (s *bizSuite) Test_impl_List() {
 		{
 			name: "list tasks not found then error",
 			args: args{start: 1, end: 10, mock: func() {
-				s.mock.On("List", mock.Anything, 10, 1).Return(nil, nil).Once()
+				s.mock.On("List", mock.Anything, repo.QueryTodoCondition{Limit: 10, Offset: 1}).Return(nil, nil).Once()
 			}},
 			wantTasks: nil,
 			wantTotal: 0,
@@ -409,7 +385,7 @@ func (s *bizSuite) Test_impl_List() {
 		{
 			name: "count all tasks then error",
 			args: args{start: 1, end: 10, mock: func() {
-				s.mock.On("List", mock.Anything, 10, 1).Return([]*todo.Task{testdata.Task1}, nil).Once()
+				s.mock.On("List", mock.Anything, repo.QueryTodoCondition{Limit: 10, Offset: 1}).Return([]*ticket.Task{testdata.Task1}, nil).Once()
 
 				s.mock.On("Count", mock.Anything).Return(0, errors.New("error")).Once()
 			}},
@@ -420,11 +396,11 @@ func (s *bizSuite) Test_impl_List() {
 		{
 			name: "list and count tasks then success",
 			args: args{start: 1, end: 10, mock: func() {
-				s.mock.On("List", mock.Anything, 10, 1).Return([]*todo.Task{testdata.Task1}, nil).Once()
+				s.mock.On("List", mock.Anything, repo.QueryTodoCondition{Limit: 10, Offset: 1}).Return([]*ticket.Task{testdata.Task1}, nil).Once()
 
 				s.mock.On("Count", mock.Anything).Return(10, nil).Once()
 			}},
-			wantTasks: []*todo.Task{testdata.Task1},
+			wantTasks: []*ticket.Task{testdata.Task1},
 			wantTotal: 10,
 			wantErr:   false,
 		},

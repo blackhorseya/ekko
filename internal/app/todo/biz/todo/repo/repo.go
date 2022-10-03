@@ -2,7 +2,7 @@ package repo
 
 import (
 	"github.com/blackhorseya/gocommon/pkg/contextx"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/ticket"
 	"github.com/google/wire"
 )
 
@@ -17,19 +17,19 @@ type QueryTodoCondition struct {
 //go:generate mockery --all --inpackage
 type ITodoRepo interface {
 	// GetByID serve caller to get a task by id
-	GetByID(ctx contextx.Contextx, id uint64) (task *todo.Task, err error)
+	GetByID(ctx contextx.Contextx, id uint64) (task *ticket.Task, err error)
 
 	// List serve caller to list all tasks
-	List(ctx contextx.Contextx, condition QueryTodoCondition) (tasks []*todo.Task, err error)
+	List(ctx contextx.Contextx, condition QueryTodoCondition) (tasks []*ticket.Task, err error)
 
 	// Create serve caller to create a task with title
-	Create(ctx contextx.Contextx, created *todo.Task) (task *todo.Task, err error)
+	Create(ctx contextx.Contextx, created *ticket.Task) (task *ticket.Task, err error)
 
 	// Count serve caller to count all tasks
 	Count(ctx contextx.Contextx) (total int, err error)
 
 	// Update serve caller to update a task
-	Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Task, err error)
+	Update(ctx contextx.Contextx, updated *ticket.Task) (task *ticket.Task, err error)
 
 	// Remove serve caller to remove a task by id
 	Remove(ctx contextx.Contextx, id uint64) error

@@ -8,10 +8,9 @@ import (
 	"github.com/blackhorseya/gocommon/pkg/response"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
-	todoE "github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/ticket"
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 
 	// import entity
@@ -68,20 +67,13 @@ func (i *impl) GetByID(c *gin.Context) {
 		return
 	}
 
-	id, err := primitive.ObjectIDFromHex(req.ID)
-	if err != nil {
-		ctx.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
-		_ = c.Error(er.ErrInvalidID)
-		return
-	}
-
-	ret, err := i.biz.GetByID(ctx, id)
+	ret, err := i.biz.GetByID(ctx, req.ID)
 	if err != nil {
 		_ = c.Error(err)
 		return
 	}
 
-	c.JSON(http.StatusOK, response.OK.WithData(todoE.NewTaskResponse(ret)))
+	c.JSON(http.StatusOK, response.OK.WithData(ticket.NewTaskResponse(ret)))
 }
 
 // List
@@ -122,7 +114,7 @@ func (i *impl) List(c *gin.Context) {
 
 	var ret []*pb.Task
 	for _, task := range tasks {
-		ret = append(ret, todoE.NewTaskResponse(task))
+		ret = append(ret, ticket.NewTaskResponse(task))
 	}
 
 	c.Header("X-Total-Count", strconv.Itoa(total))
@@ -151,7 +143,7 @@ func (i *impl) Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, response.OK.WithData(todoE.NewTaskResponse(ret)))
+	c.JSON(http.StatusCreated, response.OK.WithData(ticket.NewTaskResponse(ret)))
 }
 
 // UpdateStatus
@@ -177,13 +169,6 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 		return
 	}
 
-	id, err := primitive.ObjectIDFromHex(req.ID)
-	if err != nil {
-		ctx.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
-		_ = c.Error(er.ErrInvalidID)
-		return
-	}
-
 	statusStr := c.PostForm("status")
 	statusVal, err := strconv.Atoi(statusStr)
 	if err != nil {
@@ -191,13 +176,13 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 		return
 	}
 
-	ret, err := i.biz.UpdateStatus(ctx, id, pb.TaskStatus(int32(statusVal)))
+	ret, err := i.biz.UpdateStatus(ctx, req.ID, pb.TaskStatus(int32(statusVal)))
 	if err != nil {
 		_ = c.Error(err)
 		return
 	}
 
-	c.JSON(http.StatusOK, response.OK.WithData(todoE.NewTaskResponse(ret)))
+	c.JSON(http.StatusOK, response.OK.WithData(ticket.NewTaskResponse(ret)))
 }
 
 // ChangeTitle
@@ -223,22 +208,15 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 		return
 	}
 
-	id, err := primitive.ObjectIDFromHex(req.ID)
-	if err != nil {
-		ctx.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
-		_ = c.Error(er.ErrInvalidID)
-		return
-	}
-
 	title := c.PostForm("title")
 
-	ret, err := i.biz.ChangeTitle(ctx, id, title)
+	ret, err := i.biz.ChangeTitle(ctx, req.ID, title)
 	if err != nil {
 		_ = c.Error(err)
 		return
 	}
 
-	c.JSON(http.StatusOK, response.OK.WithData(todoE.NewTaskResponse(ret)))
+	c.JSON(http.StatusOK, response.OK.WithData(ticket.NewTaskResponse(ret)))
 }
 
 // Delete
@@ -264,14 +242,7 @@ func (i *impl) Delete(c *gin.Context) {
 		return
 	}
 
-	id, err := primitive.ObjectIDFromHex(req.ID)
-	if err != nil {
-		ctx.Error(er.ErrInvalidID.Error(), zap.Error(err), zap.String("id", req.ID))
-		_ = c.Error(er.ErrInvalidID)
-		return
-	}
-
-	err = i.biz.Delete(ctx, id)
+	err = i.biz.Delete(ctx, req.ID)
 	if err != nil {
 		_ = c.Error(err)
 		return

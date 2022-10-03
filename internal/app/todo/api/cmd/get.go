@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/blackhorseya/gocommon/pkg/contextx"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/ticket"
 	"github.com/goccy/go-json"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func init() {
@@ -35,7 +35,7 @@ var getTasksCmd = &cobra.Command{
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		var ret []*todo.Task
+		var ret []*ticket.Task
 		var total int
 		var err error
 
@@ -47,13 +47,13 @@ var getTasksCmd = &cobra.Command{
 		}
 
 		if len(args) == 1 {
-			id := args[0]
-			oid, err := primitive.ObjectIDFromHex(id)
+			idStr := args[0]
+			id, err := strconv.Atoi(idStr)
 			if err != nil {
 				return err
 			}
 
-			task, err := todoBiz.GetByID(contextx.Background(), oid)
+			task, err := todoBiz.GetByID(contextx.Background(), uint64(id))
 			if err != nil {
 				return err
 			}

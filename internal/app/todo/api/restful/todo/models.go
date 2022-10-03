@@ -1,7 +1,7 @@
 package todo
 
 type reqID struct {
-	ID string `uri:"id" binding:"required"`
+	ID uint64 `uri:"id" binding:"required"`
 }
 
 type reqTitle struct {
