@@ -9,11 +9,11 @@ import (
 
 // Task declare a task information
 type Task struct {
-	ID        uint64        `json:"id"`
-	Title     string        `json:"title"`
-	Status    pb.TaskStatus `json:"status"`
-	CreatedAt time.Time     `json:"created_at"`
-	UpdatedAt time.Time     `json:"updated_at"`
+	ID        uint64        `json:"id" db:"id"`
+	Title     string        `json:"title" db:"title"`
+	Status    pb.TaskStatus `json:"status" db:"status"`
+	CreatedAt time.Time     `json:"created_at" db:"created_at"`
+	UpdatedAt time.Time     `json:"updated_at" db:"updated_at"`
 }
 
 // NewTaskResponse serve caller to given Task to pb.Task

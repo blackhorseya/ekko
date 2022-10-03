@@ -10,7 +10,7 @@ import (
 	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/gocommon/pkg/response"
 	"github.com/blackhorseya/gocommon/pkg/restclient"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/ticket"
 	"github.com/goccy/go-json"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
@@ -46,7 +46,7 @@ func NewHTTP(opts *Options, restclient restclient.RestClient) ITodoRepo {
 	}
 }
 
-func (i *rest) GetByID(ctx contextx.Contextx, id uint64) (task *todo.Task, err error) {
+func (i *rest) GetByID(ctx contextx.Contextx, id uint64) (task *ticket.Task, err error) {
 	uri, err := url.Parse(i.opts.BaseURL + "/api/v1/tasks/" + strconv.Itoa(int(id)))
 	if err != nil {
 		return nil, err
@@ -78,7 +78,7 @@ func (i *rest) GetByID(ctx contextx.Contextx, id uint64) (task *todo.Task, err e
 		return nil, err
 	}
 
-	var ret *todo.Task
+	var ret *ticket.Task
 	err = json.Unmarshal(str, &ret)
 	if err != nil {
 		return nil, err
@@ -87,7 +87,7 @@ func (i *rest) GetByID(ctx contextx.Contextx, id uint64) (task *todo.Task, err e
 	return ret, nil
 }
 
-func (i *rest) List(ctx contextx.Contextx, condition QueryTodoCondition) (tasks []*todo.Task, err error) {
+func (i *rest) List(ctx contextx.Contextx, condition QueryTodoCondition) (tasks []*ticket.Task, err error) {
 	uri, err := url.Parse(fmt.Sprintf("%s/api/v1/tasks?page=%v&size=%v", i.opts.BaseURL, (condition.Limit+1)/10, condition.Limit))
 	if err != nil {
 		return nil, err
@@ -119,7 +119,7 @@ func (i *rest) List(ctx contextx.Contextx, condition QueryTodoCondition) (tasks 
 		return nil, err
 	}
 
-	var ret []*todo.Task
+	var ret []*ticket.Task
 	err = json.Unmarshal(str, &ret)
 	if err != nil {
 		return nil, err
@@ -128,7 +128,7 @@ func (i *rest) List(ctx contextx.Contextx, condition QueryTodoCondition) (tasks 
 	return ret, nil
 }
 
-func (i *rest) Create(ctx contextx.Contextx, created *todo.Task) (task *todo.Task, err error) {
+func (i *rest) Create(ctx contextx.Contextx, created *ticket.Task) (task *ticket.Task, err error) {
 	uri, err := url.Parse(i.opts.BaseURL + "/api/v1/tasks")
 	if err != nil {
 		return nil, err
@@ -164,7 +164,7 @@ func (i *rest) Create(ctx contextx.Contextx, created *todo.Task) (task *todo.Tas
 		return nil, err
 	}
 
-	var ret *todo.Task
+	var ret *ticket.Task
 	err = json.Unmarshal(str, &ret)
 	if err != nil {
 		return nil, err
@@ -208,7 +208,7 @@ func (i *rest) Count(ctx contextx.Contextx) (total int, err error) {
 	return ret, nil
 }
 
-func (i *rest) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Task, err error) {
+func (i *rest) Update(ctx contextx.Contextx, updated *ticket.Task) (task *ticket.Task, err error) {
 	// TODO implement me
 	panic("implement me")
 }

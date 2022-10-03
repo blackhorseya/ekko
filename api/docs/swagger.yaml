@@ -13,7 +13,7 @@ definitions:
       created_at:
         type: string
       id:
-        type: string
+        type: integer
       status:
         type: integer
       title:

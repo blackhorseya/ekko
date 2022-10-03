@@ -4,9 +4,8 @@ import (
 	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/blackhorseya/todo-app/internal/pkg/entity/ticket"
 	"github.com/blackhorseya/todo-app/pb"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 )
 
@@ -21,47 +20,41 @@ func NewImpl(repo repo.ITodoRepo) ITodoBiz {
 	}
 }
 
-func (i *impl) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo.Task, err error) {
-	if id == primitive.NilObjectID {
-		ctx.Error(er.ErrEmptyID.Error())
-		return nil, er.ErrEmptyID
-	}
-
-	// todo: 2022/10/4|sean|fix me
-	ret, err := i.repo.GetByID(ctx, 0)
+func (i *impl) GetByID(ctx contextx.Contextx, id uint64) (task *ticket.Task, err error) {
+	ret, err := i.repo.GetByID(ctx, id)
 	if err != nil {
-		ctx.Error(er.ErrGetTask.Error(), zap.Error(err), zap.String("id", id.Hex()))
+		ctx.Error(er.ErrGetTask.Error(), zap.Error(err))
 		return nil, er.ErrGetTask
 	}
 	if ret == nil {
-		ctx.Error(er.ErrTaskNotExists.Error(), zap.String("id", id.Hex()))
+		ctx.Error(er.ErrTaskNotExists.Error())
 		return nil, er.ErrTaskNotExists
 	}
 
 	return ret, nil
 }
 
-func (i *impl) List(ctx contextx.Contextx, start, end int) (tasks []*todo.Task, total int, err error) {
-	if start < 0 {
-		ctx.Error(er.ErrInvalidStart.Error(), zap.Int("start", start), zap.Int("end", end))
+func (i *impl) List(ctx contextx.Contextx, page, size int) (tasks []*ticket.Task, total int, err error) {
+	if page < 0 {
+		ctx.Error(er.ErrInvalidStart.Error(), zap.Int("page", page), zap.Int("size", size))
 		return nil, 0, er.ErrInvalidStart
 	}
 
-	if end < 0 {
-		ctx.Error(er.ErrInvalidEnd.Error(), zap.Int("start", start), zap.Int("end", end))
+	if size < 0 {
+		ctx.Error(er.ErrInvalidEnd.Error(), zap.Int("page", page), zap.Int("size", size))
 		return nil, 0, er.ErrInvalidEnd
 	}
 
 	ret, err := i.repo.List(ctx, repo.QueryTodoCondition{
-		Limit:  end - start + 1,
-		Offset: start,
+		Limit:  size - page + 1,
+		Offset: page,
 	})
 	if err != nil {
-		ctx.Error(er.ErrListTasks.Error(), zap.Error(err), zap.Int("start", start), zap.Int("end", end))
+		ctx.Error(er.ErrListTasks.Error(), zap.Error(err), zap.Int("page", page), zap.Int("size", size))
 		return nil, 0, er.ErrListTasks
 	}
 	if ret == nil {
-		ctx.Error(er.ErrTaskNotExists.Error(), zap.Int("start", start), zap.Int("end", end))
+		ctx.Error(er.ErrTaskNotExists.Error(), zap.Int("page", page), zap.Int("size", size))
 		return nil, 0, er.ErrTaskNotExists
 	}
 
@@ -74,13 +67,15 @@ func (i *impl) List(ctx contextx.Contextx, start, end int) (tasks []*todo.Task, 
 	return ret, total, nil
 }
 
-func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err error) {
+func (i *impl) Create(ctx contextx.Contextx, title string) (task *ticket.Task, err error) {
 	if len(title) == 0 {
 		ctx.Error(er.ErrEmptyTitle.Error())
 		return nil, er.ErrEmptyTitle
 	}
 
-	newTask := &todo.Task{
+	newTask := &ticket.Task{
+		// todo: 2022/10/4|sean|fix me
+		ID:     1,
 		Title:  title,
 		Status: pb.TaskStatus_TASK_STATUS_TODO,
 	}
@@ -93,20 +88,14 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *todo.Task, err
 	return ret, nil
 }
 
-func (i *impl) UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status pb.TaskStatus) (task *todo.Task, err error) {
-	if id == primitive.NilObjectID {
-		ctx.Error(er.ErrEmptyID.Error())
-		return nil, er.ErrEmptyID
-	}
-
-	// todo: 2022/10/4|sean|fix me
-	found, err := i.repo.GetByID(ctx, 0)
+func (i *impl) UpdateStatus(ctx contextx.Contextx, id uint64, status pb.TaskStatus) (task *ticket.Task, err error) {
+	found, err := i.repo.GetByID(ctx, id)
 	if err != nil {
-		ctx.Error(er.ErrGetTask.Error(), zap.Error(err), zap.String("id", id.Hex()))
+		ctx.Error(er.ErrGetTask.Error(), zap.Error(err))
 		return nil, er.ErrGetTask
 	}
 	if found == nil {
-		ctx.Error(er.ErrTaskNotExists.Error(), zap.String("id", id.Hex()))
+		ctx.Error(er.ErrTaskNotExists.Error())
 		return nil, er.ErrTaskNotExists
 	}
 
@@ -120,25 +109,19 @@ func (i *impl) UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status
 	return ret, nil
 }
 
-func (i *impl) ChangeTitle(ctx contextx.Contextx, id primitive.ObjectID, title string) (task *todo.Task, err error) {
-	if id == primitive.NilObjectID {
-		ctx.Error(er.ErrEmptyID.Error())
-		return nil, er.ErrEmptyID
-	}
-
+func (i *impl) ChangeTitle(ctx contextx.Contextx, id uint64, title string) (task *ticket.Task, err error) {
 	if len(title) == 0 {
 		ctx.Error(er.ErrEmptyTitle.Error())
 		return nil, er.ErrEmptyTitle
 	}
 
-	// todo: 2022/10/4|sean|fix me
-	found, err := i.repo.GetByID(ctx, 0)
+	found, err := i.repo.GetByID(ctx, id)
 	if err != nil {
-		ctx.Error(er.ErrGetTask.Error(), zap.Error(err), zap.String("id", id.Hex()))
+		ctx.Error(er.ErrGetTask.Error(), zap.Error(err))
 		return nil, er.ErrGetTask
 	}
 	if found == nil {
-		ctx.Error(er.ErrTaskNotExists.Error(), zap.String("id", id.Hex()))
+		ctx.Error(er.ErrTaskNotExists.Error())
 		return nil, er.ErrTaskNotExists
 	}
 
@@ -152,16 +135,10 @@ func (i *impl) ChangeTitle(ctx contextx.Contextx, id primitive.ObjectID, title s
 	return ret, nil
 }
 
-func (i *impl) Delete(ctx contextx.Contextx, id primitive.ObjectID) error {
-	if id == primitive.NilObjectID {
-		ctx.Error(er.ErrEmptyID.Error())
-		return er.ErrEmptyID
-	}
-
-	// todo: 2022/10/4|sean|fix me
-	err := i.repo.Remove(ctx, 0)
+func (i *impl) Delete(ctx contextx.Contextx, id uint64) error {
+	err := i.repo.Remove(ctx, id)
 	if err != nil {
-		ctx.Error(er.ErrDeleteTask.Error(), zap.Error(err), zap.String("id", id.Hex()))
+		ctx.Error(er.ErrDeleteTask.Error(), zap.Error(err))
 		return er.ErrDeleteTask
 	}
 
