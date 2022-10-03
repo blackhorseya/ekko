@@ -14,7 +14,6 @@ import (
 	"github.com/goccy/go-json"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // Options define options
@@ -47,8 +46,8 @@ func NewHTTP(opts *Options, restclient restclient.RestClient) ITodoRepo {
 	}
 }
 
-func (i *rest) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo.Task, err error) {
-	uri, err := url.Parse(i.opts.BaseURL + "/api/v1/tasks/" + id.Hex())
+func (i *rest) GetByID(ctx contextx.Contextx, id uint64) (task *todo.Task, err error) {
+	uri, err := url.Parse(i.opts.BaseURL + "/api/v1/tasks/" + strconv.Itoa(int(id)))
 	if err != nil {
 		return nil, err
 	}
@@ -88,8 +87,8 @@ func (i *rest) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo
 	return ret, nil
 }
 
-func (i *rest) List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Task, err error) {
-	uri, err := url.Parse(fmt.Sprintf("%s/api/v1/tasks?page=%v&size=%v", i.opts.BaseURL, (offset+1)/10, limit))
+func (i *rest) List(ctx contextx.Contextx, condition QueryTodoCondition) (tasks []*todo.Task, err error) {
+	uri, err := url.Parse(fmt.Sprintf("%s/api/v1/tasks?page=%v&size=%v", i.opts.BaseURL, (condition.Limit+1)/10, condition.Limit))
 	if err != nil {
 		return nil, err
 	}
@@ -129,14 +128,14 @@ func (i *rest) List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Tas
 	return ret, nil
 }
 
-func (i *rest) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Task, err error) {
+func (i *rest) Create(ctx contextx.Contextx, created *todo.Task) (task *todo.Task, err error) {
 	uri, err := url.Parse(i.opts.BaseURL + "/api/v1/tasks")
 	if err != nil {
 		return nil, err
 	}
 
 	values := url.Values{}
-	values.Add("title", newTask.Title)
+	values.Add("title", created.Title)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, uri.String(), bytes.NewReader([]byte(values.Encode())))
 	if err != nil {
@@ -214,7 +213,7 @@ func (i *rest) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Tas
 	panic("implement me")
 }
 
-func (i *rest) Remove(ctx contextx.Contextx, id primitive.ObjectID) error {
+func (i *rest) Remove(ctx contextx.Contextx, id uint64) error {
 	// TODO implement me
 	panic("implement me")
 }
