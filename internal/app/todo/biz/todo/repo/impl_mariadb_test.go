@@ -117,3 +117,86 @@ func (s *suiteMariadb) Test_mariadb_GetByID() {
 		})
 	}
 }
+
+func (s *suiteMariadb) Test_mariadb_List() {
+	type args struct {
+		condition QueryTodoCondition
+		mock      func()
+	}
+	tests := []struct {
+		name      string
+		args      args
+		wantTasks []*ticket.Task
+		wantErr   bool
+	}{
+		{
+			name: "list all then error",
+			args: args{condition: QueryTodoCondition{Limit: 0, Offset: 0}, mock: func() {
+				s.rw.ExpectQuery(`select id, title, status, created_at, updated_at from tickets`).
+					WillReturnError(errors.New("error"))
+			}},
+			wantTasks: nil,
+			wantErr:   true,
+		},
+		{
+			name: "list all then not found",
+			args: args{condition: QueryTodoCondition{Limit: 0, Offset: 0}, mock: func() {
+				s.rw.ExpectQuery(`select id, title, status, created_at, updated_at from tickets`).
+					WillReturnRows(sqlmock.NewRows(columns))
+			}},
+			wantTasks: nil,
+			wantErr:   false,
+		},
+		{
+			name: "list all then ok",
+			args: args{condition: QueryTodoCondition{Limit: 0, Offset: 0}, mock: func() {
+				s.rw.ExpectQuery(`select id, title, status, created_at, updated_at from tickets`).
+					WillReturnRows(sqlmock.NewRows(columns).AddRow(
+						testdata.Task1.ID,
+						testdata.Task1.Title,
+						testdata.Task1.Status,
+						testdata.Task1.CreatedAt,
+						testdata.Task1.UpdatedAt,
+					))
+			}},
+			wantTasks: []*ticket.Task{testdata.Task1},
+			wantErr:   false,
+		},
+		{
+			name: "list with limit and offset then ok",
+			args: args{condition: QueryTodoCondition{Limit: 10, Offset: 0}, mock: func() {
+				s.rw.ExpectQuery(`select id, title, status, created_at, updated_at from tickets`).
+					WithArgs(10, 0).
+					WillReturnRows(sqlmock.NewRows(columns).AddRow(
+						testdata.Task1.ID,
+						testdata.Task1.Title,
+						testdata.Task1.Status,
+						testdata.Task1.CreatedAt,
+						testdata.Task1.UpdatedAt,
+					))
+			}},
+			wantTasks: []*ticket.Task{testdata.Task1},
+			wantErr:   false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTasks, err := s.repo.List(contextx.BackgroundWithLogger(s.logger), tt.args.condition)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTasks, tt.wantTasks) {
+				t.Errorf("List() gotTasks = %v, want %v", gotTasks, tt.wantTasks)
+			}
+
+			if err := s.rw.ExpectationsWereMet(); err != nil {
+				t.Errorf("there were unfulfilled expectations: %s", err)
+			}
+		})
+	}
+}
