@@ -6,8 +6,6 @@ import (
 	contextx "github.com/blackhorseya/gocommon/pkg/contextx"
 	mock "github.com/stretchr/testify/mock"
 
-	primitive "go.mongodb.org/mongo-driver/bson/primitive"
-
 	todo "github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 )
 
@@ -37,13 +35,13 @@ func (_m *MockITodoRepo) Count(ctx contextx.Contextx) (int, error) {
 	return r0, r1
 }
 
-// Create provides a mock function with given fields: ctx, newTask
-func (_m *MockITodoRepo) Create(ctx contextx.Contextx, newTask *todo.Task) (*todo.Task, error) {
-	ret := _m.Called(ctx, newTask)
+// Create provides a mock function with given fields: ctx, created
+func (_m *MockITodoRepo) Create(ctx contextx.Contextx, created *todo.Task) (*todo.Task, error) {
+	ret := _m.Called(ctx, created)
 
 	var r0 *todo.Task
 	if rf, ok := ret.Get(0).(func(contextx.Contextx, *todo.Task) *todo.Task); ok {
-		r0 = rf(ctx, newTask)
+		r0 = rf(ctx, created)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*todo.Task)
@@ -52,7 +50,7 @@ func (_m *MockITodoRepo) Create(ctx contextx.Contextx, newTask *todo.Task) (*tod
 
 	var r1 error
 	if rf, ok := ret.Get(1).(func(contextx.Contextx, *todo.Task) error); ok {
-		r1 = rf(ctx, newTask)
+		r1 = rf(ctx, created)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -61,11 +59,11 @@ func (_m *MockITodoRepo) Create(ctx contextx.Contextx, newTask *todo.Task) (*tod
 }
 
 // GetByID provides a mock function with given fields: ctx, id
-func (_m *MockITodoRepo) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (*todo.Task, error) {
+func (_m *MockITodoRepo) GetByID(ctx contextx.Contextx, id uint64) (*todo.Task, error) {
 	ret := _m.Called(ctx, id)
 
 	var r0 *todo.Task
-	if rf, ok := ret.Get(0).(func(contextx.Contextx, primitive.ObjectID) *todo.Task); ok {
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, uint64) *todo.Task); ok {
 		r0 = rf(ctx, id)
 	} else {
 		if ret.Get(0) != nil {
@@ -74,7 +72,7 @@ func (_m *MockITodoRepo) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(contextx.Contextx, primitive.ObjectID) error); ok {
+	if rf, ok := ret.Get(1).(func(contextx.Contextx, uint64) error); ok {
 		r1 = rf(ctx, id)
 	} else {
 		r1 = ret.Error(1)
@@ -83,13 +81,13 @@ func (_m *MockITodoRepo) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (
 	return r0, r1
 }
 
-// List provides a mock function with given fields: ctx, limit, offset
-func (_m *MockITodoRepo) List(ctx contextx.Contextx, limit int, offset int) ([]*todo.Task, error) {
-	ret := _m.Called(ctx, limit, offset)
+// List provides a mock function with given fields: ctx, condition
+func (_m *MockITodoRepo) List(ctx contextx.Contextx, condition QueryTodoCondition) ([]*todo.Task, error) {
+	ret := _m.Called(ctx, condition)
 
 	var r0 []*todo.Task
-	if rf, ok := ret.Get(0).(func(contextx.Contextx, int, int) []*todo.Task); ok {
-		r0 = rf(ctx, limit, offset)
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, QueryTodoCondition) []*todo.Task); ok {
+		r0 = rf(ctx, condition)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]*todo.Task)
@@ -97,8 +95,8 @@ func (_m *MockITodoRepo) List(ctx contextx.Contextx, limit int, offset int) ([]*
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(contextx.Contextx, int, int) error); ok {
-		r1 = rf(ctx, limit, offset)
+	if rf, ok := ret.Get(1).(func(contextx.Contextx, QueryTodoCondition) error); ok {
+		r1 = rf(ctx, condition)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -107,11 +105,11 @@ func (_m *MockITodoRepo) List(ctx contextx.Contextx, limit int, offset int) ([]*
 }
 
 // Remove provides a mock function with given fields: ctx, id
-func (_m *MockITodoRepo) Remove(ctx contextx.Contextx, id primitive.ObjectID) error {
+func (_m *MockITodoRepo) Remove(ctx contextx.Contextx, id uint64) error {
 	ret := _m.Called(ctx, id)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(contextx.Contextx, primitive.ObjectID) error); ok {
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, uint64) error); ok {
 		r0 = rf(ctx, id)
 	} else {
 		r0 = ret.Error(0)

@@ -4,7 +4,6 @@ import (
 	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
 	"github.com/jmoiron/sqlx"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type mariadb struct {
@@ -18,7 +17,7 @@ func NewMariadb(rw *sqlx.DB) ITodoRepo {
 	}
 }
 
-func (i *mariadb) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo.Task, err error) {
+func (i *mariadb) GetByID(ctx contextx.Contextx, id uint64) (task *todo.Task, err error) {
 	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	// defer cancel()
 	//
@@ -39,7 +38,7 @@ func (i *mariadb) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *t
 	panic("mariadb me")
 }
 
-func (i *mariadb) List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Task, err error) {
+func (i *mariadb) List(ctx contextx.Contextx, condition QueryTodoCondition) (tasks []*todo.Task, err error) {
 	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	// defer cancel()
 	//
@@ -82,24 +81,24 @@ func (i *mariadb) Count(ctx contextx.Contextx) (total int, err error) {
 	panic("mariadb me")
 }
 
-func (i *mariadb) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Task, err error) {
+func (i *mariadb) Create(ctx contextx.Contextx, created *todo.Task) (task *todo.Task, err error) {
 	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	// defer cancel()
 	//
 	// now := time.Now()
-	// newTask.ID = primitive.NewObjectIDFromTimestamp(now)
-	// newTask.CreatedAt = primitive.NewDateTimeFromTime(now)
-	// newTask.UpdatedAt = primitive.NewDateTimeFromTime(now)
+	// created.ID = primitive.NewObjectIDFromTimestamp(now)
+	// created.CreatedAt = primitive.NewDateTimeFromTime(now)
+	// created.UpdatedAt = primitive.NewDateTimeFromTime(now)
 	//
 	// coll := i.client.Database(dbName).Collection(collName)
-	// res, err := coll.InsertOne(timeout, newTask)
+	// res, err := coll.InsertOne(timeout, created)
 	// if err != nil {
 	// 	return nil, err
 	// }
 	//
-	// newTask.ID = res.InsertedID.(primitive.ObjectID)
+	// created.ID = res.InsertedID.(primitive.ObjectID)
 	//
-	// return newTask, nil
+	// return created, nil
 
 	// todo: 2022/10/4|sean|mariadb me
 	panic("mariadb me")
@@ -126,7 +125,7 @@ func (i *mariadb) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.
 	panic("mariadb me")
 }
 
-func (i *mariadb) Remove(ctx contextx.Contextx, id primitive.ObjectID) error {
+func (i *mariadb) Remove(ctx contextx.Contextx, id uint64) error {
 	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	// defer cancel()
 	//

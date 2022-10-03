@@ -27,7 +27,8 @@ func (i *impl) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo
 		return nil, er.ErrEmptyID
 	}
 
-	ret, err := i.repo.GetByID(ctx, id)
+	// todo: 2022/10/4|sean|fix me
+	ret, err := i.repo.GetByID(ctx, 0)
 	if err != nil {
 		ctx.Error(er.ErrGetTask.Error(), zap.Error(err), zap.String("id", id.Hex()))
 		return nil, er.ErrGetTask
@@ -51,7 +52,10 @@ func (i *impl) List(ctx contextx.Contextx, start, end int) (tasks []*todo.Task, 
 		return nil, 0, er.ErrInvalidEnd
 	}
 
-	ret, err := i.repo.List(ctx, end-start+1, start)
+	ret, err := i.repo.List(ctx, repo.QueryTodoCondition{
+		Limit:  end - start + 1,
+		Offset: start,
+	})
 	if err != nil {
 		ctx.Error(er.ErrListTasks.Error(), zap.Error(err), zap.Int("start", start), zap.Int("end", end))
 		return nil, 0, er.ErrListTasks
@@ -95,7 +99,8 @@ func (i *impl) UpdateStatus(ctx contextx.Contextx, id primitive.ObjectID, status
 		return nil, er.ErrEmptyID
 	}
 
-	found, err := i.repo.GetByID(ctx, id)
+	// todo: 2022/10/4|sean|fix me
+	found, err := i.repo.GetByID(ctx, 0)
 	if err != nil {
 		ctx.Error(er.ErrGetTask.Error(), zap.Error(err), zap.String("id", id.Hex()))
 		return nil, er.ErrGetTask
@@ -126,7 +131,8 @@ func (i *impl) ChangeTitle(ctx contextx.Contextx, id primitive.ObjectID, title s
 		return nil, er.ErrEmptyTitle
 	}
 
-	found, err := i.repo.GetByID(ctx, id)
+	// todo: 2022/10/4|sean|fix me
+	found, err := i.repo.GetByID(ctx, 0)
 	if err != nil {
 		ctx.Error(er.ErrGetTask.Error(), zap.Error(err), zap.String("id", id.Hex()))
 		return nil, er.ErrGetTask
@@ -152,7 +158,8 @@ func (i *impl) Delete(ctx contextx.Contextx, id primitive.ObjectID) error {
 		return er.ErrEmptyID
 	}
 
-	err := i.repo.Remove(ctx, id)
+	// todo: 2022/10/4|sean|fix me
+	err := i.repo.Remove(ctx, 0)
 	if err != nil {
 		ctx.Error(er.ErrDeleteTask.Error(), zap.Error(err), zap.String("id", id.Hex()))
 		return er.ErrDeleteTask
