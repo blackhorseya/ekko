@@ -339,9 +339,9 @@ func (s *bizSuite) Test_impl_Delete() {
 
 func (s *bizSuite) Test_impl_List() {
 	type args struct {
-		start int
-		end   int
-		mock  func()
+		page int
+		size int
+		mock func()
 	}
 	tests := []struct {
 		name      string
@@ -351,23 +351,23 @@ func (s *bizSuite) Test_impl_List() {
 		wantErr   bool
 	}{
 		{
-			name:      "invalid start then error",
-			args:      args{start: -1, end: 10},
+			name:      "invalid page then error",
+			args:      args{page: -1, size: 10},
 			wantTasks: nil,
 			wantTotal: 0,
 			wantErr:   true,
 		},
 		{
-			name:      "invalid end then error",
-			args:      args{start: 0, end: -10},
+			name:      "invalid size then error",
+			args:      args{page: 0, size: -10},
 			wantTasks: nil,
 			wantTotal: 0,
 			wantErr:   true,
 		},
 		{
 			name: "list tasks then error",
-			args: args{start: 1, end: 10, mock: func() {
-				s.mock.On("List", mock.Anything, repo.QueryTodoCondition{Limit: 10, Offset: 1}).Return(nil, errors.New("error")).Once()
+			args: args{page: 1, size: 10, mock: func() {
+				s.mock.On("List", mock.Anything, repo.QueryTodoCondition{Limit: 10, Offset: 0}).Return(nil, errors.New("error")).Once()
 			}},
 			wantTasks: nil,
 			wantTotal: 0,
@@ -375,8 +375,8 @@ func (s *bizSuite) Test_impl_List() {
 		},
 		{
 			name: "list tasks not found then error",
-			args: args{start: 1, end: 10, mock: func() {
-				s.mock.On("List", mock.Anything, repo.QueryTodoCondition{Limit: 10, Offset: 1}).Return(nil, nil).Once()
+			args: args{page: 2, size: 5, mock: func() {
+				s.mock.On("List", mock.Anything, repo.QueryTodoCondition{Limit: 5, Offset: 5}).Return(nil, nil).Once()
 			}},
 			wantTasks: nil,
 			wantTotal: 0,
@@ -384,8 +384,8 @@ func (s *bizSuite) Test_impl_List() {
 		},
 		{
 			name: "count all tasks then error",
-			args: args{start: 1, end: 10, mock: func() {
-				s.mock.On("List", mock.Anything, repo.QueryTodoCondition{Limit: 10, Offset: 1}).Return([]*ticket.Task{testdata.Task1}, nil).Once()
+			args: args{page: 1, size: 0, mock: func() {
+				s.mock.On("List", mock.Anything, repo.QueryTodoCondition{Limit: 0, Offset: 0}).Return([]*ticket.Task{testdata.Task1}, nil).Once()
 
 				s.mock.On("Count", mock.Anything, mock.Anything).Return(0, errors.New("error")).Once()
 			}},
@@ -395,8 +395,8 @@ func (s *bizSuite) Test_impl_List() {
 		},
 		{
 			name: "list and count tasks then success",
-			args: args{start: 1, end: 10, mock: func() {
-				s.mock.On("List", mock.Anything, repo.QueryTodoCondition{Limit: 10, Offset: 1}).Return([]*ticket.Task{testdata.Task1}, nil).Once()
+			args: args{page: 2, size: 1, mock: func() {
+				s.mock.On("List", mock.Anything, repo.QueryTodoCondition{Limit: 1, Offset: 1}).Return([]*ticket.Task{testdata.Task1}, nil).Once()
 
 				s.mock.On("Count", mock.Anything, mock.Anything).Return(10, nil).Once()
 			}},
@@ -411,7 +411,7 @@ func (s *bizSuite) Test_impl_List() {
 				tt.args.mock()
 			}
 
-			gotTasks, gotTotal, err := s.biz.List(contextx.BackgroundWithLogger(s.logger), tt.args.start, tt.args.end)
+			gotTasks, gotTotal, err := s.biz.List(contextx.BackgroundWithLogger(s.logger), tt.args.page, tt.args.size)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return
