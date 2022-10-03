@@ -13,11 +13,11 @@ import (
 )
 
 type impl struct {
-	biz health.IBiz
+	biz health.IHealthBiz
 }
 
 // NewImpl is a constructor of implement health api handler
-func NewImpl(e *gin.Engine, biz health.IBiz) IHandler {
+func NewImpl(e *gin.Engine, biz health.IHealthBiz) IHandler {
 	ret := &impl{biz: biz}
 
 	e.GET("/api/readiness", ret.Readiness)

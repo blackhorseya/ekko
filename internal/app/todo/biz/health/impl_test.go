@@ -16,7 +16,7 @@ type bizTestSuite struct {
 	suite.Suite
 	logger *zap.Logger
 	mock   *repo.MockIHealthRepo
-	biz    IBiz
+	biz    IHealthBiz
 }
 
 func (s *bizTestSuite) SetupTest() {

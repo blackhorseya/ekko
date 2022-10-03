@@ -19,7 +19,7 @@ import (
 // Injectors from wire.go:
 
 // CreateIHandler serve user to create health api handler
-func CreateIHandler(e *gin.Engine, biz health.IBiz) (IHandler, error) {
+func CreateIHandler(e *gin.Engine, biz health.IHealthBiz) (IHandler, error) {
 	iHandler := NewImpl(e, biz)
 	return iHandler, nil
 }

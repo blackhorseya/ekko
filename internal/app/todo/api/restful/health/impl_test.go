@@ -17,7 +17,7 @@ import (
 type handlerSuite struct {
 	suite.Suite
 	r       *gin.Engine
-	mock    *health.MockIBiz
+	mock    *health.MockIHealthBiz
 	handler IHandler
 }
 
@@ -29,7 +29,7 @@ func (s *handlerSuite) SetupTest() {
 	s.r.Use(ginhttp.AddContextxWithLogger(logger))
 	s.r.Use(ginhttp.HandleError())
 
-	s.mock = new(health.MockIBiz)
+	s.mock = new(health.MockIHealthBiz)
 	if handler, err := CreateIHandler(s.r, s.mock); err != nil {
 		panic(err)
 	} else {

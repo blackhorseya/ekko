@@ -6,10 +6,10 @@ import (
 	"github.com/google/wire"
 )
 
-// IBiz describe health business service function
+// IHealthBiz describe health business service function
 //
 //go:generate mockery --all --inpackage
-type IBiz interface {
+type IHealthBiz interface {
 	Readiness(ctx contextx.Contextx) (ok bool, err error)
 	Liveness(ctx contextx.Contextx) (ok bool, err error)
 }

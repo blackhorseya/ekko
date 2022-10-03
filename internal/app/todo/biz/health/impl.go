@@ -14,7 +14,7 @@ type impl struct {
 }
 
 // NewImpl is a constructor of implement business with parameters
-func NewImpl(healthRepo repo.IHealthRepo) IBiz {
+func NewImpl(healthRepo repo.IHealthRepo) IHealthBiz {
 	return &impl{
 		repo: healthRepo,
 	}
