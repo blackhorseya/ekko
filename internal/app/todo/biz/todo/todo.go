@@ -9,10 +9,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// IBiz describe task business service function
+// ITodoBiz describe task business service function
 //
 //go:generate mockery --all --inpackage
-type IBiz interface {
+type ITodoBiz interface {
 	// GetByID serve caller to given task's id to get a task
 	GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo.Task, err error)
 

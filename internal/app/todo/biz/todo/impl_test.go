@@ -20,7 +20,7 @@ type bizSuite struct {
 	suite.Suite
 	logger *zap.Logger
 	mock   *repo.MockIRepo
-	biz    IBiz
+	biz    ITodoBiz
 }
 
 func (s *bizSuite) SetupTest() {
