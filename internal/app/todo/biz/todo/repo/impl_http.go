@@ -173,7 +173,7 @@ func (i *rest) Create(ctx contextx.Contextx, created *ticket.Task) (task *ticket
 	return ret, nil
 }
 
-func (i *rest) Count(ctx contextx.Contextx) (total int, err error) {
+func (i *rest) Count(ctx contextx.Contextx, condition QueryTodoCondition) (total int, err error) {
 	uri, err := url.Parse(fmt.Sprintf("%s/api/v1/tasks?page=%v&size=%v", i.opts.BaseURL, 1, 10))
 	if err != nil {
 		return 0, err
