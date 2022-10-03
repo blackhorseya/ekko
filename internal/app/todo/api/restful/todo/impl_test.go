@@ -105,9 +105,9 @@ func (s *handlerSuite) Test_impl_GetByID() {
 
 func (s *handlerSuite) Test_impl_List() {
 	type args struct {
-		start string
-		end   string
-		mock  func()
+		page string
+		size string
+		mock func()
 	}
 	tests := []struct {
 		name     string
@@ -115,32 +115,32 @@ func (s *handlerSuite) Test_impl_List() {
 		wantCode int
 	}{
 		{
-			name:     "start not a integer then error",
-			args:     args{start: "start", end: "3"},
+			name:     "page not a integer then error",
+			args:     args{page: "page", size: "3"},
 			wantCode: 400,
 		},
 		{
-			name:     "end not a integer then error",
-			args:     args{start: "0", end: "end"},
+			name:     "size not a integer then error",
+			args:     args{page: "0", size: "size"},
 			wantCode: 400,
 		},
 		{
 			name: "list then error",
-			args: args{start: "0", end: "3", mock: func() {
+			args: args{page: "0", size: "3", mock: func() {
 				s.mock.On("List", mock.Anything, 0, 3).Return(nil, 0, er.ErrListTasks).Once()
 			}},
 			wantCode: 500,
 		},
 		{
 			name: "list then not found error",
-			args: args{start: "0", end: "3", mock: func() {
+			args: args{page: "0", size: "3", mock: func() {
 				s.mock.On("List", mock.Anything, 0, 3).Return(nil, 0, er.ErrTaskNotExists).Once()
 			}},
 			wantCode: 404,
 		},
 		{
 			name: "list then success",
-			args: args{start: "0", end: "3", mock: func() {
+			args: args{page: "0", size: "3", mock: func() {
 				s.mock.On("List", mock.Anything, 0, 3).Return([]*ticket.Task{testdata.Task1}, 10, nil).Once()
 			}},
 			wantCode: 200,
@@ -152,7 +152,7 @@ func (s *handlerSuite) Test_impl_List() {
 				tt.args.mock()
 			}
 
-			uri := fmt.Sprintf("/api/v1/tasks?start=%v&end=%v", tt.args.start, tt.args.end)
+			uri := fmt.Sprintf("/api/v1/tasks?page=%v&size=%v", tt.args.page, tt.args.size)
 			req := httptest.NewRequest(http.MethodGet, uri, nil)
 			w := httptest.NewRecorder()
 			s.r.ServeHTTP(w, req)
