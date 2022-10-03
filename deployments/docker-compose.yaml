@@ -2,11 +2,10 @@ version: "3"
 
 services:
   db:
-    image: "mongo:4.4.10"
+    image: "mariadb:10"
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: todo-app
-      MONGO_INITDB_ROOT_PASSWORD: changeme
-      MONGO_INITDB_DATABASE: todo-db
+      MARIADB_ROOT_PASSWORD: changeme
+      MARIADB_DATABASE: todo
     ports:
-      - "27017:27017"
+      - "3306:3306"
