@@ -7,11 +7,11 @@ import (
 )
 
 var (
-	// ErrInvalidStart means given start is invalid
-	ErrInvalidStart = er.NewAPPError(http.StatusBadRequest, 40000, "start is invalid")
+	// ErrInvalidPage means given start is invalid
+	ErrInvalidPage = er.NewAPPError(http.StatusBadRequest, 40000, "start is invalid")
 
-	// ErrInvalidEnd means given end is invalid
-	ErrInvalidEnd = er.NewAPPError(http.StatusBadRequest, 40001, "end is invalid")
+	// ErrInvalidSize means given end is invalid
+	ErrInvalidSize = er.NewAPPError(http.StatusBadRequest, 40001, "end is invalid")
 
 	// ErrMissingID means given id is empty
 	ErrMissingID = er.NewAPPError(http.StatusBadRequest, 40002, "id is empty")

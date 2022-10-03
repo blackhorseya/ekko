@@ -94,15 +94,15 @@ func (i *impl) List(c *gin.Context) {
 
 	start, err := strconv.Atoi(c.DefaultQuery("start", "0"))
 	if err != nil {
-		ctx.Error(er.ErrInvalidStart.Error(), zap.Error(err), zap.String("start", c.Query("start")))
-		_ = c.Error(er.ErrInvalidStart)
+		ctx.Error(er.ErrInvalidPage.Error(), zap.Error(err), zap.String("start", c.Query("start")))
+		_ = c.Error(er.ErrInvalidPage)
 		return
 	}
 
 	end, err := strconv.Atoi(c.DefaultQuery("end", "10"))
 	if err != nil {
-		ctx.Error(er.ErrInvalidEnd.Error(), zap.Error(err), zap.String("end", c.Query("end")))
-		_ = c.Error(er.ErrInvalidEnd)
+		ctx.Error(er.ErrInvalidSize.Error(), zap.Error(err), zap.String("end", c.Query("end")))
+		_ = c.Error(er.ErrInvalidSize)
 		return
 	}
 

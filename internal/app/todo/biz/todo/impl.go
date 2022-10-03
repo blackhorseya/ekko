@@ -36,18 +36,18 @@ func (i *impl) GetByID(ctx contextx.Contextx, id uint64) (task *ticket.Task, err
 
 func (i *impl) List(ctx contextx.Contextx, page, size int) (tasks []*ticket.Task, total int, err error) {
 	if page < 0 {
-		ctx.Error(er.ErrInvalidStart.Error(), zap.Int("page", page), zap.Int("size", size))
-		return nil, 0, er.ErrInvalidStart
+		ctx.Error(er.ErrInvalidPage.Error(), zap.Int("page", page), zap.Int("size", size))
+		return nil, 0, er.ErrInvalidPage
 	}
 
 	if size < 0 {
-		ctx.Error(er.ErrInvalidEnd.Error(), zap.Int("page", page), zap.Int("size", size))
-		return nil, 0, er.ErrInvalidEnd
+		ctx.Error(er.ErrInvalidSize.Error(), zap.Int("page", page), zap.Int("size", size))
+		return nil, 0, er.ErrInvalidSize
 	}
 
 	condition := repo.QueryTodoCondition{
-		Limit:  size - page + 1,
-		Offset: page,
+		Limit:  size,
+		Offset: (page - 1) * size,
 	}
 	ret, err := i.repo.List(ctx, condition)
 	if err != nil {
