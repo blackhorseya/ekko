@@ -115,17 +115,15 @@ func (i *mariadb) Update(ctx contextx.Contextx, updated *ticket.Task) (task *tic
 }
 
 func (i *mariadb) Remove(ctx contextx.Contextx, id uint64) error {
-	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
-	// defer cancel()
-	//
-	// coll := i.client.Database(dbName).Collection(collName)
-	// _, err := coll.DeleteOne(timeout, bson.M{"_id": id})
-	// if err != nil {
-	// 	return err
-	// }
-	//
-	// return nil
+	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
 
-	// todo: 2022/10/4|sean|mariadb me
-	panic("mariadb me")
+	stmt := `delete from tickets where id = ?`
+
+	_, err := i.rw.ExecContext(timeout, stmt, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
