@@ -324,6 +324,52 @@ func (s *suiteMariadb) Test_mariadb_Update() {
 				t.Errorf("Update() gotTask = %v, want %v", gotTask, tt.wantTask)
 			}
 
+			if err = s.rw.ExpectationsWereMet(); err != nil {
+				t.Errorf("there were unfulfilled expectations: %s", err)
+			}
+		})
+	}
+}
+
+func (s *suiteMariadb) Test_mariadb_Remove() {
+	type args struct {
+		id   uint64
+		mock func()
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "delete then error",
+			args: args{id: testdata.Task1.ID, mock: func() {
+				s.rw.ExpectExec(`delete from tickets`).
+					WithArgs(testdata.Task1.ID).
+					WillReturnError(errors.New("error"))
+			}},
+			wantErr: true,
+		},
+		{
+			name: "delete then ok",
+			args: args{id: testdata.Task1.ID, mock: func() {
+				s.rw.ExpectExec(`delete from tickets`).
+					WithArgs(testdata.Task1.ID).
+					WillReturnResult(sqlmock.NewResult(1, 1))
+			}},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			if err := s.repo.Remove(contextx.BackgroundWithLogger(s.logger), tt.args.id); (err != nil) != tt.wantErr {
+				t.Errorf("Remove() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
 			if err := s.rw.ExpectationsWereMet(); err != nil {
 				t.Errorf("there were unfulfilled expectations: %s", err)
 			}
