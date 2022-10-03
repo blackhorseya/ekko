@@ -28,6 +28,10 @@ clean:  ## remove artifacts
 test-unit: ## execute unit test
 	@sh $(shell pwd)/scripts/go.test.sh
 
+.PHONY: test-e2e
+test-e2e: ## execute e2e test
+	@cd ./test/e2e && npx playwright test ./tests
+
 .PHONY: lint
 lint: ## execute golint
 	@golint ./...
