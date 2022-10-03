@@ -200,3 +200,133 @@ func (s *suiteMariadb) Test_mariadb_List() {
 		})
 	}
 }
+
+func (s *suiteMariadb) Test_mariadb_Create() {
+	type args struct {
+		created *ticket.Task
+		mock    func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantTask *ticket.Task
+		wantErr  bool
+	}{
+		{
+			name: "insert then error",
+			args: args{created: testdata.Task1, mock: func() {
+				s.rw.ExpectExec(`insert into tickets`).
+					WithArgs(
+						testdata.Task1.ID,
+						testdata.Task1.Title,
+						testdata.Task1.Status,
+						AnyTime{},
+						AnyTime{},
+					).
+					WillReturnError(errors.New("error"))
+			}},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "insert then ok",
+			args: args{created: testdata.Task1, mock: func() {
+				s.rw.ExpectExec(`insert into tickets`).
+					WithArgs(
+						testdata.Task1.ID,
+						testdata.Task1.Title,
+						testdata.Task1.Status,
+						AnyTime{},
+						AnyTime{},
+					).
+					WillReturnResult(sqlmock.NewResult(1, 1))
+			}},
+			wantTask: testdata.Task1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTask, err := s.repo.Create(contextx.BackgroundWithLogger(s.logger), tt.args.created)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTask, tt.wantTask) {
+				t.Errorf("Create() gotTask = %v, want %v", gotTask, tt.wantTask)
+			}
+
+			if err := s.rw.ExpectationsWereMet(); err != nil {
+				t.Errorf("there were unfulfilled expectations: %s", err)
+			}
+		})
+	}
+}
+
+func (s *suiteMariadb) Test_mariadb_Update() {
+	type args struct {
+		updated *ticket.Task
+		mock    func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantTask *ticket.Task
+		wantErr  bool
+	}{
+		{
+			name: "update then error",
+			args: args{updated: testdata.Task1, mock: func() {
+				s.rw.ExpectExec(`update tickets`).
+					WithArgs(
+						testdata.Task1.Title,
+						testdata.Task1.Status,
+						AnyTime{},
+						testdata.Task1.ID,
+					).
+					WillReturnError(errors.New("error"))
+			}},
+			wantTask: nil,
+			wantErr:  true,
+		},
+		{
+			name: "update then ok",
+			args: args{updated: testdata.Task1, mock: func() {
+				s.rw.ExpectExec(`update tickets`).
+					WithArgs(
+						testdata.Task1.Title,
+						testdata.Task1.Status,
+						AnyTime{},
+						testdata.Task1.ID,
+					).
+					WillReturnResult(sqlmock.NewResult(1, 1))
+			}},
+			wantTask: testdata.Task1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTask, err := s.repo.Update(contextx.BackgroundWithLogger(s.logger), tt.args.updated)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTask, tt.wantTask) {
+				t.Errorf("Update() gotTask = %v, want %v", gotTask, tt.wantTask)
+			}
+
+			if err := s.rw.ExpectationsWereMet(); err != nil {
+				t.Errorf("there were unfulfilled expectations: %s", err)
+			}
+		})
+	}
+}
