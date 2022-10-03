@@ -81,47 +81,37 @@ func (i *mariadb) Count(ctx contextx.Contextx, condition QueryTodoCondition) (to
 }
 
 func (i *mariadb) Create(ctx contextx.Contextx, created *ticket.Task) (task *ticket.Task, err error) {
-	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
-	// defer cancel()
-	//
-	// now := time.Now()
-	// created.ID = primitive.NewObjectIDFromTimestamp(now)
-	// created.CreatedAt = primitive.NewDateTimeFromTime(now)
-	// created.UpdatedAt = primitive.NewDateTimeFromTime(now)
-	//
-	// coll := i.client.Database(dbName).Collection(collName)
-	// res, err := coll.InsertOne(timeout, created)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	//
-	// created.ID = res.InsertedID.(primitive.ObjectID)
-	//
-	// return created, nil
+	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
 
-	// todo: 2022/10/4|sean|mariadb me
-	panic("mariadb me")
+	now := time.Now()
+	created.CreatedAt = now
+	created.UpdatedAt = now
+
+	stmt := `insert into tickets (id, title, status, created_at, updated_at) values (:id, :title, :status, :created_at, :updated_at)`
+
+	_, err = i.rw.NamedExecContext(timeout, stmt, created)
+	if err != nil {
+		return nil, err
+	}
+
+	return created, nil
 }
 
 func (i *mariadb) Update(ctx contextx.Contextx, updated *ticket.Task) (task *ticket.Task, err error) {
-	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
-	// defer cancel()
-	//
-	// updated.UpdatedAt = primitive.NewDateTimeFromTime(time.Now())
-	//
-	// filter := bson.M{"_id": updated.ID}
-	// opt := options.FindOneAndReplace().SetUpsert(false).SetReturnDocument(options.After)
-	// coll := i.client.Database(dbName).Collection(collName)
-	// var ret *ticket.Task
-	// err = coll.FindOneAndReplace(timeout, filter, updated, opt).Decode(&ret)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	//
-	// return ret, nil
+	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
 
-	// todo: 2022/10/4|sean|mariadb me
-	panic("mariadb me")
+	updated.UpdatedAt = time.Now()
+
+	stmt := `update tickets title=:title, status=:status, updated_at=:updated_at where id = :id`
+
+	_, err = i.rw.NamedExecContext(timeout, stmt, updated)
+	if err != nil {
+		return nil, err
+	}
+
+	return updated, nil
 }
 
 func (i *mariadb) Remove(ctx contextx.Contextx, id uint64) error {
