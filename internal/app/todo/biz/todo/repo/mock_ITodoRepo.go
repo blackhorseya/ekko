@@ -14,20 +14,20 @@ type MockITodoRepo struct {
 	mock.Mock
 }
 
-// Count provides a mock function with given fields: ctx
-func (_m *MockITodoRepo) Count(ctx contextx.Contextx) (int, error) {
-	ret := _m.Called(ctx)
+// Count provides a mock function with given fields: ctx, condition
+func (_m *MockITodoRepo) Count(ctx contextx.Contextx, condition QueryTodoCondition) (int, error) {
+	ret := _m.Called(ctx, condition)
 
 	var r0 int
-	if rf, ok := ret.Get(0).(func(contextx.Contextx) int); ok {
-		r0 = rf(ctx)
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, QueryTodoCondition) int); ok {
+		r0 = rf(ctx, condition)
 	} else {
 		r0 = ret.Get(0).(int)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(contextx.Contextx) error); ok {
-		r1 = rf(ctx)
+	if rf, ok := ret.Get(1).(func(contextx.Contextx, QueryTodoCondition) error); ok {
+		r1 = rf(ctx, condition)
 	} else {
 		r1 = ret.Error(1)
 	}

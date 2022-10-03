@@ -64,20 +64,20 @@ func (i *mariadb) List(ctx contextx.Contextx, condition QueryTodoCondition) (tas
 	return ret, nil
 }
 
-func (i *mariadb) Count(ctx contextx.Contextx) (total int, err error) {
-	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
-	// defer cancel()
-	//
-	// coll := i.client.Database(dbName).Collection(collName)
-	// ret, err := coll.CountDocuments(timeout, bson.M{})
-	// if err != nil {
-	// 	return 0, err
-	// }
-	//
-	// return int(ret), nil
+func (i *mariadb) Count(ctx contextx.Contextx, condition QueryTodoCondition) (total int, err error) {
+	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
 
-	// todo: 2022/10/4|sean|mariadb me
-	panic("mariadb me")
+	stmt := `select count(id) as total from tickets`
+
+	ret := 0
+	row := i.rw.QueryRowxContext(timeout, stmt)
+	err = row.Scan(&ret)
+	if err != nil {
+		return 0, err
+	}
+
+	return ret, nil
 }
 
 func (i *mariadb) Create(ctx contextx.Contextx, created *ticket.Task) (task *ticket.Task, err error) {

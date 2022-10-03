@@ -387,7 +387,7 @@ func (s *bizSuite) Test_impl_List() {
 			args: args{start: 1, end: 10, mock: func() {
 				s.mock.On("List", mock.Anything, repo.QueryTodoCondition{Limit: 10, Offset: 1}).Return([]*ticket.Task{testdata.Task1}, nil).Once()
 
-				s.mock.On("Count", mock.Anything).Return(0, errors.New("error")).Once()
+				s.mock.On("Count", mock.Anything, mock.Anything).Return(0, errors.New("error")).Once()
 			}},
 			wantTasks: nil,
 			wantTotal: 0,
@@ -398,7 +398,7 @@ func (s *bizSuite) Test_impl_List() {
 			args: args{start: 1, end: 10, mock: func() {
 				s.mock.On("List", mock.Anything, repo.QueryTodoCondition{Limit: 10, Offset: 1}).Return([]*ticket.Task{testdata.Task1}, nil).Once()
 
-				s.mock.On("Count", mock.Anything).Return(10, nil).Once()
+				s.mock.On("Count", mock.Anything, mock.Anything).Return(10, nil).Once()
 			}},
 			wantTasks: []*ticket.Task{testdata.Task1},
 			wantTotal: 10,

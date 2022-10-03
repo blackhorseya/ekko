@@ -45,10 +45,11 @@ func (i *impl) List(ctx contextx.Contextx, page, size int) (tasks []*ticket.Task
 		return nil, 0, er.ErrInvalidEnd
 	}
 
-	ret, err := i.repo.List(ctx, repo.QueryTodoCondition{
+	condition := repo.QueryTodoCondition{
 		Limit:  size - page + 1,
 		Offset: page,
-	})
+	}
+	ret, err := i.repo.List(ctx, condition)
 	if err != nil {
 		ctx.Error(er.ErrListTasks.Error(), zap.Error(err), zap.Int("page", page), zap.Int("size", size))
 		return nil, 0, er.ErrListTasks
@@ -58,7 +59,7 @@ func (i *impl) List(ctx contextx.Contextx, page, size int) (tasks []*ticket.Task
 		return nil, 0, er.ErrTaskNotExists
 	}
 
-	total, err = i.repo.Count(ctx)
+	total, err = i.repo.Count(ctx, condition)
 	if err != nil {
 		ctx.Error(er.ErrCountTask.Error(), zap.Error(err))
 		return nil, 0, er.ErrCountTask

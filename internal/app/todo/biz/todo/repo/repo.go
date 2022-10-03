@@ -26,7 +26,7 @@ type ITodoRepo interface {
 	Create(ctx contextx.Contextx, created *ticket.Task) (task *ticket.Task, err error)
 
 	// Count serve caller to count all tasks
-	Count(ctx contextx.Contextx) (total int, err error)
+	Count(ctx contextx.Contextx, condition QueryTodoCondition) (total int, err error)
 
 	// Update serve caller to update a task
 	Update(ctx contextx.Contextx, updated *ticket.Task) (task *ticket.Task, err error)
