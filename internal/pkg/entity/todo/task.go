@@ -18,7 +18,7 @@ type Task struct {
 // NewTaskResponse return *pb.Task
 func NewTaskResponse(t *Task) *pb.Task {
 	return &pb.Task{
-		Id:        t.ID.Hex(),
+		Id:        0,
 		Title:     t.Title,
 		Status:    t.Status,
 		CreatedAt: t.CreatedAt.Time().Format(timex.RFC3339Mill),
