@@ -10,11 +10,11 @@ import (
 )
 
 type impl struct {
-	repo repo.IRepo
+	repo repo.IHealthRepo
 }
 
 // NewImpl is a constructor of implement business with parameters
-func NewImpl(healthRepo repo.IRepo) IBiz {
+func NewImpl(healthRepo repo.IHealthRepo) IBiz {
 	return &impl{
 		repo: healthRepo,
 	}

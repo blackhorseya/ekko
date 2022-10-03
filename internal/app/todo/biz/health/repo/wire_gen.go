@@ -8,16 +8,16 @@ package repo
 
 import (
 	"github.com/google/wire"
-	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/jmoiron/sqlx"
 )
 
 // Injectors from wire.go:
 
-func CreateIRepo(client *mongo.Client) (IRepo, error) {
-	iRepo := NewImpl()
-	return iRepo, nil
+func CreateMariadb(rw *sqlx.DB) (IHealthRepo, error) {
+	iHealthRepo := NewMariadb(rw)
+	return iHealthRepo, nil
 }
 
 // wire.go:
 
-var testProviderSet = wire.NewSet(NewImpl)
+var testProviderSet = wire.NewSet(NewMariadb)
