@@ -5,17 +5,17 @@ package repo
 import (
 	"github.com/blackhorseya/gocommon/pkg/restclient"
 	"github.com/google/wire"
-	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/jmoiron/sqlx"
 )
 
-var testProviderSet = wire.NewSet(NewImpl)
+var mariadbProviderSet = wire.NewSet(NewMariadb)
 
-func CreateIRepo(client *mongo.Client) (IRepo, error) {
-	panic(wire.Build(testProviderSet))
+func CreateMariadb(rw *sqlx.DB) (ITodoRepo, error) {
+	panic(wire.Build(mariadbProviderSet))
 }
 
 var httpProviderSet = wire.NewSet(NewHTTP)
 
-func CreateHTTP(opts *Options, client restclient.RestClient) (IRepo, error) {
+func CreateHTTP(opts *Options, client restclient.RestClient) (ITodoRepo, error) {
 	panic(wire.Build(httpProviderSet))
 }

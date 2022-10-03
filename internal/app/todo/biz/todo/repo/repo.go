@@ -7,10 +7,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// IRepo declare repository service function
+// ITodoRepo declare repository service function
 //
 //go:generate mockery --all --inpackage
-type IRepo interface {
+type ITodoRepo interface {
 	// GetByID serve caller to get a task by id
 	GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo.Task, err error)
 
@@ -31,8 +31,8 @@ type IRepo interface {
 }
 
 var (
-	// ProviderSetViaDatabase is a provider set for wire
-	ProviderSetViaDatabase = wire.NewSet(NewImpl)
+	// ProviderSetMariadb is a provider set for wire
+	ProviderSetMariadb = wire.NewSet(NewMariadb)
 
 	// ProviderSetViaHTTP is a http provider set for wire
 	ProviderSetViaHTTP = wire.NewSet(NewHTTP, NewOptions)

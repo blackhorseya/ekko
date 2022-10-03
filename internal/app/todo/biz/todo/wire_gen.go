@@ -14,9 +14,9 @@ import (
 // Injectors from wire.go:
 
 // CreateIBiz serve user to create health biz
-func CreateIBiz(repo2 repo.IRepo) (ITodoBiz, error) {
-	iBiz := NewImpl(repo2)
-	return iBiz, nil
+func CreateIBiz(repo2 repo.ITodoRepo) (ITodoBiz, error) {
+	iTodoBiz := NewImpl(repo2)
+	return iTodoBiz, nil
 }
 
 // wire.go:

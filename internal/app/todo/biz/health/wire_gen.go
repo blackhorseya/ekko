@@ -15,8 +15,8 @@ import (
 
 // CreateIBiz serve user to create health biz
 func CreateIBiz(repo2 repo.IHealthRepo) (IHealthBiz, error) {
-	iBiz := NewImpl(repo2)
-	return iBiz, nil
+	iHealthBiz := NewImpl(repo2)
+	return iHealthBiz, nil
 }
 
 // wire.go:

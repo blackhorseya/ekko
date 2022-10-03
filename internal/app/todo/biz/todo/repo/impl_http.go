@@ -39,8 +39,8 @@ type rest struct {
 	restclient restclient.RestClient
 }
 
-// NewHTTP return IRepo
-func NewHTTP(opts *Options, restclient restclient.RestClient) IRepo {
+// NewHTTP return ITodoRepo
+func NewHTTP(opts *Options, restclient restclient.RestClient) ITodoRepo {
 	return &rest{
 		opts:       opts,
 		restclient: restclient,

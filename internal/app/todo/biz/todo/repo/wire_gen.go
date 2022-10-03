@@ -9,23 +9,23 @@ package repo
 import (
 	"github.com/blackhorseya/gocommon/pkg/restclient"
 	"github.com/google/wire"
-	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/jmoiron/sqlx"
 )
 
 // Injectors from wire.go:
 
-func CreateIRepo(client *mongo.Client) (IRepo, error) {
-	iRepo := NewImpl()
-	return iRepo, nil
+func CreateIRepo(rw *sqlx.DB) (ITodoRepo, error) {
+	iTodoRepo := NewMariadb(rw)
+	return iTodoRepo, nil
 }
 
-func CreateHTTP(opts *Options, client restclient.RestClient) (IRepo, error) {
-	iRepo := NewHTTP(opts, client)
-	return iRepo, nil
+func CreateHTTP(opts *Options, client restclient.RestClient) (ITodoRepo, error) {
+	iTodoRepo := NewHTTP(opts, client)
+	return iTodoRepo, nil
 }
 
 // wire.go:
 
-var testProviderSet = wire.NewSet(NewImpl)
+var testProviderSet = wire.NewSet(NewMariadb)
 
 var httpProviderSet = wire.NewSet(NewHTTP)

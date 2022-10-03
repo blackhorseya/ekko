@@ -10,6 +10,6 @@ import (
 var testProviderSet = wire.NewSet(NewImpl)
 
 // CreateIBiz serve user to create health biz
-func CreateIBiz(repo repo.IRepo) (ITodoBiz, error) {
+func CreateIBiz(repo repo.ITodoRepo) (ITodoBiz, error) {
 	panic(wire.Build(testProviderSet))
 }

@@ -3,28 +3,22 @@ package repo
 import (
 	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/todo"
+	"github.com/jmoiron/sqlx"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-const (
-	dbName = "todo-db"
-
-	collName = "tasks"
-)
-
-type impl struct {
-	client *mongo.Client
+type mariadb struct {
+	rw *sqlx.DB
 }
 
-// NewImpl serve caller to create an IRepo
-func NewImpl() IRepo {
-	return &impl{
-		client: nil,
+// NewMariadb serve caller to create an ITodoRepo
+func NewMariadb(rw *sqlx.DB) ITodoRepo {
+	return &mariadb{
+		rw: rw,
 	}
 }
 
-func (i *impl) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo.Task, err error) {
+func (i *mariadb) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo.Task, err error) {
 	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	// defer cancel()
 	//
@@ -41,11 +35,11 @@ func (i *impl) GetByID(ctx contextx.Contextx, id primitive.ObjectID) (task *todo
 	// }
 	//
 	// return &ret, nil
-	// todo: 2022/10/4|sean|impl me
-	panic("impl me")
+	// todo: 2022/10/4|sean|mariadb me
+	panic("mariadb me")
 }
 
-func (i *impl) List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Task, err error) {
+func (i *mariadb) List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Task, err error) {
 	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	// defer cancel()
 	//
@@ -68,11 +62,11 @@ func (i *impl) List(ctx contextx.Contextx, limit, offset int) (tasks []*todo.Tas
 	//
 	// return ret, nil
 
-	// todo: 2022/10/4|sean|impl me
-	panic("impl me")
+	// todo: 2022/10/4|sean|mariadb me
+	panic("mariadb me")
 }
 
-func (i *impl) Count(ctx contextx.Contextx) (total int, err error) {
+func (i *mariadb) Count(ctx contextx.Contextx) (total int, err error) {
 	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	// defer cancel()
 	//
@@ -84,11 +78,11 @@ func (i *impl) Count(ctx contextx.Contextx) (total int, err error) {
 	//
 	// return int(ret), nil
 
-	// todo: 2022/10/4|sean|impl me
-	panic("impl me")
+	// todo: 2022/10/4|sean|mariadb me
+	panic("mariadb me")
 }
 
-func (i *impl) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Task, err error) {
+func (i *mariadb) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Task, err error) {
 	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	// defer cancel()
 	//
@@ -107,11 +101,11 @@ func (i *impl) Create(ctx contextx.Contextx, newTask *todo.Task) (task *todo.Tas
 	//
 	// return newTask, nil
 
-	// todo: 2022/10/4|sean|impl me
-	panic("impl me")
+	// todo: 2022/10/4|sean|mariadb me
+	panic("mariadb me")
 }
 
-func (i *impl) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Task, err error) {
+func (i *mariadb) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Task, err error) {
 	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	// defer cancel()
 	//
@@ -128,11 +122,11 @@ func (i *impl) Update(ctx contextx.Contextx, updated *todo.Task) (task *todo.Tas
 	//
 	// return ret, nil
 
-	// todo: 2022/10/4|sean|impl me
-	panic("impl me")
+	// todo: 2022/10/4|sean|mariadb me
+	panic("mariadb me")
 }
 
-func (i *impl) Remove(ctx contextx.Contextx, id primitive.ObjectID) error {
+func (i *mariadb) Remove(ctx contextx.Contextx, id primitive.ObjectID) error {
 	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	// defer cancel()
 	//
@@ -144,6 +138,6 @@ func (i *impl) Remove(ctx contextx.Contextx, id primitive.ObjectID) error {
 	//
 	// return nil
 
-	// todo: 2022/10/4|sean|impl me
-	panic("impl me")
+	// todo: 2022/10/4|sean|mariadb me
+	panic("mariadb me")
 }

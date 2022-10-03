@@ -34,7 +34,7 @@ type ITodoBiz interface {
 
 var (
 	// ProviderSet is a provider set for wire
-	ProviderSet = wire.NewSet(NewImpl, repo.ProviderSetViaDatabase)
+	ProviderSet = wire.NewSet(NewImpl, repo.ProviderSetMariadb)
 
 	// ProviderSetViaHTTP is a http provider set for wire
 	ProviderSetViaHTTP = wire.NewSet(NewImpl, repo.ProviderSetViaHTTP)
