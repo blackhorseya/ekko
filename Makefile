@@ -75,7 +75,7 @@ deploy: check-VERSION check-DEPLOY_TO ## deploy application
 	--set image.tag=$(VERSION)
 
 .PHONY: gen
-gen: gen-wire gen-swagger gen-pb gen-mocks ## generate code
+gen: gen-wire gen-pb gen-mocks gen-swagger ## generate code
 
 .PHONY: gen-pb
 gen-pb: ## generate protobuf
