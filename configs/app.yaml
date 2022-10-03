@@ -9,5 +9,5 @@ log:
   level: debug
 
 db:
-  debug: true
-  url: "mongodb://todo-app:changeme@localhost:27017/todo-db?connect=direct&authSource=admin"
+  url: "root:changeme@tcp(localhost:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local"
+  conns: 100
