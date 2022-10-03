@@ -14,7 +14,7 @@ import (
 // Injectors from wire.go:
 
 func CreateIRepo(client *mongo.Client) (IRepo, error) {
-	iRepo := NewImpl(client)
+	iRepo := NewImpl()
 	return iRepo, nil
 }
 

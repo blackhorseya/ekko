@@ -9,7 +9,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/api/restful"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz"
 	"github.com/blackhorseya/todo-app/internal/pkg/app"
-	"github.com/blackhorseya/todo-app/internal/pkg/infra/database"
+	"github.com/blackhorseya/todo-app/internal/pkg/infra/databases"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http"
 	"github.com/google/wire"
 )
@@ -18,7 +18,7 @@ var providerSet = wire.NewSet(
 	log.ProviderSet,
 	config.ProviderSet,
 	http.ProviderSet,
-	database.ProviderSet,
+	databases.ProviderSet,
 	todo.ProviderSet,
 	restful.ProviderSet,
 	biz.ProviderSet,
