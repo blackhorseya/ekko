@@ -12,6 +12,7 @@ import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
+	"github.com/blackhorseya/todo-app/internal/pkg/infra/node"
 	"github.com/google/wire"
 	"github.com/spf13/cobra"
 )
@@ -29,7 +30,11 @@ func CreateApp() (*cobra.Command, error) {
 	}
 	restClient := restclient.NewClient()
 	iTodoRepo := repo.NewHTTP(options, restClient)
-	iTodoBiz := todo.NewImpl(iTodoRepo)
+	generator, err := node.NewImpl()
+	if err != nil {
+		return nil, err
+	}
+	iTodoBiz := todo.NewImpl(iTodoRepo, generator)
 	command, err := cmd.NewRootCmd(iTodoBiz)
 	if err != nil {
 		return nil, err
@@ -39,4 +44,4 @@ func CreateApp() (*cobra.Command, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(restclient.ProviderSet, cmd.ProviderSet, biz.ProviderSetViaHTTP)
+var providerSet = wire.NewSet(restclient.ProviderSet, node.ProviderSet, cmd.ProviderSet, biz.ProviderSetViaHTTP)
