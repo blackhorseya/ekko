@@ -19,11 +19,11 @@ import (
 )
 
 type impl struct {
-	biz todo.IBiz
+	biz todo.ITodoBiz
 }
 
 // NewImpl serve caller to create an IHandler
-func NewImpl(e *gin.Engine, biz todo.IBiz) IHandler {
+func NewImpl(e *gin.Engine, biz todo.ITodoBiz) IHandler {
 	ret := &impl{biz: biz}
 
 	api := e.Group("api")

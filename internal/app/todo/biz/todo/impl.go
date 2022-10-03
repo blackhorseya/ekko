@@ -14,8 +14,8 @@ type impl struct {
 	repo repo.IRepo
 }
 
-// NewImpl serve caller to create an IBiz
-func NewImpl(repo repo.IRepo) IBiz {
+// NewImpl serve caller to create an ITodoBiz
+func NewImpl(repo repo.IRepo) ITodoBiz {
 	return &impl{
 		repo: repo,
 	}

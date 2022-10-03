@@ -11,6 +11,6 @@ import (
 var testProviderSet = wire.NewSet(NewImpl)
 
 // CreateIHandler serve user to create health api handler
-func CreateIHandler(e *gin.Engine, biz todo.IBiz) (IHandler, error) {
+func CreateIHandler(e *gin.Engine, biz todo.ITodoBiz) (IHandler, error) {
 	panic(wire.Build(testProviderSet))
 }

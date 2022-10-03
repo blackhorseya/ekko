@@ -35,10 +35,10 @@ var (
 	level   string
 	output  string
 
-	todoBiz todo.IBiz
+	todoBiz todo.ITodoBiz
 )
 
-func NewRootCmd(biz todo.IBiz) (*cobra.Command, error) {
+func NewRootCmd(biz todo.ITodoBiz) (*cobra.Command, error) {
 	todoBiz = biz
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", fmt.Sprintf("config file (default is $HOME/.%s.yaml)", consts.AppName))
