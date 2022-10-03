@@ -2,6 +2,7 @@ package repo
 
 import (
 	"database/sql"
+	"strings"
 	"time"
 
 	"github.com/blackhorseya/gocommon/pkg/contextx"
@@ -41,30 +42,26 @@ func (i *mariadb) GetByID(ctx contextx.Contextx, id uint64) (task *ticket.Task, 
 }
 
 func (i *mariadb) List(ctx contextx.Contextx, condition QueryTodoCondition) (tasks []*ticket.Task, err error) {
-	// timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
-	// defer cancel()
-	//
-	// coll := i.client.Database(dbName).Collection(collName)
-	// cur, err := coll.Find(timeout, bson.D{}, options.Find().SetLimit(int64(limit)).SetSkip(int64(offset)))
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// defer cur.Close(timeout)
-	//
-	// var ret []*ticket.Task
-	// err = cur.All(timeout, &ret)
-	// if err != nil {
-	// 	if errors.Is(err, mongo.ErrNoDocuments) {
-	// 		return nil, nil
-	// 	}
-	//
-	// 	return nil, err
-	// }
-	//
-	// return ret, nil
+	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
 
-	// todo: 2022/10/4|sean|mariadb me
-	panic("mariadb me")
+	var args []interface{}
+	stmt := []string{
+		`select id, title, status, created_at, updated_at from tickets`,
+	}
+
+	if condition.Limit != 0 {
+		stmt = append(stmt, `limit ? offset ?`)
+		args = append(args, condition.Limit, condition.Offset)
+	}
+
+	var ret []*ticket.Task
+	err = i.rw.SelectContext(timeout, &ret, strings.Join(stmt, " "), args...)
+	if err != nil {
+		return nil, err
+	}
+
+	return ret, nil
 }
 
 func (i *mariadb) Count(ctx contextx.Contextx) (total int, err error) {
