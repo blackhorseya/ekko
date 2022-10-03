@@ -8,14 +8,15 @@ package todo
 
 import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
+	"github.com/blackhorseya/todo-app/internal/pkg/infra/node"
 	"github.com/google/wire"
 )
 
 // Injectors from wire.go:
 
 // CreateIBiz serve user to create health biz
-func CreateIBiz(repo2 repo.ITodoRepo) (ITodoBiz, error) {
-	iTodoBiz := NewImpl(repo2)
+func CreateIBiz(repo2 repo.ITodoRepo, node2 node.Generator) (ITodoBiz, error) {
+	iTodoBiz := NewImpl(repo2, node2)
 	return iTodoBiz, nil
 }
 

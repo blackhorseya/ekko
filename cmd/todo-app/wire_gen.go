@@ -20,6 +20,7 @@ import (
 	repo2 "github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/app"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/databases"
+	"github.com/blackhorseya/todo-app/internal/pkg/infra/node"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http"
 	"github.com/google/wire"
 )
@@ -61,7 +62,11 @@ func CreateApp(path2 string) (*app.Application, error) {
 	iHealthBiz := health.NewImpl(iHealthRepo)
 	iHandler := health2.NewImpl(engine, iHealthBiz)
 	iTodoRepo := repo2.NewMariadb(db)
-	iTodoBiz := todo2.NewImpl(iTodoRepo)
+	generator, err := node.NewImpl()
+	if err != nil {
+		return nil, err
+	}
+	iTodoBiz := todo2.NewImpl(iTodoRepo, generator)
 	todoIHandler := todo3.NewImpl(engine, iTodoBiz)
 	initHandlers := restful.CreateInitHandlerFn(iHandler, todoIHandler)
 	server, err := http.New(httpOptions, logger, engine, initHandlers)
@@ -77,4 +82,4 @@ func CreateApp(path2 string) (*app.Application, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(log.ProviderSet, config.ProviderSet, http.ProviderSet, databases.ProviderSet, todo.ProviderSet, restful.ProviderSet, biz.ProviderSet)
+var providerSet = wire.NewSet(log.ProviderSet, config.ProviderSet, http.ProviderSet, databases.ProviderSet, node.ProviderSet, todo.ProviderSet, restful.ProviderSet, biz.ProviderSet)
