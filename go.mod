@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/blackhorseya/gocommon v0.0.0-20220930051018-de6084c73334
+	github.com/bwmarrin/snowflake v0.3.0
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-contrib/zap v0.1.0
 	github.com/gin-gonic/gin v1.8.1
