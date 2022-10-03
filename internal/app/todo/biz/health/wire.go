@@ -12,6 +12,6 @@ var testProviderSet = wire.NewSet(
 )
 
 // CreateIBiz serve user to create health biz
-func CreateIBiz(repo repo.IHealthRepo) (IBiz, error) {
+func CreateIBiz(repo repo.IHealthRepo) (IHealthBiz, error) {
 	panic(wire.Build(testProviderSet))
 }
