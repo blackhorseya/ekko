@@ -17,7 +17,7 @@ type QueryTodoCondition struct {
 //go:generate mockery --all --inpackage
 type ITodoRepo interface {
 	// GetByID serve caller to get a task by id
-	GetByID(ctx contextx.Contextx, id uint64) (task *ticket.Task, err error)
+	GetByID(ctx contextx.Contextx, id int64) (task *ticket.Task, err error)
 
 	// List serve caller to list all tasks
 	List(ctx contextx.Contextx, condition QueryTodoCondition) (tasks []*ticket.Task, err error)
@@ -32,7 +32,7 @@ type ITodoRepo interface {
 	Update(ctx contextx.Contextx, updated *ticket.Task) (task *ticket.Task, err error)
 
 	// Remove serve caller to remove a task by id
-	Remove(ctx contextx.Contextx, id uint64) error
+	Remove(ctx contextx.Contextx, id int64) error
 }
 
 var (

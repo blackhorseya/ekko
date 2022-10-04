@@ -10,7 +10,7 @@ enum TaskStatus {
 }
 
 message Task {
-  uint64 id = 1;
+  int64 id = 1;
   string title = 2;
   TaskStatus status = 3;
   string created_at = 4;

@@ -22,7 +22,7 @@ func NewMariadb(rw *sqlx.DB) ITodoRepo {
 	}
 }
 
-func (i *mariadb) GetByID(ctx contextx.Contextx, id uint64) (task *ticket.Task, err error) {
+func (i *mariadb) GetByID(ctx contextx.Contextx, id int64) (task *ticket.Task, err error) {
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
@@ -104,7 +104,7 @@ func (i *mariadb) Update(ctx contextx.Contextx, updated *ticket.Task) (task *tic
 
 	updated.UpdatedAt = time.Now()
 
-	stmt := `update tickets title=:title, status=:status, updated_at=:updated_at where id = :id`
+	stmt := `update tickets set title=:title, status=:status, updated_at=:updated_at where id = :id`
 
 	_, err = i.rw.NamedExecContext(timeout, stmt, updated)
 	if err != nil {
@@ -114,7 +114,7 @@ func (i *mariadb) Update(ctx contextx.Contextx, updated *ticket.Task) (task *tic
 	return updated, nil
 }
 
-func (i *mariadb) Remove(ctx contextx.Contextx, id uint64) error {
+func (i *mariadb) Remove(ctx contextx.Contextx, id int64) error {
 	timeout, cancel := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 

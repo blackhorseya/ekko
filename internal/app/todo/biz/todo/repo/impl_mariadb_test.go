@@ -50,7 +50,7 @@ func TestSuiteMariadb(t *testing.T) {
 
 func (s *suiteMariadb) Test_mariadb_GetByID() {
 	type args struct {
-		id   uint64
+		id   int64
 		mock func()
 	}
 	tests := []struct {
@@ -333,7 +333,7 @@ func (s *suiteMariadb) Test_mariadb_Update() {
 
 func (s *suiteMariadb) Test_mariadb_Remove() {
 	type args struct {
-		id   uint64
+		id   int64
 		mock func()
 	}
 	tests := []struct {

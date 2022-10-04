@@ -53,7 +53,7 @@ var getTasksCmd = &cobra.Command{
 				return err
 			}
 
-			task, err := todoBiz.GetByID(contextx.Background(), uint64(id))
+			task, err := todoBiz.GetByID(contextx.Background(), int64(id))
 			if err != nil {
 				return err
 			}

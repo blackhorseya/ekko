@@ -70,14 +70,14 @@ func (s *handlerSuite) Test_impl_GetByID() {
 		{
 			name: "get by id then 500",
 			args: args{id: "1", mock: func() {
-				s.mock.On("GetByID", mock.Anything, uint64(1)).Return(nil, er.ErrGetTask).Once()
+				s.mock.On("GetByID", mock.Anything, int64(1)).Return(nil, er.ErrGetTask).Once()
 			}},
 			wantCode: 500,
 		},
 		{
 			name: "get by id then 200",
 			args: args{id: "1", mock: func() {
-				s.mock.On("GetByID", mock.Anything, uint64(1)).Return(testdata.Task1, nil).Once()
+				s.mock.On("GetByID", mock.Anything, int64(1)).Return(testdata.Task1, nil).Once()
 			}},
 			wantCode: 200,
 		},
@@ -228,11 +228,6 @@ func (s *handlerSuite) Test_impl_UpdateStatus() {
 		wantCode int
 	}{
 		{
-			name:     "missing id then 400",
-			args:     args{id: ""},
-			wantCode: 400,
-		},
-		{
 			name:     "invalid id then 400",
 			args:     args{id: "xxx"},
 			wantCode: 400,
@@ -287,11 +282,6 @@ func (s *handlerSuite) Test_impl_ChangeTitle() {
 		args     args
 		wantCode int
 	}{
-		{
-			name:     "missing id then 400",
-			args:     args{id: "", title: "title"},
-			wantCode: 400,
-		},
 		{
 			name:     "invalid id then 400",
 			args:     args{id: "xxx", title: "title"},
