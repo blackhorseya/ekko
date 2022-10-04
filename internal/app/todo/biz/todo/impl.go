@@ -78,7 +78,7 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *ticket.Task, e
 	}
 
 	newTask := &ticket.Task{
-		ID:     i.node.Generate().Int64(),
+		ID:     i.node.Generate().Int64() / 1_000,
 		Title:  title,
 		Status: pb.TaskStatus_TASK_STATUS_TODO,
 	}
