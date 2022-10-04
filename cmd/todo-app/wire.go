@@ -10,7 +10,6 @@ import (
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz"
 	"github.com/blackhorseya/todo-app/internal/pkg/app"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/databases"
-	"github.com/blackhorseya/todo-app/internal/pkg/infra/node"
 	"github.com/blackhorseya/todo-app/internal/pkg/infra/transports/http"
 	"github.com/google/wire"
 )
@@ -20,7 +19,6 @@ var providerSet = wire.NewSet(
 	config.ProviderSet,
 	http.ProviderSet,
 	databases.ProviderSet,
-	node.ProviderSet,
 	todo.ProviderSet,
 	restful.ProviderSet,
 	biz.ProviderSet,
