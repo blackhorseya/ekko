@@ -7,10 +7,8 @@ import (
 	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/ticket"
-	"github.com/blackhorseya/todo-app/internal/pkg/infra/node"
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/blackhorseya/todo-app/test/testdata"
-	"github.com/bwmarrin/snowflake"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -21,7 +19,6 @@ type bizSuite struct {
 	suite.Suite
 	logger *zap.Logger
 	mock   *repo.MockITodoRepo
-	node   *node.MockGenerator
 	biz    ITodoBiz
 }
 
@@ -29,8 +26,7 @@ func (s *bizSuite) SetupTest() {
 	s.logger, _ = zap.NewDevelopment()
 
 	s.mock = new(repo.MockITodoRepo)
-	s.node = new(node.MockGenerator)
-	biz, err := CreateIBiz(s.mock, s.node)
+	biz, err := CreateIBiz(s.mock)
 	if err != nil {
 		panic(err)
 	}
@@ -117,7 +113,6 @@ func (s *bizSuite) Test_impl_Create() {
 		{
 			name: "create task then error",
 			args: args{title: "task 1", mock: func() {
-				s.node.On("Generate").Return(snowflake.ParseInt64(1)).Once()
 				s.mock.On("Create", mock.Anything, testdata.Task1).Return(nil, errors.New("error")).Once()
 			}},
 			wantTask: nil,
@@ -126,7 +121,6 @@ func (s *bizSuite) Test_impl_Create() {
 		{
 			name: "create task then success",
 			args: args{title: "task 1", mock: func() {
-				s.node.On("Generate").Return(snowflake.ParseInt64(1)).Once()
 				s.mock.On("Create", mock.Anything, testdata.Task1).Return(testdata.Task1, nil).Once()
 			}},
 			wantTask: testdata.Task1,

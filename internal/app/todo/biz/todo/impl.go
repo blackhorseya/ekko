@@ -3,23 +3,21 @@ package todo
 import (
 	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
+	"github.com/blackhorseya/todo-app/internal/pkg/base/rand"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/ticket"
-	"github.com/blackhorseya/todo-app/internal/pkg/infra/node"
 	"github.com/blackhorseya/todo-app/pb"
 	"go.uber.org/zap"
 )
 
 type impl struct {
-	node node.Generator
 	repo repo.ITodoRepo
 }
 
 // NewImpl serve caller to create an ITodoBiz
-func NewImpl(repo repo.ITodoRepo, node node.Generator) ITodoBiz {
+func NewImpl(repo repo.ITodoRepo) ITodoBiz {
 	return &impl{
 		repo: repo,
-		node: node,
 	}
 }
 
@@ -78,7 +76,7 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *ticket.Task, e
 	}
 
 	newTask := &ticket.Task{
-		ID:     i.node.Generate().Int64() / 1_000,
+		ID:     rand.Int64() / 1_000,
 		Title:  title,
 		Status: pb.TaskStatus_TASK_STATUS_TODO,
 	}
