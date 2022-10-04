@@ -113,7 +113,7 @@ func (s *bizSuite) Test_impl_Create() {
 		{
 			name: "create task then error",
 			args: args{title: "task 1", mock: func() {
-				s.mock.On("Create", mock.Anything, testdata.Task1).Return(nil, errors.New("error")).Once()
+				s.mock.On("Create", mock.Anything, mock.Anything).Return(nil, errors.New("error")).Once()
 			}},
 			wantTask: nil,
 			wantErr:  true,
@@ -121,7 +121,7 @@ func (s *bizSuite) Test_impl_Create() {
 		{
 			name: "create task then success",
 			args: args{title: "task 1", mock: func() {
-				s.mock.On("Create", mock.Anything, testdata.Task1).Return(testdata.Task1, nil).Once()
+				s.mock.On("Create", mock.Anything, mock.Anything).Return(testdata.Task1, nil).Once()
 			}},
 			wantTask: testdata.Task1,
 			wantErr:  false,
