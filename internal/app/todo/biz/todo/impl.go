@@ -76,7 +76,7 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *ticket.Task, e
 	}
 
 	newTask := &ticket.Task{
-		ID:     rand.Int64() / 1_000,
+		ID:     rand.Int64(),
 		Title:  title,
 		Status: pb.TaskStatus_TASK_STATUS_TODO,
 	}

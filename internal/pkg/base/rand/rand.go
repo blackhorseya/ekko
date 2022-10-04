@@ -1,8 +1,9 @@
 package rand
 
 import (
-	"math/rand"
 	"time"
+
+	"github.com/bwmarrin/snowflake"
 )
 
 var (
@@ -19,18 +20,18 @@ func init() {
 // genInt generates integer into channel to prevent concurrent access of rand function.
 // See https://groups.google.com/forum/#!topic/golang-nuts/oyTWypHlHog for details.
 func genInt() {
-	// source is not safe for concurrent use by multiple goroutines, so we create
-	// it for each goroutine.
-	s := rand.New(rand.NewSource(time.Now().UnixNano()))
+	node, _ := snowflake.NewNode(0)
 	for {
-		chInt <- s.Int()
+		chInt <- int(node.Generate().Int64() / 1_000)
+		time.Sleep(1 * time.Millisecond)
 	}
 }
 
 func genInt64() {
-	s := rand.New(rand.NewSource(time.Now().UnixNano()))
+	node, _ := snowflake.NewNode(0)
 	for {
-		chInt64 <- s.Int63()
+		chInt64 <- node.Generate().Int64() / 1_000
+		time.Sleep(1 * time.Millisecond)
 	}
 }
 
