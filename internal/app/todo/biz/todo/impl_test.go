@@ -43,7 +43,7 @@ func TestBizSuite(t *testing.T) {
 
 func (s *bizSuite) Test_impl_GetByID() {
 	type args struct {
-		id   uint64
+		id   int64
 		mock func()
 	}
 	tests := []struct {
@@ -155,7 +155,7 @@ func (s *bizSuite) Test_impl_Create() {
 
 func (s *bizSuite) Test_impl_UpdateStatus() {
 	type args struct {
-		id     uint64
+		id     int64
 		status pb.TaskStatus
 		mock   func()
 	}
@@ -226,7 +226,7 @@ func (s *bizSuite) Test_impl_UpdateStatus() {
 
 func (s *bizSuite) Test_impl_ChangeTitle() {
 	type args struct {
-		id    uint64
+		id    int64
 		title string
 		mock  func()
 	}
@@ -305,7 +305,7 @@ func (s *bizSuite) Test_impl_ChangeTitle() {
 
 func (s *bizSuite) Test_impl_Delete() {
 	type args struct {
-		id   uint64
+		id   int64
 		mock func()
 	}
 	tests := []struct {

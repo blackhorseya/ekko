@@ -59,11 +59,11 @@ func (_m *MockITodoRepo) Create(ctx contextx.Contextx, created *ticket.Task) (*t
 }
 
 // GetByID provides a mock function with given fields: ctx, id
-func (_m *MockITodoRepo) GetByID(ctx contextx.Contextx, id uint64) (*ticket.Task, error) {
+func (_m *MockITodoRepo) GetByID(ctx contextx.Contextx, id int64) (*ticket.Task, error) {
 	ret := _m.Called(ctx, id)
 
 	var r0 *ticket.Task
-	if rf, ok := ret.Get(0).(func(contextx.Contextx, uint64) *ticket.Task); ok {
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, int64) *ticket.Task); ok {
 		r0 = rf(ctx, id)
 	} else {
 		if ret.Get(0) != nil {
@@ -72,7 +72,7 @@ func (_m *MockITodoRepo) GetByID(ctx contextx.Contextx, id uint64) (*ticket.Task
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(contextx.Contextx, uint64) error); ok {
+	if rf, ok := ret.Get(1).(func(contextx.Contextx, int64) error); ok {
 		r1 = rf(ctx, id)
 	} else {
 		r1 = ret.Error(1)
@@ -105,11 +105,11 @@ func (_m *MockITodoRepo) List(ctx contextx.Contextx, condition QueryTodoConditio
 }
 
 // Remove provides a mock function with given fields: ctx, id
-func (_m *MockITodoRepo) Remove(ctx contextx.Contextx, id uint64) error {
+func (_m *MockITodoRepo) Remove(ctx contextx.Contextx, id int64) error {
 	ret := _m.Called(ctx, id)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(contextx.Contextx, uint64) error); ok {
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, int64) error); ok {
 		r0 = rf(ctx, id)
 	} else {
 		r0 = ret.Error(0)

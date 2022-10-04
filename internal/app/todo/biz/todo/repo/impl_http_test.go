@@ -44,7 +44,7 @@ func TestSuiteHTTP(t *testing.T) {
 
 func (s *SuiteHTTP) Test_rest_GetByID() {
 	type args struct {
-		id   uint64
+		id   int64
 		mock func()
 	}
 	tests := []struct {

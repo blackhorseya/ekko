@@ -17,11 +17,11 @@ type MockITodoBiz struct {
 }
 
 // ChangeTitle provides a mock function with given fields: ctx, id, title
-func (_m *MockITodoBiz) ChangeTitle(ctx contextx.Contextx, id uint64, title string) (*ticket.Task, error) {
+func (_m *MockITodoBiz) ChangeTitle(ctx contextx.Contextx, id int64, title string) (*ticket.Task, error) {
 	ret := _m.Called(ctx, id, title)
 
 	var r0 *ticket.Task
-	if rf, ok := ret.Get(0).(func(contextx.Contextx, uint64, string) *ticket.Task); ok {
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, int64, string) *ticket.Task); ok {
 		r0 = rf(ctx, id, title)
 	} else {
 		if ret.Get(0) != nil {
@@ -30,7 +30,7 @@ func (_m *MockITodoBiz) ChangeTitle(ctx contextx.Contextx, id uint64, title stri
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(contextx.Contextx, uint64, string) error); ok {
+	if rf, ok := ret.Get(1).(func(contextx.Contextx, int64, string) error); ok {
 		r1 = rf(ctx, id, title)
 	} else {
 		r1 = ret.Error(1)
@@ -63,11 +63,11 @@ func (_m *MockITodoBiz) Create(ctx contextx.Contextx, title string) (*ticket.Tas
 }
 
 // Delete provides a mock function with given fields: ctx, id
-func (_m *MockITodoBiz) Delete(ctx contextx.Contextx, id uint64) error {
+func (_m *MockITodoBiz) Delete(ctx contextx.Contextx, id int64) error {
 	ret := _m.Called(ctx, id)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(contextx.Contextx, uint64) error); ok {
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, int64) error); ok {
 		r0 = rf(ctx, id)
 	} else {
 		r0 = ret.Error(0)
@@ -77,11 +77,11 @@ func (_m *MockITodoBiz) Delete(ctx contextx.Contextx, id uint64) error {
 }
 
 // GetByID provides a mock function with given fields: ctx, id
-func (_m *MockITodoBiz) GetByID(ctx contextx.Contextx, id uint64) (*ticket.Task, error) {
+func (_m *MockITodoBiz) GetByID(ctx contextx.Contextx, id int64) (*ticket.Task, error) {
 	ret := _m.Called(ctx, id)
 
 	var r0 *ticket.Task
-	if rf, ok := ret.Get(0).(func(contextx.Contextx, uint64) *ticket.Task); ok {
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, int64) *ticket.Task); ok {
 		r0 = rf(ctx, id)
 	} else {
 		if ret.Get(0) != nil {
@@ -90,7 +90,7 @@ func (_m *MockITodoBiz) GetByID(ctx contextx.Contextx, id uint64) (*ticket.Task,
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(contextx.Contextx, uint64) error); ok {
+	if rf, ok := ret.Get(1).(func(contextx.Contextx, int64) error); ok {
 		r1 = rf(ctx, id)
 	} else {
 		r1 = ret.Error(1)
@@ -130,11 +130,11 @@ func (_m *MockITodoBiz) List(ctx contextx.Contextx, page int, size int) ([]*tick
 }
 
 // UpdateStatus provides a mock function with given fields: ctx, id, status
-func (_m *MockITodoBiz) UpdateStatus(ctx contextx.Contextx, id uint64, status pb.TaskStatus) (*ticket.Task, error) {
+func (_m *MockITodoBiz) UpdateStatus(ctx contextx.Contextx, id int64, status pb.TaskStatus) (*ticket.Task, error) {
 	ret := _m.Called(ctx, id, status)
 
 	var r0 *ticket.Task
-	if rf, ok := ret.Get(0).(func(contextx.Contextx, uint64, pb.TaskStatus) *ticket.Task); ok {
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, int64, pb.TaskStatus) *ticket.Task); ok {
 		r0 = rf(ctx, id, status)
 	} else {
 		if ret.Get(0) != nil {
@@ -143,7 +143,7 @@ func (_m *MockITodoBiz) UpdateStatus(ctx contextx.Contextx, id uint64, status pb
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(contextx.Contextx, uint64, pb.TaskStatus) error); ok {
+	if rf, ok := ret.Get(1).(func(contextx.Contextx, int64, pb.TaskStatus) error); ok {
 		r1 = rf(ctx, id, status)
 	} else {
 		r1 = ret.Error(1)

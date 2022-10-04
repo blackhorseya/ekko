@@ -23,7 +23,7 @@ func NewImpl(repo repo.ITodoRepo, node node.Generator) ITodoBiz {
 	}
 }
 
-func (i *impl) GetByID(ctx contextx.Contextx, id uint64) (task *ticket.Task, err error) {
+func (i *impl) GetByID(ctx contextx.Contextx, id int64) (task *ticket.Task, err error) {
 	ret, err := i.repo.GetByID(ctx, id)
 	if err != nil {
 		ctx.Error(er.ErrGetTask.Error(), zap.Error(err))
@@ -78,7 +78,7 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *ticket.Task, e
 	}
 
 	newTask := &ticket.Task{
-		ID:     uint64(i.node.Generate().Int64() / 1_000_000),
+		ID:     i.node.Generate().Int64(),
 		Title:  title,
 		Status: pb.TaskStatus_TASK_STATUS_TODO,
 	}
@@ -91,7 +91,7 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *ticket.Task, e
 	return ret, nil
 }
 
-func (i *impl) UpdateStatus(ctx contextx.Contextx, id uint64, status pb.TaskStatus) (task *ticket.Task, err error) {
+func (i *impl) UpdateStatus(ctx contextx.Contextx, id int64, status pb.TaskStatus) (task *ticket.Task, err error) {
 	found, err := i.repo.GetByID(ctx, id)
 	if err != nil {
 		ctx.Error(er.ErrGetTask.Error(), zap.Error(err))
@@ -112,7 +112,7 @@ func (i *impl) UpdateStatus(ctx contextx.Contextx, id uint64, status pb.TaskStat
 	return ret, nil
 }
 
-func (i *impl) ChangeTitle(ctx contextx.Contextx, id uint64, title string) (task *ticket.Task, err error) {
+func (i *impl) ChangeTitle(ctx contextx.Contextx, id int64, title string) (task *ticket.Task, err error) {
 	if len(title) == 0 {
 		ctx.Error(er.ErrEmptyTitle.Error())
 		return nil, er.ErrEmptyTitle
@@ -138,7 +138,7 @@ func (i *impl) ChangeTitle(ctx contextx.Contextx, id uint64, title string) (task
 	return ret, nil
 }
 
-func (i *impl) Delete(ctx contextx.Contextx, id uint64) error {
+func (i *impl) Delete(ctx contextx.Contextx, id int64) error {
 	err := i.repo.Remove(ctx, id)
 	if err != nil {
 		ctx.Error(er.ErrDeleteTask.Error(), zap.Error(err))

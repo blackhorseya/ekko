@@ -46,7 +46,7 @@ func NewHTTP(opts *Options, restclient restclient.RestClient) ITodoRepo {
 	}
 }
 
-func (i *rest) GetByID(ctx contextx.Contextx, id uint64) (task *ticket.Task, err error) {
+func (i *rest) GetByID(ctx contextx.Contextx, id int64) (task *ticket.Task, err error) {
 	uri, err := url.Parse(i.opts.BaseURL + "/api/v1/tasks/" + strconv.Itoa(int(id)))
 	if err != nil {
 		return nil, err
@@ -213,7 +213,7 @@ func (i *rest) Update(ctx contextx.Contextx, updated *ticket.Task) (task *ticket
 	panic("implement me")
 }
 
-func (i *rest) Remove(ctx contextx.Contextx, id uint64) error {
+func (i *rest) Remove(ctx contextx.Contextx, id int64) error {
 	// TODO implement me
 	panic("implement me")
 }
