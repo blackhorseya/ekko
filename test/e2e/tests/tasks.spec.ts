@@ -25,7 +25,7 @@ test.describe('Tasks Testing', () => {
 
   test('Should get a task by id', async ({request}) => {
     const resp = await request.get(`/api/v1/tasks/${id}`);
-    expect(resp.ok).toBeTruthy();
+    expect(resp.ok()).toBeTruthy();
   });
 
   test('Should update a task title', async ({ request }) => {
