@@ -310,14 +310,14 @@ func (s *bizSuite) Test_impl_Delete() {
 		{
 			name: "delete task by id then error",
 			args: args{id: testdata.Task1.ID, mock: func() {
-				s.mock.On("Remove", mock.Anything, testdata.Task1.ID).Return(errors.New("error")).Once()
+				s.mock.On("DeleteByID", mock.Anything, testdata.Task1.ID).Return(errors.New("error")).Once()
 			}},
 			wantErr: true,
 		},
 		{
 			name: "delete task by id then success",
 			args: args{id: testdata.Task1.ID, mock: func() {
-				s.mock.On("Remove", mock.Anything, testdata.Task1.ID).Return(nil).Once()
+				s.mock.On("DeleteByID", mock.Anything, testdata.Task1.ID).Return(nil).Once()
 			}},
 			wantErr: false,
 		},
