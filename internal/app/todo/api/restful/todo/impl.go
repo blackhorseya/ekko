@@ -7,8 +7,8 @@ import (
 	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/gocommon/pkg/response"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/ticket"
+	"github.com/blackhorseya/todo-app/internal/pkg/errorx"
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -59,8 +59,8 @@ func (i *impl) GetByID(c *gin.Context) {
 	var req reqID
 	err := c.ShouldBindUri(&req)
 	if err != nil {
-		ctx.Error(er.ErrBindID.Error(), zap.Error(err))
-		_ = c.Error(er.ErrBindID)
+		ctx.Error(errorx.ErrBindID.Error(), zap.Error(err))
+		_ = c.Error(errorx.ErrBindID)
 		return
 	}
 
@@ -91,15 +91,15 @@ func (i *impl) List(c *gin.Context) {
 
 	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
 	if err != nil {
-		ctx.Error(er.ErrInvalidPage.Error(), zap.Error(err), zap.String("page", c.Query("page")))
-		_ = c.Error(er.ErrInvalidPage)
+		ctx.Error(errorx.ErrInvalidPage.Error(), zap.Error(err), zap.String("page", c.Query("page")))
+		_ = c.Error(errorx.ErrInvalidPage)
 		return
 	}
 
 	size, err := strconv.Atoi(c.DefaultQuery("size", "10"))
 	if err != nil {
-		ctx.Error(er.ErrInvalidSize.Error(), zap.Error(err), zap.String("size", c.Query("size")))
-		_ = c.Error(er.ErrInvalidSize)
+		ctx.Error(errorx.ErrInvalidSize.Error(), zap.Error(err), zap.String("size", c.Query("size")))
+		_ = c.Error(errorx.ErrInvalidSize)
 		return
 	}
 
@@ -161,15 +161,15 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 	var req reqID
 	err := c.ShouldBindUri(&req)
 	if err != nil {
-		ctx.Error(er.ErrBindID.Error(), zap.Error(err))
-		_ = c.Error(er.ErrBindID)
+		ctx.Error(errorx.ErrBindID.Error(), zap.Error(err))
+		_ = c.Error(errorx.ErrBindID)
 		return
 	}
 
 	statusStr := c.PostForm("status")
 	statusVal, err := strconv.Atoi(statusStr)
 	if err != nil {
-		_ = c.Error(er.ErrInvalidStatus)
+		_ = c.Error(errorx.ErrInvalidStatus)
 		return
 	}
 
@@ -200,8 +200,8 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 	var req reqID
 	err := c.ShouldBindUri(&req)
 	if err != nil {
-		ctx.Error(er.ErrBindID.Error(), zap.Error(err))
-		_ = c.Error(er.ErrBindID)
+		ctx.Error(errorx.ErrBindID.Error(), zap.Error(err))
+		_ = c.Error(errorx.ErrBindID)
 		return
 	}
 
@@ -234,8 +234,8 @@ func (i *impl) Delete(c *gin.Context) {
 	var req reqID
 	err := c.ShouldBindUri(&req)
 	if err != nil {
-		ctx.Error(er.ErrBindID.Error(), zap.Error(err))
-		_ = c.Error(er.ErrBindID)
+		ctx.Error(errorx.ErrBindID.Error(), zap.Error(err))
+		_ = c.Error(errorx.ErrBindID)
 		return
 	}
 

@@ -25,7 +25,7 @@ func init() {
 //
 // @BasePath /api
 func main() {
-	svc, err := CreateService(*path)
+	svc, err := CreateService(*path, 1)
 	if err != nil {
 		zap.S().Fatal(zap.Error(err))
 	}

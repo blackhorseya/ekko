@@ -5,7 +5,7 @@ import (
 
 	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health/repo"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
+	"github.com/blackhorseya/todo-app/internal/pkg/errorx"
 	"go.uber.org/zap"
 )
 
@@ -24,8 +24,8 @@ func NewImpl(healthRepo repo.IHealthRepo) IHealthBiz {
 func (i *impl) Readiness(ctx contextx.Contextx) (ok bool, err error) {
 	err = i.repo.Ping(ctx, 2*time.Second)
 	if err != nil {
-		ctx.Error(er.ErrPing.Error(), zap.Error(err))
-		return false, er.ErrPing
+		ctx.Error(errorx.ErrPing.Error(), zap.Error(err))
+		return false, errorx.ErrPing
 	}
 
 	return true, nil
@@ -35,8 +35,8 @@ func (i *impl) Readiness(ctx contextx.Contextx) (ok bool, err error) {
 func (i *impl) Liveness(ctx contextx.Contextx) (ok bool, err error) {
 	err = i.repo.Ping(ctx, 5*time.Second)
 	if err != nil {
-		ctx.Error(er.ErrPing.Error(), zap.Error(err))
-		return false, er.ErrPing
+		ctx.Error(errorx.ErrPing.Error(), zap.Error(err))
+		return false, errorx.ErrPing
 	}
 
 	return true, nil

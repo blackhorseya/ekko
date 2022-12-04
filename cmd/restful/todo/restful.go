@@ -3,9 +3,11 @@ package main
 import (
 	"time"
 
+	"github.com/blackhorseya/todo-app/cmd/restful/todo/api"
 	"github.com/blackhorseya/todo-app/pkg/adapters"
 	"github.com/blackhorseya/todo-app/pkg/contextx"
 	"github.com/blackhorseya/todo-app/pkg/cors"
+	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/todo/biz"
 	"github.com/blackhorseya/todo-app/pkg/er"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
@@ -14,9 +16,10 @@ import (
 
 type restful struct {
 	router *gin.Engine
+	biz    tb.IBiz
 }
 
-func NewRestful(logger *zap.Logger, router *gin.Engine) adapters.Restful {
+func NewRestful(logger *zap.Logger, router *gin.Engine, biz tb.IBiz) adapters.Restful {
 	router.Use(cors.AddAllowAll())
 	router.Use(ginzap.RecoveryWithZap(logger, true))
 	router.Use(ginzap.GinzapWithConfig(logger, &ginzap.Config{
@@ -29,9 +32,12 @@ func NewRestful(logger *zap.Logger, router *gin.Engine) adapters.Restful {
 
 	return &restful{
 		router: router,
+		biz:    biz,
 	}
 }
 
 func (i *restful) InitRouting() error {
+	api.Handle(i.router.Group("/api"), i.biz)
+
 	return nil
 }
