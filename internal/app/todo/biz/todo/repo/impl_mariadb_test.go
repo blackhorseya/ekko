@@ -367,7 +367,7 @@ func (s *suiteMariadb) Test_mariadb_Remove() {
 			}
 
 			if err := s.repo.Remove(contextx.BackgroundWithLogger(s.logger), tt.args.id); (err != nil) != tt.wantErr {
-				t.Errorf("Remove() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("DeleteByID() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
 			if err := s.rw.ExpectationsWereMet(); err != nil {
