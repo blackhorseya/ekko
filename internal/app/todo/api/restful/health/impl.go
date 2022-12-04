@@ -26,15 +26,6 @@ func NewImpl(e *gin.Engine, biz health.IHealthBiz) IHandler {
 	return ret
 }
 
-// Readiness to know when an application is ready to start accepting traffic
-// @Summary Readiness
-// @Description Show application was ready to start accepting traffic
-// @Tags Health
-// @Accept application/json
-// @Produce application/json
-// @Success 200 {object} response.Response
-// @Failure 500 {object} er.APPError
-// @Router /readiness [get]
 func (i *impl) Readiness(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
 
@@ -47,15 +38,6 @@ func (i *impl) Readiness(c *gin.Context) {
 	c.JSON(http.StatusOK, response.OK.WithData("success"))
 }
 
-// Liveness to know when to restart an application
-// @Summary Liveness
-// @Description to know when to restart an application
-// @Tags Health
-// @Accept application/json
-// @Produce application/json
-// @Success 200 {object} response.Response
-// @Failure 500 {object} er.APPError
-// @Router /liveness [get]
 func (i *impl) Liveness(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
 

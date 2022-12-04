@@ -12,9 +12,6 @@ import (
 	"github.com/blackhorseya/todo-app/pb"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-
-	// import entity
-	_ "github.com/blackhorseya/gocommon/pkg/er"
 )
 
 type impl struct {
@@ -52,9 +49,9 @@ func NewImpl(e *gin.Engine, biz todo.ITodoBiz) IHandler {
 // @Produce application/json
 // @Param id path int true "ID of task"
 // @Success 200 {object} response.Response{data=pb.Task}
-// @Failure 400 {object} er.APPError
-// @Failure 404 {object} er.APPError
-// @Failure 500 {object} er.APPError
+// @Failure 400 {object} er.Error
+// @Failure 404 {object} er.Error
+// @Failure 500 {object} er.Error
 // @Router /v1/tasks/{id} [get]
 func (i *impl) GetByID(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
@@ -85,9 +82,9 @@ func (i *impl) GetByID(c *gin.Context) {
 // @Param page query integer false "page" default(1)
 // @Param size query integer false "size" default(10)
 // @Success 200 {object} response.Response{data=[]pb.Task}
-// @Failure 400 {object} er.APPError
-// @Failure 404 {object} er.APPError
-// @Failure 500 {object} er.APPError
+// @Failure 400 {object} er.Error
+// @Failure 404 {object} er.Error
+// @Failure 500 {object} er.Error
 // @Router /v1/tasks [get]
 func (i *impl) List(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
@@ -129,8 +126,8 @@ func (i *impl) List(c *gin.Context) {
 // @Produce application/json
 // @Param title formData string true "title"
 // @Success 201 {object} response.Response{data=pb.Task}
-// @Failure 400 {object} er.APPError
-// @Failure 500 {object} er.APPError
+// @Failure 400 {object} er.Error
+// @Failure 500 {object} er.Error
 // @Router /v1/tasks [post]
 func (i *impl) Create(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
@@ -155,8 +152,8 @@ func (i *impl) Create(c *gin.Context) {
 // @Param id path int true "ID of task"
 // @Param status formData integer true "status"
 // @Success 200 {object} response.Response{data=pb.Task}
-// @Failure 400 {object} er.APPError
-// @Failure 500 {object} er.APPError
+// @Failure 400 {object} er.Error
+// @Failure 500 {object} er.Error
 // @Router /v1/tasks/{id}/status [patch]
 func (i *impl) UpdateStatus(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
@@ -194,8 +191,8 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 // @Param id path int true "ID of task"
 // @Param title formData string true "title"
 // @Success 200 {object} response.Response{data=pb.Task}
-// @Failure 400 {object} er.APPError
-// @Failure 500 {object} er.APPError
+// @Failure 400 {object} er.Error
+// @Failure 500 {object} er.Error
 // @Router /v1/tasks/{id}/title [patch]
 func (i *impl) ChangeTitle(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)
@@ -227,9 +224,9 @@ func (i *impl) ChangeTitle(c *gin.Context) {
 // @Produce application/json
 // @Param id path int true "ID of task"
 // @Success 200 {object} response.Response{data=string}
-// @Failure 400 {object} er.APPError
-// @Failure 404 {object} er.APPError
-// @Failure 500 {object} er.APPError
+// @Failure 400 {object} er.Error
+// @Failure 404 {object} er.Error
+// @Failure 500 {object} er.Error
 // @Router /v1/tasks/{id} [delete]
 func (i *impl) Delete(c *gin.Context) {
 	ctx := c.MustGet("ctx").(contextx.Contextx)

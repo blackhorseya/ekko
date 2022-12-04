@@ -1,6 +1,6 @@
 basePath: /api
 definitions:
-  er.APPError:
+  er.Error:
     properties:
       code:
         type: integer
@@ -15,12 +15,24 @@ definitions:
       id:
         type: integer
       status:
-        type: integer
+        $ref: '#/definitions/pb.TaskStatus'
       title:
         type: string
       updated_at:
         type: string
     type: object
+  pb.TaskStatus:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - TaskStatus_TASK_STATUS_UNSPECIFIED
+    - TaskStatus_TASK_STATUS_TODO
+    - TaskStatus_TASK_STATUS_INPROGRESS
+    - TaskStatus_TASK_STATUS_DONE
   response.Response:
     properties:
       code:
@@ -32,53 +44,15 @@ definitions:
 info:
   contact:
     email: blackhorseya@gmail.com
-    name: Sean Cheng
+    name: sean.zheng
     url: https://blog.seancheng.space
-  description: TodoList API
+  description: API for Todo
   license:
     name: GPL-3.0
     url: https://spdx.org/licenses/GPL-3.0-only.html
-  title: TodoList API
+  title: Todo API
   version: 0.0.1
 paths:
-  /liveness:
-    get:
-      consumes:
-      - application/json
-      description: to know when to restart an application
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/er.APPError'
-      summary: Liveness
-      tags:
-      - Health
-  /readiness:
-    get:
-      consumes:
-      - application/json
-      description: Show application was ready to start accepting traffic
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/er.APPError'
-      summary: Readiness
-      tags:
-      - Health
   /v1/tasks:
     get:
       consumes:
@@ -112,15 +86,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/er.APPError'
+            $ref: '#/definitions/er.Error'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/er.APPError'
+            $ref: '#/definitions/er.Error'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/er.APPError'
+            $ref: '#/definitions/er.Error'
       summary: List all tasks
       tags:
       - Tasks
@@ -149,11 +123,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/er.APPError'
+            $ref: '#/definitions/er.Error'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/er.APPError'
+            $ref: '#/definitions/er.Error'
       summary: Create a task
       tags:
       - Tasks
@@ -183,15 +157,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/er.APPError'
+            $ref: '#/definitions/er.Error'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/er.APPError'
+            $ref: '#/definitions/er.Error'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/er.APPError'
+            $ref: '#/definitions/er.Error'
       summary: Delete a task by id
       tags:
       - Tasks
@@ -220,15 +194,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/er.APPError'
+            $ref: '#/definitions/er.Error'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/er.APPError'
+            $ref: '#/definitions/er.Error'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/er.APPError'
+            $ref: '#/definitions/er.Error'
       summary: Get a task by id
       tags:
       - Tasks
@@ -263,11 +237,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/er.APPError'
+            $ref: '#/definitions/er.Error'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/er.APPError'
+            $ref: '#/definitions/er.Error'
       summary: Update task's status by id
       tags:
       - Tasks
@@ -302,11 +276,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/er.APPError'
+            $ref: '#/definitions/er.Error'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/er.APPError'
+            $ref: '#/definitions/er.Error'
       summary: Change task's title by id
       tags:
       - Tasks
