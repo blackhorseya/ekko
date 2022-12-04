@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	_ "github.com/blackhorseya/todo-app/api/docs" // import swagger spec
+	v1 "github.com/blackhorseya/todo-app/cmd/restful/todo/api/v1"
 	"github.com/blackhorseya/todo-app/internal/pkg/errorx"
 	"github.com/blackhorseya/todo-app/pkg/contextx"
 	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/todo/biz"
@@ -22,6 +23,8 @@ func Handle(g *gin.RouterGroup, biz tb.IBiz) {
 
 	g.GET("readiness", i.Readiness)
 	g.GET("liveness", i.Liveness)
+
+	v1.Handle(g.Group("v1"), biz)
 }
 
 type impl struct {
