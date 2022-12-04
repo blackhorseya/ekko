@@ -3,6 +3,11 @@ http:
   port: 1992
   mode: debug
 
+db:
+  url: "root:changeme@tcp(localhost:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local"
+  debug: true
+  conns: 100
+
 log:
   encoding: console
   level: debug
