@@ -7,7 +7,7 @@ import (
 
 	"github.com/blackhorseya/gocommon/pkg/ginhttp"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/health"
-	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
+	"github.com/blackhorseya/todo-app/internal/pkg/errorx"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -57,7 +57,7 @@ func (s *handlerSuite) Test_impl_Readiness() {
 		{
 			name: "readiness then error",
 			args: args{mock: func() {
-				s.mock.On("Readiness", mock.Anything).Return(false, er.ErrPing).Once()
+				s.mock.On("Readiness", mock.Anything).Return(false, errorx.ErrPing).Once()
 			}},
 			wantCode: 500,
 		},
@@ -102,7 +102,7 @@ func (s *handlerSuite) Test_impl_Liveness() {
 		{
 			name: "liveness then error",
 			args: args{mock: func() {
-				s.mock.On("Liveness", mock.Anything).Return(false, er.ErrPing).Once()
+				s.mock.On("Liveness", mock.Anything).Return(false, errorx.ErrPing).Once()
 			}},
 			wantCode: 500,
 		},

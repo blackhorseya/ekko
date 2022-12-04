@@ -7,15 +7,19 @@
 package main
 
 import (
+	"github.com/blackhorseya/todo-app/internal/app/domain/todo/biz"
+	"github.com/blackhorseya/todo-app/internal/app/domain/todo/biz/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/config"
+	"github.com/blackhorseya/todo-app/internal/pkg/genx"
 	"github.com/blackhorseya/todo-app/internal/pkg/httpx"
 	"github.com/blackhorseya/todo-app/internal/pkg/log"
+	"github.com/blackhorseya/todo-app/internal/pkg/storage/mariadb"
 	"github.com/google/wire"
 )
 
 // Injectors from wire.go:
 
-func CreateService(path2 string) (*Service, error) {
+func CreateService(path2 string, id int64) (*Service, error) {
 	viper, err := config.NewConfig(path2)
 	if err != nil {
 		return nil, err
@@ -34,7 +38,21 @@ func CreateService(path2 string) (*Service, error) {
 	}
 	engine := httpx.NewRouter(httpxOptions)
 	server := httpx.NewServer(httpxOptions, logger, engine)
-	adaptersRestful := NewRestful(logger, engine)
+	mariadbOptions, err := mariadb.NewOptions(viper, logger)
+	if err != nil {
+		return nil, err
+	}
+	db, err := mariadb.NewMariadb(mariadbOptions, logger)
+	if err != nil {
+		return nil, err
+	}
+	iRepo := repo.NewMariadb(db)
+	generator, err := genx.NewImpl(id)
+	if err != nil {
+		return nil, err
+	}
+	iBiz := biz.NewImpl(iRepo, generator)
+	adaptersRestful := NewRestful(logger, engine, iBiz)
 	service, err := NewService(logger, server, adaptersRestful)
 	if err != nil {
 		return nil, err
@@ -44,6 +62,6 @@ func CreateService(path2 string) (*Service, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, httpx.ProviderClientSet, httpx.ProviderServerSet, NewRestful,
+var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, httpx.ProviderClientSet, genx.ProviderSet, mariadb.ProviderSet, httpx.ProviderServerSet, biz.ProviderStorageSet, NewRestful,
 	NewService,
 )
