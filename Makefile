@@ -82,9 +82,17 @@ deploy: check-VERSION check-DEPLOY_TO ## deploy application
 gen: gen-wire gen-pb gen-mocks gen-swagger ## generate code
 
 .PHONY: gen-pb
-gen-pb: ## generate protobuf
-	@protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. ./pb/*.proto
+gen-pb: ## generate protobuf messages and services
+	@go get -u google.golang.org/protobuf/proto
+	@go get -u google.golang.org/protobuf/cmd/protoc-gen-go
+
+	## Starting generate pb
+	@protoc --proto_path=./pb --go_out=paths=source_relative:./pkg/entity --go-grpc_out=paths=source_relative,require_unimplemented_servers=false:./pb ./pb/domain/*/*/*.proto
 	@echo Successfully generated proto
+
+	## Starting inject tags
+	@protoc-go-inject-tag -input="./pkg/entity/domain/*/model/*.pb.go"
+	@echo Successfully injected tags
 
 .PHONY: gen-wire
 gen-wire: ## generate wire
