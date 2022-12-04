@@ -11,7 +11,7 @@ const docTemplate = `{
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
         "contact": {
-            "name": "Sean Cheng",
+            "name": "sean.zheng",
             "url": "https://blog.seancheng.space",
             "email": "blackhorseya@gmail.com"
         },
@@ -24,64 +24,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/liveness": {
-            "get": {
-                "description": "to know when to restart an application",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Health"
-                ],
-                "summary": "Liveness",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/er.APPError"
-                        }
-                    }
-                }
-            }
-        },
-        "/readiness": {
-            "get": {
-                "description": "Show application was ready to start accepting traffic",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Health"
-                ],
-                "summary": "Readiness",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/er.APPError"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/tasks": {
             "get": {
                 "description": "List all tasks",
@@ -136,19 +78,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/er.APPError"
+                            "$ref": "#/definitions/er.Error"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/er.APPError"
+                            "$ref": "#/definitions/er.Error"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/er.APPError"
+                            "$ref": "#/definitions/er.Error"
                         }
                     }
                 }
@@ -196,13 +138,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/er.APPError"
+                            "$ref": "#/definitions/er.Error"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/er.APPError"
+                            "$ref": "#/definitions/er.Error"
                         }
                     }
                 }
@@ -252,19 +194,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/er.APPError"
+                            "$ref": "#/definitions/er.Error"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/er.APPError"
+                            "$ref": "#/definitions/er.Error"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/er.APPError"
+                            "$ref": "#/definitions/er.Error"
                         }
                     }
                 }
@@ -312,19 +254,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/er.APPError"
+                            "$ref": "#/definitions/er.Error"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/er.APPError"
+                            "$ref": "#/definitions/er.Error"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/er.APPError"
+                            "$ref": "#/definitions/er.Error"
                         }
                     }
                 }
@@ -381,13 +323,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/er.APPError"
+                            "$ref": "#/definitions/er.Error"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/er.APPError"
+                            "$ref": "#/definitions/er.Error"
                         }
                     }
                 }
@@ -444,13 +386,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/er.APPError"
+                            "$ref": "#/definitions/er.Error"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/er.APPError"
+                            "$ref": "#/definitions/er.Error"
                         }
                     }
                 }
@@ -458,7 +400,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "er.APPError": {
+        "er.Error": {
             "type": "object",
             "properties": {
                 "code": {
@@ -480,7 +422,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "status": {
-                    "type": "integer"
+                    "$ref": "#/definitions/pb.TaskStatus"
                 },
                 "title": {
                     "type": "string"
@@ -489,6 +431,21 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "pb.TaskStatus": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "x-enum-varnames": [
+                "TaskStatus_TASK_STATUS_UNSPECIFIED",
+                "TaskStatus_TASK_STATUS_TODO",
+                "TaskStatus_TASK_STATUS_INPROGRESS",
+                "TaskStatus_TASK_STATUS_DONE"
+            ]
         },
         "response.Response": {
             "type": "object",
@@ -511,8 +468,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "/api",
 	Schemes:          []string{},
-	Title:            "TodoList API",
-	Description:      "TodoList API",
+	Title:            "Todo API",
+	Description:      "API for Todo",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

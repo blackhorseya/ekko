@@ -100,7 +100,8 @@ gen-wire: ## generate wire
 
 .PHONY: gen-swagger
 gen-swagger: ## generate swagger spec
-	@swag init -g cmd/$(APP_NAME)/main.go --parseInternal --parseDependency --parseDepth 1 -o api/docs
+	@swag init -q --dir ./cmd/restful/todo,./ -o ./api/docs
+	## Generated swagger spec
 
 .PHONY: gen-mocks # generate mocks code via mockery
 gen-mocks: ## generate mocks
