@@ -3,7 +3,6 @@ package todo
 import (
 	"github.com/blackhorseya/gocommon/pkg/contextx"
 	"github.com/blackhorseya/todo-app/internal/app/todo/biz/todo/repo"
-	"github.com/blackhorseya/todo-app/internal/pkg/base/rand"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/er"
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/ticket"
 	"github.com/blackhorseya/todo-app/pb"
@@ -76,7 +75,8 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (task *ticket.Task, e
 	}
 
 	newTask := &ticket.Task{
-		ID:     rand.Int64(),
+		// todo: 2022/12/4|sean|fix me
+		ID:     0,
 		Title:  title,
 		Status: pb.TaskStatus_TASK_STATUS_TODO,
 	}
