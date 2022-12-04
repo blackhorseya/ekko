@@ -15,6 +15,16 @@ type task struct {
 	UpdatedAt time.Time        `json:"updated_at" db:"updated_at"`
 }
 
+func newTask(val *model.Task) *task {
+	return &task{
+		ID:        val.Id,
+		Title:     val.Title,
+		Status:    val.Status,
+		CreatedAt: val.CreatedAt.AsTime().UTC(),
+		UpdatedAt: val.UpdatedAt.AsTime().UTC(),
+	}
+}
+
 func (t *task) ToEntity() *model.Task {
 	return &model.Task{
 		Id:        t.ID,

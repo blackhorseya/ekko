@@ -2,11 +2,13 @@ package repo
 
 import (
 	"database/sql"
+	"strings"
 
 	"github.com/blackhorseya/todo-app/pkg/contextx"
 	"github.com/blackhorseya/todo-app/pkg/entity/domain/todo/model"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type mariadb struct {
@@ -33,27 +35,90 @@ func (i *mariadb) GetByID(ctx contextx.Contextx, id int64) (info *model.Task, er
 	return ret.ToEntity(), nil
 }
 
-func (i *mariadb) List(ctx contextx.Contextx, condition QueryTasksCondition) (info []*model.Task, err error) {
-	// TODO implement me
-	panic("implement me")
+func (i *mariadb) Create(ctx contextx.Contextx, created *model.Task) (info *model.Task, err error) {
+	now := timestamppb.Now()
+	created.CreatedAt = now
+	created.UpdatedAt = now
+	arg := newTask(created)
+
+	stmt := `insert into tickets (id, title, status, created_at, updated_at) values (:id, :title, :status, :created_at, :updated_at)`
+
+	_, err = i.rw.NamedExecContext(ctx, stmt, arg)
+	if err != nil {
+		return nil, err
+	}
+
+	return created, nil
 }
 
-func (i *mariadb) Create(ctx contextx.Contextx, created *model.Task) (info *model.Task, err error) {
-	// TODO implement me
-	panic("implement me")
+func (i *mariadb) List(ctx contextx.Contextx, condition QueryTasksCondition) (info []*model.Task, err error) {
+	var args []interface{}
+	query := []string{
+		`select id, title, status, created_at, updated_at from tickets`,
+	}
+
+	if condition.Limit != 0 {
+		query = append(query, `limit ?`)
+		args = append(args, condition.Limit)
+	}
+
+	if condition.Offset != 0 {
+		query = append(query, `offset ?`)
+		args = append(args, condition.Offset)
+	}
+
+	// concat query to stmt
+	stmt := strings.Join(query, " ")
+
+	var got []*task
+	err = i.rw.SelectContext(ctx, &got, stmt, args...)
+	if err != nil {
+		return nil, err
+	}
+	if len(got) == 0 {
+		return nil, nil
+	}
+
+	ret := make([]*model.Task, len(got))
+	for idx, t := range got {
+		ret[idx] = t.ToEntity()
+	}
+
+	return ret, nil
 }
 
 func (i *mariadb) Count(ctx contextx.Contextx, condition QueryTasksCondition) (total int, err error) {
-	// TODO implement me
-	panic("implement me")
+	stmt := `select count(id) as total from tickets`
+
+	ret := 0
+	err = i.rw.QueryRowxContext(ctx, stmt).Scan(&ret)
+	if err != nil {
+		return 0, err
+	}
+
+	return ret, nil
 }
 
 func (i *mariadb) Update(ctx contextx.Contextx, updated *model.Task) (info *model.Task, err error) {
-	// TODO implement me
-	panic("implement me")
+	updated.UpdatedAt = timestamppb.Now()
+
+	stmt := `update tickets set title=:title, status=:status, updated_at=:updated_at where id = :id`
+
+	_, err = i.rw.NamedExecContext(ctx, stmt, newTask(updated))
+	if err != nil {
+		return nil, err
+	}
+
+	return updated, nil
 }
 
 func (i *mariadb) DeleteByID(ctx contextx.Contextx, id int64) error {
-	// TODO implement me
-	panic("implement me")
+	stmt := `delete from tickets where id = ?`
+
+	_, err := i.rw.ExecContext(ctx, stmt, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
