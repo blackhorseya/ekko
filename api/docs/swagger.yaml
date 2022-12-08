@@ -8,20 +8,16 @@ definitions:
       msg:
         type: string
     type: object
-  pb.Task:
+  model.Task:
     properties:
-      created_at:
-        type: string
       id:
         type: integer
       status:
-        $ref: '#/definitions/pb.TaskStatus'
+        $ref: '#/definitions/model.TaskStatus'
       title:
         type: string
-      updated_at:
-        type: string
     type: object
-  pb.TaskStatus:
+  model.TaskStatus:
     enum:
     - 0
     - 1
@@ -80,7 +76,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/pb.Task'
+                    $ref: '#/definitions/model.Task'
                   type: array
               type: object
         "400":
@@ -118,7 +114,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/pb.Task'
+                  $ref: '#/definitions/model.Task'
               type: object
         "400":
           description: Bad Request
@@ -189,7 +185,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/pb.Task'
+                  $ref: '#/definitions/model.Task'
               type: object
         "400":
           description: Bad Request
@@ -232,7 +228,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/pb.Task'
+                  $ref: '#/definitions/model.Task'
               type: object
         "400":
           description: Bad Request
@@ -271,7 +267,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/pb.Task'
+                  $ref: '#/definitions/model.Task'
               type: object
         "400":
           description: Bad Request
