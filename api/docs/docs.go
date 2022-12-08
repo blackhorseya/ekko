@@ -67,7 +67,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/pb.Task"
+                                                "$ref": "#/definitions/model.Task"
                                             }
                                         }
                                     }
@@ -128,7 +128,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/pb.Task"
+                                            "$ref": "#/definitions/model.Task"
                                         }
                                     }
                                 }
@@ -184,7 +184,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/pb.Task"
+                                            "$ref": "#/definitions/model.Task"
                                         }
                                     }
                                 }
@@ -313,7 +313,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/pb.Task"
+                                            "$ref": "#/definitions/model.Task"
                                         }
                                     }
                                 }
@@ -376,7 +376,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/pb.Task"
+                                            "$ref": "#/definitions/model.Task"
                                         }
                                     }
                                 }
@@ -412,27 +412,21 @@ const docTemplate = `{
                 }
             }
         },
-        "pb.Task": {
+        "model.Task": {
             "type": "object",
             "properties": {
-                "created_at": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
                 },
                 "status": {
-                    "$ref": "#/definitions/pb.TaskStatus"
+                    "$ref": "#/definitions/model.TaskStatus"
                 },
                 "title": {
-                    "type": "string"
-                },
-                "updated_at": {
                     "type": "string"
                 }
             }
         },
-        "pb.TaskStatus": {
+        "model.TaskStatus": {
             "type": "integer",
             "enum": [
                 0,
