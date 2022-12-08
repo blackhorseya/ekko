@@ -4,8 +4,8 @@
 package biz
 
 import (
-	"github.com/blackhorseya/todo-app/internal/app/domain/todo/biz/repo"
-	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/todo/biz"
+	"github.com/blackhorseya/todo-app/internal/app/domain/task/biz/repo"
+	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/task/biz"
 	"github.com/blackhorseya/todo-app/pkg/genx"
 	"github.com/google/wire"
 )

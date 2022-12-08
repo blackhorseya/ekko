@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/blackhorseya/todo-app/pkg/contextx"
-	"github.com/blackhorseya/todo-app/pkg/entity/domain/todo/model"
+	"github.com/blackhorseya/todo-app/pkg/entity/domain/task/model"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/types/known/timestamppb"

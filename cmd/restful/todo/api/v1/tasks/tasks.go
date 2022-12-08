@@ -1,7 +1,7 @@
 package tasks
 
 import (
-	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/todo/biz"
+	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/task/biz"
 	"github.com/gin-gonic/gin"
 )
 

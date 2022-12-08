@@ -2,10 +2,10 @@ package biz
 
 import (
 	"github.com/blackhorseya/todo-app/pkg/contextx"
-	tm "github.com/blackhorseya/todo-app/pkg/entity/domain/todo/model"
+	tm "github.com/blackhorseya/todo-app/pkg/entity/domain/task/model"
 )
 
-// IBiz declare todo domain interface
+// IBiz declare task domain interface
 //
 //go:generate mockery --all --inpackage
 type IBiz interface {

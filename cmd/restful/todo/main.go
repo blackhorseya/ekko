@@ -6,7 +6,7 @@ import (
 	"go.uber.org/zap"
 )
 
-var path = flag.String("c", "./configs/restful/todo/local.yaml", "set config file path")
+var path = flag.String("c", "./configs/restful/task/local.yaml", "set config file path")
 
 func init() {
 	flag.Parse()

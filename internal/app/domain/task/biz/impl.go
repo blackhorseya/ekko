@@ -1,11 +1,11 @@
 package biz
 
 import (
-	"github.com/blackhorseya/todo-app/internal/app/domain/todo/biz/repo"
+	"github.com/blackhorseya/todo-app/internal/app/domain/task/biz/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/errorx"
 	"github.com/blackhorseya/todo-app/pkg/contextx"
-	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/todo/biz"
-	"github.com/blackhorseya/todo-app/pkg/entity/domain/todo/model"
+	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/task/biz"
+	"github.com/blackhorseya/todo-app/pkg/entity/domain/task/model"
 	"github.com/blackhorseya/todo-app/pkg/genx"
 	"github.com/google/wire"
 	"go.uber.org/zap"

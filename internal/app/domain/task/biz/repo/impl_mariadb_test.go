@@ -8,7 +8,7 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/blackhorseya/todo-app/pkg/contextx"
-	"github.com/blackhorseya/todo-app/pkg/entity/domain/todo/model"
+	"github.com/blackhorseya/todo-app/pkg/entity/domain/task/model"
 	"github.com/blackhorseya/todo-app/test/testdata"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
