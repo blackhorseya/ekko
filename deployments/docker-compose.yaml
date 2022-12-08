@@ -6,6 +6,6 @@ services:
     restart: always
     environment:
       MARIADB_ROOT_PASSWORD: changeme
-      MARIADB_DATABASE: todo
+      MARIADB_DATABASE: task
     ports:
       - "3306:3306"

@@ -2,7 +2,7 @@ package repo
 
 import (
 	"github.com/blackhorseya/todo-app/pkg/contextx"
-	tm "github.com/blackhorseya/todo-app/pkg/entity/domain/todo/model"
+	tm "github.com/blackhorseya/todo-app/pkg/entity/domain/task/model"
 	"github.com/google/wire"
 )
 
@@ -12,7 +12,7 @@ type QueryTasksCondition struct {
 	Offset int `json:"offset"`
 }
 
-// IRepo declare todo repo interface
+// IRepo declare task repo interface
 //
 //go:generate mockery --all --inpackage
 type IRepo interface {

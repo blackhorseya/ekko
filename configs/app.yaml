@@ -1,5 +1,5 @@
 app:
-  name: todo
+  name: task
 
 http:
   port: 8080
@@ -9,5 +9,5 @@ log:
   level: debug
 
 db:
-  url: "root:changeme@tcp(localhost:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local"
+  url: "root:changeme@tcp(localhost:3306)/task?charset=utf8mb4&parseTime=True&loc=Local"
   conns: 100

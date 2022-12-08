@@ -7,8 +7,8 @@
 package main
 
 import (
-	"github.com/blackhorseya/todo-app/internal/app/domain/todo/biz"
-	"github.com/blackhorseya/todo-app/internal/app/domain/todo/biz/repo"
+	"github.com/blackhorseya/todo-app/internal/app/domain/task/biz"
+	"github.com/blackhorseya/todo-app/internal/app/domain/task/biz/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/config"
 	"github.com/blackhorseya/todo-app/internal/pkg/genx"
 	"github.com/blackhorseya/todo-app/internal/pkg/httpx"

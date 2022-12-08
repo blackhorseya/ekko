@@ -7,7 +7,7 @@ import (
 	v1 "github.com/blackhorseya/todo-app/cmd/restful/todo/api/v1"
 	"github.com/blackhorseya/todo-app/internal/pkg/errorx"
 	"github.com/blackhorseya/todo-app/pkg/contextx"
-	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/todo/biz"
+	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/task/biz"
 	"github.com/blackhorseya/todo-app/pkg/response"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"

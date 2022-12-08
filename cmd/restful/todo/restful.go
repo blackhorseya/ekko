@@ -7,7 +7,7 @@ import (
 	"github.com/blackhorseya/todo-app/pkg/adapters"
 	"github.com/blackhorseya/todo-app/pkg/contextx"
 	"github.com/blackhorseya/todo-app/pkg/cors"
-	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/todo/biz"
+	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/task/biz"
 	"github.com/blackhorseya/todo-app/pkg/er"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"

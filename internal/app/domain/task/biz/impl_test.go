@@ -4,10 +4,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/blackhorseya/todo-app/internal/app/domain/todo/biz/repo"
+	"github.com/blackhorseya/todo-app/internal/app/domain/task/biz/repo"
 	"github.com/blackhorseya/todo-app/pkg/contextx"
-	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/todo/biz"
-	"github.com/blackhorseya/todo-app/pkg/entity/domain/todo/model"
+	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/task/biz"
+	"github.com/blackhorseya/todo-app/pkg/entity/domain/task/model"
 	"github.com/blackhorseya/todo-app/pkg/genx"
 	"github.com/blackhorseya/todo-app/test/testdata"
 	"github.com/pkg/errors"

@@ -5,7 +5,7 @@ import (
 
 	"github.com/blackhorseya/todo-app/internal/pkg/entity/ticket"
 	"github.com/blackhorseya/todo-app/pb"
-	"github.com/blackhorseya/todo-app/pkg/entity/domain/todo/model"
+	"github.com/blackhorseya/todo-app/pkg/entity/domain/task/model"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

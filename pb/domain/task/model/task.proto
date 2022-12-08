@@ -1,6 +1,6 @@
 syntax = "proto3";
-package todo;
-option go_package = "github.com/blackhorseya/todo-app/pkg/entity/domain/todo/model";
+package task;
+option go_package = "github.com/blackhorseya/task-app/pkg/entity/domain/task/model";
 
 import "google/protobuf/timestamp.proto";
 
