@@ -36,8 +36,8 @@ func (i *impl) GetByID(c *gin.Context) {
 	var req getByIDRequest
 	err := c.ShouldBindUri(&req)
 	if err != nil {
-		ctx.Error(errorx.ErrBindID.Error(), zap.Error(err))
-		_ = c.Error(errorx.ErrBindID)
+		ctx.Error(errorx.ErrInvalidID.Error(), zap.Error(err))
+		_ = c.Error(errorx.ErrInvalidID)
 		return
 	}
 
