@@ -117,8 +117,8 @@ func (i *impl) UpdateStatus(ctx contextx.Contextx, id int64, status model.TaskSt
 
 func (i *impl) ChangeTitle(ctx contextx.Contextx, id int64, title string) (info *model.Task, err error) {
 	if len(title) == 0 {
-		ctx.Error(errorx.ErrEmptyTitle.Error())
-		return nil, errorx.ErrEmptyTitle
+		ctx.Error(errorx.ErrInvalidTitle.Error())
+		return nil, errorx.ErrInvalidTitle
 	}
 
 	exists, err := i.repo.GetByID(ctx, id)
