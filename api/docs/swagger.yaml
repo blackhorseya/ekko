@@ -1,5 +1,14 @@
 basePath: /api
 definitions:
+  cmd_restful_todo_api_v1_tasks.listResponse:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/model.Task'
+        type: array
+      total:
+        type: integer
+    type: object
   er.Error:
     properties:
       code:
@@ -7,6 +16,15 @@ definitions:
       data: {}
       msg:
         type: string
+    type: object
+  github_com_blackhorseya_todo-app_cmd_restful_todo_api_v1_tasks.listResponse:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/model.Task'
+        type: array
+      total:
+        type: integer
     type: object
   model.Task:
     properties:
@@ -75,9 +93,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/model.Task'
-                  type: array
+                  $ref: '#/definitions/cmd_restful_todo_api_v1_tasks.listResponse'
               type: object
         "400":
           description: Bad Request
