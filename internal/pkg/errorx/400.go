@@ -15,8 +15,8 @@ var (
 )
 
 var (
-	// ErrBindID means bind id is invalid
-	ErrBindID = er.New(http.StatusBadRequest, 40012, "bind id is invalid", "bind id is invalid")
+	// ErrInvalidID means bind id is invalid
+	ErrInvalidID = er.New(http.StatusBadRequest, 40012, "id is invalid", "id is invalid")
 
 	// ErrInvalidTitle means title must be NOT empty
 	ErrInvalidTitle = er.New(http.StatusBadRequest, 40015, "title is invalid", "title is invalid")
