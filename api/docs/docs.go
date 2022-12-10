@@ -65,10 +65,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/model.Task"
-                                            }
+                                            "$ref": "#/definitions/cmd_restful_todo_api_v1_tasks.listResponse"
                                         }
                                     }
                                 }
@@ -400,6 +397,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "cmd_restful_todo_api_v1_tasks.listResponse": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Task"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "er.Error": {
             "type": "object",
             "properties": {
@@ -409,6 +420,20 @@ const docTemplate = `{
                 "data": {},
                 "msg": {
                     "type": "string"
+                }
+            }
+        },
+        "github_com_blackhorseya_todo-app_cmd_restful_todo_api_v1_tasks.listResponse": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Task"
+                    }
+                },
+                "total": {
+                    "type": "integer"
                 }
             }
         },
