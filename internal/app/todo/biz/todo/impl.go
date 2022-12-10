@@ -70,8 +70,8 @@ func (i *impl) List(ctx contextx.Contextx, page, size int) (tasks []*ticket.Task
 
 func (i *impl) Create(ctx contextx.Contextx, title string) (task *ticket.Task, err error) {
 	if len(title) == 0 {
-		ctx.Error(errorx.ErrEmptyTitle.Error())
-		return nil, errorx.ErrEmptyTitle
+		ctx.Error(errorx.ErrInvalidTitle.Error())
+		return nil, errorx.ErrInvalidTitle
 	}
 
 	newTask := &ticket.Task{
@@ -111,8 +111,8 @@ func (i *impl) UpdateStatus(ctx contextx.Contextx, id int64, status pb.TaskStatu
 
 func (i *impl) ChangeTitle(ctx contextx.Contextx, id int64, title string) (task *ticket.Task, err error) {
 	if len(title) == 0 {
-		ctx.Error(errorx.ErrEmptyTitle.Error())
-		return nil, errorx.ErrEmptyTitle
+		ctx.Error(errorx.ErrInvalidTitle.Error())
+		return nil, errorx.ErrInvalidTitle
 	}
 
 	found, err := i.repo.GetByID(ctx, id)
