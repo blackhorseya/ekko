@@ -52,18 +52,18 @@ func (s *suiteTester) Test_impl_GetByID() {
 	}{
 		{
 			name: "get by id then error",
-			args: args{id: testdata.Task2.Id, mock: func() {
-				s.repo.On("GetByID", mock.Anything, testdata.Task2.Id).Return(nil, errors.New("error")).Once()
+			args: args{id: testdata.Task1.Id, mock: func() {
+				s.repo.On("GetByID", mock.Anything, testdata.Task1.Id).Return(nil, errors.New("error")).Once()
 			}},
 			wantInfo: nil,
 			wantErr:  true,
 		},
 		{
 			name: "get by id then ok",
-			args: args{id: testdata.Task2.Id, mock: func() {
-				s.repo.On("GetByID", mock.Anything, testdata.Task2.Id).Return(testdata.Task2, nil).Once()
+			args: args{id: testdata.Task1.Id, mock: func() {
+				s.repo.On("GetByID", mock.Anything, testdata.Task1.Id).Return(testdata.Task1, nil).Once()
 			}},
-			wantInfo: testdata.Task2,
+			wantInfo: testdata.Task1,
 			wantErr:  false,
 		},
 	}
