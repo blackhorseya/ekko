@@ -25,7 +25,7 @@ func NewRestful(logger *zap.Logger, router *gin.Engine, biz tb.IBiz) adapters.Re
 	router.Use(ginzap.GinzapWithConfig(logger, &ginzap.Config{
 		TimeFormat: time.RFC3339,
 		UTC:        true,
-		SkipPaths:  []string{"/api/readiness", "/api/liveness", "/metrics"},
+		SkipPaths:  []string{"/api/readiness", "/api/liveness"},
 	}))
 	router.Use(contextx.AddContextxWitLoggerMiddleware(logger))
 	router.Use(er.AddErrorHandlingMiddleware())
