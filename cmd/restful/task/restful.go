@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 
-	"github.com/blackhorseya/todo-app/cmd/restful/todo/api"
+	"github.com/blackhorseya/todo-app/cmd/restful/task/api"
 	"github.com/blackhorseya/todo-app/pkg/adapters"
 	"github.com/blackhorseya/todo-app/pkg/contextx"
 	"github.com/blackhorseya/todo-app/pkg/cors"
