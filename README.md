@@ -7,18 +7,7 @@
 [![Release](https://img.shields.io/github/release/blackhorseya/todo-app)](https://github.com/blackhorseya/todo-app/releases/latest)
 [![GitHub license](https://img.shields.io/github/license/blackhorseya/todo-app)](https://github.com/blackhorseya/todo-app/blob/main/LICENSE)
 
-practice TodoList application using `golang`
-
-- [TodoList List](#todo-list)
-    * [Live Preview](#live-preview)
-    * [Functional](#functional)
-        + [Main](#main)
-        + [Extra](#extra)
-    * [Technical](#technical)
-        + [Languages](#languages)
-        + [Frameworks](#frameworks)
-        + [Infrastructures](#infrastructures)
-        + [CI/CD](#ci-cd)
+The main purpose of this project is to practice `golang` and design the system architecture
 
 ## Live Preview
 
@@ -45,7 +34,7 @@ practice TodoList application using `golang`
 - Go
 - React
 
-### Frameworks
+### Toolchain
 
 - [Gin](https://github.com/gin-gonic/gin)
 - [Protobuf](https://developers.google.com/protocol-buffers)
@@ -55,14 +44,14 @@ practice TodoList application using `golang`
 
 ### Infrastructures
 
-- GKE
-- MongoDB
+- Mariadb
 - Docker
 - GCR
-- Terraform
+- GKE
 - Helm 3
+- Terraform
 
-### CI CD
+### CI/CD
 
 - GitHub Action
 - [Codecov](https://codecov.io/)
