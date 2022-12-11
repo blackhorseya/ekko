@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 let id = 0;
 
@@ -9,21 +9,21 @@ test.describe('Tasks Testing', () => {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       form: {
-        'title': 'title',
+        title: 'title',
       },
     });
     expect(resp.ok()).toBeTruthy();
 
-    const task = await resp.json()
+    const task = await resp.json();
     id = task.data.id;
   });
-  
+
   test.afterAll(async ({ request }) => {
     const resp = await request.delete(`/api/v1/tasks/${id}`);
     expect(resp.ok()).toBeTruthy();
   });
 
-  test('Should get a task by id', async ({request}) => {
+  test('Should get a task by id', async ({ request }) => {
     const resp = await request.get(`/api/v1/tasks/${id}`);
     expect(resp.ok()).toBeTruthy();
   });
@@ -34,9 +34,9 @@ test.describe('Tasks Testing', () => {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       form: {
-        'title': 'title',
+        title: 'title',
       },
-    })
+    });
     expect(resp.ok()).toBeTruthy();
   });
 
@@ -46,9 +46,9 @@ test.describe('Tasks Testing', () => {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       form: {
-        'status': 2,
+        status: 2,
       },
-    })
+    });
     expect(resp.ok()).toBeTruthy();
   });
 });
