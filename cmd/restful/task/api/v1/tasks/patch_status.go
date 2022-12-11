@@ -16,7 +16,7 @@ const (
 	_formStatus = "status"
 )
 
-type patchStatusIDIDRequest struct {
+type patchStatusIDRequest struct {
 	ID int64 `uri:"id"`
 }
 
@@ -39,7 +39,7 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 		return
 	}
 
-	var req patchStatusIDIDRequest
+	var req patchStatusIDRequest
 	err := c.ShouldBindUri(&req)
 	if err != nil {
 		ctx.Error(errorx.ErrInvalidID.Error(), zap.Error(err))
