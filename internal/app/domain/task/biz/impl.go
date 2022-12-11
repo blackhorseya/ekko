@@ -39,6 +39,10 @@ func (i *impl) GetByID(ctx contextx.Contextx, id int64) (info *model.Task, err e
 		ctx.Error(errorx.ErrGetTask.Error(), zap.Error(err), zap.Int64("id", id))
 		return nil, errorx.ErrGetTask
 	}
+	if ret == nil {
+		ctx.Error(errorx.ErrTaskNotExists.Error(), zap.Int64("id", id))
+		return nil, errorx.ErrTaskNotExists
+	}
 
 	return ret, nil
 }
