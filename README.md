@@ -13,6 +13,21 @@ The main purpose of this project is to practice `golang` and design the system a
 
 [Demo](https://todo.seancheng.space)
 
+## Concepts
+
+### Project layout
+
+The project layout is designed with reference to the [Standard Go Project Layout](https://github.com/golang-standards/project-layout) combined with the concept of [monorepo](https://monorepo.tools/)
+
+### System design
+
+Design the corresponding microservice based on Domain-Driven Design
+
+**Domain**
+
+- `Account`: define a user
+- `Task`: as a representation of all tickets
+
 ## Functional
 
 ### Main
