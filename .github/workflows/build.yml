@@ -18,10 +18,6 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
-      - name: Clone submodules
-        run: |
-          sed -i 's/git@github.com:/https:\/\/'"${{ secrets.USERNAME }}"':'"${{ secrets.TOKEN }}"'@github.com\//' .gitmodules
-          git submodule update --init --recursive
       - name: Setup go
         uses: actions/setup-go@v2
         with:
