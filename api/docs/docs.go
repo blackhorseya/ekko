@@ -65,7 +65,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/cmd_restful_todo_api_v1_tasks.listResponse"
+                                            "$ref": "#/definitions/cmd_restful_task_api_v1_tasks.listResponse"
                                         }
                                     }
                                 }
@@ -397,7 +397,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "cmd_restful_todo_api_v1_tasks.listResponse": {
+        "cmd_restful_task_api_v1_tasks.listResponse": {
             "type": "object",
             "properties": {
                 "list": {
@@ -423,7 +423,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_blackhorseya_todo-app_cmd_restful_todo_api_v1_tasks.listResponse": {
+        "github_com_blackhorseya_todo-app_cmd_restful_task_api_v1_tasks.listResponse": {
             "type": "object",
             "properties": {
                 "list": {

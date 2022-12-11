@@ -100,7 +100,7 @@ gen-wire: ## generate wire
 
 .PHONY: gen-swagger
 gen-swagger: ## generate swagger spec
-	@swag init -q --dir ./cmd/restful/todo,./ -o ./api/docs
+	@swag init -q --dir ./cmd/restful/task,./ -o ./api/docs
 	## Generated swagger spec
 
 .PHONY: gen-mocks # generate mocks code via mockery
