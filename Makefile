@@ -121,3 +121,7 @@ update-package: ## update package and commit
 	@go mod tidy
 	@git add go.mod go.sum
 	@git commit -m "build: update package"
+
+.PHONY: update-repos
+update-repos: ## run gazelle with bazel
+	@bazel run //:gazelle-update-repos
