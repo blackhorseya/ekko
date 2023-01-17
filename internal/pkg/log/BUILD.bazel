@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "log",
+    srcs = ["log.go"],
+    importpath = "github.com/blackhorseya/todo-app/internal/pkg/log",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@com_github_google_wire//:wire",
+        "@com_github_spf13_viper//:viper",
+        "@org_uber_go_zap//:zap",
+        "@org_uber_go_zap//zapcore",
+    ],
+)

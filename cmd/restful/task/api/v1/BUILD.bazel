@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "api",
+    srcs = ["v1.go"],
+    importpath = "github.com/blackhorseya/todo-app/cmd/restful/task/api/v1",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//cmd/restful/task/api/v1/tasks",
+        "//pkg/entity/domain/task/biz",
+        "@com_github_gin_gonic_gin//:gin",
+    ],
+)

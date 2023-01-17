@@ -1,0 +1,12 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "testdata",
+    srcs = ["task.go"],
+    importpath = "github.com/blackhorseya/todo-app/test/testdata",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/entity/domain/task/model",
+        "@org_golang_google_protobuf//types/known/timestamppb",
+    ],
+)

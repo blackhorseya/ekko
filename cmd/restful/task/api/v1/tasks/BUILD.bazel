@@ -1,0 +1,25 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "tasks",
+    srcs = [
+        "delete_id.go",
+        "get_id.go",
+        "get_list.go",
+        "patch_status.go",
+        "patch_title.go",
+        "post_task.go",
+        "tasks.go",
+    ],
+    importpath = "github.com/blackhorseya/todo-app/cmd/restful/task/api/v1/tasks",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//internal/pkg/errorx",
+        "//pkg/contextx",
+        "//pkg/entity/domain/task/biz",
+        "//pkg/entity/domain/task/model",
+        "//pkg/response",
+        "@com_github_gin_gonic_gin//:gin",
+        "@org_uber_go_zap//:zap",
+    ],
+)

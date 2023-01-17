@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "errorx",
+    srcs = [
+        "400.go",
+        "404.go",
+        "500.go",
+    ],
+    importpath = "github.com/blackhorseya/todo-app/internal/pkg/errorx",
+    visibility = ["//:__subpackages__"],
+    deps = ["//pkg/er"],
+)

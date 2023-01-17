@@ -1,0 +1,16 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "biz",
+    srcs = [
+        "interface.go",
+        "mock_IBiz.go",
+    ],
+    importpath = "github.com/blackhorseya/todo-app/pkg/entity/domain/task/biz",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/contextx",
+        "//pkg/entity/domain/task/model",
+        "@com_github_stretchr_testify//mock",
+    ],
+)
