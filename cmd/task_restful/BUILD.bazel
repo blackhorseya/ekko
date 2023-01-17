@@ -2,13 +2,13 @@ load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 load("@io_bazel_rules_docker//go:image.bzl", "go_image")
 
 go_library(
-    name = "restful_lib",
+    name = "task_restful_lib",
     srcs = [
         "main.go",
         "service.go",
         "wire_gen.go",
     ],
-    importpath = "github.com/blackhorseya/todo-app/cmd/task/restful",
+    importpath = "github.com/blackhorseya/todo-app/cmd/task_restful",
     visibility = ["//visibility:private"],
     deps = [
         "//internal/adapter/task/restful",
@@ -28,14 +28,14 @@ go_library(
 )
 
 go_binary(
-    name = "restful",
-    embed = [":restful_lib"],
+    name = "task_restful",
+    embed = [":task_restful_lib"],
     visibility = ["//visibility:public"],
 )
 
 go_image(
-    name = "restful_image",
-    embed = [":restful_lib"],
+    name = "task_restful_image",
+    embed = [":task_restful_lib"],
     goarch = "amd64",
     goos = "linux",
     visibility = ["//visibility:public"],
