@@ -87,7 +87,10 @@ gen-pb: ## generate protobuf messages and services
 	@go get -u google.golang.org/protobuf/cmd/protoc-gen-go
 
 	## Starting generate pb
-	@protoc --proto_path=./pb --go_out=paths=source_relative:./pkg/entity --go-grpc_out=paths=source_relative,require_unimplemented_servers=false:./pb ./pb/domain/*/*/*.proto
+	@protoc --proto_path=. \
+			--go_out=. --go_opt=module=github.com/blackhorseya/todo-app \
+			--go-grpc_out=. --go-grpc_opt=module=github.com/blackhorseya/todo-app,require_unimplemented_servers=false \
+			./pb/domain/*/**.proto
 	@echo Successfully generated proto
 
 	## Starting inject tags

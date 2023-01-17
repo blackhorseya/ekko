@@ -20,4 +20,3 @@ message Task {
   // @gotags: json:"-"
   google.protobuf.Timestamp updated_at = 5;
 }
-

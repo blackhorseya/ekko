@@ -8,4 +8,3 @@ message Profile {
   string picture_url = 3;
   string token = 4;
 }
-
