@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"github.com/blackhorseya/todo-app/cmd/restful/task/api/v1/tasks"
+	"github.com/blackhorseya/todo-app/internal/adapter/task/restful/api/v1/tasks"
 	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/task/biz"
 	"github.com/gin-gonic/gin"
 )

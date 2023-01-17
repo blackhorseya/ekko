@@ -4,6 +4,7 @@
 package main
 
 import (
+	"github.com/blackhorseya/todo-app/internal/adapter/task/restful"
 	"github.com/blackhorseya/todo-app/internal/app/domain/task/biz"
 	"github.com/blackhorseya/todo-app/internal/pkg/config"
 	"github.com/blackhorseya/todo-app/internal/pkg/genx"
@@ -27,10 +28,10 @@ var providerSet = wire.NewSet(
 	httpx.ProviderServerSet,
 
 	// implementation
+	restful.TaskSet,
 	biz.ProviderStorageSet,
 
 	// main
-	NewRestful,
 	NewService,
 )
 

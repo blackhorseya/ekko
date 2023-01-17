@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	_ "github.com/blackhorseya/todo-app/api/docs" // import swagger spec
-	v1 "github.com/blackhorseya/todo-app/cmd/restful/task/api/v1"
+	"github.com/blackhorseya/todo-app/internal/adapter/task/restful/api/v1"
 	"github.com/blackhorseya/todo-app/internal/pkg/errorx"
 	"github.com/blackhorseya/todo-app/pkg/contextx"
 	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/task/biz"
