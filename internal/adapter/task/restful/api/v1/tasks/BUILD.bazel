@@ -11,7 +11,7 @@ go_library(
         "post_task.go",
         "tasks.go",
     ],
-    importpath = "github.com/blackhorseya/todo-app/cmd/restful/task/api/v1/tasks",
+    importpath = "github.com/blackhorseya/todo-app/internal/adapter/task/restful/api/v1/tasks",
     visibility = ["//visibility:public"],
     deps = [
         "//internal/pkg/errorx",

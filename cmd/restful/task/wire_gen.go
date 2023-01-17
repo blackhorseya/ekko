@@ -7,6 +7,7 @@
 package main
 
 import (
+	"github.com/blackhorseya/todo-app/internal/adapter/task/restful"
 	"github.com/blackhorseya/todo-app/internal/app/domain/task/biz"
 	"github.com/blackhorseya/todo-app/internal/app/domain/task/biz/repo"
 	"github.com/blackhorseya/todo-app/internal/pkg/config"
@@ -52,7 +53,7 @@ func CreateService(path2 string, id int64) (*Service, error) {
 		return nil, err
 	}
 	iBiz := biz.NewImpl(iRepo, generator)
-	adaptersRestful := NewRestful(logger, engine, iBiz)
+	adaptersRestful := restful.NewRestful(logger, engine, iBiz)
 	service, err := NewService(logger, server, adaptersRestful)
 	if err != nil {
 		return nil, err
@@ -62,6 +63,4 @@ func CreateService(path2 string, id int64) (*Service, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, httpx.ProviderClientSet, genx.ProviderSet, mariadb.ProviderSet, httpx.ProviderServerSet, biz.ProviderStorageSet, NewRestful,
-	NewService,
-)
+var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, genx.ProviderSet, mariadb.ProviderSet, httpx.ProviderClientSet, httpx.ProviderServerSet, restful.TaskSet, biz.ProviderStorageSet, NewService)

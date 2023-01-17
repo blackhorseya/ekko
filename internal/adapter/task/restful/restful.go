@@ -1,9 +1,9 @@
-package main
+package restful
 
 import (
 	"time"
 
-	"github.com/blackhorseya/todo-app/cmd/restful/task/api"
+	"github.com/blackhorseya/todo-app/internal/adapter/task/restful/api"
 	"github.com/blackhorseya/todo-app/pkg/adapters"
 	"github.com/blackhorseya/todo-app/pkg/contextx"
 	"github.com/blackhorseya/todo-app/pkg/cors"
@@ -11,6 +11,7 @@ import (
 	"github.com/blackhorseya/todo-app/pkg/er"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
+	"github.com/google/wire"
 	"go.uber.org/zap"
 )
 
@@ -41,3 +42,5 @@ func (i *restful) InitRouting() error {
 
 	return nil
 }
+
+var TaskSet = wire.NewSet(NewRestful)
