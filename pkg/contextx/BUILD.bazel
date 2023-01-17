@@ -1,0 +1,16 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "contextx",
+    srcs = [
+        "contextx.go",
+        "middlewares.go",
+    ],
+    importpath = "github.com/blackhorseya/todo-app/pkg/contextx",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_gin_gonic_gin//:gin",
+        "@org_uber_go_zap//:zap",
+        "@org_uber_go_zap//zapcore",
+    ],
+)

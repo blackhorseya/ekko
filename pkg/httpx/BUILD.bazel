@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "httpx",
+    srcs = [
+        "httpx.go",
+        "mock_Client.go",
+        "mock_Server.go",
+    ],
+    importpath = "github.com/blackhorseya/todo-app/pkg/httpx",
+    visibility = ["//visibility:public"],
+    deps = ["@com_github_stretchr_testify//mock"],
+)
