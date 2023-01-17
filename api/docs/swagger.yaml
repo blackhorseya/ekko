@@ -1,14 +1,5 @@
 basePath: /api
 definitions:
-  cmd_restful_task_api_v1_tasks.listResponse:
-    properties:
-      list:
-        items:
-          $ref: '#/definitions/model.Task'
-        type: array
-      total:
-        type: integer
-    type: object
   er.Error:
     properties:
       code:
@@ -16,15 +7,6 @@ definitions:
       data: {}
       msg:
         type: string
-    type: object
-  github_com_blackhorseya_todo-app_cmd_restful_task_api_v1_tasks.listResponse:
-    properties:
-      list:
-        items:
-          $ref: '#/definitions/model.Task'
-        type: array
-      total:
-        type: integer
     type: object
   model.Task:
     properties:
@@ -54,6 +36,15 @@ definitions:
       data: {}
       msg:
         type: string
+    type: object
+  tasks.listResponse:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/model.Task'
+        type: array
+      total:
+        type: integer
     type: object
 info:
   contact:
@@ -93,7 +84,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/cmd_restful_task_api_v1_tasks.listResponse'
+                  $ref: '#/definitions/tasks.listResponse'
               type: object
         "400":
           description: Bad Request

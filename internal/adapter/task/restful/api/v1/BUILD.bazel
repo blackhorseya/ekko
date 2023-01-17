@@ -4,7 +4,7 @@ go_library(
     name = "api",
     srcs = ["v1.go"],
     importpath = "github.com/blackhorseya/todo-app/internal/adapter/task/restful/api/v1",
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
     deps = [
         "//internal/adapter/task/restful/api/v1/tasks",
         "//pkg/entity/domain/task/biz",

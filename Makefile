@@ -103,12 +103,16 @@ gen-wire: ## generate wire
 
 .PHONY: gen-swagger
 gen-swagger: ## generate swagger spec
-	@swag init -q --dir ./cmd/restful/task,./ -o ./api/docs
+	@swag init -q --dir ./cmd/task/restful,./ -o ./api/docs
 	## Generated swagger spec
 
-.PHONY: gen-mocks # generate mocks code via mockery
+.PHONY: gen-mocks
 gen-mocks: ## generate mocks
 	@go generate -tags=wireinject -x ./...
+
+.PHONY: gen-build
+gen-build: ## run gazelle with bazel
+	@bazel run //:gazelle
 
 .PHONY: migrate-up
 migrate-up: ## run migration up
@@ -122,9 +126,8 @@ migrate-down: ## run migration down
 update-package: ## update package and commit
 	@go get -u ./...
 	@go mod tidy
-	@git add go.mod go.sum
-	@git commit -m "build: update package"
 
-.PHONY: update-repos
-update-repos: ## run gazelle with bazel
 	@bazel run //:gazelle-update-repos
+
+	@git add go.mod go.sum deps.bzl
+	@git commit -m "build: update package"
