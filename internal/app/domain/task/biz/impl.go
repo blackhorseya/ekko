@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-var ProviderStorageSet = wire.NewSet(NewImpl, repo.ProviderMariadbSet)
+var TaskSet = wire.NewSet(NewImpl)
 
 type impl struct {
 	repo      repo.IRepo

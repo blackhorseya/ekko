@@ -35,5 +35,5 @@ type IRepo interface {
 	DeleteByID(ctx contextx.Contextx, id int64) error
 }
 
-// ProviderMariadbSet is a provider set for mariadb implementation
-var ProviderMariadbSet = wire.NewSet(NewMariadb)
+// ProvideMariadb is a provider set for mariadb implementation
+var ProvideMariadb = wire.NewSet(NewMariadb)
