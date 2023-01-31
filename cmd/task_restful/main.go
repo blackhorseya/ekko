@@ -26,16 +26,16 @@ func init() {
 func main() {
 	svc, err := CreateService(*path, 1)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 	}
 
 	err = svc.Start()
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 	}
 
 	err = svc.AwaitSignal()
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 	}
 }
