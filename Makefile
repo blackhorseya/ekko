@@ -5,10 +5,8 @@ NS=side
 DEPLOY_TO=uat
 REGISTRY=gcr.io
 IMAGE_NAME=$(REGISTRY)/$(PROJECT_ID)/$(APP_NAME)
-HELM_REPO_NAME=blackhorseya
+HELM_REPO_NAME=$(PROJECT_ID)
 CHART_NAME=todo-app
-
-DB_URI='mysql://root:changeme@tcp(localhost:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local'
 
 .PHONY: check-%
 check-%: ## check environment variable is exists
@@ -114,13 +112,16 @@ gen-mocks: ## generate mocks
 gen-build: ## run gazelle with bazel
 	@bazel run //:gazelle
 
+DB_URI='mysql://root:changeme@tcp(localhost:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local'
+N=1
+
 .PHONY: migrate-up
 migrate-up: ## run migration up
 	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migrations up
 
 .PHONY: migrate-down
 migrate-down: ## run migration down
-	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migrations down
+	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migrations down $(N)
 
 .PHONY: update-package
 update-package: ## update package and commit
@@ -131,3 +132,11 @@ update-package: ## update package and commit
 
 	@git add go.mod go.sum deps.bzl
 	@git commit -m "build: update package"
+
+.PHONY: package-charts
+package-charts: ## package helm chart
+	@helm package ./deployments/charts/* -d ./charts
+
+.PHONY: push-charts
+push-charts: ## push helm chart
+	@helm gcs push --force ./charts/* $(HELM_REPO_NAME)
