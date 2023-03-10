@@ -16,6 +16,5 @@ func Handle(g *gin.RouterGroup, biz tb.IBiz) {
 	g.GET("", i.List)
 	g.POST("", i.Create)
 	g.PATCH(":id/status", i.UpdateStatus)
-	g.PATCH(":id/title", i.ChangeTitle)
 	g.DELETE(":id", i.Delete)
 }

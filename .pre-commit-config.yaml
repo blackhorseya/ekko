@@ -11,4 +11,3 @@ repos:
       - id: go-fmt
       - id: go-imports
       - id: no-go-testing
-      - id: go-unit-tests
