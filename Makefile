@@ -32,7 +32,7 @@ report: ## execute goreportcard
 
 .PHONY: clean
 clean:  ## remove artifacts
-	@rm -rf coverage.txt profile.out ./bin
+	@rm -rf coverage.txt profile.out ./bin ./deployments/charts/*.tgz
 	@echo Successfuly removed artifacts
 
 ## go
