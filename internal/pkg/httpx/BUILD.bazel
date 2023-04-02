@@ -6,7 +6,7 @@ go_library(
         "client.go",
         "server.go",
     ],
-    importpath = "github.com/blackhorseya/todo-app/internal/pkg/httpx",
+    importpath = "github.com/blackhorseya/ekko/internal/pkg/httpx",
     visibility = ["//:__subpackages__"],
     deps = [
         "//pkg/contextx",

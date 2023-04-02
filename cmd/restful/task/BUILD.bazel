@@ -1,6 +1,4 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
-load("@io_bazel_rules_docker//container:container.bzl", "container_image")
-load("@io_bazel_rules_docker//container:container.bzl", "container_push")
 
 go_library(
     name = "task_lib",
@@ -9,7 +7,7 @@ go_library(
         "service.go",
         "wire_gen.go",
     ],
-    importpath = "github.com/blackhorseya/todo-app/cmd/restful/task",
+    importpath = "github.com/blackhorseya/ekko/cmd/restful/task",
     visibility = ["//visibility:private"],
     deps = [
         "//internal/adapter/task/restful",

@@ -7,7 +7,7 @@ go_library(
         "404.go",
         "500.go",
     ],
-    importpath = "github.com/blackhorseya/todo-app/internal/pkg/errorx",
+    importpath = "github.com/blackhorseya/ekko/internal/pkg/errorx",
     visibility = ["//:__subpackages__"],
     deps = ["//pkg/er"],
 )

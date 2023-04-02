@@ -3,7 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "genx",
     srcs = ["genx.go"],
-    importpath = "github.com/blackhorseya/todo-app/internal/pkg/genx",
+    importpath = "github.com/blackhorseya/ekko/internal/pkg/genx",
     visibility = ["//:__subpackages__"],
     deps = [
         "//pkg/genx",

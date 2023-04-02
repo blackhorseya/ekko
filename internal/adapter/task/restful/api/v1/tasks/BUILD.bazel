@@ -10,7 +10,7 @@ go_library(
         "post_task.go",
         "tasks.go",
     ],
-    importpath = "github.com/blackhorseya/todo-app/internal/adapter/task/restful/api/v1/tasks",
+    importpath = "github.com/blackhorseya/ekko/internal/adapter/task/restful/api/v1/tasks",
     visibility = ["//:__subpackages__"],
     deps = [
         "//internal/pkg/errorx",

@@ -3,6 +3,6 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "adapters",
     srcs = ["adapters.go"],
-    importpath = "github.com/blackhorseya/todo-app/pkg/adapters",
+    importpath = "github.com/blackhorseya/ekko/pkg/adapters",
     visibility = ["//visibility:public"],
 )

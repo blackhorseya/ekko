@@ -6,7 +6,7 @@ go_library(
         "task.go",
         "task.pb.go",
     ],
-    importpath = "github.com/blackhorseya/todo-app/pkg/entity/domain/task/model",
+    importpath = "github.com/blackhorseya/ekko/pkg/entity/domain/task/model",
     visibility = ["//visibility:public"],
     deps = [
         "@org_golang_google_protobuf//reflect/protoreflect",

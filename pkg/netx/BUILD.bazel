@@ -6,6 +6,6 @@ go_library(
         "ip.go",
         "port.go",
     ],
-    importpath = "github.com/blackhorseya/todo-app/pkg/netx",
+    importpath = "github.com/blackhorseya/ekko/pkg/netx",
     visibility = ["//visibility:public"],
 )

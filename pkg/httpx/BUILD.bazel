@@ -7,7 +7,7 @@ go_library(
         "mock_Client.go",
         "mock_Server.go",
     ],
-    importpath = "github.com/blackhorseya/todo-app/pkg/httpx",
+    importpath = "github.com/blackhorseya/ekko/pkg/httpx",
     visibility = ["//visibility:public"],
     deps = ["@com_github_stretchr_testify//mock"],
 )

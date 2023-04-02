@@ -6,7 +6,7 @@ go_library(
         "interface.go",
         "mock_IBiz.go",
     ],
-    importpath = "github.com/blackhorseya/todo-app/pkg/entity/domain/task/biz",
+    importpath = "github.com/blackhorseya/ekko/pkg/entity/domain/task/biz",
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/contextx",

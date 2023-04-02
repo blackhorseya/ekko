@@ -6,7 +6,7 @@ go_library(
         "impl.go",
         "wire_gen.go",
     ],
-    importpath = "github.com/blackhorseya/todo-app/internal/app/domain/task/biz",
+    importpath = "github.com/blackhorseya/ekko/internal/app/domain/task/biz",
     visibility = ["//:__subpackages__"],
     deps = [
         "//internal/app/domain/task/biz/repo",

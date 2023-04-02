@@ -6,7 +6,7 @@ go_library(
         "er.go",
         "middlewares.go",
     ],
-    importpath = "github.com/blackhorseya/todo-app/pkg/er",
+    importpath = "github.com/blackhorseya/ekko/pkg/er",
     visibility = ["//visibility:public"],
     deps = ["@com_github_gin_gonic_gin//:gin"],
 )

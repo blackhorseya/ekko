@@ -3,7 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "mariadb",
     srcs = ["mariadb.go"],
-    importpath = "github.com/blackhorseya/todo-app/internal/pkg/storage/mariadb",
+    importpath = "github.com/blackhorseya/ekko/internal/pkg/storage/mariadb",
     visibility = ["//:__subpackages__"],
     deps = [
         "@com_github_go_sql_driver_mysql//:mysql",

@@ -9,7 +9,7 @@ go_library(
         "models.go",
         "wire_gen.go",
     ],
-    importpath = "github.com/blackhorseya/todo-app/internal/app/domain/task/biz/repo",
+    importpath = "github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo",
     visibility = ["//:__subpackages__"],
     deps = [
         "//pkg/contextx",

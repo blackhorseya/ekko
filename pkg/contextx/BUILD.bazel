@@ -6,7 +6,7 @@ go_library(
         "contextx.go",
         "middlewares.go",
     ],
-    importpath = "github.com/blackhorseya/todo-app/pkg/contextx",
+    importpath = "github.com/blackhorseya/ekko/pkg/contextx",
     visibility = ["//visibility:public"],
     deps = [
         "@com_github_gin_gonic_gin//:gin",

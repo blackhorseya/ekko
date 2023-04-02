@@ -3,7 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "restful",
     srcs = ["restful.go"],
-    importpath = "github.com/blackhorseya/todo-app/internal/adapter/task/restful",
+    importpath = "github.com/blackhorseya/ekko/internal/adapter/task/restful",
     visibility = ["//:__subpackages__"],
     deps = [
         "//internal/adapter/task/restful/api",
