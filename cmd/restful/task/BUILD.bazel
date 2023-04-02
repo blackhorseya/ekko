@@ -44,10 +44,10 @@ container_image(
 )
 
 container_push(
-   name = "push",
-   image = ":image",
-   format = "Docker",
-   registry = "gcr.io",
-   repository = "sean-side/todo-task-restful",
-   tag = "latest",
+    name = "push",
+    format = "Docker",
+    image = ":image",
+    registry = "gcr.io",
+    repository = "sean-side/todo-task-restful",
+    tag = "latest",
 )

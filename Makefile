@@ -16,7 +16,7 @@ HELM_REPO_NAME := sean-side
 # env for k8s
 DEPLOY_TO := prod
 NS := $(APP_NAME)
-RELEASE_NAME := $(DEPLOY_TO)-$(SVC_NAME)-$(SVC_ADAPTER)
+RELEASE_NAME := $(DEPLOY_TO)-$(APP_NAME)-$(SVC_NAME)-$(SVC_ADAPTER)
 
 ## common
 .PHONY: check-%

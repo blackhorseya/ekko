@@ -7,7 +7,6 @@ go_library(
         "get_id.go",
         "get_list.go",
         "patch_status.go",
-        "patch_title.go",
         "post_task.go",
         "tasks.go",
     ],
