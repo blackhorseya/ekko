@@ -1,5 +1,5 @@
 # env for project
-APP_NAME := todo-app
+APP_NAME := ekko
 VERSION := $(shell git describe --tags --always)
 SVC_NAME := task
 SVC_ADAPTER := restful
@@ -30,7 +30,7 @@ help: ## show help
 
 .PHONY: report
 report: ## execute goreportcard
-	@curl -XPOST 'https://goreportcard.com/checks' --data 'repo=github.com/blackhorseya/todo-app'
+	@curl -XPOST 'https://goreportcard.com/checks' --data 'repo=github.com/blackhorseya/ekko'
 
 .PHONY: clean
 clean:  ## remove artifacts
@@ -88,8 +88,8 @@ gen-pb: ## generate protobuf messages and services
 
 	## Starting generate pb
 	@protoc --proto_path=. \
-			--go_out=. --go_opt=module=github.com/blackhorseya/todo-app \
-			--go-grpc_out=. --go-grpc_opt=module=github.com/blackhorseya/todo-app,require_unimplemented_servers=false \
+			--go_out=. --go_opt=module=github.com/blackhorseya/ekko \
+			--go-grpc_out=. --go-grpc_opt=module=github.com/blackhorseya/ekko,require_unimplemented_servers=false \
 			./pb/domain/*/**.proto
 	@echo Successfully generated proto
 
@@ -114,7 +114,7 @@ gen-mocks: ## generate mocks
 gen-build: ## run gazelle with bazel
 	@bazel run //:gazelle
 
-DB_URI='mysql://root:changeme@tcp(localhost:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local'
+DB_URI='mysql://root:changeme@tcp(localhost:3306)/ekko?charset=utf8mb4&parseTime=True&loc=Local'
 N=1
 
 ## database

@@ -11,9 +11,9 @@ func init() {
 	flag.Parse()
 }
 
-// @title Todo API
+// @title Ekko
 // @version 0.0.1
-// @description API for Todo
+// @description ekko is a simple task management system
 //
 // @contact.name sean.zheng
 // @contact.email blackhorseya@gmail.com

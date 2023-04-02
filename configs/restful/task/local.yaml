@@ -4,7 +4,7 @@ http:
   mode: debug
 
 db:
-  url: "root:changeme@tcp(localhost:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local"
+  url: "root:changeme@tcp(localhost:3306)/ekko?charset=utf8mb4&parseTime=True&loc=Local"
   debug: true
   conns: 100
 

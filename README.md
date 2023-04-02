@@ -1,17 +1,17 @@
 # ekko
 
-[![Build](https://github.com/blackhorseya/todo-app/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/blackhorseya/todo-app/actions/workflows/build.yml)
-[![codecov](https://codecov.io/gh/blackhorseya/todo-app/branch/main/graph/badge.svg?token=SV4V6G6QZJ)](https://codecov.io/gh/blackhorseya/todo-app)
-[![Go Report Card](https://goreportcard.com/badge/github.com/blackhorseya/todo-app)](https://goreportcard.com/report/github.com/blackhorseya/todo-app)
-[![Go Reference](https://pkg.go.dev/badge/github.com/blackhorseya/todo-app)](https://pkg.go.dev/github.com/blackhorseya/todo-app)
-[![Release](https://img.shields.io/github/release/blackhorseya/todo-app)](https://github.com/blackhorseya/todo-app/releases/latest)
-[![GitHub license](https://img.shields.io/github/license/blackhorseya/todo-app)](https://github.com/blackhorseya/todo-app/blob/main/LICENSE)
+[![Build](https://github.com/blackhorseya/ekko/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/blackhorseya/ekko/actions/workflows/build.yml)
+[![codecov](https://codecov.io/gh/blackhorseya/ekko/branch/main/graph/badge.svg?token=SV4V6G6QZJ)](https://codecov.io/gh/blackhorseya/ekko)
+[![Go Report Card](https://goreportcard.com/badge/github.com/blackhorseya/ekko)](https://goreportcard.com/report/github.com/blackhorseya/ekko)
+[![Go Reference](https://pkg.go.dev/badge/github.com/blackhorseya/ekko)](https://pkg.go.dev/github.com/blackhorseya/ekko)
+[![Release](https://img.shields.io/github/release/blackhorseya/ekko)](https://github.com/blackhorseya/ekko/releases/latest)
+[![GitHub license](https://img.shields.io/github/license/blackhorseya/ekko)](https://github.com/blackhorseya/ekko/blob/main/LICENSE)
 
 The main purpose of this project is to practice `golang` and design the system architecture
 
 ## Live Preview
 
-[Demo](https://todo.seancheng.space)
+[Demo](https://ekko.seancheng.space)
 
 ## Concepts
 

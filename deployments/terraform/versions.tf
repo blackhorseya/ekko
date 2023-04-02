@@ -4,7 +4,7 @@ terraform {
     organization = "blackhorseya"
 
     workspaces {
-      name = "todo-app"
+      name = "ekko"
     }
   }
 

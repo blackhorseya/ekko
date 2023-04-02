@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "todo-app.fullname" . }}
+  name: {{ include "ekko.fullname" . }}
   labels:
-    {{- include "todo-app.labels" . | nindent 4 }}
+    {{- include "ekko.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "todo-app.fullname" . }}
+    name: {{ include "ekko.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

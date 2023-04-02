@@ -4,7 +4,7 @@ resource "cloudflare_zone" "this" {
 }
 
 resource "cloudflare_record" "prod" {
-  name    = "todo"
+  name    = "ekko"
   type    = "A"
   zone_id = cloudflare_zone.this.id
   value   = var.ip

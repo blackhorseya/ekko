@@ -1,6 +1,6 @@
 syntax = "proto3";
-package account;
-option go_package = "github.com/blackhorseya/todo-app/pkg/entity/domain/account/model";
+package user;
+option go_package = "github.com/blackhorseya/ekko/pkg/entity/domain/user/model";
 
 message Profile {
   int64 id = 1;

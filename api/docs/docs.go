@@ -410,8 +410,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "/api",
 	Schemes:          []string{},
-	Title:            "Todo API",
-	Description:      "API for Todo",
+	Title:            "Ekko",
+	Description:      "ekko is a simple task management system",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }
