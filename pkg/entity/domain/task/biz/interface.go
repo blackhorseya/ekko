@@ -1,3 +1,5 @@
+//go:generate mockgen -destination=./mock_interface.go -package=biz -source=interface.go
+
 package biz
 
 import (
@@ -6,8 +8,6 @@ import (
 )
 
 // IBiz declare task domain interface
-//
-//go:generate mockery --all --inpackage
 type IBiz interface {
 	Liveness(ctx contextx.Contextx) error
 

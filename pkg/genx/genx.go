@@ -1,7 +1,8 @@
+//go:generate mockgen -destination=./mock_genx.go -package=genx -source=genx.go
+
 package genx
 
 // Generator declare a genx factory
-//go:generate mockery --all --inpackage
 type Generator interface {
 	Int64() int64
 }

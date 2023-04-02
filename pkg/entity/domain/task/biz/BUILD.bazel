@@ -4,13 +4,13 @@ go_library(
     name = "biz",
     srcs = [
         "interface.go",
-        "mock_IBiz.go",
+        "mock_interface.go",
     ],
     importpath = "github.com/blackhorseya/ekko/pkg/entity/domain/task/biz",
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/contextx",
         "//pkg/entity/domain/task/model",
-        "@com_github_stretchr_testify//mock",
+        "@com_github_golang_mock//gomock",
     ],
 )

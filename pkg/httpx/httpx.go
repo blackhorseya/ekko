@@ -1,3 +1,5 @@
+//go:generate mockgen -destination=./mock_httpx.go -package=httpx -source=httpx.go
+
 package httpx
 
 import (
@@ -5,8 +7,6 @@ import (
 )
 
 // Client http client interface
-//
-//go:generate mockery --all --inpackage
 type Client interface {
 	// Do send an HTTP request and returns an HTTP response, following
 	// policy (such as redirects, cookies, auth) as configured on the
@@ -15,8 +15,6 @@ type Client interface {
 }
 
 // Server declare a http server functions
-//
-//go:generate mockery --all --inpackage
 type Server interface {
 	// Start a server
 	Start() error

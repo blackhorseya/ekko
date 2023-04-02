@@ -27,8 +27,8 @@ type suiteTester struct {
 
 func (s *suiteTester) SetupTest() {
 	s.logger, _ = zap.NewDevelopment()
-	s.generator = new(genx.MockGenerator)
 	s.ctrl = gomock.NewController(s.T())
+	s.generator = genx.NewMockGenerator(s.ctrl)
 	s.repo = repo.NewMockIRepo(s.ctrl)
 	s.biz = CreateBiz(s.repo, s.generator)
 }
