@@ -1,3 +1,5 @@
+//go:generate mockgen -destination=./mock_${GOFILE} -package=repo -source=${GOFILE}
+
 package repo
 
 import (
@@ -13,8 +15,6 @@ type QueryTasksCondition struct {
 }
 
 // IRepo declare task repo interface
-//
-//go:generate mockgen -source=./interface.go -destination=./mock_repo.go -package=repo
 type IRepo interface {
 	// GetByID serve caller to get a task by id
 	GetByID(ctx contextx.Contextx, id int64) (info *tm.Task, err error)

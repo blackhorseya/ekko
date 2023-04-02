@@ -1,4 +1,4 @@
-//go:generate mockgen -destination=./mock_genx.go -package=genx -source=genx.go
+//go:generate mockgen -destination=./mock_${GOFILE} -package=genx -source=${GOFILE}
 
 package genx
 

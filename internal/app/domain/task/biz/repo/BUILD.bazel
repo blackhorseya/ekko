@@ -5,7 +5,7 @@ go_library(
     srcs = [
         "impl_mariadb.go",
         "interface.go",
-        "mock_repo.go",
+        "mock_interface.go",
         "models.go",
         "wire_gen.go",
     ],

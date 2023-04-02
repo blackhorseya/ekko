@@ -1,4 +1,4 @@
-//go:generate mockgen -destination=./mock_interface.go -package=biz -source=interface.go
+//go:generate mockgen -destination=./mock_${GOFILE} -package=biz -source=${GOFILE}
 
 package biz
 
