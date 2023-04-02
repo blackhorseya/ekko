@@ -8,6 +8,7 @@ require (
 	github.com/gin-contrib/zap v0.1.0
 	github.com/gin-gonic/gin v1.9.0
 	github.com/go-sql-driver/mysql v1.7.0
+	github.com/golang/mock v1.6.0
 	github.com/google/wire v0.5.0
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/pkg/errors v0.9.1

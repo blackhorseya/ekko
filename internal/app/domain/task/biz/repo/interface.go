@@ -14,7 +14,7 @@ type QueryTasksCondition struct {
 
 // IRepo declare task repo interface
 //
-//go:generate mockery --all --inpackage
+//go:generate mockgen -source=./interface.go -destination=./mock_repo.go -package=repo
 type IRepo interface {
 	// GetByID serve caller to get a task by id
 	GetByID(ctx contextx.Contextx, id int64) (info *tm.Task, err error)

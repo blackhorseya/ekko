@@ -10,8 +10,8 @@ import (
 	"github.com/blackhorseya/ekko/pkg/entity/domain/task/model"
 	"github.com/blackhorseya/ekko/pkg/genx"
 	"github.com/blackhorseya/ekko/test/testdata"
+	"github.com/golang/mock/gomock"
 	"github.com/pkg/errors"
-	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
 )
@@ -19,6 +19,7 @@ import (
 type suiteTester struct {
 	suite.Suite
 	logger    *zap.Logger
+	ctrl      *gomock.Controller
 	generator *genx.MockGenerator
 	repo      *repo.MockIRepo
 	biz       tb.IBiz
@@ -26,13 +27,14 @@ type suiteTester struct {
 
 func (s *suiteTester) SetupTest() {
 	s.logger, _ = zap.NewDevelopment()
-	s.repo = new(repo.MockIRepo)
 	s.generator = new(genx.MockGenerator)
+	s.ctrl = gomock.NewController(s.T())
+	s.repo = repo.NewMockIRepo(s.ctrl)
 	s.biz = CreateBiz(s.repo, s.generator)
 }
 
-func (s *suiteTester) assertExpectation(t *testing.T) {
-	s.repo.AssertExpectations(t)
+func (s *suiteTester) TearDownTest() {
+	s.ctrl.Finish()
 }
 
 func TestAll(t *testing.T) {
@@ -53,7 +55,7 @@ func (s *suiteTester) Test_impl_GetByID() {
 		{
 			name: "get by id then error",
 			args: args{id: testdata.Task1.Id, mock: func() {
-				s.repo.On("GetByID", mock.Anything, testdata.Task1.Id).Return(nil, errors.New("error")).Once()
+				s.repo.EXPECT().GetByID(gomock.Any(), testdata.Task1.Id).Return(nil, errors.New("error")).Times(1)
 			}},
 			wantInfo: nil,
 			wantErr:  true,
@@ -61,7 +63,7 @@ func (s *suiteTester) Test_impl_GetByID() {
 		{
 			name: "get by id then ok",
 			args: args{id: testdata.Task1.Id, mock: func() {
-				s.repo.On("GetByID", mock.Anything, testdata.Task1.Id).Return(testdata.Task1, nil).Once()
+				s.repo.EXPECT().GetByID(gomock.Any(), testdata.Task1.Id).Return(testdata.Task1, nil).Times(1)
 			}},
 			wantInfo: testdata.Task1,
 			wantErr:  false,
@@ -82,7 +84,7 @@ func (s *suiteTester) Test_impl_GetByID() {
 				t.Errorf("GetByID() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
 
-			s.assertExpectation(t)
+			// s.assertExpectation(t)
 		})
 	}
 }
