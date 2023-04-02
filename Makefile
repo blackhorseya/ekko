@@ -1,13 +1,22 @@
-APP_NAME=todo-app
-VERSION=latest
-PROJECT_ID=sean-side
-NS=side
-DEPLOY_TO=uat
-REGISTRY=gcr.io
-IMAGE_NAME=$(REGISTRY)/$(PROJECT_ID)/$(APP_NAME)
-HELM_REPO_NAME=$(PROJECT_ID)
-CHART_NAME=todo-app
+# env for project
+APP_NAME := todo-app
+VERSION := $(shell git describe --tags --always)
+SVC_NAME := task
+SVC_ADAPTER := restful
+MAIN_PKG := ./cmd/$(SVC_ADAPTER)/$(SVC_NAME)
 
+# env for gcp
+PROJECT_ID := $(shell gcloud config get-value project)
+REGISTRY := gcr.io
+IMAGE_NAME := $(REGISTRY)/$(PROJECT_ID)/$(APP_NAME)
+
+# env for helm
+HELM_REPO_NAME := sean-side
+
+# env for k8s
+DEPLOY_TO := prod
+
+## common
 .PHONY: check-%
 check-%: ## check environment variable is exists
 	@if [ -z '${${*}}' ]; then echo 'Environment variable $* not set' && exit 1; fi
@@ -17,11 +26,16 @@ help: ## show help
 	@grep -hE '^[ a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 	awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-17s\033[0m %s\n", $$1, $$2}'
 
+.PHONY: report
+report: ## execute goreportcard
+	@curl -XPOST 'https://goreportcard.com/checks' --data 'repo=github.com/blackhorseya/todo-app'
+
 .PHONY: clean
 clean:  ## remove artifacts
 	@rm -rf coverage.txt profile.out ./bin
 	@echo Successfuly removed artifacts
 
+## go
 .PHONY: test-unit
 test-unit: ## execute unit test
 	@sh $(shell pwd)/scripts/go.test.sh
@@ -34,40 +48,32 @@ test-e2e: ## execute e2e test
 lint: ## execute golint
 	@golint ./...
 
-.PHONY: report
-report: ## execute goreportcard
-	@curl -XPOST 'https://goreportcard.com/checks' --data 'repo=github.com/blackhorseya/todo-app'
-
+## docker
 .PHONY: build-image
-build-image: check-VERSION ## build image
+build-image: ## build image
+	@echo "Building image $(IMAGE_NAME):$(VERSION)"
 	@docker build -t $(IMAGE_NAME):$(VERSION) \
 	--label "app.name=$(APP_NAME)" \
 	--label "app.version=$(VERSION)" \
-	--build-arg APP_NAME=$(APP_NAME) \
-	--pull --cache-from=$(IMAGE_NAME) \
-	-f Dockerfile .
+	--build-arg MAIN_PKG=$(MAIN_PKG) \
+	--pull --cache-from $(IMAGE_NAME):latest \
+	--platform linux/amd64 \
+	--pull -f Dockerfile .
 
-.PHONY: list-images
-list-images: ## list all images
+.PHONY: list-image
+list-image: ## list all images
 	@docker images --filter=label=app.name=$(APP_NAME)
 
-.PHONY: prune-images
-prune-images: ## prune images
+.PHONY: prune-image
+prune-image: ## prune images
 	@docker rmi -f `docker images --filter=label=app.name=$(APP_NAME) -q`
 
 .PHONY: push-image
-push-image: check-VERSION ## publish image
+push-image: ## publish image
+	@echo "Pushing image $(IMAGE_NAME):$(VERSION)"
 	@docker tag $(IMAGE_NAME):$(VERSION) $(IMAGE_NAME):latest
 	@docker push $(IMAGE_NAME):$(VERSION)
 	@docker push $(IMAGE_NAME):latest
-
-.PHONY: up-local-db
-up-local-db: ## run docker-compose up
-	@docker-compose --file ./deployments/docker-compose.yaml --project-name $(APP_NAME) up -d
-
-.PHONY: down-local-db
-down-local-db: ## run docker-compose down
-	@docker-compose --file ./deployments/docker-compose.yaml --project-name $(APP_NAME) down -v
 
 .PHONY: deploy
 deploy: check-VERSION check-DEPLOY_TO ## deploy application
@@ -133,10 +139,30 @@ update-package: ## update package and commit
 	@git add go.mod go.sum deps.bzl
 	@git commit -m "build: update package"
 
-.PHONY: package-charts
-package-charts: ## package helm chart
-	@helm package ./deployments/charts/* -d ./charts
+## helm
+.PHONY: lint-helm
+lint-helm: ## lint helm chart
+	@helm lint deployments/charts/*
 
-.PHONY: push-charts
-push-charts: ## push helm chart
-	@helm gcs push --force ./charts/* $(HELM_REPO_NAME)
+.PHONY: add-helm-repo
+add-helm-repo: ## add helm repo
+	@helm repo add --no-update $(HELM_REPO_NAME) gs://sean-helm-charts/charts
+	@helm repo update $(HELM_REPO_NAME)
+
+.PHONY: package-helm
+package-helm: ## package helm chart
+	@helm package ./deployments/charts/$(APP_NAME) --destination ./deployments/charts
+
+.PHONY: push-helm
+push-helm: ## push helm chart to gcs
+	@helm gcs push --force ./deployments/charts/$(APP_NAME)-*.tgz $(HELM_REPO_NAME)
+	@helm repo update $(HELM_REPO_NAME)
+
+.PHONY: upgrade-helm
+upgrade-helm: ## upgrade helm chart
+	@echo "Upgrading $(RELEASE_NAME) to $(VERSION)"
+	@helm upgrade $(RELEASE_NAME) $(HELM_REPO_NAME)/$(APP_NAME) \
+	--install --namespace $(NS) --create-namespace \
+	--history-max 3 \
+	--values ./deployments/configs/$(DEPLOY_TO)/values.yaml \
+	--set image.tag=$(VERSION)

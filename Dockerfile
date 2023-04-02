@@ -1,7 +1,7 @@
 # build stage
 FROM golang:alpine AS builder
 
-ARG APP_NAME
+ARG MAIN_PKG
 
 WORKDIR /src
 
@@ -10,9 +10,9 @@ RUN go mod download
 
 COPY cmd ./cmd
 COPY internal ./internal
-COPY pb ./pb
+COPY pkg ./pkg
 COPY api ./api
-RUN go build -o app ./cmd/${APP_NAME}
+RUN go build -o app ${MAIN_PKG}
 
 # build frontend
 FROM node:alpine AS builder-f2e
