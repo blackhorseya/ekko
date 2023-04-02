@@ -15,6 +15,8 @@ HELM_REPO_NAME := sean-side
 
 # env for k8s
 DEPLOY_TO := prod
+NS := $(APP_NAME)
+RELEASE_NAME := $(DEPLOY_TO)-$(SVC_NAME)-$(SVC_ADAPTER)
 
 ## common
 .PHONY: check-%
@@ -75,13 +77,7 @@ push-image: ## publish image
 	@docker push $(IMAGE_NAME):$(VERSION)
 	@docker push $(IMAGE_NAME):latest
 
-.PHONY: deploy
-deploy: check-VERSION check-DEPLOY_TO ## deploy application
-	@helm --namespace $(NS) \
-	upgrade --install $(DEPLOY_TO)-$(APP_NAME) $(HELM_REPO_NAME)/$(CHART_NAME) \
-	--values ./deployments/configs/$(DEPLOY_TO)/values.yaml \
-	--set image.tag=$(VERSION)
-
+## generate
 .PHONY: gen
 gen: gen-wire gen-pb gen-mocks gen-swagger ## generate code
 
@@ -121,6 +117,7 @@ gen-build: ## run gazelle with bazel
 DB_URI='mysql://root:changeme@tcp(localhost:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local'
 N=1
 
+## database
 .PHONY: migrate-up
 migrate-up: ## run migration up
 	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migrations up
@@ -129,6 +126,7 @@ migrate-up: ## run migration up
 migrate-down: ## run migration down
 	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migrations down $(N)
 
+## dependency
 .PHONY: update-package
 update-package: ## update package and commit
 	@go get -u ./...
