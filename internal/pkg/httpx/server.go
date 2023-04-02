@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/blackhorseya/todo-app/pkg/contextx"
-	"github.com/blackhorseya/todo-app/pkg/httpx"
-	"github.com/blackhorseya/todo-app/pkg/netx"
+	"github.com/blackhorseya/ekko/pkg/contextx"
+	"github.com/blackhorseya/ekko/pkg/httpx"
+	"github.com/blackhorseya/ekko/pkg/netx"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	"github.com/pkg/errors"

@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/blackhorseya/todo-app/pkg/contextx"
-	"github.com/blackhorseya/todo-app/pkg/entity/domain/task/model"
-	"github.com/blackhorseya/todo-app/test/testdata"
+	"github.com/blackhorseya/ekko/pkg/contextx"
+	"github.com/blackhorseya/ekko/pkg/entity/domain/task/model"
+	"github.com/blackhorseya/ekko/test/testdata"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/suite"

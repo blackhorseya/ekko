@@ -7,9 +7,9 @@
 package biz
 
 import (
-	"github.com/blackhorseya/todo-app/internal/app/domain/task/biz/repo"
-	"github.com/blackhorseya/todo-app/pkg/entity/domain/task/biz"
-	"github.com/blackhorseya/todo-app/pkg/genx"
+	"github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo"
+	"github.com/blackhorseya/ekko/pkg/entity/domain/task/biz"
+	"github.com/blackhorseya/ekko/pkg/genx"
 	"github.com/google/wire"
 )
 

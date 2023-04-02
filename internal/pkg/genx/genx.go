@@ -1,7 +1,7 @@
 package genx
 
 import (
-	"github.com/blackhorseya/todo-app/pkg/genx"
+	"github.com/blackhorseya/ekko/pkg/genx"
 	"github.com/bwmarrin/snowflake"
 	"github.com/google/wire"
 )

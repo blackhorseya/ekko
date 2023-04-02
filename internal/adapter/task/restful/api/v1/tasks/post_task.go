@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/blackhorseya/todo-app/internal/pkg/errorx"
-	"github.com/blackhorseya/todo-app/pkg/contextx"
-	"github.com/blackhorseya/todo-app/pkg/response"
+	"github.com/blackhorseya/ekko/internal/pkg/errorx"
+	"github.com/blackhorseya/ekko/pkg/contextx"
+	"github.com/blackhorseya/ekko/pkg/response"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

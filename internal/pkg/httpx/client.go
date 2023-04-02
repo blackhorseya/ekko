@@ -3,7 +3,7 @@ package httpx
 import (
 	"net/http"
 
-	"github.com/blackhorseya/todo-app/pkg/httpx"
+	"github.com/blackhorseya/ekko/pkg/httpx"
 	"github.com/google/wire"
 )
 

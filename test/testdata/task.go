@@ -1,7 +1,7 @@
 package testdata
 
 import (
-	"github.com/blackhorseya/todo-app/pkg/entity/domain/task/model"
+	"github.com/blackhorseya/ekko/pkg/entity/domain/task/model"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

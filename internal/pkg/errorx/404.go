@@ -3,7 +3,7 @@ package errorx
 import (
 	"net/http"
 
-	"github.com/blackhorseya/todo-app/pkg/er"
+	"github.com/blackhorseya/ekko/pkg/er"
 )
 
 var (

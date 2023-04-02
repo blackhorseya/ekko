@@ -1,4 +1,4 @@
-# Todo List
+# ekko
 
 [![Build](https://github.com/blackhorseya/todo-app/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/blackhorseya/todo-app/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/blackhorseya/todo-app/branch/main/graph/badge.svg?token=SV4V6G6QZJ)](https://codecov.io/gh/blackhorseya/todo-app)

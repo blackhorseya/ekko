@@ -4,14 +4,14 @@
 package main
 
 import (
-	"github.com/blackhorseya/todo-app/internal/adapter/task/restful"
-	"github.com/blackhorseya/todo-app/internal/app/domain/task/biz"
-	"github.com/blackhorseya/todo-app/internal/app/domain/task/biz/repo"
-	"github.com/blackhorseya/todo-app/internal/pkg/config"
-	"github.com/blackhorseya/todo-app/internal/pkg/genx"
-	"github.com/blackhorseya/todo-app/internal/pkg/httpx"
-	"github.com/blackhorseya/todo-app/internal/pkg/log"
-	"github.com/blackhorseya/todo-app/internal/pkg/storage/mariadb"
+	"github.com/blackhorseya/ekko/internal/adapter/task/restful"
+	"github.com/blackhorseya/ekko/internal/app/domain/task/biz"
+	"github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo"
+	"github.com/blackhorseya/ekko/internal/pkg/config"
+	"github.com/blackhorseya/ekko/internal/pkg/genx"
+	"github.com/blackhorseya/ekko/internal/pkg/httpx"
+	"github.com/blackhorseya/ekko/internal/pkg/log"
+	"github.com/blackhorseya/ekko/internal/pkg/storage/mariadb"
 	"github.com/google/wire"
 )
 

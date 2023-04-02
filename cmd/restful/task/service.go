@@ -5,8 +5,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/blackhorseya/todo-app/pkg/adapters"
-	"github.com/blackhorseya/todo-app/pkg/httpx"
+	"github.com/blackhorseya/ekko/pkg/adapters"
+	"github.com/blackhorseya/ekko/pkg/httpx"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 )

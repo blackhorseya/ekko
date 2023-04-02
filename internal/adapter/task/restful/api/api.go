@@ -3,12 +3,12 @@ package api
 import (
 	"net/http"
 
-	_ "github.com/blackhorseya/todo-app/api/docs" // import swagger spec
-	"github.com/blackhorseya/todo-app/internal/adapter/task/restful/api/v1"
-	"github.com/blackhorseya/todo-app/internal/pkg/errorx"
-	"github.com/blackhorseya/todo-app/pkg/contextx"
-	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/task/biz"
-	"github.com/blackhorseya/todo-app/pkg/response"
+	_ "github.com/blackhorseya/ekko/api/docs" // import swagger spec
+	"github.com/blackhorseya/ekko/internal/adapter/task/restful/api/v1"
+	"github.com/blackhorseya/ekko/internal/pkg/errorx"
+	"github.com/blackhorseya/ekko/pkg/contextx"
+	tb "github.com/blackhorseya/ekko/pkg/entity/domain/task/biz"
+	"github.com/blackhorseya/ekko/pkg/response"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"

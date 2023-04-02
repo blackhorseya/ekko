@@ -3,12 +3,12 @@ package restful
 import (
 	"time"
 
-	"github.com/blackhorseya/todo-app/internal/adapter/task/restful/api"
-	"github.com/blackhorseya/todo-app/pkg/adapters"
-	"github.com/blackhorseya/todo-app/pkg/contextx"
-	"github.com/blackhorseya/todo-app/pkg/cors"
-	tb "github.com/blackhorseya/todo-app/pkg/entity/domain/task/biz"
-	"github.com/blackhorseya/todo-app/pkg/er"
+	"github.com/blackhorseya/ekko/internal/adapter/task/restful/api"
+	"github.com/blackhorseya/ekko/pkg/adapters"
+	"github.com/blackhorseya/ekko/pkg/contextx"
+	"github.com/blackhorseya/ekko/pkg/cors"
+	tb "github.com/blackhorseya/ekko/pkg/entity/domain/task/biz"
+	"github.com/blackhorseya/ekko/pkg/er"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"

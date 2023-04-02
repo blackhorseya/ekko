@@ -1,8 +1,8 @@
 package biz
 
 import (
-	"github.com/blackhorseya/todo-app/pkg/contextx"
-	tm "github.com/blackhorseya/todo-app/pkg/entity/domain/task/model"
+	"github.com/blackhorseya/ekko/pkg/contextx"
+	tm "github.com/blackhorseya/ekko/pkg/entity/domain/task/model"
 )
 
 // IBiz declare task domain interface
