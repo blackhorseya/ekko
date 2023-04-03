@@ -1,6 +1,6 @@
 # ekko
 
-[![Build](https://github.com/blackhorseya/ekko/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/blackhorseya/ekko/actions/workflows/build.yml)
+[![Go](https://github.com/blackhorseya/ekko/actions/workflows/go.yml/badge.svg)](https://github.com/blackhorseya/ekko/actions/workflows/go.yml)
 [![codecov](https://codecov.io/gh/blackhorseya/ekko/branch/main/graph/badge.svg?token=SV4V6G6QZJ)](https://codecov.io/gh/blackhorseya/ekko)
 [![Go Report Card](https://goreportcard.com/badge/github.com/blackhorseya/ekko)](https://goreportcard.com/report/github.com/blackhorseya/ekko)
 [![Go Reference](https://pkg.go.dev/badge/github.com/blackhorseya/ekko)](https://pkg.go.dev/github.com/blackhorseya/ekko)
