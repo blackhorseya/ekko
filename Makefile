@@ -1,14 +1,14 @@
 # env for project
 APP_NAME := ekko
 VERSION := $(shell git describe --tags --always)
-SVC_NAME := task
+DOMAIN_NAME := task
 SVC_ADAPTER := restful
-MAIN_PKG := ./cmd/$(SVC_ADAPTER)/$(SVC_NAME)
+MAIN_PKG := ./cmd/$(SVC_ADAPTER)/$(DOMAIN_NAME)
 
 # env for gcp
 PROJECT_ID := $(shell gcloud config get-value project)
 REGISTRY := gcr.io
-IMAGE_NAME := $(REGISTRY)/$(PROJECT_ID)/$(APP_NAME)-$(SVC_NAME)-$(SVC_ADAPTER)
+IMAGE_NAME := $(REGISTRY)/$(PROJECT_ID)/$(APP_NAME)-$(DOMAIN_NAME)-$(SVC_ADAPTER)
 
 # env for helm
 HELM_REPO_NAME := sean-side
@@ -16,7 +16,7 @@ HELM_REPO_NAME := sean-side
 # env for k8s
 DEPLOY_TO := prod
 NS := $(APP_NAME)
-RELEASE_NAME := $(DEPLOY_TO)-$(APP_NAME)-$(SVC_NAME)-$(SVC_ADAPTER)
+RELEASE_NAME := $(DEPLOY_TO)-$(APP_NAME)-$(DOMAIN_NAME)-$(SVC_ADAPTER)
 
 ## common
 .PHONY: check-%
@@ -114,10 +114,19 @@ gen-mocks: ## generate mocks
 gen-build: ## run gazelle with bazel
 	@bazel run //:gazelle
 
-DB_URI='mysql://root:changeme@tcp(localhost:3306)/ekko?charset=utf8mb4&parseTime=True&loc=Local'
-N=1
-
 ## database
+DB_RELEASE_NAME := $(DEPLOY_TO)-$(APP_NAME)-$(DOMAIN_NAME)-db
+DB_URI := 'mysql://root:changeme@tcp(localhost:3306)/ekko?charset=utf8mb4&parseTime=True&loc=Local'
+N := 1
+
+.PHONY: upgrade-db
+upgrade-db: ## upgrade database
+	@echo "Deploying database $(DB_RELEASE_NAME) to $(DEPLOY_TO)"
+	@helm upgrade $(DB_RELEASE_NAME) bitnami/mariadb \
+	--install --namespace $(NS) --create-namespace \
+	--history-max 3 \
+	--values ./deployments/configs/$(DEPLOY_TO)/db.yaml
+
 .PHONY: migrate-up
 migrate-up: ## run migration up
 	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migrations up
