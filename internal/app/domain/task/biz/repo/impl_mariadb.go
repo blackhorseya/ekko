@@ -101,17 +101,17 @@ func (i *mariadb) Count(ctx contextx.Contextx, condition QueryTicketsCondition) 
 	return ret, nil
 }
 
-func (i *mariadb) Update(ctx contextx.Contextx, updated *tm.Ticket) (info *tm.Ticket, err error) {
+func (i *mariadb) Update(ctx contextx.Contextx, updated *tm.Ticket) error {
 	updated.UpdatedAt = timestamppb.Now()
 
 	stmt := `update tickets set title=:title, status=:status, updated_at=:updated_at where id = :id`
 
-	_, err = i.rw.NamedExecContext(ctx, stmt, newTask(updated))
+	_, err := i.rw.NamedExecContext(ctx, stmt, newTask(updated))
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return updated, nil
+	return nil
 }
 
 func (i *mariadb) DeleteByID(ctx contextx.Contextx, id int64) error {

@@ -29,7 +29,7 @@ type IRepo interface {
 	Count(ctx contextx.Contextx, condition QueryTicketsCondition) (total int, err error)
 
 	// Update serve caller to update a task
-	Update(ctx contextx.Contextx, updated *tm.Ticket) (info *tm.Ticket, err error)
+	Update(ctx contextx.Contextx, updated *tm.Ticket) error
 
 	// DeleteByID serve caller to remove a task by id
 	DeleteByID(ctx contextx.Contextx, id int64) error

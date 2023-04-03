@@ -110,13 +110,13 @@ func (i *impl) UpdateStatus(ctx contextx.Contextx, id int64, status tm.TicketSta
 	}
 
 	exists.Status = status
-	ret, err := i.repo.Update(ctx, exists)
+	err = i.repo.Update(ctx, exists)
 	if err != nil {
 		ctx.Error(errorx.ErrUpdateStatusTask.Error(), zap.Error(err), zap.Any("updated", exists))
 		return nil, errorx.ErrUpdateStatusTask
 	}
 
-	return ret, nil
+	return exists, nil
 }
 
 func (i *impl) Delete(ctx contextx.Contextx, id int64) error {

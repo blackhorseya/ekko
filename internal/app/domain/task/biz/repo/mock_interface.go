@@ -110,12 +110,11 @@ func (mr *MockIRepoMockRecorder) List(ctx, condition interface{}) *gomock.Call {
 }
 
 // Update mocks base method.
-func (m *MockIRepo) Update(ctx contextx.Contextx, updated *model.Ticket) (*model.Ticket, error) {
+func (m *MockIRepo) Update(ctx contextx.Contextx, updated *model.Ticket) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", ctx, updated)
-	ret0, _ := ret[0].(*model.Ticket)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
 // Update indicates an expected call of Update.

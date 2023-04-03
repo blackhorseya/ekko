@@ -299,10 +299,9 @@ func (s *suiteMariadb) Test_mariadb_Update() {
 		mock    func()
 	}
 	tests := []struct {
-		name     string
-		args     args
-		wantInfo *tm.Ticket
-		wantErr  bool
+		name    string
+		args    args
+		wantErr bool
 	}{
 		{
 			name: "update then error",
@@ -316,8 +315,7 @@ func (s *suiteMariadb) Test_mariadb_Update() {
 					).
 					WillReturnError(errors.New("error"))
 			}},
-			wantInfo: nil,
-			wantErr:  true,
+			wantErr: true,
 		},
 		{
 			name: "update then ok",
@@ -331,8 +329,7 @@ func (s *suiteMariadb) Test_mariadb_Update() {
 					).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			}},
-			wantInfo: testdata.Ticket1,
-			wantErr:  false,
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
@@ -341,13 +338,10 @@ func (s *suiteMariadb) Test_mariadb_Update() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.repo.Update(contextx.BackgroundWithLogger(s.logger), tt.args.updated)
+			err := s.repo.Update(contextx.BackgroundWithLogger(s.logger), tt.args.updated)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
 				return
-			}
-			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
-				t.Errorf("Update() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
 
 			s.assertExpectation(t)

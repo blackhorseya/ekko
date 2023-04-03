@@ -257,3 +257,70 @@ func (s *suiteTester) Test_impl_Create() {
 		})
 	}
 }
+
+func (s *suiteTester) Test_impl_UpdateStatus() {
+	type args struct {
+		id     int64
+		status tm.TicketStatus
+		mock   func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantInfo *tm.Ticket
+		wantErr  bool
+	}{
+		{
+			name: "get by id then error",
+			args: args{id: testdata.Ticket1.Id, status: tm.TicketStatus_TICKET_STATUS_DONE, mock: func() {
+				s.repo.EXPECT().GetByID(gomock.Any(), testdata.Ticket1.Id).Return(nil, errors.New("error")).Times(1)
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "if not exists then error",
+			args: args{id: testdata.Ticket1.Id, status: tm.TicketStatus_TICKET_STATUS_DONE, mock: func() {
+				s.repo.EXPECT().GetByID(gomock.Any(), testdata.Ticket1.Id).Return(nil, nil).Times(1)
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "update status then error",
+			args: args{id: testdata.Ticket1.Id, status: tm.TicketStatus_TICKET_STATUS_DONE, mock: func() {
+				s.repo.EXPECT().GetByID(gomock.Any(), testdata.Ticket1.Id).Return(testdata.Ticket1, nil).Times(1)
+
+				s.repo.EXPECT().Update(gomock.Any(), testdata.Ticket1).Return(errors.New("error")).Times(1)
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "ok",
+			args: args{id: testdata.Ticket1.Id, status: tm.TicketStatus_TICKET_STATUS_DONE, mock: func() {
+				s.repo.EXPECT().GetByID(gomock.Any(), testdata.Ticket1.Id).Return(testdata.Ticket1, nil).Times(1)
+
+				s.repo.EXPECT().Update(gomock.Any(), testdata.Ticket1).Return(nil).Times(1)
+			}},
+			wantInfo: testdata.Ticket1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotInfo, err := s.biz.UpdateStatus(contextx.BackgroundWithLogger(s.logger), tt.args.id, tt.args.status)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("UpdateStatus() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
+				t.Errorf("UpdateStatus() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
+			}
+		})
+	}
+}
