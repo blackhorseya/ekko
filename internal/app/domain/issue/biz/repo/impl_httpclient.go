@@ -87,8 +87,43 @@ func (h *httpclient) GetByID(ctx contextx.Contextx, id int64) (info *im.Ticket, 
 }
 
 func (h *httpclient) List(ctx contextx.Contextx, condition QueryTicketsCondition) (info []*im.Ticket, err error) {
-	// todo: 2023/4/3|sean|impl me
-	panic("implement me")
+	size := condition.Limit
+	page := (condition.Offset / condition.Limit) + 1
+	uri := h.baseURL.JoinPath("/v1/tasks")
+	uri.RawQuery = url.Values{
+		"page": []string{fmt.Sprintf("%v", page)},
+		"size": []string{fmt.Sprintf("%v", size)},
+	}.Encode()
+
+	req, err := http.NewRequest(http.MethodGet, uri.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := h.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	type dto struct {
+		*response.Response
+		Data struct {
+			Total int          `json:"total"`
+			List  []*im.Ticket `json:"list"`
+		} `json:"data,omitempty"`
+	}
+	var res *dto
+	err = json.NewDecoder(resp.Body).Decode(&res)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(res.Data.List) == 0 {
+		return nil, nil
+	}
+
+	return res.Data.List, nil
 }
 
 func (h *httpclient) Create(ctx contextx.Contextx, created *im.Ticket) (info *im.Ticket, err error) {
