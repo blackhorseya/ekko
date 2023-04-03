@@ -55,7 +55,7 @@ Design the corresponding microservice based on Domain-Driven Design
 - [Protobuf](https://developers.google.com/protocol-buffers)
 - [Wire](https://github.com/google/wire)
 - [Testify](https://github.com/stretchr/testify)
-- [Mockery](https://github.com/vektra/mockery)
+- [Mockgen](https://github.com/golang/mock)
 
 ### Infrastructures
 
