@@ -53,7 +53,7 @@ func (i *mariadb) Create(ctx contextx.Contextx, created *tm.Ticket) (info *tm.Ti
 	return created, nil
 }
 
-func (i *mariadb) List(ctx contextx.Contextx, condition QueryTasksCondition) (info []*tm.Ticket, err error) {
+func (i *mariadb) List(ctx contextx.Contextx, condition QueryTicketsCondition) (info []*tm.Ticket, err error) {
 	var args []interface{}
 	query := []string{
 		`select id, title, status, created_at, updated_at from tickets`,
@@ -89,7 +89,7 @@ func (i *mariadb) List(ctx contextx.Contextx, condition QueryTasksCondition) (in
 	return ret, nil
 }
 
-func (i *mariadb) Count(ctx contextx.Contextx, condition QueryTasksCondition) (total int, err error) {
+func (i *mariadb) Count(ctx contextx.Contextx, condition QueryTicketsCondition) (total int, err error) {
 	stmt := `select count(id) as total from tickets`
 
 	ret := 0

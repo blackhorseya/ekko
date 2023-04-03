@@ -6,8 +6,8 @@ import (
 )
 
 var (
-	// Task1 task 1
-	Task1 = &tm.Ticket{
+	// Ticket1 task 1
+	Ticket1 = &tm.Ticket{
 		Id:        1,
 		Title:     "task 1",
 		Status:    tm.TicketStatus_TICKET_STATUS_TODO,

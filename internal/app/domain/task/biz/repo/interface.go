@@ -8,8 +8,8 @@ import (
 	"github.com/google/wire"
 )
 
-// QueryTasksCondition declare list tasks condition
-type QueryTasksCondition struct {
+// QueryTicketsCondition declare list tasks condition
+type QueryTicketsCondition struct {
 	Limit  int `json:"limit"`
 	Offset int `json:"offset"`
 }
@@ -20,13 +20,13 @@ type IRepo interface {
 	GetByID(ctx contextx.Contextx, id int64) (info *tm.Ticket, err error)
 
 	// List serve caller to list all tasks
-	List(ctx contextx.Contextx, condition QueryTasksCondition) (info []*tm.Ticket, err error)
+	List(ctx contextx.Contextx, condition QueryTicketsCondition) (info []*tm.Ticket, err error)
 
 	// Create serve caller to create a task with title
 	Create(ctx contextx.Contextx, created *tm.Ticket) (info *tm.Ticket, err error)
 
 	// Count serve caller to count all tasks
-	Count(ctx contextx.Contextx, condition QueryTasksCondition) (total int, err error)
+	Count(ctx contextx.Contextx, condition QueryTicketsCondition) (total int, err error)
 
 	// Update serve caller to update a task
 	Update(ctx contextx.Contextx, updated *tm.Ticket) (info *tm.Ticket, err error)

@@ -36,7 +36,7 @@ func (m *MockIRepo) EXPECT() *MockIRepoMockRecorder {
 }
 
 // Count mocks base method.
-func (m *MockIRepo) Count(ctx contextx.Contextx, condition QueryTasksCondition) (int, error) {
+func (m *MockIRepo) Count(ctx contextx.Contextx, condition QueryTicketsCondition) (int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Count", ctx, condition)
 	ret0, _ := ret[0].(int)
@@ -95,7 +95,7 @@ func (mr *MockIRepoMockRecorder) GetByID(ctx, id interface{}) *gomock.Call {
 }
 
 // List mocks base method.
-func (m *MockIRepo) List(ctx contextx.Contextx, condition QueryTasksCondition) ([]*model.Ticket, error) {
+func (m *MockIRepo) List(ctx contextx.Contextx, condition QueryTicketsCondition) ([]*model.Ticket, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", ctx, condition)
 	ret0, _ := ret[0].([]*model.Ticket)

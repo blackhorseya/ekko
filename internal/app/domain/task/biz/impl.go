@@ -50,7 +50,7 @@ func (i *impl) List(ctx contextx.Contextx, page, size int) (info []*tm.Ticket, t
 		return nil, 0, errorx.ErrInvalidSize
 	}
 
-	condition := repo.QueryTasksCondition{
+	condition := repo.QueryTicketsCondition{
 		Limit:  size,
 		Offset: (page - 1) * size,
 	}
