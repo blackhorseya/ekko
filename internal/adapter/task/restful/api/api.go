@@ -17,9 +17,7 @@ import (
 func Handle(g *gin.RouterGroup, biz tb.IBiz) {
 	i := &impl{biz: biz}
 
-	if gin.Mode() != gin.ReleaseMode {
-		g.GET("docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	}
+	g.GET("docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	g.GET("readiness", i.Readiness)
 	g.GET("liveness", i.Liveness)

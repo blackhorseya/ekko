@@ -8,7 +8,7 @@ MAIN_PKG := ./cmd/$(SVC_ADAPTER)/$(SVC_NAME)
 # env for gcp
 PROJECT_ID := $(shell gcloud config get-value project)
 REGISTRY := gcr.io
-IMAGE_NAME := $(REGISTRY)/$(PROJECT_ID)/$(APP_NAME)
+IMAGE_NAME := $(REGISTRY)/$(PROJECT_ID)/$(APP_NAME)-$(SVC_NAME)-$(SVC_ADAPTER)
 
 # env for helm
 HELM_REPO_NAME := sean-side
