@@ -15,27 +15,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Setup go
-        uses: actions/setup-go@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          go-version: '^1.17'
+          node-version: 16
 
-      - name: Setup cache
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20
+
+      - name: Install Bazel
+        run: |
+          npm install -g @bazel/bazelisk
+          bazel version
+
+      - name: Cache Bazel dependencies
         uses: actions/cache@v2
         with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
-      - name: Lint
+          path: ~/.cache/bazel
+          key: ${{ runner.os }}-bazel-${{ hashFiles('**/WORKSPACE') }}
+
+      - name: Build
         run: |
-          make report
+          bazel build //...
+
       - name: Test
         run: |
-          make test-unit
-      - name: Send code coverage report
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          bazel test //...
+
