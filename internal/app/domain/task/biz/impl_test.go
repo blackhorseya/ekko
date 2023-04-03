@@ -324,3 +324,41 @@ func (s *suiteTester) Test_impl_UpdateStatus() {
 		})
 	}
 }
+
+func (s *suiteTester) Test_impl_Delete() {
+	type args struct {
+		id   int64
+		mock func()
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "delete by id then error",
+			args: args{id: testdata.Ticket1.Id, mock: func() {
+				s.repo.EXPECT().DeleteByID(gomock.Any(), testdata.Ticket1.Id).Return(errors.New("error")).Times(1)
+			}},
+			wantErr: true,
+		},
+		{
+			name: "ok",
+			args: args{id: testdata.Ticket1.Id, mock: func() {
+				s.repo.EXPECT().DeleteByID(gomock.Any(), testdata.Ticket1.Id).Return(nil).Times(1)
+			}},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			if err := s.biz.Delete(contextx.BackgroundWithLogger(s.logger), tt.args.id); (err != nil) != tt.wantErr {
+				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
