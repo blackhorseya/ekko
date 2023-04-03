@@ -70,3 +70,39 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
+
+      - name: Checkout private submodule
+        run: |
+          sed -i 's/git@github.com:/https:\/\/'"${{ secrets.USERNAME }}"':'"${{ secrets.TOKEN }}"'@github.com\//' .gitmodules
+          git submodule update --init --recursive
+
+      - name: Authenticate with Google Cloud Platform
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v1.1.0
+        with:
+          project_id: sean-side
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.7.0
+
+      - name: Helm repo add
+        run: |
+          helm plugin install https://github.com/hayorov/helm-gcs.git
+          make add-helm-repo
+
+      - name: Kubectl tool installer
+        uses: Azure/setup-kubectl@v3
+
+      - name: Deploy
+        env:
+          KUBECONFIG_FILE: ${{ secrets.KUBECONFIG }}
+        run: |
+          mkdir -p ~/.kube
+          echo $KUBECONFIG_FILE | base64 --decode > ~/.kube/config && export KUBECONFIG=~/.kube/config
+          make upgrade-helm
