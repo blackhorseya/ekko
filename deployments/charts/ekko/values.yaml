@@ -109,3 +109,6 @@ config: |-
   log:
     level: info
     encoding: console
+
+containerArgs:
+  - -c=/app/config.yaml

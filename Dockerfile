@@ -24,4 +24,4 @@ WORKDIR /app
 
 COPY --from=builder /src/app ./
 
-ENTRYPOINT ./app
+ENTRYPOINT ["./app"]
