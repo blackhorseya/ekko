@@ -8,16 +8,16 @@ definitions:
       msg:
         type: string
     type: object
-  model.Task:
+  model.Ticket:
     properties:
       id:
         type: integer
       status:
-        $ref: '#/definitions/model.TaskStatus'
+        $ref: '#/definitions/model.TicketStatus'
       title:
         type: string
     type: object
-  model.TaskStatus:
+  model.TicketStatus:
     enum:
     - 0
     - 1
@@ -25,10 +25,10 @@ definitions:
     - 3
     type: integer
     x-enum-varnames:
-    - TaskStatus_TASK_STATUS_UNSPECIFIED
-    - TaskStatus_TASK_STATUS_TODO
-    - TaskStatus_TASK_STATUS_INPROGRESS
-    - TaskStatus_TASK_STATUS_DONE
+    - TicketStatus_TICKET_STATUS_UNSPECIFIED
+    - TicketStatus_TICKET_STATUS_TODO
+    - TicketStatus_TICKET_STATUS_INPROGRESS
+    - TicketStatus_TICKET_STATUS_DONE
   response.Response:
     properties:
       code:
@@ -41,7 +41,7 @@ definitions:
     properties:
       list:
         items:
-          $ref: '#/definitions/model.Task'
+          $ref: '#/definitions/model.Ticket'
         type: array
       total:
         type: integer
@@ -51,12 +51,12 @@ info:
     email: blackhorseya@gmail.com
     name: sean.zheng
     url: https://blog.seancheng.space
-  description: ekko is a simple task management system
+  description: ekko is a simple issue management system
   license:
     name: GPL-3.0
     url: https://spdx.org/licenses/GPL-3.0-only.html
   title: Ekko
-  version: 0.0.1
+  version: 0.0.3
 paths:
   /v1/tasks:
     get:
@@ -104,7 +104,7 @@ paths:
     post:
       consumes:
       - application/x-www-form-urlencoded
-      description: Create a task
+      description: Create a issue
       parameters:
       - description: title
         in: formData
@@ -121,7 +121,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/model.Task'
+                  $ref: '#/definitions/model.Ticket'
               type: object
         "400":
           description: Bad Request
@@ -131,16 +131,16 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/er.Error'
-      summary: Create a task
+      summary: Create a issue
       tags:
       - Tasks
   /v1/tasks/{id}:
     delete:
       consumes:
       - application/json
-      description: Delete a task by id
+      description: Delete a issue by id
       parameters:
-      - description: ID of task
+      - description: ID of issue
         in: path
         name: id
         required: true
@@ -169,15 +169,15 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/er.Error'
-      summary: Delete a task by id
+      summary: Delete a issue by id
       tags:
       - Tasks
     get:
       consumes:
       - application/json
-      description: Get a task by id
+      description: Get a issue by id
       parameters:
-      - description: ID of task
+      - description: ID of issue
         in: path
         name: id
         required: true
@@ -192,7 +192,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/model.Task'
+                  $ref: '#/definitions/model.Ticket'
               type: object
         "400":
           description: Bad Request
@@ -206,16 +206,16 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/er.Error'
-      summary: Get a task by id
+      summary: Get a issue by id
       tags:
       - Tasks
   /v1/tasks/{id}/status:
     patch:
       consumes:
       - application/x-www-form-urlencoded
-      description: Update task's status by id
+      description: Update issue's status by id
       parameters:
-      - description: ID of task
+      - description: ID of issue
         in: path
         name: id
         required: true
@@ -235,7 +235,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/model.Task'
+                  $ref: '#/definitions/model.Ticket'
               type: object
         "400":
           description: Bad Request
@@ -245,7 +245,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/er.Error'
-      summary: Update task's status by id
+      summary: Update issue's status by id
       tags:
       - Tasks
 swagger: "2.0"

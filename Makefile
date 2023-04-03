@@ -1,7 +1,7 @@
 # env for project
 APP_NAME := ekko
 VERSION := $(shell git describe --tags --always)
-DOMAIN_NAME := task
+DOMAIN_NAME := issue
 SVC_ADAPTER := restful
 MAIN_PKG := ./cmd/$(SVC_ADAPTER)/$(DOMAIN_NAME)
 
@@ -103,7 +103,7 @@ gen-wire: ## generate wire
 
 .PHONY: gen-swagger
 gen-swagger: ## generate swagger spec
-	@swag init -q --dir ./cmd/restful/task,./ -o ./api/docs
+	@swag init -q --dir ./cmd/restful/issue,./ -o ./api/docs
 	## Generated swagger spec
 
 .PHONY: gen-mocks

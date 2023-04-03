@@ -93,7 +93,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Create a task",
+                "description": "Create a issue",
                 "consumes": [
                     "application/x-www-form-urlencoded"
                 ],
@@ -103,7 +103,7 @@ const docTemplate = `{
                 "tags": [
                     "Tasks"
                 ],
-                "summary": "Create a task",
+                "summary": "Create a issue",
                 "parameters": [
                     {
                         "type": "string",
@@ -125,7 +125,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Task"
+                                            "$ref": "#/definitions/model.Ticket"
                                         }
                                     }
                                 }
@@ -149,7 +149,7 @@ const docTemplate = `{
         },
         "/v1/tasks/{id}": {
             "get": {
-                "description": "Get a task by id",
+                "description": "Get a issue by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -159,11 +159,11 @@ const docTemplate = `{
                 "tags": [
                     "Tasks"
                 ],
-                "summary": "Get a task by id",
+                "summary": "Get a issue by id",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "ID of task",
+                        "description": "ID of issue",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -181,7 +181,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Task"
+                                            "$ref": "#/definitions/model.Ticket"
                                         }
                                     }
                                 }
@@ -209,7 +209,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete a task by id",
+                "description": "Delete a issue by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -219,11 +219,11 @@ const docTemplate = `{
                 "tags": [
                     "Tasks"
                 ],
-                "summary": "Delete a task by id",
+                "summary": "Delete a issue by id",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "ID of task",
+                        "description": "ID of issue",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -271,7 +271,7 @@ const docTemplate = `{
         },
         "/v1/tasks/{id}/status": {
             "patch": {
-                "description": "Update task's status by id",
+                "description": "Update issue's status by id",
                 "consumes": [
                     "application/x-www-form-urlencoded"
                 ],
@@ -281,11 +281,11 @@ const docTemplate = `{
                 "tags": [
                     "Tasks"
                 ],
-                "summary": "Update task's status by id",
+                "summary": "Update issue's status by id",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "ID of task",
+                        "description": "ID of issue",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -310,7 +310,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Task"
+                                            "$ref": "#/definitions/model.Ticket"
                                         }
                                     }
                                 }
@@ -346,21 +346,21 @@ const docTemplate = `{
                 }
             }
         },
-        "model.Task": {
+        "model.Ticket": {
             "type": "object",
             "properties": {
                 "id": {
                     "type": "integer"
                 },
                 "status": {
-                    "$ref": "#/definitions/model.TaskStatus"
+                    "$ref": "#/definitions/model.TicketStatus"
                 },
                 "title": {
                     "type": "string"
                 }
             }
         },
-        "model.TaskStatus": {
+        "model.TicketStatus": {
             "type": "integer",
             "enum": [
                 0,
@@ -369,10 +369,10 @@ const docTemplate = `{
                 3
             ],
             "x-enum-varnames": [
-                "TaskStatus_TASK_STATUS_UNSPECIFIED",
-                "TaskStatus_TASK_STATUS_TODO",
-                "TaskStatus_TASK_STATUS_INPROGRESS",
-                "TaskStatus_TASK_STATUS_DONE"
+                "TicketStatus_TICKET_STATUS_UNSPECIFIED",
+                "TicketStatus_TICKET_STATUS_TODO",
+                "TicketStatus_TICKET_STATUS_INPROGRESS",
+                "TicketStatus_TICKET_STATUS_DONE"
             ]
         },
         "response.Response": {
@@ -393,7 +393,7 @@ const docTemplate = `{
                 "list": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.Task"
+                        "$ref": "#/definitions/model.Ticket"
                     }
                 },
                 "total": {
@@ -406,12 +406,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "0.0.1",
+	Version:          "0.0.3",
 	Host:             "",
 	BasePath:         "/api",
 	Schemes:          []string{},
 	Title:            "Ekko",
-	Description:      "ekko is a simple task management system",
+	Description:      "ekko is a simple issue management system",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

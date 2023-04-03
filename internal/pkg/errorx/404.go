@@ -7,6 +7,6 @@ import (
 )
 
 var (
-	// ErrTaskNotExists means task is not exists
-	ErrTaskNotExists = er.New(http.StatusNotFound, 40401, "task is not exists", "task is not exists")
+	// ErrTaskNotExists means issue is not exists
+	ErrTaskNotExists = er.New(http.StatusNotFound, 40401, "issue is not exists", "issue is not exists")
 )

@@ -1,0 +1,20 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "restful",
+    srcs = ["restful.go"],
+    importpath = "github.com/blackhorseya/ekko/internal/adapter/issue/restful",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//internal/adapter/issue/restful/api",
+        "//pkg/adapters",
+        "//pkg/contextx",
+        "//pkg/cors",
+        "//pkg/entity/domain/issue/biz",
+        "//pkg/er",
+        "@com_github_gin_contrib_zap//:zap",
+        "@com_github_gin_gonic_gin//:gin",
+        "@com_github_google_wire//:wire",
+        "@org_uber_go_zap//:zap",
+    ],
+)

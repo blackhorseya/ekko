@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "ekko is a simple task management system",
+        "description": "ekko is a simple issue management system",
         "title": "Ekko",
         "contact": {
             "name": "sean.zheng",
@@ -12,7 +12,7 @@
             "name": "GPL-3.0",
             "url": "https://spdx.org/licenses/GPL-3.0-only.html"
         },
-        "version": "0.0.1"
+        "version": "0.0.3"
     },
     "basePath": "/api",
     "paths": {
@@ -85,7 +85,7 @@
                 }
             },
             "post": {
-                "description": "Create a task",
+                "description": "Create a issue",
                 "consumes": [
                     "application/x-www-form-urlencoded"
                 ],
@@ -95,7 +95,7 @@
                 "tags": [
                     "Tasks"
                 ],
-                "summary": "Create a task",
+                "summary": "Create a issue",
                 "parameters": [
                     {
                         "type": "string",
@@ -117,7 +117,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Task"
+                                            "$ref": "#/definitions/model.Ticket"
                                         }
                                     }
                                 }
@@ -141,7 +141,7 @@
         },
         "/v1/tasks/{id}": {
             "get": {
-                "description": "Get a task by id",
+                "description": "Get a issue by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -151,11 +151,11 @@
                 "tags": [
                     "Tasks"
                 ],
-                "summary": "Get a task by id",
+                "summary": "Get a issue by id",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "ID of task",
+                        "description": "ID of issue",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -173,7 +173,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Task"
+                                            "$ref": "#/definitions/model.Ticket"
                                         }
                                     }
                                 }
@@ -201,7 +201,7 @@
                 }
             },
             "delete": {
-                "description": "Delete a task by id",
+                "description": "Delete a issue by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -211,11 +211,11 @@
                 "tags": [
                     "Tasks"
                 ],
-                "summary": "Delete a task by id",
+                "summary": "Delete a issue by id",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "ID of task",
+                        "description": "ID of issue",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -263,7 +263,7 @@
         },
         "/v1/tasks/{id}/status": {
             "patch": {
-                "description": "Update task's status by id",
+                "description": "Update issue's status by id",
                 "consumes": [
                     "application/x-www-form-urlencoded"
                 ],
@@ -273,11 +273,11 @@
                 "tags": [
                     "Tasks"
                 ],
-                "summary": "Update task's status by id",
+                "summary": "Update issue's status by id",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "ID of task",
+                        "description": "ID of issue",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -302,7 +302,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Task"
+                                            "$ref": "#/definitions/model.Ticket"
                                         }
                                     }
                                 }
@@ -338,21 +338,21 @@
                 }
             }
         },
-        "model.Task": {
+        "model.Ticket": {
             "type": "object",
             "properties": {
                 "id": {
                     "type": "integer"
                 },
                 "status": {
-                    "$ref": "#/definitions/model.TaskStatus"
+                    "$ref": "#/definitions/model.TicketStatus"
                 },
                 "title": {
                     "type": "string"
                 }
             }
         },
-        "model.TaskStatus": {
+        "model.TicketStatus": {
             "type": "integer",
             "enum": [
                 0,
@@ -361,10 +361,10 @@
                 3
             ],
             "x-enum-varnames": [
-                "TaskStatus_TASK_STATUS_UNSPECIFIED",
-                "TaskStatus_TASK_STATUS_TODO",
-                "TaskStatus_TASK_STATUS_INPROGRESS",
-                "TaskStatus_TASK_STATUS_DONE"
+                "TicketStatus_TICKET_STATUS_UNSPECIFIED",
+                "TicketStatus_TICKET_STATUS_TODO",
+                "TicketStatus_TICKET_STATUS_INPROGRESS",
+                "TicketStatus_TICKET_STATUS_DONE"
             ]
         },
         "response.Response": {
@@ -385,7 +385,7 @@
                 "list": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.Task"
+                        "$ref": "#/definitions/model.Ticket"
                     }
                 },
                 "total": {
