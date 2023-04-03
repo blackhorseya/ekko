@@ -18,6 +18,13 @@ func CreateMariadb(rw *sqlx.DB) IRepo {
 	return iRepo
 }
 
+func CreateHTTPClient(opts *HTTPClientOptions) IRepo {
+	iRepo := NewHTTPClient(opts)
+	return iRepo
+}
+
 // wire.go:
 
 var testProviderMariadbSet = wire.NewSet(NewMariadb)
+
+var testProviderHTTPClientSet = wire.NewSet(NewHTTPClient)
