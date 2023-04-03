@@ -8,7 +8,7 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	"github.com/blackhorseya/ekko/pkg/entity/domain/task/model"
+	tm "github.com/blackhorseya/ekko/pkg/entity/domain/task/model"
 	"github.com/blackhorseya/ekko/test/testdata"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
@@ -60,14 +60,14 @@ func (s *suiteMariadb) Test_mariadb_GetByID() {
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *model.Task
+		wantInfo *tm.Ticket
 		wantErr  bool
 	}{
 		{
 			name: "get by id then error",
-			args: args{id: testdata.Task1.Id, mock: func() {
+			args: args{id: testdata.Ticket1.Id, mock: func() {
 				s.rw.ExpectQuery(`SELECT id, title, status, created_at, updated_at FROM tickets WHERE id = ?`).
-					WithArgs(testdata.Task1.Id).
+					WithArgs(testdata.Ticket1.Id).
 					WillReturnError(errors.New("error"))
 			}},
 			wantInfo: nil,
@@ -75,9 +75,9 @@ func (s *suiteMariadb) Test_mariadb_GetByID() {
 		},
 		{
 			name: "get by id then not found",
-			args: args{id: testdata.Task1.Id, mock: func() {
+			args: args{id: testdata.Ticket1.Id, mock: func() {
 				s.rw.ExpectQuery(`SELECT id, title, status, created_at, updated_at FROM tickets WHERE id = ?`).
-					WithArgs(testdata.Task1.Id).
+					WithArgs(testdata.Ticket1.Id).
 					WillReturnRows(sqlmock.NewRows(columns))
 			}},
 			wantInfo: nil,
@@ -85,18 +85,18 @@ func (s *suiteMariadb) Test_mariadb_GetByID() {
 		},
 		{
 			name: "get by id then ok",
-			args: args{id: testdata.Task1.Id, mock: func() {
+			args: args{id: testdata.Ticket1.Id, mock: func() {
 				s.rw.ExpectQuery(`SELECT id, title, status, created_at, updated_at FROM tickets WHERE id = ?`).
-					WithArgs(testdata.Task1.Id).
+					WithArgs(testdata.Ticket1.Id).
 					WillReturnRows(sqlmock.NewRows(columns).AddRow(
-						testdata.Task1.Id,
-						testdata.Task1.Title,
-						testdata.Task1.Status,
-						testdata.Task1.CreatedAt.AsTime(),
-						testdata.Task1.UpdatedAt.AsTime(),
+						testdata.Ticket1.Id,
+						testdata.Ticket1.Title,
+						testdata.Ticket1.Status,
+						testdata.Ticket1.CreatedAt.AsTime(),
+						testdata.Ticket1.UpdatedAt.AsTime(),
 					))
 			}},
-			wantInfo: testdata.Task1,
+			wantInfo: testdata.Ticket1,
 			wantErr:  false,
 		},
 	}
@@ -122,23 +122,23 @@ func (s *suiteMariadb) Test_mariadb_GetByID() {
 
 func (s *suiteMariadb) Test_mariadb_Create() {
 	type args struct {
-		created *model.Task
+		created *tm.Ticket
 		mock    func()
 	}
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *model.Task
+		wantInfo *tm.Ticket
 		wantErr  bool
 	}{
 		{
 			name: "create then error",
-			args: args{created: testdata.Task1, mock: func() {
+			args: args{created: testdata.Ticket1, mock: func() {
 				s.rw.ExpectExec(`insert into tickets`).
 					WithArgs(
-						testdata.Task1.Id,
-						testdata.Task1.Title,
-						testdata.Task1.Status,
+						testdata.Ticket1.Id,
+						testdata.Ticket1.Title,
+						testdata.Ticket1.Status,
 						AnyTime{},
 						AnyTime{},
 					).
@@ -149,18 +149,18 @@ func (s *suiteMariadb) Test_mariadb_Create() {
 		},
 		{
 			name: "create then ok",
-			args: args{created: testdata.Task1, mock: func() {
+			args: args{created: testdata.Ticket1, mock: func() {
 				s.rw.ExpectExec(`insert into tickets`).
 					WithArgs(
-						testdata.Task1.Id,
-						testdata.Task1.Title,
-						testdata.Task1.Status,
+						testdata.Ticket1.Id,
+						testdata.Ticket1.Title,
+						testdata.Ticket1.Status,
 						AnyTime{},
 						AnyTime{},
 					).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			}},
-			wantInfo: testdata.Task1,
+			wantInfo: testdata.Ticket1,
 			wantErr:  false,
 		},
 	}
@@ -186,18 +186,18 @@ func (s *suiteMariadb) Test_mariadb_Create() {
 
 func (s *suiteMariadb) Test_mariadb_List() {
 	type args struct {
-		condition QueryTasksCondition
+		condition QueryTicketsCondition
 		mock      func()
 	}
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo []*model.Task
+		wantInfo []*tm.Ticket
 		wantErr  bool
 	}{
 		{
 			name: "list then error",
-			args: args{condition: QueryTasksCondition{}, mock: func() {
+			args: args{condition: QueryTicketsCondition{}, mock: func() {
 				s.rw.ExpectQuery(`select id, title, status, created_at, updated_at from tickets`).
 					WillReturnError(errors.New("error"))
 			}},
@@ -206,7 +206,7 @@ func (s *suiteMariadb) Test_mariadb_List() {
 		},
 		{
 			name: "list then not found",
-			args: args{condition: QueryTasksCondition{}, mock: func() {
+			args: args{condition: QueryTicketsCondition{}, mock: func() {
 				s.rw.ExpectQuery(`select id, title, status, created_at, updated_at from tickets`).
 					WillReturnRows(sqlmock.NewRows(columns))
 			}},
@@ -215,17 +215,17 @@ func (s *suiteMariadb) Test_mariadb_List() {
 		},
 		{
 			name: "list then ok",
-			args: args{condition: QueryTasksCondition{}, mock: func() {
+			args: args{condition: QueryTicketsCondition{}, mock: func() {
 				s.rw.ExpectQuery(`select id, title, status, created_at, updated_at from tickets`).
 					WillReturnRows(sqlmock.NewRows(columns).AddRow(
-						testdata.Task1.Id,
-						testdata.Task1.Title,
-						testdata.Task1.Status,
-						testdata.Task1.CreatedAt.AsTime(),
-						testdata.Task1.UpdatedAt.AsTime(),
+						testdata.Ticket1.Id,
+						testdata.Ticket1.Title,
+						testdata.Ticket1.Status,
+						testdata.Ticket1.CreatedAt.AsTime(),
+						testdata.Ticket1.UpdatedAt.AsTime(),
 					))
 			}},
-			wantInfo: []*model.Task{testdata.Task1},
+			wantInfo: []*tm.Ticket{testdata.Ticket1},
 			wantErr:  false,
 		},
 	}
@@ -261,18 +261,18 @@ func (s *suiteMariadb) Test_mariadb_DeleteByID() {
 	}{
 		{
 			name: "delete then error",
-			args: args{id: testdata.Task1.Id, mock: func() {
+			args: args{id: testdata.Ticket1.Id, mock: func() {
 				s.rw.ExpectExec(`delete from tickets`).
-					WithArgs(testdata.Task1.Id).
+					WithArgs(testdata.Ticket1.Id).
 					WillReturnError(errors.New("error"))
 			}},
 			wantErr: true,
 		},
 		{
 			name: "delete then ok",
-			args: args{id: testdata.Task1.Id, mock: func() {
+			args: args{id: testdata.Ticket1.Id, mock: func() {
 				s.rw.ExpectExec(`delete from tickets`).
-					WithArgs(testdata.Task1.Id).
+					WithArgs(testdata.Ticket1.Id).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			}},
 			wantErr: false,
@@ -295,44 +295,41 @@ func (s *suiteMariadb) Test_mariadb_DeleteByID() {
 
 func (s *suiteMariadb) Test_mariadb_Update() {
 	type args struct {
-		updated *model.Task
+		updated *tm.Ticket
 		mock    func()
 	}
 	tests := []struct {
-		name     string
-		args     args
-		wantInfo *model.Task
-		wantErr  bool
+		name    string
+		args    args
+		wantErr bool
 	}{
 		{
 			name: "update then error",
-			args: args{updated: testdata.Task1, mock: func() {
+			args: args{updated: testdata.Ticket1, mock: func() {
 				s.rw.ExpectExec(`update tickets`).
 					WithArgs(
-						testdata.Task1.Title,
-						testdata.Task1.Status,
+						testdata.Ticket1.Title,
+						testdata.Ticket1.Status,
 						AnyTime{},
-						testdata.Task1.Id,
+						testdata.Ticket1.Id,
 					).
 					WillReturnError(errors.New("error"))
 			}},
-			wantInfo: nil,
-			wantErr:  true,
+			wantErr: true,
 		},
 		{
 			name: "update then ok",
-			args: args{updated: testdata.Task1, mock: func() {
+			args: args{updated: testdata.Ticket1, mock: func() {
 				s.rw.ExpectExec(`update tickets`).
 					WithArgs(
-						testdata.Task1.Title,
-						testdata.Task1.Status,
+						testdata.Ticket1.Title,
+						testdata.Ticket1.Status,
 						AnyTime{},
-						testdata.Task1.Id,
+						testdata.Ticket1.Id,
 					).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			}},
-			wantInfo: testdata.Task1,
-			wantErr:  false,
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
@@ -341,13 +338,10 @@ func (s *suiteMariadb) Test_mariadb_Update() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.repo.Update(contextx.BackgroundWithLogger(s.logger), tt.args.updated)
+			err := s.repo.Update(contextx.BackgroundWithLogger(s.logger), tt.args.updated)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
 				return
-			}
-			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
-				t.Errorf("Update() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
 
 			s.assertExpectation(t)

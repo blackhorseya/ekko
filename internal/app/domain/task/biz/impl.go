@@ -1,11 +1,13 @@
 package biz
 
 import (
+	"strings"
+
 	"github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/errorx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	tb "github.com/blackhorseya/ekko/pkg/entity/domain/task/biz"
-	"github.com/blackhorseya/ekko/pkg/entity/domain/task/model"
+	tm "github.com/blackhorseya/ekko/pkg/entity/domain/task/model"
 	"github.com/blackhorseya/ekko/pkg/genx"
 	"github.com/google/wire"
 	"go.uber.org/zap"
@@ -25,15 +27,7 @@ func NewImpl(repo repo.IRepo, generator genx.Generator) tb.IBiz {
 	}
 }
 
-func (i *impl) Liveness(ctx contextx.Contextx) error {
-	return nil
-}
-
-func (i *impl) Readiness(ctx contextx.Contextx) error {
-	return nil
-}
-
-func (i *impl) GetByID(ctx contextx.Contextx, id int64) (info *model.Task, err error) {
+func (i *impl) GetByID(ctx contextx.Contextx, id int64) (info *tm.Ticket, err error) {
 	ret, err := i.repo.GetByID(ctx, id)
 	if err != nil {
 		ctx.Error(errorx.ErrGetTask.Error(), zap.Error(err), zap.Int64("id", id))
@@ -47,7 +41,7 @@ func (i *impl) GetByID(ctx contextx.Contextx, id int64) (info *model.Task, err e
 	return ret, nil
 }
 
-func (i *impl) List(ctx contextx.Contextx, page, size int) (info []*model.Task, total int, err error) {
+func (i *impl) List(ctx contextx.Contextx, page, size int) (info []*tm.Ticket, total int, err error) {
 	if page < 0 {
 		ctx.Error(errorx.ErrInvalidPage.Error(), zap.Int("page", page), zap.Int("size", size))
 		return nil, 0, errorx.ErrInvalidPage
@@ -58,7 +52,7 @@ func (i *impl) List(ctx contextx.Contextx, page, size int) (info []*model.Task, 
 		return nil, 0, errorx.ErrInvalidSize
 	}
 
-	condition := repo.QueryTasksCondition{
+	condition := repo.QueryTicketsCondition{
 		Limit:  size,
 		Offset: (page - 1) * size,
 	}
@@ -81,11 +75,17 @@ func (i *impl) List(ctx contextx.Contextx, page, size int) (info []*model.Task, 
 	return ret, total, nil
 }
 
-func (i *impl) Create(ctx contextx.Contextx, title string) (info *model.Task, err error) {
-	created := &model.Task{
+func (i *impl) Create(ctx contextx.Contextx, title string) (info *tm.Ticket, err error) {
+	title = strings.TrimSpace(title)
+	if len(title) == 0 {
+		ctx.Error(errorx.ErrInvalidTitle.Error(), zap.String("title", title))
+		return nil, errorx.ErrInvalidTitle
+	}
+
+	created := &tm.Ticket{
 		Id:        i.generator.Int64(),
 		Title:     title,
-		Status:    model.TaskStatus_TASK_STATUS_TODO,
+		Status:    tm.TicketStatus_TICKET_STATUS_TODO,
 		CreatedAt: nil,
 		UpdatedAt: nil,
 	}
@@ -98,7 +98,7 @@ func (i *impl) Create(ctx contextx.Contextx, title string) (info *model.Task, er
 	return ret, nil
 }
 
-func (i *impl) UpdateStatus(ctx contextx.Contextx, id int64, status model.TaskStatus) (info *model.Task, err error) {
+func (i *impl) UpdateStatus(ctx contextx.Contextx, id int64, status tm.TicketStatus) (info *tm.Ticket, err error) {
 	exists, err := i.repo.GetByID(ctx, id)
 	if err != nil {
 		ctx.Error(errorx.ErrGetTask.Error(), zap.Error(err))
@@ -110,39 +110,13 @@ func (i *impl) UpdateStatus(ctx contextx.Contextx, id int64, status model.TaskSt
 	}
 
 	exists.Status = status
-	ret, err := i.repo.Update(ctx, exists)
+	err = i.repo.Update(ctx, exists)
 	if err != nil {
 		ctx.Error(errorx.ErrUpdateStatusTask.Error(), zap.Error(err), zap.Any("updated", exists))
 		return nil, errorx.ErrUpdateStatusTask
 	}
 
-	return ret, nil
-}
-
-func (i *impl) ChangeTitle(ctx contextx.Contextx, id int64, title string) (info *model.Task, err error) {
-	if len(title) == 0 {
-		ctx.Error(errorx.ErrInvalidTitle.Error())
-		return nil, errorx.ErrInvalidTitle
-	}
-
-	exists, err := i.repo.GetByID(ctx, id)
-	if err != nil {
-		ctx.Error(errorx.ErrGetTask.Error(), zap.Error(err))
-		return nil, errorx.ErrGetTask
-	}
-	if exists == nil {
-		ctx.Error(errorx.ErrTaskNotExists.Error())
-		return nil, errorx.ErrTaskNotExists
-	}
-
-	exists.Title = title
-	ret, err := i.repo.Update(ctx, exists)
-	if err != nil {
-		ctx.Error(errorx.ErrChangeTitleTask.Error(), zap.Error(err), zap.Any("updated", exists))
-		return nil, errorx.ErrChangeTitleTask
-	}
-
-	return ret, nil
+	return exists, nil
 }
 
 func (i *impl) Delete(ctx contextx.Contextx, id int64) error {

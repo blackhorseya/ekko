@@ -5,9 +5,10 @@ import (
 	"strings"
 
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	"github.com/blackhorseya/ekko/pkg/entity/domain/task/model"
+	tm "github.com/blackhorseya/ekko/pkg/entity/domain/task/model"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -19,7 +20,7 @@ func NewMariadb(rw *sqlx.DB) IRepo {
 	return &mariadb{rw: rw}
 }
 
-func (i *mariadb) GetByID(ctx contextx.Contextx, id int64) (info *model.Task, err error) {
+func (i *mariadb) GetByID(ctx contextx.Contextx, id int64) (info *tm.Ticket, err error) {
 	stmt := `SELECT id, title, status, created_at, updated_at FROM tickets WHERE id = ?`
 
 	var ret task
@@ -29,13 +30,14 @@ func (i *mariadb) GetByID(ctx contextx.Contextx, id int64) (info *model.Task, er
 			return nil, nil
 		}
 
+		ctx.Error("GetByID", zap.Error(err), zap.String("stmt", stmt), zap.Int64("id", id))
 		return nil, err
 	}
 
 	return ret.ToEntity(), nil
 }
 
-func (i *mariadb) Create(ctx contextx.Contextx, created *model.Task) (info *model.Task, err error) {
+func (i *mariadb) Create(ctx contextx.Contextx, created *tm.Ticket) (info *tm.Ticket, err error) {
 	now := timestamppb.Now()
 	created.CreatedAt = now
 	created.UpdatedAt = now
@@ -51,7 +53,7 @@ func (i *mariadb) Create(ctx contextx.Contextx, created *model.Task) (info *mode
 	return created, nil
 }
 
-func (i *mariadb) List(ctx contextx.Contextx, condition QueryTasksCondition) (info []*model.Task, err error) {
+func (i *mariadb) List(ctx contextx.Contextx, condition QueryTicketsCondition) (info []*tm.Ticket, err error) {
 	var args []interface{}
 	query := []string{
 		`select id, title, status, created_at, updated_at from tickets`,
@@ -79,7 +81,7 @@ func (i *mariadb) List(ctx contextx.Contextx, condition QueryTasksCondition) (in
 		return nil, nil
 	}
 
-	ret := make([]*model.Task, len(got))
+	ret := make([]*tm.Ticket, len(got))
 	for idx, t := range got {
 		ret[idx] = t.ToEntity()
 	}
@@ -87,7 +89,7 @@ func (i *mariadb) List(ctx contextx.Contextx, condition QueryTasksCondition) (in
 	return ret, nil
 }
 
-func (i *mariadb) Count(ctx contextx.Contextx, condition QueryTasksCondition) (total int, err error) {
+func (i *mariadb) Count(ctx contextx.Contextx, condition QueryTicketsCondition) (total int, err error) {
 	stmt := `select count(id) as total from tickets`
 
 	ret := 0
@@ -99,17 +101,17 @@ func (i *mariadb) Count(ctx contextx.Contextx, condition QueryTasksCondition) (t
 	return ret, nil
 }
 
-func (i *mariadb) Update(ctx contextx.Contextx, updated *model.Task) (info *model.Task, err error) {
+func (i *mariadb) Update(ctx contextx.Contextx, updated *tm.Ticket) error {
 	updated.UpdatedAt = timestamppb.Now()
 
 	stmt := `update tickets set title=:title, status=:status, updated_at=:updated_at where id = :id`
 
-	_, err = i.rw.NamedExecContext(ctx, stmt, newTask(updated))
+	_, err := i.rw.NamedExecContext(ctx, stmt, newTask(updated))
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return updated, nil
+	return nil
 }
 
 func (i *mariadb) DeleteByID(ctx contextx.Contextx, id int64) error {

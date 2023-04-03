@@ -3,19 +3,19 @@ package repo
 import (
 	"time"
 
-	"github.com/blackhorseya/ekko/pkg/entity/domain/task/model"
+	tm "github.com/blackhorseya/ekko/pkg/entity/domain/task/model"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type task struct {
-	ID        int64            `json:"id" db:"id"`
-	Title     string           `json:"title" db:"title"`
-	Status    model.TaskStatus `json:"status" db:"status"`
-	CreatedAt time.Time        `json:"created_at" db:"created_at"`
-	UpdatedAt time.Time        `json:"updated_at" db:"updated_at"`
+	ID        int64           `json:"id" db:"id"`
+	Title     string          `json:"title" db:"title"`
+	Status    tm.TicketStatus `json:"status" db:"status"`
+	CreatedAt time.Time       `json:"created_at" db:"created_at"`
+	UpdatedAt time.Time       `json:"updated_at" db:"updated_at"`
 }
 
-func newTask(val *model.Task) *task {
+func newTask(val *tm.Ticket) *task {
 	return &task{
 		ID:        val.Id,
 		Title:     val.Title,
@@ -25,8 +25,8 @@ func newTask(val *model.Task) *task {
 	}
 }
 
-func (t *task) ToEntity() *model.Task {
-	return &model.Task{
+func (t *task) ToEntity() *tm.Ticket {
+	return &tm.Ticket{
 		Id:        t.ID,
 		Title:     t.Title,
 		Status:    t.Status,
