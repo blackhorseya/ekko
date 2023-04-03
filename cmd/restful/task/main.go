@@ -12,7 +12,7 @@ func init() {
 }
 
 // @title Ekko
-// @version 0.0.2
+// @version 0.0.3
 // @description ekko is a simple task management system
 //
 // @contact.name sean.zheng
