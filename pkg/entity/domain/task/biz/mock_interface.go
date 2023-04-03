@@ -35,26 +35,11 @@ func (m *MockIBiz) EXPECT() *MockIBizMockRecorder {
 	return m.recorder
 }
 
-// ChangeTitle mocks base method.
-func (m *MockIBiz) ChangeTitle(ctx contextx.Contextx, id int64, title string) (*model.Task, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ChangeTitle", ctx, id, title)
-	ret0, _ := ret[0].(*model.Task)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ChangeTitle indicates an expected call of ChangeTitle.
-func (mr *MockIBizMockRecorder) ChangeTitle(ctx, id, title interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangeTitle", reflect.TypeOf((*MockIBiz)(nil).ChangeTitle), ctx, id, title)
-}
-
 // Create mocks base method.
-func (m *MockIBiz) Create(ctx contextx.Contextx, title string) (*model.Task, error) {
+func (m *MockIBiz) Create(ctx contextx.Contextx, title string) (*model.Ticket, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", ctx, title)
-	ret0, _ := ret[0].(*model.Task)
+	ret0, _ := ret[0].(*model.Ticket)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -80,10 +65,10 @@ func (mr *MockIBizMockRecorder) Delete(ctx, id interface{}) *gomock.Call {
 }
 
 // GetByID mocks base method.
-func (m *MockIBiz) GetByID(ctx contextx.Contextx, id int64) (*model.Task, error) {
+func (m *MockIBiz) GetByID(ctx contextx.Contextx, id int64) (*model.Ticket, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetByID", ctx, id)
-	ret0, _ := ret[0].(*model.Task)
+	ret0, _ := ret[0].(*model.Ticket)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -95,10 +80,10 @@ func (mr *MockIBizMockRecorder) GetByID(ctx, id interface{}) *gomock.Call {
 }
 
 // List mocks base method.
-func (m *MockIBiz) List(ctx contextx.Contextx, page, size int) ([]*model.Task, int, error) {
+func (m *MockIBiz) List(ctx contextx.Contextx, page, size int) ([]*model.Ticket, int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", ctx, page, size)
-	ret0, _ := ret[0].([]*model.Task)
+	ret0, _ := ret[0].([]*model.Ticket)
 	ret1, _ := ret[1].(int)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2
@@ -110,39 +95,11 @@ func (mr *MockIBizMockRecorder) List(ctx, page, size interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockIBiz)(nil).List), ctx, page, size)
 }
 
-// Liveness mocks base method.
-func (m *MockIBiz) Liveness(ctx contextx.Contextx) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Liveness", ctx)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Liveness indicates an expected call of Liveness.
-func (mr *MockIBizMockRecorder) Liveness(ctx interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Liveness", reflect.TypeOf((*MockIBiz)(nil).Liveness), ctx)
-}
-
-// Readiness mocks base method.
-func (m *MockIBiz) Readiness(ctx contextx.Contextx) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Readiness", ctx)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Readiness indicates an expected call of Readiness.
-func (mr *MockIBizMockRecorder) Readiness(ctx interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Readiness", reflect.TypeOf((*MockIBiz)(nil).Readiness), ctx)
-}
-
 // UpdateStatus mocks base method.
-func (m *MockIBiz) UpdateStatus(ctx contextx.Contextx, id int64, status model.TaskStatus) (*model.Task, error) {
+func (m *MockIBiz) UpdateStatus(ctx contextx.Contextx, id int64, status model.TicketStatus) (*model.Ticket, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateStatus", ctx, id, status)
-	ret0, _ := ret[0].(*model.Task)
+	ret0, _ := ret[0].(*model.Ticket)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

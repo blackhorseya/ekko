@@ -4,17 +4,17 @@ option go_package = "github.com/blackhorseya/ekko/pkg/entity/domain/task/model";
 
 import "google/protobuf/timestamp.proto";
 
-enum TaskStatus {
-  TASK_STATUS_UNSPECIFIED = 0;
-  TASK_STATUS_TODO = 1;
-  TASK_STATUS_INPROGRESS = 2;
-  TASK_STATUS_DONE = 3;
+enum TicketStatus {
+  TICKET_STATUS_UNSPECIFIED = 0;
+  TICKET_STATUS_TODO = 1;
+  TICKET_STATUS_INPROGRESS = 2;
+  TICKET_STATUS_DONE = 3;
 }
 
-message Task {
+message Ticket {
   int64 id = 1;
   string title = 2;
-  TaskStatus status = 3;
+  TicketStatus status = 3;
   // @gotags: json:"-"
   google.protobuf.Timestamp created_at = 4;
   // @gotags: json:"-"

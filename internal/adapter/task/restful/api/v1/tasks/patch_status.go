@@ -54,14 +54,14 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 		return
 	}
 
-	_, ok = model.TaskStatus_name[int32(statusVal)]
+	_, ok = model.TicketStatus_name[int32(statusVal)]
 	if !ok {
 		ctx.Error(errorx.ErrInvalidStatus.Error(), zap.String(_formStatus, c.PostForm(_formStatus)))
 		_ = c.Error(errorx.ErrInvalidStatus)
 		return
 	}
 
-	ret, err := i.biz.UpdateStatus(ctx, req.ID, model.TaskStatus(statusVal))
+	ret, err := i.biz.UpdateStatus(ctx, req.ID, model.TicketStatus(statusVal))
 	if err != nil {
 		_ = c.Error(err)
 		return

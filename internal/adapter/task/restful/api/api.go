@@ -30,15 +30,9 @@ type impl struct {
 }
 
 func (i *impl) Readiness(c *gin.Context) {
-	ctx, ok := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
+	_, ok := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
 	if !ok {
 		_ = c.Error(errorx.ErrContextx)
-		return
-	}
-
-	err := i.biz.Readiness(ctx)
-	if err != nil {
-		_ = c.Error(err)
 		return
 	}
 
@@ -46,15 +40,9 @@ func (i *impl) Readiness(c *gin.Context) {
 }
 
 func (i *impl) Liveness(c *gin.Context) {
-	ctx, ok := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
+	_, ok := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
 	if !ok {
 		_ = c.Error(errorx.ErrContextx)
-		return
-	}
-
-	err := i.biz.Liveness(ctx)
-	if err != nil {
-		_ = c.Error(err)
 		return
 	}
 

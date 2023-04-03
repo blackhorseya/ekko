@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-func (x *Task) MarshalJSON() ([]byte, error) {
-	type Alias Task
+func (x *Ticket) MarshalJSON() ([]byte, error) {
+	type Alias Ticket
 
 	return json.Marshal(&struct {
 		*Alias

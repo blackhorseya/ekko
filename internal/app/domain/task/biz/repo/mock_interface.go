@@ -51,10 +51,10 @@ func (mr *MockIRepoMockRecorder) Count(ctx, condition interface{}) *gomock.Call 
 }
 
 // Create mocks base method.
-func (m *MockIRepo) Create(ctx contextx.Contextx, created *model.Task) (*model.Task, error) {
+func (m *MockIRepo) Create(ctx contextx.Contextx, created *model.Ticket) (*model.Ticket, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", ctx, created)
-	ret0, _ := ret[0].(*model.Task)
+	ret0, _ := ret[0].(*model.Ticket)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -80,10 +80,10 @@ func (mr *MockIRepoMockRecorder) DeleteByID(ctx, id interface{}) *gomock.Call {
 }
 
 // GetByID mocks base method.
-func (m *MockIRepo) GetByID(ctx contextx.Contextx, id int64) (*model.Task, error) {
+func (m *MockIRepo) GetByID(ctx contextx.Contextx, id int64) (*model.Ticket, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetByID", ctx, id)
-	ret0, _ := ret[0].(*model.Task)
+	ret0, _ := ret[0].(*model.Ticket)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -95,10 +95,10 @@ func (mr *MockIRepoMockRecorder) GetByID(ctx, id interface{}) *gomock.Call {
 }
 
 // List mocks base method.
-func (m *MockIRepo) List(ctx contextx.Contextx, condition QueryTasksCondition) ([]*model.Task, error) {
+func (m *MockIRepo) List(ctx contextx.Contextx, condition QueryTasksCondition) ([]*model.Ticket, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", ctx, condition)
-	ret0, _ := ret[0].([]*model.Task)
+	ret0, _ := ret[0].([]*model.Ticket)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -110,10 +110,10 @@ func (mr *MockIRepoMockRecorder) List(ctx, condition interface{}) *gomock.Call {
 }
 
 // Update mocks base method.
-func (m *MockIRepo) Update(ctx contextx.Contextx, updated *model.Task) (*model.Task, error) {
+func (m *MockIRepo) Update(ctx contextx.Contextx, updated *model.Ticket) (*model.Ticket, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", ctx, updated)
-	ret0, _ := ret[0].(*model.Task)
+	ret0, _ := ret[0].(*model.Ticket)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

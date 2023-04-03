@@ -21,8 +21,8 @@ const (
 )
 
 type listResponse struct {
-	Total int           `json:"total"`
-	List  []*model.Task `json:"list"`
+	Total int             `json:"total"`
+	List  []*model.Ticket `json:"list"`
 }
 
 // List

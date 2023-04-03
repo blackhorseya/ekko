@@ -7,7 +7,7 @@ import (
 	"github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	tb "github.com/blackhorseya/ekko/pkg/entity/domain/task/biz"
-	"github.com/blackhorseya/ekko/pkg/entity/domain/task/model"
+	tm "github.com/blackhorseya/ekko/pkg/entity/domain/task/model"
 	"github.com/blackhorseya/ekko/pkg/genx"
 	"github.com/blackhorseya/ekko/test/testdata"
 	"github.com/golang/mock/gomock"
@@ -49,7 +49,7 @@ func (s *suiteTester) Test_impl_GetByID() {
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *model.Task
+		wantInfo *tm.Ticket
 		wantErr  bool
 	}{
 		{
