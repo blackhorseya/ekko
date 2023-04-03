@@ -1,6 +1,8 @@
 package biz
 
 import (
+	"strings"
+
 	"github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/errorx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
@@ -74,6 +76,12 @@ func (i *impl) List(ctx contextx.Contextx, page, size int) (info []*tm.Ticket, t
 }
 
 func (i *impl) Create(ctx contextx.Contextx, title string) (info *tm.Ticket, err error) {
+	title = strings.TrimSpace(title)
+	if len(title) == 0 {
+		ctx.Error(errorx.ErrInvalidTitle.Error(), zap.String("title", title))
+		return nil, errorx.ErrInvalidTitle
+	}
+
 	created := &tm.Ticket{
 		Id:        i.generator.Int64(),
 		Title:     title,

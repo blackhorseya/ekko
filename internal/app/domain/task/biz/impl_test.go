@@ -189,3 +189,71 @@ func (s *suiteTester) Test_impl_List() {
 		})
 	}
 }
+
+func (s *suiteTester) Test_impl_Create() {
+	type args struct {
+		title string
+		mock  func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantInfo *tm.Ticket
+		wantErr  bool
+	}{
+		{
+			name:     "invalid title then error",
+			args:     args{title: "   "},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "create a ticket then error",
+			args: args{title: testdata.Ticket1.Title, mock: func() {
+				s.generator.EXPECT().Int64().Return(testdata.Ticket1.Id).Times(1)
+				created := &tm.Ticket{
+					Id:        testdata.Ticket1.Id,
+					Title:     testdata.Ticket1.Title,
+					Status:    tm.TicketStatus_TICKET_STATUS_TODO,
+					CreatedAt: nil,
+					UpdatedAt: nil,
+				}
+				s.repo.EXPECT().Create(gomock.Any(), created).Return(nil, errors.New("error")).Times(1)
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "ok",
+			args: args{title: testdata.Ticket1.Title, mock: func() {
+				s.generator.EXPECT().Int64().Return(testdata.Ticket1.Id).Times(1)
+				created := &tm.Ticket{
+					Id:        testdata.Ticket1.Id,
+					Title:     testdata.Ticket1.Title,
+					Status:    tm.TicketStatus_TICKET_STATUS_TODO,
+					CreatedAt: nil,
+					UpdatedAt: nil,
+				}
+				s.repo.EXPECT().Create(gomock.Any(), created).Return(testdata.Ticket1, nil).Times(1)
+			}},
+			wantInfo: testdata.Ticket1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotInfo, err := s.biz.Create(contextx.BackgroundWithLogger(s.logger), tt.args.title)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
+				t.Errorf("Create() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
+			}
+		})
+	}
+}
