@@ -7,7 +7,11 @@
 [![Release](https://img.shields.io/github/release/blackhorseya/ekko)](https://github.com/blackhorseya/ekko/releases/latest)
 [![GitHub license](https://img.shields.io/github/license/blackhorseya/ekko)](https://github.com/blackhorseya/ekko/blob/main/LICENSE)
 
-The main purpose of this project is to practice `golang` and design the system architecture
+Ekko is a Golang-based todo list application that aims to expand into a Jira-like issue tracking system. Its features
+include workflow management, collaboration tools, reporting, and analytics. Ekko is highly scalable and customizable,
+and it comes with built-in user authentication and authorization for data security. Its intuitive interface and powerful
+functionality make it a valuable tool for teams of all sizes looking to streamline their workflow and improve
+productivity.
 
 ## Live Preview
 
@@ -17,7 +21,9 @@ The main purpose of this project is to practice `golang` and design the system a
 
 ### Project layout
 
-The project layout is designed with reference to the [Standard Go Project Layout](https://github.com/golang-standards/project-layout) combined with the concept of [monorepo](https://monorepo.tools/)
+The project layout is designed with reference to
+the [Standard Go Project Layout](https://github.com/golang-standards/project-layout) combined with the concept
+of [monorepo](https://monorepo.tools/)
 
 ### System design
 
