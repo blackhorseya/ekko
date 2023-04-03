@@ -32,4 +32,7 @@ func (resp *Response) WithData(data interface{}) *Response {
 var (
 	// OK request is success
 	OK = &Response{Code: http.StatusOK, Msg: "ok"}
+
+	// Err request is failed
+	Err = &Response{Code: http.StatusInternalServerError, Msg: "internal server error"}
 )
