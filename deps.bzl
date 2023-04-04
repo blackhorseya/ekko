@@ -48,8 +48,8 @@ def go_dependencies():
         name = "com_github_bytedance_sonic",
         build_file_proto_mode = "disable_global",
         importpath = "github.com/bytedance/sonic",
-        sum = "h1:aUgO9S8gvdN6SyW2EhIpAw5E4ChworywIEndZCkCVXk=",
-        version = "v1.8.6",
+        sum = "h1:d3sry5vGgVq/OpgozRUNP6xBsSo0mtNdwliApw+SAMQ=",
+        version = "v1.8.7",
     )
 
     go_repository(
