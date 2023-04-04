@@ -1,9 +1,24 @@
 package main
 
 import (
-	"fmt"
+	"flag"
+	"log"
 )
 
+var path = flag.String("c", "./configs/cli/ekko/local.yaml", "set config file path")
+
+func init() {
+	flag.Parse()
+}
+
 func main() {
-	fmt.Println("I'm a cli tool")
+	service, err := InitializeService(*path)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	err = service.Start()
+	if err != nil {
+		log.Fatalln(err)
+	}
 }
