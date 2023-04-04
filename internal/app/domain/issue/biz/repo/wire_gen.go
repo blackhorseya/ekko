@@ -10,6 +10,7 @@ import (
 	"github.com/blackhorseya/ekko/pkg/httpx"
 	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
+	"github.com/spf13/viper"
 )
 
 // Injectors from wire.go:
@@ -19,8 +20,8 @@ func CreateMariadb(rw *sqlx.DB) IRepo {
 	return iRepo
 }
 
-func CreateHTTPClient(opts *HTTPClientOptions, client httpx.Client) (IRepo, error) {
-	iRepo, err := NewHTTPClient(opts, client)
+func CreateHTTPClient(v *viper.Viper, client httpx.Client) (IRepo, error) {
+	iRepo, err := NewHTTPClient(v, client)
 	if err != nil {
 		return nil, err
 	}

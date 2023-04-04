@@ -7,6 +7,8 @@ go_library(
     visibility = ["//:__subpackages__"],
     deps = [
         "//pkg/adapters",
+        "//pkg/contextx",
+        "//pkg/entity/domain/issue/biz",
         "@com_github_google_wire//:wire",
         "@com_github_spf13_cobra//:cobra",
         "@com_github_spf13_viper//:viper",

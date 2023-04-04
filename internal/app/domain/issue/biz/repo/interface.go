@@ -37,3 +37,6 @@ type IRepo interface {
 
 // ProvideMariadb is a provider set for mariadb implementation
 var ProvideMariadb = wire.NewSet(NewMariadb)
+
+// HTTPClientSet is a provider set for http client implementation
+var HTTPClientSet = wire.NewSet(NewHTTPClient)

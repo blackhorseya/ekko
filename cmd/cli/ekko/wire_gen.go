@@ -8,16 +8,30 @@ package main
 
 import (
 	"github.com/blackhorseya/ekko/internal/adapter/cli"
+	"github.com/blackhorseya/ekko/internal/app/domain/issue/biz"
+	"github.com/blackhorseya/ekko/internal/app/domain/issue/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
+	"github.com/blackhorseya/ekko/internal/pkg/genx"
+	"github.com/blackhorseya/ekko/internal/pkg/httpx"
 	"github.com/google/wire"
 )
 
 // Injectors from wire.go:
 
 // InitializeService serve caller to initialize service
-func InitializeService() (*Service, error) {
+func InitializeService(i int64) (*Service, error) {
 	viper := config.NewConfig()
-	adaptersCLI := cli.NewCLI(viper)
+	client := httpx.NewClient()
+	iRepo, err := repo.NewHTTPClient(viper, client)
+	if err != nil {
+		return nil, err
+	}
+	generator, err := genx.NewImpl(i)
+	if err != nil {
+		return nil, err
+	}
+	iBiz := biz.NewImpl(iRepo, generator)
+	adaptersCLI := cli.NewCLI(viper, iBiz)
 	service, err := NewService(adaptersCLI)
 	if err != nil {
 		return nil, err
@@ -27,4 +41,4 @@ func InitializeService() (*Service, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(config.NewViperSet, cli.ProviderSet, NewService)
+var providerSet = wire.NewSet(config.NewViperSet, httpx.ClientSet, genx.ProviderSet, cli.ProviderSet, biz.IssueSet, repo.HTTPClientSet, NewService)

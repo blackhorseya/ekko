@@ -35,27 +35,33 @@ func NewHTTPClientOptions(v *viper.Viper) (*HTTPClientOptions, error) {
 }
 
 type httpclient struct {
-	opts    *HTTPClientOptions
-	baseURL *url.URL
-	client  httpx.Client
+	v      *viper.Viper
+	client httpx.Client
 }
 
 // NewHTTPClient serve caller to create an IRepo
-func NewHTTPClient(opts *HTTPClientOptions, client httpx.Client) (IRepo, error) {
-	baseURL, err := url.ParseRequestURI(opts.URL)
-	if err != nil {
-		return nil, errors.Wrap(err, "parse url error")
-	}
-
+func NewHTTPClient(v *viper.Viper, client httpx.Client) (IRepo, error) {
 	return &httpclient{
-		opts:    opts,
-		baseURL: baseURL,
-		client:  client,
+		v:      v,
+		client: client,
 	}, nil
 }
 
+func (h *httpclient) GetBaseURL() (*url.URL, error) {
+	o, err := NewHTTPClientOptions(h.v)
+	if err != nil {
+		return nil, err
+	}
+
+	return url.ParseRequestURI(o.URL)
+}
+
 func (h *httpclient) GetByID(ctx contextx.Contextx, id int64) (info *im.Ticket, err error) {
-	uri := h.baseURL.JoinPath(fmt.Sprintf("/v1/tasks/%v", id))
+	baseURL, err := h.GetBaseURL()
+	if err != nil {
+		return nil, err
+	}
+	uri := baseURL.JoinPath(fmt.Sprintf("/v1/tasks/%v", id))
 
 	req, err := http.NewRequest(http.MethodGet, uri.String(), nil)
 	if err != nil {
@@ -89,7 +95,12 @@ func (h *httpclient) GetByID(ctx contextx.Contextx, id int64) (info *im.Ticket, 
 func (h *httpclient) List(ctx contextx.Contextx, condition QueryTicketsCondition) (info []*im.Ticket, err error) {
 	size := condition.Limit
 	page := (condition.Offset / condition.Limit) + 1
-	uri := h.baseURL.JoinPath("/v1/tasks")
+
+	baseURL, err := h.GetBaseURL()
+	if err != nil {
+		return nil, err
+	}
+	uri := baseURL.JoinPath("/v1/tasks")
 	uri.RawQuery = url.Values{
 		"page": []string{fmt.Sprintf("%v", page)},
 		"size": []string{fmt.Sprintf("%v", size)},

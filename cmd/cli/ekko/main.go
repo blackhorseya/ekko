@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	service, err := InitializeService()
+	service, err := InitializeService(1)
 	if err != nil {
 		log.Fatalln(err)
 	}

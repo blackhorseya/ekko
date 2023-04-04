@@ -79,7 +79,7 @@ push-image: ## publish image
 
 ## generate
 .PHONY: gen
-gen: gen-wire gen-pb gen-mocks gen-swagger ## generate code
+gen: gen-wire gen-pb gen-mocks gen-swagger gen-build ## generate code
 
 .PHONY: gen-pb
 gen-pb: ## generate protobuf messages and services

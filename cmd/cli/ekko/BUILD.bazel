@@ -11,7 +11,11 @@ go_library(
     visibility = ["//visibility:private"],
     deps = [
         "//internal/adapter/cli",
+        "//internal/app/domain/issue/biz",
+        "//internal/app/domain/issue/biz/repo",
         "//internal/pkg/config",
+        "//internal/pkg/genx",
+        "//internal/pkg/httpx",
         "//pkg/adapters",
         "@com_github_google_wire//:wire",
         "@com_github_pkg_errors//:errors",

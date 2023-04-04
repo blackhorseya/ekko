@@ -16,6 +16,7 @@ import (
 	"github.com/blackhorseya/ekko/pkg/response"
 	"github.com/blackhorseya/ekko/test/testdata"
 	"github.com/golang/mock/gomock"
+	"github.com/spf13/viper"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
 )
@@ -34,7 +35,9 @@ func (s *suiteHTTPClient) SetupTest() {
 	s.ctrl = gomock.NewController(s.T())
 
 	s.client = httpx.NewMockClient(s.ctrl)
-	s.repo, _ = NewHTTPClient(&HTTPClientOptions{URL: "http://localhost:8080/api"}, s.client)
+	v := viper.GetViper()
+	v.Set("app.url", "http://localhost:8080/api")
+	s.repo, _ = NewHTTPClient(v, s.client)
 }
 
 func (s *suiteHTTPClient) TearDownTest() {

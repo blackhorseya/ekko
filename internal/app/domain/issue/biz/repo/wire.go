@@ -7,6 +7,7 @@ import (
 	"github.com/blackhorseya/ekko/pkg/httpx"
 	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
+	"github.com/spf13/viper"
 )
 
 var testProviderMariadbSet = wire.NewSet(NewMariadb)
@@ -17,6 +18,6 @@ func CreateMariadb(rw *sqlx.DB) IRepo {
 
 var testProviderHTTPClientSet = wire.NewSet(NewHTTPClient)
 
-func CreateHTTPClient(opts *HTTPClientOptions, client httpx.Client) (IRepo, error) {
+func CreateHTTPClient(v *viper.Viper, client httpx.Client) (IRepo, error) {
 	panic(wire.Build(testProviderHTTPClientSet))
 }

@@ -1,6 +1,2 @@
 app:
   url: https://ekko.seancheng.space/api
-
-log:
-  encoding: console
-  level: debug

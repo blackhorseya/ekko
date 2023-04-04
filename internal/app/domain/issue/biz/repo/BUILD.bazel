@@ -44,6 +44,7 @@ go_test(
         "@com_github_golang_mock//gomock",
         "@com_github_jmoiron_sqlx//:sqlx",
         "@com_github_pkg_errors//:errors",
+        "@com_github_spf13_viper//:viper",
         "@com_github_stretchr_testify//suite",
         "@org_uber_go_zap//:zap",
     ],

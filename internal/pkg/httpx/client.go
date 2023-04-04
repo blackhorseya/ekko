@@ -18,5 +18,5 @@ func (i *client) Do(req *http.Request) (resp *http.Response, err error) {
 	return http.DefaultClient.Do(req)
 }
 
-// ProviderClientSet is a provider set for httpx client
-var ProviderClientSet = wire.NewSet(NewClient)
+// ClientSet is a provider set for httpx client
+var ClientSet = wire.NewSet(NewClient)
