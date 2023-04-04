@@ -21,7 +21,7 @@ import (
 // Injectors from wire.go:
 
 func CreateService(path2 string, id int64) (*Service, error) {
-	viper, err := config.NewConfig(path2)
+	viper, err := config.NewConfigWithPath(path2)
 	if err != nil {
 		return nil, err
 	}
@@ -63,4 +63,4 @@ func CreateService(path2 string, id int64) (*Service, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, genx.ProviderSet, mariadb.ProviderSet, httpx.ProviderServerSet, restful.IssueSet, biz.IssueSet, repo.ProvideMariadb, NewService)
+var providerSet = wire.NewSet(config.WithPathSet, log.ProviderSet, genx.ProviderSet, mariadb.ProviderSet, httpx.ProviderServerSet, restful.IssueSet, biz.IssueSet, repo.ProvideMariadb, NewService)

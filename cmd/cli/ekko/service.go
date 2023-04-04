@@ -3,19 +3,16 @@ package main
 import (
 	"github.com/blackhorseya/ekko/pkg/adapters"
 	"github.com/pkg/errors"
-	"go.uber.org/zap"
 )
 
 type Service struct {
-	logger *zap.Logger
-	cli    adapters.CLI
+	cli adapters.CLI
 }
 
 // NewService serve caller to create service instance
-func NewService(logger *zap.Logger, cli adapters.CLI) (*Service, error) {
+func NewService(cli adapters.CLI) (*Service, error) {
 	svc := &Service{
-		logger: logger.With(zap.String("type", "service")),
-		cli:    cli,
+		cli: cli,
 	}
 
 	return svc, nil

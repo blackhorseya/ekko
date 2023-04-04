@@ -6,14 +6,12 @@ package main
 import (
 	"github.com/blackhorseya/ekko/internal/adapter/cli"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
-	"github.com/blackhorseya/ekko/internal/pkg/log"
 	"github.com/google/wire"
 )
 
 var providerSet = wire.NewSet(
 	// infrastructure
-	config.ProviderSet,
-	log.ProviderSet,
+	config.NewViperSet,
 
 	// adapters
 	cli.ProviderSet,
@@ -23,6 +21,6 @@ var providerSet = wire.NewSet(
 )
 
 // InitializeService serve caller to initialize service
-func InitializeService(path string) (*Service, error) {
+func InitializeService() (*Service, error) {
 	panic(wire.Build(providerSet))
 }

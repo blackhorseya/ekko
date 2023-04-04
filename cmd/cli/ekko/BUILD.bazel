@@ -12,11 +12,9 @@ go_library(
     deps = [
         "//internal/adapter/cli",
         "//internal/pkg/config",
-        "//internal/pkg/log",
         "//pkg/adapters",
         "@com_github_google_wire//:wire",
         "@com_github_pkg_errors//:errors",
-        "@org_uber_go_zap//:zap",
     ],
 )
 

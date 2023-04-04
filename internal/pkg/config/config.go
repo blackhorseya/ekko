@@ -1,12 +1,14 @@
 package config
 
 import (
+	"log"
+
 	"github.com/google/wire"
 	"github.com/spf13/viper"
 )
 
-// NewConfig serve caller to create a viper.Viper
-func NewConfig(path string) (*viper.Viper, error) {
+// NewConfigWithPath serve caller to create a viper.Viper
+func NewConfigWithPath(path string) (*viper.Viper, error) {
 	var (
 		err error
 		v   = viper.New()
@@ -15,12 +17,23 @@ func NewConfig(path string) (*viper.Viper, error) {
 	v.AddConfigPath(".")
 	v.SetConfigFile(path)
 
-	if err = v.ReadInConfig(); err != nil {
+	err = v.ReadInConfig()
+	if err != nil {
 		return nil, err
 	}
+
+	log.Println("Using config file: ", v.ConfigFileUsed())
 
 	return v, nil
 }
 
-// ProviderSet is a provider set for wire
-var ProviderSet = wire.NewSet(NewConfig)
+// NewConfig serve caller to create a viper.Viper
+func NewConfig() *viper.Viper {
+	return viper.New()
+}
+
+// WithPathSet is a provider set for wire
+var WithPathSet = wire.NewSet(NewConfigWithPath)
+
+// NewViperSet is a provider set for wire
+var NewViperSet = wire.NewSet(NewConfig)

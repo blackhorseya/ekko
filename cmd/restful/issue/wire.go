@@ -17,7 +17,7 @@ import (
 
 var providerSet = wire.NewSet(
 	// infra
-	config.ProviderSet,
+	config.WithPathSet,
 	log.ProviderSet,
 	genx.ProviderSet,
 
