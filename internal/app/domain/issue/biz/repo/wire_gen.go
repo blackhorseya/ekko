@@ -7,6 +7,7 @@
 package repo
 
 import (
+	"github.com/blackhorseya/ekko/pkg/httpx"
 	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 )
@@ -18,9 +19,12 @@ func CreateMariadb(rw *sqlx.DB) IRepo {
 	return iRepo
 }
 
-func CreateHTTPClient(opts *HTTPClientOptions) IRepo {
-	iRepo := NewHTTPClient(opts)
-	return iRepo
+func CreateHTTPClient(opts *HTTPClientOptions, client httpx.Client) (IRepo, error) {
+	iRepo, err := NewHTTPClient(opts, client)
+	if err != nil {
+		return nil, err
+	}
+	return iRepo, nil
 }
 
 // wire.go:

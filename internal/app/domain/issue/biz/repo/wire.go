@@ -4,6 +4,7 @@
 package repo
 
 import (
+	"github.com/blackhorseya/ekko/pkg/httpx"
 	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 )
@@ -16,6 +17,6 @@ func CreateMariadb(rw *sqlx.DB) IRepo {
 
 var testProviderHTTPClientSet = wire.NewSet(NewHTTPClient)
 
-func CreateHTTPClient(opts *HTTPClientOptions) IRepo {
+func CreateHTTPClient(opts *HTTPClientOptions, client httpx.Client) (IRepo, error) {
 	panic(wire.Build(testProviderHTTPClientSet))
 }
