@@ -1,0 +1,12 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "cli",
+    srcs = ["cli.go"],
+    importpath = "github.com/blackhorseya/ekko/internal/adapter/cli",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//pkg/adapters",
+        "@com_github_google_wire//:wire",
+    ],
+)

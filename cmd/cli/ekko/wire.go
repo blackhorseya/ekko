@@ -4,6 +4,7 @@
 package main
 
 import (
+	"github.com/blackhorseya/ekko/internal/adapter/cli"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
 	"github.com/blackhorseya/ekko/internal/pkg/log"
 	"github.com/google/wire"
@@ -15,6 +16,7 @@ var providerSet = wire.NewSet(
 	log.ProviderSet,
 
 	// adapters
+	cli.ProviderSet,
 
 	// main
 	NewService,

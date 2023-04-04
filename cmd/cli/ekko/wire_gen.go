@@ -7,6 +7,7 @@
 package main
 
 import (
+	"github.com/blackhorseya/ekko/internal/adapter/cli"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
 	"github.com/blackhorseya/ekko/internal/pkg/log"
 	"github.com/google/wire"
@@ -15,8 +16,8 @@ import (
 // Injectors from wire.go:
 
 // InitializeService serve caller to initialize service
-func InitializeService(path string) (*Service, error) {
-	viper, err := config.NewConfig(path)
+func InitializeService(path2 string) (*Service, error) {
+	viper, err := config.NewConfig(path2)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +29,8 @@ func InitializeService(path string) (*Service, error) {
 	if err != nil {
 		return nil, err
 	}
-	service, err := NewService(logger)
+	adaptersCLI := cli.NewCLI()
+	service, err := NewService(logger, adaptersCLI)
 	if err != nil {
 		return nil, err
 	}
@@ -37,4 +39,4 @@ func InitializeService(path string) (*Service, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, NewService)
+var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, cli.ProviderSet, NewService)
