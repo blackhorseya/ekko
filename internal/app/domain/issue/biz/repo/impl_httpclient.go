@@ -143,8 +143,48 @@ func (h *httpclient) Create(ctx contextx.Contextx, created *im.Ticket) (info *im
 }
 
 func (h *httpclient) Count(ctx contextx.Contextx, condition QueryTicketsCondition) (total int, err error) {
-	// todo: 2023/4/3|sean|impl me
-	panic("implement me")
+	size := condition.Limit
+	page := (condition.Offset / condition.Limit) + 1
+
+	baseURL, err := h.GetBaseURL()
+	if err != nil {
+		return 0, err
+	}
+	uri := baseURL.JoinPath("/v1/tasks")
+	uri.RawQuery = url.Values{
+		"page": []string{fmt.Sprintf("%v", page)},
+		"size": []string{fmt.Sprintf("%v", size)},
+	}.Encode()
+
+	req, err := http.NewRequest(http.MethodGet, uri.String(), nil)
+	if err != nil {
+		return 0, err
+	}
+
+	resp, err := h.client.Do(req)
+	if err != nil {
+		return 0, err
+	}
+	defer resp.Body.Close()
+
+	type dto struct {
+		*response.Response
+		Data struct {
+			Total int          `json:"total"`
+			List  []*im.Ticket `json:"list"`
+		} `json:"data,omitempty"`
+	}
+	var res *dto
+	err = json.NewDecoder(resp.Body).Decode(&res)
+	if err != nil {
+		return 0, err
+	}
+
+	if len(res.Data.List) == 0 {
+		return 0, nil
+	}
+
+	return res.Data.Total, nil
 }
 
 func (h *httpclient) Update(ctx contextx.Contextx, updated *im.Ticket) error {
