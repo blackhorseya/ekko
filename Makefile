@@ -50,6 +50,22 @@ test-e2e: ## execute e2e test
 lint: ## execute golint
 	@golint ./...
 
+.PHONY: gazelle-repos
+gazelle-repos: ## update gazelle repos
+	@bazel run //:gazelle -- update-repos -from_file=go.mod -to_macro=deps.bzl%go_dependencies -prune
+
+.PHONY: gazelle
+gazelle: gazelle-repos ## run gazelle with bazel
+	@bazel run //:gazelle
+
+.PHONY: build-go
+build-go: gazelle ## build go binary
+	@bazel build //...
+
+.PHONY: test-go
+test-go: gazelle ## test go binary
+	@bazel test //...
+
 ## docker
 .PHONY: build-image
 build-image: ## build image
@@ -141,7 +157,7 @@ update-package: ## update package and commit
 	@go get -u ./...
 	@go mod tidy
 
-	@bazel run //:gazelle-update-repos
+	@bazel run //:gazelle -- update-repos -from_file=go.mod -to_macro=deps.bzl%go_dependencies -prune
 
 	@git add go.mod go.sum deps.bzl
 	@git commit -m "build: update package"

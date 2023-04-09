@@ -40,9 +40,8 @@ jobs:
 
       - name: Build
         run: |
-          bazel build //...
+          make build-go
 
       - name: Test
         run: |
-          bazel test //...
-
+          make test-go
