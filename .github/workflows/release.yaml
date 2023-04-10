@@ -12,24 +12,34 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v3
 
-      - name: Setup go
-        uses: actions/setup-go@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          go-version: '1.20'
+          node-version: 16
 
-      - name: Cache dependencies
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20
+
+      - name: Install Bazel
+        run: |
+          npm install -g @bazel/bazelisk
+          bazel version
+
+      - name: Cache Bazel dependencies
         uses: actions/cache@v2
         with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          path: ~/.cache/bazel
+          key: ${{ runner.os }}-bazel-${{ hashFiles('**/WORKSPACE') }}
 
       - name: Build
         run: |
-          go build -v ./...
+          make build-go
 
       - name: Test
         run: |
-          go test -v ./...
+          make test-go
   docker:
     runs-on: ubuntu-latest
     needs:
@@ -55,13 +65,31 @@ jobs:
           username: _json_key
           password: ${{ secrets.GCR_JSON_KEY }}
 
-      - name: Build image
-        run: |
-          make build-image
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
 
-      - name: Push image
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20
+
+      - name: Install Bazel
+        run: |
+          npm install -g @bazel/bazelisk
+          bazel version
+
+      - name: Cache Bazel dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/bazel
+          key: ${{ runner.os }}-bazel-${{ hashFiles('**/WORKSPACE') }}
+
+      - name: Push docker image
         run: |
           make push-image
+
   deploy:
     runs-on: ubuntu-latest
     needs:
