@@ -89,7 +89,7 @@ prune-image: ## prune images
 .PHONY: push-image
 push-image: ## publish image
 	@echo "Pushing image $(IMAGE_NAME):$(VERSION)"
-	@bazel run //:push-issue-restful -- -dst=$(IMAGE_NAME):$(VERSION)
+	@bazel run //:push-$(DOMAIN_NAME)-$(SVC_ADAPTER) -- -dst=$(IMAGE_NAME):$(VERSION) -skip-unchanged-digest
 
 ## generate
 .PHONY: gen
