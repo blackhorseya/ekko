@@ -1,6 +1,25 @@
 load("@bazel_gazelle//:def.bzl", "gazelle")
+load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
 
 # gazelle:prefix github.com/blackhorseya/ekko
 # gazelle:proto disable_global
 
 gazelle(name = "gazelle")
+
+container_image(
+    name = "build-issue-restful",
+    base = "@alpine_linux_amd64//image",
+    directory = "/workspace",
+    entrypoint = ["./issue"],
+    files = ["//cmd/restful/issue"],
+    workdir = "/workspace",
+)
+
+container_push(
+    name = "push-issue-restful",
+    format = "Docker",
+    image = ":build-issue-restful",
+    registry = "gcr.io",
+    repository = "sean-side/ekko-issue-restful",
+    tag = "latest",
+)
