@@ -13,9 +13,6 @@ const (
 var (
 	// ErrContextx means Missing contextx
 	ErrContextx = er.New(http.StatusInternalServerError, 50001, "Internal server error", "Missing contextx")
-
-	// ErrPing means db ping is failure
-	ErrPing = er.New(http.StatusInternalServerError, 50002, errDatabase, "db ping is failure")
 )
 
 var (
@@ -36,7 +33,9 @@ var (
 
 	// ErrUpdateStatusTask means update the issue's status is failure
 	ErrUpdateStatusTask = er.New(http.StatusInternalServerError, 50015, errDatabase, "update the issue's status is failure")
+)
 
-	// ErrChangeTitleTask means change the issue's title is failure
-	ErrChangeTitleTask = er.New(http.StatusInternalServerError, 50016, errDatabase, "change the issue's title is failure")
+var (
+	// ErrRegisterProfile means register profile is failure
+	ErrRegisterProfile = er.New(http.StatusInternalServerError, 50020, errDatabase, "register profile is failure")
 )

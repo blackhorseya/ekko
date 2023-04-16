@@ -24,3 +24,11 @@ var (
 	// ErrInvalidStatus means status value is invalid
 	ErrInvalidStatus = er.New(http.StatusBadRequest, 40016, "status value is invalid", "status value is invalid")
 )
+
+var (
+	// ErrInvalidUsername means username is invalid
+	ErrInvalidUsername = er.New(http.StatusBadRequest, 40020, "username is invalid", "username is invalid")
+
+	// ErrInvalidPassword means password is invalid
+	ErrInvalidPassword = er.New(http.StatusBadRequest, 40021, "password is invalid", "password is invalid")
+)

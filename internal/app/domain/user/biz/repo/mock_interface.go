@@ -66,11 +66,12 @@ func (mr *MockIRepoMockRecorder) GetProfileByUsername(ctx, username interface{})
 }
 
 // Register mocks base method.
-func (m *MockIRepo) Register(ctx contextx.Contextx, who *model.Profile) error {
+func (m *MockIRepo) Register(ctx contextx.Contextx, who *model.Profile) (*model.Profile, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Register", ctx, who)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*model.Profile)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Register indicates an expected call of Register.

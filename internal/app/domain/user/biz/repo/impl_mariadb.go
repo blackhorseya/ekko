@@ -61,7 +61,7 @@ func (m *mariadb) GetProfileByID(ctx contextx.Contextx, id int64) (info *um.Prof
 	return ret.ToEntity(), nil
 }
 
-func (m *mariadb) Register(ctx contextx.Contextx, who *um.Profile) error {
+func (m *mariadb) Register(ctx contextx.Contextx, who *um.Profile) (info *um.Profile, err error) {
 	timeout, cancelFunc := contextx.WithTimeout(ctx, 1*time.Second)
 	defer cancelFunc()
 
@@ -69,10 +69,10 @@ func (m *mariadb) Register(ctx contextx.Contextx, who *um.Profile) error {
 
 	who.CreatedAt = timestamppb.Now()
 	who.UpdatedAt = timestamppb.Now()
-	_, err := m.rw.NamedExecContext(timeout, stmt, dao.NewProfile(who))
+	_, err = m.rw.NamedExecContext(timeout, stmt, dao.NewProfile(who))
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return who, nil
 }
