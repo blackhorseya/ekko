@@ -1,0 +1,12 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "dao",
+    srcs = ["dao.go"],
+    importpath = "github.com/blackhorseya/ekko/internal/app/domain/user/biz/repo/dao",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//pkg/entity/domain/user/model",
+        "@org_golang_google_protobuf//types/known/timestamppb",
+    ],
+)

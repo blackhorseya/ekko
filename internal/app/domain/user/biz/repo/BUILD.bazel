@@ -11,6 +11,7 @@ go_library(
     importpath = "github.com/blackhorseya/ekko/internal/app/domain/user/biz/repo",
     visibility = ["//:__subpackages__"],
     deps = [
+        "//internal/app/domain/user/biz/repo/dao",
         "//pkg/contextx",
         "//pkg/entity/domain/user/model",
         "@com_github_golang_mock//gomock",
@@ -24,6 +25,9 @@ go_test(
     srcs = ["impl_mariadb_test.go"],
     embed = [":repo"],
     deps = [
+        "//pkg/contextx",
+        "//pkg/entity/domain/user/model",
+        "//test/testdata",
         "@com_github_data_dog_go_sqlmock//:go-sqlmock",
         "@com_github_jmoiron_sqlx//:sqlx",
         "@com_github_stretchr_testify//suite",
