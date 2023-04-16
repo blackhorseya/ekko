@@ -109,3 +109,74 @@ func (s *suiteMariadb) Test_mariadb_GetProfileByUsername() {
 		})
 	}
 }
+
+func (s *suiteMariadb) Test_mariadb_GetProfileByID() {
+	column := []string{"id", "username", "password", "token", "created_at", "updated_at"}
+
+	type args struct {
+		id   int64
+		mock func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantInfo *um.Profile
+		wantErr  bool
+	}{
+		{
+			name: "get profile by id then error",
+			args: args{id: testdata.Profile1.Id, mock: func() {
+				s.rw.ExpectQuery(`select id, username, password, token, created_at, updated_at from users where id = ?`).
+					WithArgs(testdata.Profile1.Id).
+					WillReturnError(errors.New("error"))
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "if not found then return nil",
+			args: args{id: testdata.Profile1.Id, mock: func() {
+				s.rw.ExpectQuery(`select id, username, password, token, created_at, updated_at from users where id = ?`).
+					WithArgs(testdata.Profile1.Id).
+					WillReturnRows(sqlmock.NewRows(column))
+			}},
+			wantInfo: nil,
+			wantErr:  false,
+		},
+		{
+			name: "if found then return profile",
+			args: args{id: testdata.Profile1.Id, mock: func() {
+				s.rw.ExpectQuery(`select id, username, password, token, created_at, updated_at from users where id = ?`).
+					WithArgs(testdata.Profile1.Id).
+					WillReturnRows(sqlmock.NewRows(column).AddRow(
+						testdata.Profile1.Id,
+						testdata.Profile1.Username,
+						testdata.Profile1.Password,
+						testdata.Profile1.Token,
+						testdata.Profile1.CreatedAt.AsTime(),
+						testdata.Profile1.UpdatedAt.AsTime(),
+					))
+			}},
+			wantInfo: testdata.Profile1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotInfo, err := s.repo.GetProfileByID(contextx.BackgroundWithLogger(s.logger), tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetProfileByID() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
+				t.Errorf("GetProfileByID() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
+			}
+
+			s.AssertExpectation(t)
+		})
+	}
+}

@@ -42,8 +42,22 @@ func (m *mariadb) GetProfileByUsername(ctx contextx.Contextx, username string) (
 }
 
 func (m *mariadb) GetProfileByID(ctx contextx.Contextx, id int64) (info *um.Profile, err error) {
-	// todo: 2023/4/16|sean|impl me
-	panic("implement me")
+	timeout, cancelFunc := contextx.WithTimeout(ctx, 1*time.Second)
+	defer cancelFunc()
+
+	stmt := `select id, username, password, token, created_at, updated_at from users where id = ?`
+
+	var ret dao.Profile
+	err = m.rw.GetContext(timeout, &ret, stmt, id)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	return ret.ToEntity(), nil
 }
 
 func (m *mariadb) Register(ctx contextx.Contextx, who *um.Profile) error {
