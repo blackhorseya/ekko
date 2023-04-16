@@ -5,6 +5,7 @@ package biz
 
 import (
 	"github.com/blackhorseya/ekko/internal/app/domain/user/biz/repo"
+	"github.com/blackhorseya/ekko/internal/pkg/tokenx"
 	ub "github.com/blackhorseya/ekko/pkg/entity/domain/user/biz"
 	"github.com/blackhorseya/ekko/pkg/genx"
 	"github.com/google/wire"
@@ -12,6 +13,6 @@ import (
 
 var testProviderSet = wire.NewSet(NewImpl)
 
-func CreateBiz(repo repo.IRepo, node genx.Generator) ub.IBiz {
+func CreateBiz(repo repo.IRepo, node genx.Generator, tokenizer tokenx.Tokenizer) ub.IBiz {
 	panic(wire.Build(testProviderSet))
 }

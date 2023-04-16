@@ -10,6 +10,7 @@ go_library(
     visibility = ["//:__subpackages__"],
     deps = [
         "//internal/app/domain/user/biz/repo",
+        "//internal/pkg/tokenx",
         "//pkg/contextx",
         "//pkg/entity/domain/user/biz",
         "//pkg/entity/domain/user/model",
@@ -24,6 +25,7 @@ go_test(
     embed = [":biz"],
     deps = [
         "//internal/app/domain/user/biz/repo",
+        "//internal/pkg/tokenx",
         "//pkg/entity/domain/user/biz",
         "//pkg/genx",
         "@com_github_golang_mock//gomock",

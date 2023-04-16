@@ -8,6 +8,7 @@ package biz
 
 import (
 	"github.com/blackhorseya/ekko/internal/app/domain/user/biz/repo"
+	"github.com/blackhorseya/ekko/internal/pkg/tokenx"
 	"github.com/blackhorseya/ekko/pkg/entity/domain/user/biz"
 	"github.com/blackhorseya/ekko/pkg/genx"
 	"github.com/google/wire"
@@ -15,8 +16,8 @@ import (
 
 // Injectors from wire.go:
 
-func CreateBiz(repo2 repo.IRepo, node genx.Generator) biz.IBiz {
-	iBiz := NewImpl(repo2, node)
+func CreateBiz(repo2 repo.IRepo, node genx.Generator, tokenizer tokenx.Tokenizer) biz.IBiz {
+	iBiz := NewImpl(repo2, node, tokenizer)
 	return iBiz
 }
 

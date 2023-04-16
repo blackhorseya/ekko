@@ -2,6 +2,7 @@ package biz
 
 import (
 	"github.com/blackhorseya/ekko/internal/app/domain/user/biz/repo"
+	"github.com/blackhorseya/ekko/internal/pkg/tokenx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	ub "github.com/blackhorseya/ekko/pkg/entity/domain/user/biz"
 	um "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
@@ -9,15 +10,17 @@ import (
 )
 
 type impl struct {
-	repo repo.IRepo
-	node genx.Generator
+	repo      repo.IRepo
+	node      genx.Generator
+	tokenizer tokenx.Tokenizer
 }
 
 // NewImpl serve caller to create an IBiz
-func NewImpl(repo repo.IRepo, node genx.Generator) ub.IBiz {
+func NewImpl(repo repo.IRepo, node genx.Generator, tokenizer tokenx.Tokenizer) ub.IBiz {
 	return &impl{
-		repo: repo,
-		node: node,
+		repo:      repo,
+		node:      node,
+		tokenizer: tokenizer,
 	}
 }
 

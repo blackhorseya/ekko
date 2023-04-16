@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/blackhorseya/ekko/internal/app/domain/user/biz/repo"
+	"github.com/blackhorseya/ekko/internal/pkg/tokenx"
 	ub "github.com/blackhorseya/ekko/pkg/entity/domain/user/biz"
 	"github.com/blackhorseya/ekko/pkg/genx"
 	"github.com/golang/mock/gomock"
@@ -17,9 +18,10 @@ type suiteBiz struct {
 	logger *zap.Logger
 	ctrl   *gomock.Controller
 
-	repo *repo.MockIRepo
-	node *genx.MockGenerator
-	biz  ub.IBiz
+	repo      *repo.MockIRepo
+	node      *genx.MockGenerator
+	tokenizer *tokenx.MockTokenizer
+	biz       ub.IBiz
 }
 
 func (s *suiteBiz) SetupTest() {
@@ -28,8 +30,9 @@ func (s *suiteBiz) SetupTest() {
 
 	s.repo = repo.NewMockIRepo(s.ctrl)
 	s.node = genx.NewMockGenerator(s.ctrl)
+	s.tokenizer = tokenx.NewMockTokenizer(s.ctrl)
 
-	s.biz = CreateBiz(s.repo, s.node)
+	s.biz = CreateBiz(s.repo, s.node, s.tokenizer)
 }
 
 func (s *suiteBiz) TearDownTest() {
