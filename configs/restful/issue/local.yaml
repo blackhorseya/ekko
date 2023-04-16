@@ -14,3 +14,7 @@ db:
 log:
   encoding: console
   level: debug
+
+jwt:
+  issuer: ekko
+  signature: changeme
