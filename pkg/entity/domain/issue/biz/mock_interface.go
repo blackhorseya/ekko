@@ -9,6 +9,7 @@ import (
 
 	contextx "github.com/blackhorseya/ekko/pkg/contextx"
 	model "github.com/blackhorseya/ekko/pkg/entity/domain/issue/model"
+	model0 "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -93,6 +94,22 @@ func (m *MockIBiz) List(ctx contextx.Contextx, page, size int) ([]*model.Ticket,
 func (mr *MockIBizMockRecorder) List(ctx, page, size interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockIBiz)(nil).List), ctx, page, size)
+}
+
+// ListTasks mocks base method.
+func (m *MockIBiz) ListTasks(ctx contextx.Contextx, who *model0.Profile, condition ListTasksCondition) ([]*model.Ticket, int, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListTasks", ctx, who, condition)
+	ret0, _ := ret[0].([]*model.Ticket)
+	ret1, _ := ret[1].(int)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// ListTasks indicates an expected call of ListTasks.
+func (mr *MockIBizMockRecorder) ListTasks(ctx, who, condition interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTasks", reflect.TypeOf((*MockIBiz)(nil).ListTasks), ctx, who, condition)
 }
 
 // UpdateStatus mocks base method.

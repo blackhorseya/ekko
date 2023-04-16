@@ -8,6 +8,7 @@ import (
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	ib "github.com/blackhorseya/ekko/pkg/entity/domain/issue/biz"
 	im "github.com/blackhorseya/ekko/pkg/entity/domain/issue/model"
+	"github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
 	"github.com/blackhorseya/ekko/pkg/genx"
 	"github.com/google/wire"
 	"go.uber.org/zap"
@@ -127,4 +128,9 @@ func (i *impl) Delete(ctx contextx.Contextx, id int64) error {
 	}
 
 	return nil
+}
+
+func (i *impl) ListTasks(ctx contextx.Contextx, who *model.Profile, condition ib.ListTasksCondition) (tickets []*im.Ticket, total int, err error) {
+	// todo: 2023/4/16|sean|impl me
+	panic("implement me")
 }

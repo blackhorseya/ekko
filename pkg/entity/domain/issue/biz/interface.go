@@ -5,7 +5,13 @@ package biz
 import (
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	im "github.com/blackhorseya/ekko/pkg/entity/domain/issue/model"
+	um "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
 )
+
+type ListTasksCondition struct {
+	Page uint
+	Size uint
+}
 
 // IBiz declare issue domain interface
 type IBiz interface {
@@ -23,4 +29,7 @@ type IBiz interface {
 
 	// Delete serve caller to given issue's id to delete the issue
 	Delete(ctx contextx.Contextx, id int64) error
+
+	// ListTasks serve caller to given user's profile to list all tasks
+	ListTasks(ctx contextx.Contextx, who *um.Profile, condition ListTasksCondition) (tickets []*im.Ticket, total int, err error)
 }
