@@ -17,6 +17,17 @@ type Profile struct {
 	UpdatedAt time.Time `db:"updated_at"`
 }
 
+func NewProfile(info *um.Profile) *Profile {
+	return &Profile{
+		ID:        info.Id,
+		Username:  info.Username,
+		Password:  info.Password,
+		Token:     info.Token,
+		CreatedAt: info.CreatedAt.AsTime().UTC(),
+		UpdatedAt: info.UpdatedAt.AsTime().UTC(),
+	}
+}
+
 // ToEntity serve caller to convert to Profile entity
 func (p *Profile) ToEntity() *um.Profile {
 	return &um.Profile{

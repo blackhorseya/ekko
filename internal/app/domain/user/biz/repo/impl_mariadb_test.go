@@ -180,3 +180,61 @@ func (s *suiteMariadb) Test_mariadb_GetProfileByID() {
 		})
 	}
 }
+
+func (s *suiteMariadb) Test_mariadb_Register() {
+	type args struct {
+		who  *um.Profile
+		mock func()
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "create profile then error",
+			args: args{who: testdata.Profile1, mock: func() {
+				s.rw.ExpectExec(`insert into users`).
+					WithArgs(
+						testdata.Profile1.Id,
+						testdata.Profile1.Username,
+						testdata.Profile1.Password,
+						testdata.Profile1.Token,
+						sqlmock.AnyArg(),
+						sqlmock.AnyArg(),
+					).
+					WillReturnError(errors.New("error"))
+			}},
+			wantErr: true,
+		},
+		{
+			name: "create profile then success",
+			args: args{who: testdata.Profile1, mock: func() {
+				s.rw.ExpectExec(`insert into users`).
+					WithArgs(
+						testdata.Profile1.Id,
+						testdata.Profile1.Username,
+						testdata.Profile1.Password,
+						testdata.Profile1.Token,
+						sqlmock.AnyArg(),
+						sqlmock.AnyArg(),
+					).
+					WillReturnResult(sqlmock.NewResult(1, 1))
+			}},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			if err := s.repo.Register(contextx.BackgroundWithLogger(s.logger), tt.args.who); (err != nil) != tt.wantErr {
+				t.Errorf("Register() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			s.AssertExpectation(t)
+		})
+	}
+}

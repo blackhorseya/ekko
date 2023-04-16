@@ -9,6 +9,7 @@ import (
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	um "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
 	"github.com/jmoiron/sqlx"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type mariadb struct {
@@ -61,6 +62,17 @@ func (m *mariadb) GetProfileByID(ctx contextx.Contextx, id int64) (info *um.Prof
 }
 
 func (m *mariadb) Register(ctx contextx.Contextx, who *um.Profile) error {
-	// todo: 2023/4/16|sean|impl me
-	panic("implement me")
+	timeout, cancelFunc := contextx.WithTimeout(ctx, 1*time.Second)
+	defer cancelFunc()
+
+	stmt := `insert into users (id, username, password, token, created_at, updated_at) values (:id, :username, :password, :token, :created_at, :updated_at)`
+
+	who.CreatedAt = timestamppb.Now()
+	who.UpdatedAt = timestamppb.Now()
+	_, err := m.rw.NamedExecContext(timeout, stmt, dao.NewProfile(who))
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
