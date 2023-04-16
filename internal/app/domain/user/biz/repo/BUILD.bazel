@@ -1,10 +1,12 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "repo",
     srcs = [
+        "impl_mariadb.go",
         "interface.go",
         "mock_interface.go",
+        "wire_gen.go",
     ],
     importpath = "github.com/blackhorseya/ekko/internal/app/domain/user/biz/repo",
     visibility = ["//:__subpackages__"],
@@ -13,5 +15,18 @@ go_library(
         "//pkg/entity/domain/user/model",
         "@com_github_golang_mock//gomock",
         "@com_github_google_wire//:wire",
+        "@com_github_jmoiron_sqlx//:sqlx",
+    ],
+)
+
+go_test(
+    name = "repo_test",
+    srcs = ["impl_mariadb_test.go"],
+    embed = [":repo"],
+    deps = [
+        "@com_github_data_dog_go_sqlmock//:go-sqlmock",
+        "@com_github_jmoiron_sqlx//:sqlx",
+        "@com_github_stretchr_testify//suite",
+        "@org_uber_go_zap//:zap",
     ],
 )

@@ -21,4 +21,4 @@ type IRepo interface {
 }
 
 // MariadbSet is a provider set for mariadb implementation
-var MariadbSet = wire.NewSet()
+var MariadbSet = wire.NewSet(NewMariadb)
