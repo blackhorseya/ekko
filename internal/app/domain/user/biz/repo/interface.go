@@ -18,6 +18,9 @@ type IRepo interface {
 
 	// Register serve caller to given profile to insert into users table
 	Register(ctx contextx.Contextx, who *um.Profile) (info *um.Profile, err error)
+
+	// UpdateToken serve caller to given user and token to update token into users table
+	UpdateToken(ctx contextx.Contextx, who *um.Profile, token string) (info *um.Profile, err error)
 }
 
 // MariadbSet is a provider set for mariadb implementation

@@ -51,6 +51,15 @@ func TestAll(t *testing.T) {
 }
 
 func (s *suiteBiz) Test_impl_Signup() {
+	newUser := &um.Profile{
+		Id:        testdata.Profile1.Id,
+		Username:  testdata.Profile1.Username,
+		Password:  fmt.Sprintf("%x", sha256.Sum256([]byte(testdata.Profile1.Password))),
+		Token:     "",
+		CreatedAt: nil,
+		UpdatedAt: nil,
+	}
+
 	type args struct {
 		username string
 		password string
@@ -81,14 +90,6 @@ func (s *suiteBiz) Test_impl_Signup() {
 				s.node.EXPECT().Int64().Return(testdata.Profile1.Id).Times(1)
 
 				// mock register
-				newUser := &um.Profile{
-					Id:        testdata.Profile1.Id,
-					Username:  testdata.Profile1.Username,
-					Password:  fmt.Sprintf("%x", sha256.Sum256([]byte(testdata.Profile1.Password))),
-					Token:     "",
-					CreatedAt: nil,
-					UpdatedAt: nil,
-				}
 				s.repo.EXPECT().Register(gomock.Any(), newUser).Return(nil, errors.New("error")).Times(1)
 			}},
 			wantInfo: nil,
@@ -101,14 +102,6 @@ func (s *suiteBiz) Test_impl_Signup() {
 				s.node.EXPECT().Int64().Return(testdata.Profile1.Id).Times(1)
 
 				// mock register
-				newUser := &um.Profile{
-					Id:        testdata.Profile1.Id,
-					Username:  testdata.Profile1.Username,
-					Password:  fmt.Sprintf("%x", sha256.Sum256([]byte(testdata.Profile1.Password))),
-					Token:     "",
-					CreatedAt: nil,
-					UpdatedAt: nil,
-				}
 				s.repo.EXPECT().Register(gomock.Any(), newUser).Return(testdata.Profile1, nil).Times(1)
 			}},
 			wantInfo: testdata.Profile1,
@@ -128,6 +121,150 @@ func (s *suiteBiz) Test_impl_Signup() {
 			}
 			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
 				t.Errorf("Signup() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
+			}
+		})
+	}
+}
+
+func (s *suiteBiz) Test_impl_Login() {
+	type args struct {
+		username string
+		password string
+		mock     func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantInfo *um.Profile
+		wantErr  bool
+	}{
+		{
+			name:     "username empty then error",
+			args:     args{username: "", password: testdata.Profile1.Password},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name:     "password empty then error",
+			args:     args{username: testdata.Profile1.Username, password: ""},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "get profile by username then error",
+			args: args{username: testdata.Profile1.Username, password: testdata.Profile1.Password, mock: func() {
+				// mock get profile by username
+				s.repo.EXPECT().GetProfileByUsername(gomock.Any(), testdata.Profile1.Username).Return(nil, errors.New("error")).Times(1)
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "if user not exist then error",
+			args: args{username: testdata.Profile1.Username, password: testdata.Profile1.Password, mock: func() {
+				// mock get profile by username
+				s.repo.EXPECT().GetProfileByUsername(gomock.Any(), testdata.Profile1.Username).Return(nil, nil).Times(1)
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "if password not match then error",
+			args: args{username: testdata.Profile1.Username, password: testdata.Profile1.Password, mock: func() {
+				// mock get profile by username
+				exists := &um.Profile{
+					Id:        testdata.Profile1.Id,
+					Username:  testdata.Profile1.Username,
+					Password:  "not match",
+					Token:     testdata.Profile1.Token,
+					CreatedAt: testdata.Profile1.CreatedAt,
+					UpdatedAt: testdata.Profile1.UpdatedAt,
+				}
+				s.repo.EXPECT().GetProfileByUsername(gomock.Any(), testdata.Profile1.Username).Return(exists, nil).Times(1)
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "generate token then error",
+			args: args{username: testdata.Profile1.Username, password: testdata.Profile1.Password, mock: func() {
+				// mock get profile by username
+				exists := &um.Profile{
+					Id:        testdata.Profile1.Id,
+					Username:  testdata.Profile1.Username,
+					Password:  fmt.Sprintf("%x", sha256.Sum256([]byte(testdata.Profile1.Password))),
+					Token:     testdata.Profile1.Token,
+					CreatedAt: testdata.Profile1.CreatedAt,
+					UpdatedAt: testdata.Profile1.UpdatedAt,
+				}
+				s.repo.EXPECT().GetProfileByUsername(gomock.Any(), testdata.Profile1.Username).Return(exists, nil).Times(1)
+
+				// mock generate token
+				s.tokenizer.EXPECT().NewToken(exists).Return("", errors.New("error")).Times(1)
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "update token then error",
+			args: args{username: testdata.Profile1.Username, password: testdata.Profile1.Password, mock: func() {
+				// mock get profile by username
+				exists := &um.Profile{
+					Id:        testdata.Profile1.Id,
+					Username:  testdata.Profile1.Username,
+					Password:  fmt.Sprintf("%x", sha256.Sum256([]byte(testdata.Profile1.Password))),
+					Token:     testdata.Profile1.Token,
+					CreatedAt: testdata.Profile1.CreatedAt,
+					UpdatedAt: testdata.Profile1.UpdatedAt,
+				}
+				s.repo.EXPECT().GetProfileByUsername(gomock.Any(), testdata.Profile1.Username).Return(exists, nil).Times(1)
+
+				// mock generate token
+				s.tokenizer.EXPECT().NewToken(exists).Return("new token", nil).Times(1)
+
+				// mock update token
+				s.repo.EXPECT().UpdateToken(gomock.Any(), exists, "new token").Return(nil, errors.New("error")).Times(1)
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "login success",
+			args: args{username: testdata.Profile1.Username, password: testdata.Profile1.Password, mock: func() {
+				// mock get profile by username
+				exists := &um.Profile{
+					Id:        testdata.Profile1.Id,
+					Username:  testdata.Profile1.Username,
+					Password:  fmt.Sprintf("%x", sha256.Sum256([]byte(testdata.Profile1.Password))),
+					Token:     testdata.Profile1.Token,
+					CreatedAt: testdata.Profile1.CreatedAt,
+					UpdatedAt: testdata.Profile1.UpdatedAt,
+				}
+				s.repo.EXPECT().GetProfileByUsername(gomock.Any(), testdata.Profile1.Username).Return(exists, nil).Times(1)
+
+				// mock generate token
+				s.tokenizer.EXPECT().NewToken(exists).Return("new token", nil).Times(1)
+
+				// mock update token
+				s.repo.EXPECT().UpdateToken(gomock.Any(), exists, "new token").Return(testdata.Profile1, nil).Times(1)
+			}},
+			wantInfo: testdata.Profile1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotInfo, err := s.biz.Login(contextx.BackgroundWithLogger(s.logger), tt.args.username, tt.args.password)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Login() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
+				t.Errorf("Login() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
 		})
 	}

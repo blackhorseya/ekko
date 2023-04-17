@@ -56,8 +56,42 @@ func (i *impl) Signup(ctx contextx.Contextx, username, password string) (info *u
 }
 
 func (i *impl) Login(ctx contextx.Contextx, username, password string) (info *um.Profile, err error) {
-	// todo: 2023/4/16|sean|impl me
-	panic("implement me")
+	if username == "" {
+		return nil, errorx.ErrInvalidUsername
+	}
+
+	if password == "" {
+		return nil, errorx.ErrInvalidPassword
+	}
+
+	exists, err := i.repo.GetProfileByUsername(ctx, username)
+	if err != nil {
+		ctx.Error(errorx.ErrGetProfile.Error(), zap.Error(err), zap.String("username", username))
+		return nil, errorx.ErrGetProfile
+	}
+	if exists == nil {
+		ctx.Error(errorx.ErrUserNotFound.Error(), zap.String("username", username))
+		return nil, errorx.ErrUserNotFound
+	}
+
+	if exists.Password != fmt.Sprintf("%x", sha256.Sum256([]byte(password))) {
+		ctx.Error(errorx.ErrInvalidPassword.Error(), zap.String("username", username))
+		return nil, errorx.ErrInvalidPassword
+	}
+
+	token, err := i.tokenizer.NewToken(exists)
+	if err != nil {
+		ctx.Error(errorx.ErrNewToken.Error(), zap.Error(err))
+		return nil, errorx.ErrNewToken
+	}
+
+	ret, err := i.repo.UpdateToken(ctx, exists, token)
+	if err != nil {
+		ctx.Error(errorx.ErrUpdateToken.Error(), zap.Error(err))
+		return nil, errorx.ErrUpdateToken
+	}
+
+	return ret, nil
 }
 
 func (i *impl) Logout(ctx contextx.Contextx, who *um.Profile) error {

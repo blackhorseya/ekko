@@ -38,4 +38,13 @@ var (
 var (
 	// ErrRegisterProfile means register profile is failure
 	ErrRegisterProfile = er.New(http.StatusInternalServerError, 50020, errDatabase, "register profile is failure")
+
+	// ErrGetProfile means get profile is failure
+	ErrGetProfile = er.New(http.StatusInternalServerError, 50021, errDatabase, "get profile is failure")
+
+	// ErrNewToken means new token is failure
+	ErrNewToken = er.New(http.StatusInternalServerError, 50022, "Internal server error", "new token is failure")
+
+	// ErrUpdateToken means update token is failure
+	ErrUpdateToken = er.New(http.StatusInternalServerError, 50023, errDatabase, "update token is failure")
 )
