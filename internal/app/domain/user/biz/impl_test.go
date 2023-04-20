@@ -269,3 +269,46 @@ func (s *suiteBiz) Test_impl_Login() {
 		})
 	}
 }
+
+func (s *suiteBiz) Test_impl_Logout() {
+	type args struct {
+		who  *um.Profile
+		mock func()
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name:    "who is nil then error",
+			args:    args{who: nil},
+			wantErr: true,
+		},
+		{
+			name: "update token to empty then error",
+			args: args{who: testdata.Profile1, mock: func() {
+				s.repo.EXPECT().UpdateToken(gomock.Any(), testdata.Profile1, "").Return(nil, errors.New("error")).Times(1)
+			}},
+			wantErr: true,
+		},
+		{
+			name: "ok",
+			args: args{who: testdata.Profile1, mock: func() {
+				s.repo.EXPECT().UpdateToken(gomock.Any(), testdata.Profile1, "").Return(testdata.Profile1, nil).Times(1)
+			}},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			if err := s.biz.Logout(contextx.BackgroundWithLogger(s.logger), tt.args.who); (err != nil) != tt.wantErr {
+				t.Errorf("Logout() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

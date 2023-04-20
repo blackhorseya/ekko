@@ -95,8 +95,17 @@ func (i *impl) Login(ctx contextx.Contextx, username, password string) (info *um
 }
 
 func (i *impl) Logout(ctx contextx.Contextx, who *um.Profile) error {
-	// todo: 2023/4/16|sean|impl me
-	panic("implement me")
+	if who == nil {
+		return errorx.ErrInvalidProfile
+	}
+
+	_, err := i.repo.UpdateToken(ctx, who, "")
+	if err != nil {
+		ctx.Error(errorx.ErrUpdateToken.Error(), zap.Error(err))
+		return errorx.ErrUpdateToken
+	}
+
+	return nil
 }
 
 func (i *impl) WhoAmI(ctx contextx.Contextx, token string) (info *um.Profile, err error) {

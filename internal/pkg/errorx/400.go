@@ -31,4 +31,7 @@ var (
 
 	// ErrInvalidPassword means password is invalid
 	ErrInvalidPassword = er.New(http.StatusBadRequest, 40021, "password is invalid", "password is invalid")
+
+	// ErrInvalidProfile means profile is invalid
+	ErrInvalidProfile = er.New(http.StatusBadRequest, 40022, "profile is invalid", "profile is invalid")
 )
