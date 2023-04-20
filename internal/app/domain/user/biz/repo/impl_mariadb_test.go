@@ -187,12 +187,13 @@ func (s *suiteMariadb) Test_mariadb_Register() {
 		mock func()
 	}
 	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
+		name     string
+		args     args
+		wantInfo *um.Profile
+		wantErr  bool
 	}{
 		{
-			name: "create profile then error",
+			name: "register then error",
 			args: args{who: testdata.Profile1, mock: func() {
 				s.rw.ExpectExec(`insert into users`).
 					WithArgs(
@@ -204,11 +205,13 @@ func (s *suiteMariadb) Test_mariadb_Register() {
 						sqlmock.AnyArg(),
 					).
 					WillReturnError(errors.New("error"))
+
 			}},
-			wantErr: true,
+			wantInfo: nil,
+			wantErr:  true,
 		},
 		{
-			name: "create profile then success",
+			name: "register then return profile",
 			args: args{who: testdata.Profile1, mock: func() {
 				s.rw.ExpectExec(`insert into users`).
 					WithArgs(
@@ -221,7 +224,8 @@ func (s *suiteMariadb) Test_mariadb_Register() {
 					).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			}},
-			wantErr: false,
+			wantInfo: testdata.Profile1,
+			wantErr:  false,
 		},
 	}
 	for _, tt := range tests {
@@ -230,8 +234,74 @@ func (s *suiteMariadb) Test_mariadb_Register() {
 				tt.args.mock()
 			}
 
-			if err := s.repo.Register(contextx.BackgroundWithLogger(s.logger), tt.args.who); (err != nil) != tt.wantErr {
+			gotInfo, err := s.repo.Register(contextx.BackgroundWithLogger(s.logger), tt.args.who)
+			if (err != nil) != tt.wantErr {
 				t.Errorf("Register() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
+				t.Errorf("Register() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
+			}
+
+			s.AssertExpectation(t)
+		})
+	}
+}
+
+func (s *suiteMariadb) Test_mariadb_UpdateToken() {
+	type args struct {
+		who   *um.Profile
+		token string
+		mock  func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantInfo *um.Profile
+		wantErr  bool
+	}{
+		{
+			name: "update token then error",
+			args: args{who: testdata.Profile1, token: "new token", mock: func() {
+				s.rw.ExpectExec(`update users`).
+					WithArgs(
+						"new token",
+						sqlmock.AnyArg(),
+						testdata.Profile1.Id,
+					).
+					WillReturnError(errors.New("error"))
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "update token then return profile",
+			args: args{who: testdata.Profile1, token: "new token", mock: func() {
+				s.rw.ExpectExec(`update users`).
+					WithArgs(
+						"new token",
+						sqlmock.AnyArg(),
+						testdata.Profile1.Id,
+					).
+					WillReturnResult(sqlmock.NewResult(1, 1))
+			}},
+			wantInfo: testdata.Profile1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotInfo, err := s.repo.UpdateToken(contextx.BackgroundWithLogger(s.logger), tt.args.who, tt.args.token)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("UpdateToken() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
+				t.Errorf("UpdateToken() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
 
 			s.AssertExpectation(t)

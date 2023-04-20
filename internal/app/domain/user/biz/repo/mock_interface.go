@@ -66,15 +66,31 @@ func (mr *MockIRepoMockRecorder) GetProfileByUsername(ctx, username interface{})
 }
 
 // Register mocks base method.
-func (m *MockIRepo) Register(ctx contextx.Contextx, who *model.Profile) error {
+func (m *MockIRepo) Register(ctx contextx.Contextx, who *model.Profile) (*model.Profile, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Register", ctx, who)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*model.Profile)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Register indicates an expected call of Register.
 func (mr *MockIRepoMockRecorder) Register(ctx, who interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockIRepo)(nil).Register), ctx, who)
+}
+
+// UpdateToken mocks base method.
+func (m *MockIRepo) UpdateToken(ctx contextx.Contextx, who *model.Profile, token string) (*model.Profile, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateToken", ctx, who, token)
+	ret0, _ := ret[0].(*model.Profile)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateToken indicates an expected call of UpdateToken.
+func (mr *MockIRepoMockRecorder) UpdateToken(ctx, who, token interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateToken", reflect.TypeOf((*MockIRepo)(nil).UpdateToken), ctx, who, token)
 }
