@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strconv"
 	"testing"
 
 	"github.com/blackhorseya/ekko/internal/app/domain/user/biz/repo"
@@ -14,6 +15,7 @@ import (
 	um "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
 	"github.com/blackhorseya/ekko/pkg/genx"
 	"github.com/blackhorseya/ekko/test/testdata"
+	"github.com/golang-jwt/jwt"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
@@ -308,6 +310,90 @@ func (s *suiteBiz) Test_impl_Logout() {
 
 			if err := s.biz.Logout(contextx.BackgroundWithLogger(s.logger), tt.args.who); (err != nil) != tt.wantErr {
 				t.Errorf("Logout() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func (s *suiteBiz) Test_impl_WhoAmI() {
+	type args struct {
+		token string
+		mock  func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantInfo *um.Profile
+		wantErr  bool
+	}{
+		{
+			name:     "toke empty then error",
+			args:     args{token: ""},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "get profile by token then error",
+			args: args{token: testdata.Profile1.Token, mock: func() {
+				s.tokenizer.EXPECT().ValidateToken(testdata.Profile1.Token).Return(nil, errors.New("error")).Times(1)
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "get profile by id then error",
+			args: args{token: testdata.Profile1.Token, mock: func() {
+				s.tokenizer.EXPECT().ValidateToken(testdata.Profile1.Token).Return(&tokenx.TokenClaims{
+					StandardClaims: jwt.StandardClaims{
+						Audience:  "",
+						ExpiresAt: 0,
+						Id:        "",
+						IssuedAt:  0,
+						Issuer:    "",
+						NotBefore: 0,
+						Subject:   strconv.FormatInt(testdata.Profile1.Id, 10),
+					},
+				}, nil).Times(1)
+
+				s.repo.EXPECT().GetProfileByID(gomock.Any(), testdata.Profile1.Id).Return(nil, errors.New("error")).Times(1)
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "ok",
+			args: args{token: testdata.Profile1.Token, mock: func() {
+				s.tokenizer.EXPECT().ValidateToken(testdata.Profile1.Token).Return(&tokenx.TokenClaims{
+					StandardClaims: jwt.StandardClaims{
+						Audience:  "",
+						ExpiresAt: 0,
+						Id:        "",
+						IssuedAt:  0,
+						Issuer:    "",
+						NotBefore: 0,
+						Subject:   strconv.FormatInt(testdata.Profile1.Id, 10),
+					},
+				}, nil).Times(1)
+
+				s.repo.EXPECT().GetProfileByID(gomock.Any(), testdata.Profile1.Id).Return(testdata.Profile1, nil).Times(1)
+			}},
+			wantInfo: testdata.Profile1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotInfo, err := s.biz.WhoAmI(contextx.BackgroundWithLogger(s.logger), tt.args.token)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("WhoAmI() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
+				t.Errorf("WhoAmI() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
 		})
 	}

@@ -3,6 +3,7 @@ package biz
 import (
 	"crypto/sha256"
 	"fmt"
+	"strconv"
 
 	"github.com/blackhorseya/ekko/internal/app/domain/user/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/errorx"
@@ -109,6 +110,27 @@ func (i *impl) Logout(ctx contextx.Contextx, who *um.Profile) error {
 }
 
 func (i *impl) WhoAmI(ctx contextx.Contextx, token string) (info *um.Profile, err error) {
-	// todo: 2023/4/16|sean|impl me
-	panic("implement me")
+	if token == "" {
+		return nil, errorx.ErrInvalidToken
+	}
+
+	claims, err := i.tokenizer.ValidateToken(token)
+	if err != nil {
+		ctx.Error(errorx.ErrInvalidToken.Error(), zap.Error(err))
+		return nil, errorx.ErrInvalidToken
+	}
+
+	id, err := strconv.Atoi(claims.Subject)
+	if err != nil {
+		ctx.Error(errorx.ErrInvalidToken.Error(), zap.Error(err))
+		return nil, errorx.ErrInvalidToken
+	}
+
+	ret, err := i.repo.GetProfileByID(ctx, int64(id))
+	if err != nil {
+		ctx.Error(errorx.ErrGetProfile.Error(), zap.Error(err))
+		return nil, errorx.ErrGetProfile
+	}
+
+	return ret, nil
 }

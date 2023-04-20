@@ -34,4 +34,7 @@ var (
 
 	// ErrInvalidProfile means profile is invalid
 	ErrInvalidProfile = er.New(http.StatusBadRequest, 40022, "profile is invalid", "profile is invalid")
+
+	// ErrInvalidToken means token is invalid
+	ErrInvalidToken = er.New(http.StatusBadRequest, 40023, "token is invalid", "token is invalid")
 )

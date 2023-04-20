@@ -33,6 +33,7 @@ go_test(
         "//pkg/entity/domain/user/model",
         "//pkg/genx",
         "//test/testdata",
+        "@com_github_golang_jwt_jwt//:jwt",
         "@com_github_golang_mock//gomock",
         "@com_github_stretchr_testify//suite",
         "@org_uber_go_zap//:zap",
