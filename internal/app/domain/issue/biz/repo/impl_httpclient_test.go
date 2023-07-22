@@ -100,7 +100,7 @@ func (s *suiteHTTPClient) Test_httpclient_GetByID() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.repo.GetByID(contextx.BackgroundWithLogger(s.logger), tt.args.id)
+			gotInfo, err := s.repo.GetByID(contextx.WithLogger(s.logger), tt.args.id)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetByID() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -179,7 +179,7 @@ func (s *suiteHTTPClient) Test_httpclient_List() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.repo.List(contextx.BackgroundWithLogger(s.logger), tt.args.condition)
+			gotInfo, err := s.repo.List(contextx.WithLogger(s.logger), tt.args.condition)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return

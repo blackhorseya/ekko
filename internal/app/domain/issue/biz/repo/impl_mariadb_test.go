@@ -106,7 +106,7 @@ func (s *suiteMariadb) Test_mariadb_GetByID() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.repo.GetByID(contextx.BackgroundWithLogger(s.logger), tt.args.id)
+			gotInfo, err := s.repo.GetByID(contextx.WithLogger(s.logger), tt.args.id)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetByID() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -170,7 +170,7 @@ func (s *suiteMariadb) Test_mariadb_Create() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.repo.Create(contextx.BackgroundWithLogger(s.logger), tt.args.created)
+			gotInfo, err := s.repo.Create(contextx.WithLogger(s.logger), tt.args.created)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -235,7 +235,7 @@ func (s *suiteMariadb) Test_mariadb_List() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.repo.List(contextx.BackgroundWithLogger(s.logger), tt.args.condition)
+			gotInfo, err := s.repo.List(contextx.WithLogger(s.logger), tt.args.condition)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -284,7 +284,7 @@ func (s *suiteMariadb) Test_mariadb_DeleteByID() {
 				tt.args.mock()
 			}
 
-			if err := s.repo.DeleteByID(contextx.BackgroundWithLogger(s.logger), tt.args.id); (err != nil) != tt.wantErr {
+			if err := s.repo.DeleteByID(contextx.WithLogger(s.logger), tt.args.id); (err != nil) != tt.wantErr {
 				t.Errorf("DeleteByID() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
@@ -338,7 +338,7 @@ func (s *suiteMariadb) Test_mariadb_Update() {
 				tt.args.mock()
 			}
 
-			err := s.repo.Update(contextx.BackgroundWithLogger(s.logger), tt.args.updated)
+			err := s.repo.Update(contextx.WithLogger(s.logger), tt.args.updated)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
 				return

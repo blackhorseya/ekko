@@ -75,7 +75,7 @@ func (s *suiteTester) Test_impl_GetByID() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.biz.GetByID(contextx.BackgroundWithLogger(s.logger), tt.args.id)
+			gotInfo, err := s.biz.GetByID(contextx.WithLogger(s.logger), tt.args.id)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetByID() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -175,7 +175,7 @@ func (s *suiteTester) Test_impl_List() {
 				tt.args.mock()
 			}
 
-			gotInfo, gotTotal, err := s.biz.List(contextx.BackgroundWithLogger(s.logger), tt.args.page, tt.args.size)
+			gotInfo, gotTotal, err := s.biz.List(contextx.WithLogger(s.logger), tt.args.page, tt.args.size)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -246,7 +246,7 @@ func (s *suiteTester) Test_impl_Create() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.biz.Create(contextx.BackgroundWithLogger(s.logger), tt.args.title)
+			gotInfo, err := s.biz.Create(contextx.WithLogger(s.logger), tt.args.title)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -313,7 +313,7 @@ func (s *suiteTester) Test_impl_UpdateStatus() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.biz.UpdateStatus(contextx.BackgroundWithLogger(s.logger), tt.args.id, tt.args.status)
+			gotInfo, err := s.biz.UpdateStatus(contextx.WithLogger(s.logger), tt.args.id, tt.args.status)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("UpdateStatus() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -356,7 +356,7 @@ func (s *suiteTester) Test_impl_Delete() {
 				tt.args.mock()
 			}
 
-			if err := s.biz.Delete(contextx.BackgroundWithLogger(s.logger), tt.args.id); (err != nil) != tt.wantErr {
+			if err := s.biz.Delete(contextx.WithLogger(s.logger), tt.args.id); (err != nil) != tt.wantErr {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

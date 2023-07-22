@@ -8,7 +8,7 @@ import (
 // AddContextxWitLoggerMiddleware add custom contextx middleware
 func AddContextxWitLoggerMiddleware(logger *zap.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Set(string(KeyCtx), BackgroundWithLogger(logger))
+		c.Set(string(KeyCtx), WithLogger(logger))
 
 		c.Next()
 	}

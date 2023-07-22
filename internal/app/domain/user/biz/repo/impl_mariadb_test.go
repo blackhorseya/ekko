@@ -96,7 +96,7 @@ func (s *suiteMariadb) Test_mariadb_GetProfileByUsername() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.repo.GetProfileByUsername(contextx.BackgroundWithLogger(s.logger), tt.args.username)
+			gotInfo, err := s.repo.GetProfileByUsername(contextx.WithLogger(s.logger), tt.args.username)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetProfileByUsername() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -167,7 +167,7 @@ func (s *suiteMariadb) Test_mariadb_GetProfileByID() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.repo.GetProfileByID(contextx.BackgroundWithLogger(s.logger), tt.args.id)
+			gotInfo, err := s.repo.GetProfileByID(contextx.WithLogger(s.logger), tt.args.id)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetProfileByID() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -234,7 +234,7 @@ func (s *suiteMariadb) Test_mariadb_Register() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.repo.Register(contextx.BackgroundWithLogger(s.logger), tt.args.who)
+			gotInfo, err := s.repo.Register(contextx.WithLogger(s.logger), tt.args.who)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Register() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -295,7 +295,7 @@ func (s *suiteMariadb) Test_mariadb_UpdateToken() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.repo.UpdateToken(contextx.BackgroundWithLogger(s.logger), tt.args.who, tt.args.token)
+			gotInfo, err := s.repo.UpdateToken(contextx.WithLogger(s.logger), tt.args.who, tt.args.token)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("UpdateToken() error = %v, wantErr %v", err, tt.wantErr)
 				return

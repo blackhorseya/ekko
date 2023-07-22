@@ -32,17 +32,9 @@ func Background() Contextx {
 	}
 }
 
-// BackgroundWithLogger returns a non-nil, empty Context. It is never canceled, has no values, and
+// WithLogger returns a non-nil, empty Context. It is never canceled, has no values, and
 // has no deadline. It is typically used by the main function, initialization, and tests,
 // and as the top-level Context for incoming requests
-func BackgroundWithLogger(logger *zap.Logger) Contextx {
-	return Contextx{
-		Context: context.Background(),
-		logger:  logger,
-	}
-}
-
-// WithLogger returns a copy of parent in which the value associated with key is val.
 func WithLogger(logger *zap.Logger) Contextx {
 	return Contextx{
 		Context: context.Background(),

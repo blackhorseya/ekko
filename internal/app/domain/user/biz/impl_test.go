@@ -116,7 +116,7 @@ func (s *suiteBiz) Test_impl_Signup() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.biz.Signup(contextx.BackgroundWithLogger(s.logger), tt.args.username, tt.args.password)
+			gotInfo, err := s.biz.Signup(contextx.WithLogger(s.logger), tt.args.username, tt.args.password)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Signup() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -260,7 +260,7 @@ func (s *suiteBiz) Test_impl_Login() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.biz.Login(contextx.BackgroundWithLogger(s.logger), tt.args.username, tt.args.password)
+			gotInfo, err := s.biz.Login(contextx.WithLogger(s.logger), tt.args.username, tt.args.password)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Login() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -308,7 +308,7 @@ func (s *suiteBiz) Test_impl_Logout() {
 				tt.args.mock()
 			}
 
-			if err := s.biz.Logout(contextx.BackgroundWithLogger(s.logger), tt.args.who); (err != nil) != tt.wantErr {
+			if err := s.biz.Logout(contextx.WithLogger(s.logger), tt.args.who); (err != nil) != tt.wantErr {
 				t.Errorf("Logout() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -387,7 +387,7 @@ func (s *suiteBiz) Test_impl_WhoAmI() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.biz.WhoAmI(contextx.BackgroundWithLogger(s.logger), tt.args.token)
+			gotInfo, err := s.biz.WhoAmI(contextx.WithLogger(s.logger), tt.args.token)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("WhoAmI() error = %v, wantErr %v", err, tt.wantErr)
 				return
