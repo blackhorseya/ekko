@@ -1,17 +1,19 @@
 syntax = "proto3";
+
 package user;
-option go_package = "github.com/blackhorseya/ekko/pkg/entity/domain/user/model";
 
 import "google/protobuf/timestamp.proto";
 
+option go_package = "github.com/blackhorseya/ekko/pkg/entity/domain/user/model";
+
 message Profile {
-  int64 id = 1;
-  string username = 2;
-  // @gotags: json:"-"
-  string password = 3;
-  string token = 4;
-  // @gotags: json:"-"
-  google.protobuf.Timestamp created_at = 5;
-  // @gotags: json:"-"
-  google.protobuf.Timestamp updated_at = 6;
+    int64 id = 1;
+    string username = 2;
+    // @gotags: json:"-"
+    string password = 3;
+    string token = 4;
+    // @gotags: json:"-"
+    google.protobuf.Timestamp created_at = 5;
+    // @gotags: json:"-"
+    google.protobuf.Timestamp updated_at = 6;
 }
