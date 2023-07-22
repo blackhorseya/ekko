@@ -2,12 +2,12 @@ package httpx
 
 import (
 	"fmt"
+	"net"
 	"net/http"
 	"time"
 
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/httpx"
-	"github.com/blackhorseya/ekko/pkg/netx"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	"github.com/pkg/errors"
@@ -64,7 +64,7 @@ func (s *server) Start() error {
 	}
 
 	if s.port == 0 {
-		s.port = netx.GetAvailablePort()
+		s.port = GetAvailablePort()
 	}
 
 	addr := fmt.Sprintf("%s:%d", s.host, s.port)
@@ -103,6 +103,15 @@ func (s *server) Stop() error {
 	s.logger.Info("http server stopped")
 
 	return nil
+}
+
+// GetAvailablePort returns a port at random
+func GetAvailablePort() int {
+	l, _ := net.Listen("tcp", ":0") // listen on localhost
+	defer l.Close()
+	port := l.Addr().(*net.TCPAddr).Port
+
+	return port
 }
 
 // ProviderServerSet is a provider set for httpx server
