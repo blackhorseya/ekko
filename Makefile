@@ -62,6 +62,16 @@ build-go: gazelle ## build go binary
 test-go: gazelle ## test go binary
 	@sh $(shell pwd)/scripts/go.test.sh
 
+.PHONY: update-deps-go
+update-deps-go: ## update go dependencies
+	@echo Starting update package
+	@go get -u ./...
+	@go mod tidy
+
+	@git add go.mod go.sum
+	@git commit -m "build: update package"
+	@echo Successfully updated package
+
 ## docker
 .PHONY: build-image
 build-image: ## build image
@@ -139,17 +149,6 @@ migrate-up: ## run migration up
 .PHONY: migrate-down
 migrate-down: ## run migration down
 	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migrations down $(N)
-
-## dependency
-.PHONY: update-package
-update-package: ## update package and commit
-	@go get -u ./...
-	@go mod tidy
-
-	@bazel run //:gazelle -- update-repos -from_file=go.mod -to_macro=deps.bzl%go_dependencies -prune
-
-	@git add go.mod go.sum deps.bzl
-	@git commit -m "build: update package"
 
 ## helm
 .PHONY: lint-helm
