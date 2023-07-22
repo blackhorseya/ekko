@@ -6,36 +6,16 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/blackhorseya/ekko/internal/pkg/config"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/httpx"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	"github.com/pkg/errors"
-	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
-// Options declare http configuration
-type Options struct {
-	Host string `json:"host" yaml:"host"`
-	Port int    `json:"port" yaml:"port"`
-	Mode string `json:"mode" yaml:"mode"`
-}
-
-func NewOptions(v *viper.Viper) (*Options, error) {
-	ret := new(Options)
-
-	err := v.UnmarshalKey("http", ret)
-	if err != nil {
-		return nil, errors.Wrap(err, "load http options failed")
-	}
-
-	return ret, nil
-}
-
-func NewRouter(opts *Options) *gin.Engine {
-	gin.SetMode(opts.Mode)
-
+func NewRouter() *gin.Engine {
 	return gin.New()
 }
 
@@ -48,10 +28,12 @@ type server struct {
 	httpServer http.Server
 }
 
-func NewServer(opts *Options, logger *zap.Logger, router *gin.Engine) httpx.Server {
+func NewServer(config *config.Config, logger *zap.Logger, router *gin.Engine) httpx.Server {
+	gin.SetMode(config.HTTP.Mode)
+
 	return &server{
-		host:       opts.Host,
-		port:       opts.Port,
+		host:       config.HTTP.Host,
+		port:       config.HTTP.Port,
 		logger:     logger,
 		router:     router,
 		httpServer: http.Server{},
@@ -114,5 +96,5 @@ func GetAvailablePort() int {
 	return port
 }
 
-// ProviderServerSet is a provider set for httpx server
-var ProviderServerSet = wire.NewSet(NewOptions, NewRouter, NewServer)
+// ServerSet is a provider set for httpx server
+var ServerSet = wire.NewSet(NewRouter, NewServer)

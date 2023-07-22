@@ -21,29 +21,17 @@ import (
 // Injectors from wire.go:
 
 func CreateService(path2 string, id int64) (*Service, error) {
-	viper, err := config.NewConfig(path2)
+	configConfig, err := config.NewWithPath(path2)
 	if err != nil {
 		return nil, err
 	}
-	options, err := log.NewOptions(viper)
+	logger, err := log.NewLogger(configConfig)
 	if err != nil {
 		return nil, err
 	}
-	logger, err := log.NewLogger(options)
-	if err != nil {
-		return nil, err
-	}
-	httpxOptions, err := httpx.NewOptions(viper)
-	if err != nil {
-		return nil, err
-	}
-	engine := httpx.NewRouter(httpxOptions)
-	server := httpx.NewServer(httpxOptions, logger, engine)
-	mariadbOptions, err := mariadb.NewOptions(viper, logger)
-	if err != nil {
-		return nil, err
-	}
-	db, err := mariadb.NewMariadb(mariadbOptions, logger)
+	engine := httpx.NewRouter()
+	server := httpx.NewServer(configConfig, logger, engine)
+	db, err := mariadb.NewMariadb(configConfig, logger)
 	if err != nil {
 		return nil, err
 	}
@@ -63,4 +51,4 @@ func CreateService(path2 string, id int64) (*Service, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, genx.ProviderSet, mariadb.ProviderSet, httpx.ProviderServerSet, restful.IssueSet, biz.IssueSet, repo.ProvideMariadb, NewService)
+var providerSet = wire.NewSet(config.NewWithPath, log.NewLogger, genx.ProviderSet, mariadb.ProviderSet, httpx.ServerSet, restful.IssueSet, biz.IssueSet, repo.ProvideMariadb, NewService)

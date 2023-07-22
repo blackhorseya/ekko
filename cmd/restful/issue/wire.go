@@ -17,15 +17,15 @@ import (
 
 var providerSet = wire.NewSet(
 	// infra
-	config.ProviderSet,
-	log.ProviderSet,
+	config.NewWithPath,
+	log.NewLogger,
 	genx.ProviderSet,
 
 	// storage
 	mariadb.ProviderSet,
 
 	// transports
-	httpx.ProviderServerSet,
+	httpx.ServerSet,
 
 	// implementation
 	restful.IssueSet,
