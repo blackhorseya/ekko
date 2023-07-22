@@ -55,11 +55,11 @@ gazelle: gazelle-repos ## run gazelle with bazel
 	@bazel run //:gazelle
 
 .PHONY: build-go
-build-go: gazelle ## build go binary
+build-go: ## build go binary
 	@bazel build //...
 
 .PHONY: test-go
-test-go: gazelle ## test go binary
+test-go: ## test go binary
 	@sh $(shell pwd)/scripts/go.test.sh
 
 .PHONY: update-deps-go
