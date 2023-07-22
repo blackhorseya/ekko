@@ -38,10 +38,6 @@ clean:  ## remove artifacts
 	@echo Successfuly removed artifacts
 
 ## go
-.PHONY: test-unit
-test-unit: ## execute unit test
-	@sh $(shell pwd)/scripts/go.test.sh
-
 .PHONY: test-e2e
 test-e2e: ## execute e2e test
 	@cd ./test/e2e && npx playwright test ./tests
@@ -64,7 +60,7 @@ build-go: gazelle ## build go binary
 
 .PHONY: test-go
 test-go: gazelle ## test go binary
-	@bazel test //...
+	@sh $(shell pwd)/scripts/go.test.sh
 
 ## docker
 .PHONY: build-image
@@ -93,7 +89,7 @@ push-image: ## publish image
 
 ## generate
 .PHONY: gen
-gen: gen-wire gen-pb gen-mocks gen-swagger ## generate code
+gen: gen-pb gen-mocks gen-swagger ## generate code
 
 .PHONY: gen-pb
 gen-pb: ## generate protobuf messages and services
@@ -101,19 +97,12 @@ gen-pb: ## generate protobuf messages and services
 	@go get -u google.golang.org/protobuf/cmd/protoc-gen-go
 
 	## Starting generate pb
-	@protoc --proto_path=. \
-			--go_out=. --go_opt=module=github.com/blackhorseya/ekko \
-			--go-grpc_out=. --go-grpc_opt=module=github.com/blackhorseya/ekko,require_unimplemented_servers=false \
-			./pb/domain/*/**.proto
+	@protoc --proto_path=./pb --go_out=paths=source_relative:./pkg/entity --go-grpc_out=paths=source_relative,require_unimplemented_servers=false:./pb ./pb/domain/*/*/*.proto
 	@echo Successfully generated proto
 
 	## Starting inject tags
 	@protoc-go-inject-tag -input="./pkg/entity/domain/*/model/*.pb.go"
 	@echo Successfully injected tags
-
-.PHONY: gen-wire
-gen-wire: ## generate wire
-	@wire gen ./...
 
 .PHONY: gen-swagger
 gen-swagger: ## generate swagger spec
@@ -122,7 +111,9 @@ gen-swagger: ## generate swagger spec
 
 .PHONY: gen-mocks
 gen-mocks: ## generate mocks
-	@go generate -tags=wireinject -x ./...
+	## Starting generate wire and mockgen
+	@go generate -tags="wireinject" ./...
+	@echo Successfully generated wire and mockgen
 
 .PHONY: gen-build
 gen-build: ## run gazelle with bazel
@@ -176,7 +167,10 @@ package-helm: ## package helm chart
 
 .PHONY: push-helm
 push-helm: ## push helm chart to gcs
-	@helm gcs push --force ./deployments/charts/$(APP_NAME)-*.tgz $(HELM_REPO_NAME)
+	@for file in $(wildcard ./deployments/charts/*.tgz); do \
+		filename=$$(basename $$file); \
+		helm gcs push --force $$file $(HELM_REPO_NAME); \
+	done
 	@helm repo update $(HELM_REPO_NAME)
 
 .PHONY: upgrade-helm
