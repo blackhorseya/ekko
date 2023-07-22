@@ -5,10 +5,12 @@ on:
     branches: [ "main" ]
     paths:
       - "**.go"
+      - ".github/workflows/go.yaml"
   pull_request:
     branches: [ "main" ]
     paths:
       - "**.go"
+      - ".github/workflows/go.yaml"
 
 jobs:
   test:
@@ -17,30 +19,11 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
-
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
-          go-version: 1.20
-
-      - name: Install Bazel
-        run: |
-          npm install -g @bazel/bazelisk
-          bazel version
-
-      - name: Cache Bazel dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/bazel
-          key: ${{ runner.os }}-bazel-${{ hashFiles('**/WORKSPACE') }}
-
-      - name: Build
-        run: |
-          make build-go
+          go-version: '^1.20'
+          cache: true
 
       - name: Test
         run: |
