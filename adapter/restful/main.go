@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"os"
 )
@@ -22,7 +21,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	_ = config
 
-	fmt.Println("I'm a restful adapter")
+	logger, err := NewLogger(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	logger.Info("I'm a restful adapter")
 }
