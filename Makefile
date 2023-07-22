@@ -156,6 +156,10 @@ update-package: ## update package and commit
 lint-helm: ## lint helm chart
 	@helm lint deployments/charts/*
 
+.PHONY: install-helm-plugins
+install-helm-plugins: ## install helm plugins
+	@helm plugin install https://github.com/hayorov/helm-gcs.git
+
 .PHONY: add-helm-repo
 add-helm-repo: ## add helm repo
 	@helm repo add --no-update $(HELM_REPO_NAME) gs://sean-helm-charts/charts
