@@ -16,6 +16,18 @@ func init() {
 	}
 }
 
+// @title ekko
+// @version 0.1.0
+// @description ekko is a simple issue management system
+//
+// @contact.name sean.zheng
+// @contact.email blackhorseya@gmail.com
+// @contact.url https://blog.seancheng.space
+//
+// @license.name GPL-3.0
+// @license.url https://spdx.org/licenses/GPL-3.0-only.html
+//
+// @BasePath /api
 func main() {
 	config, err := NewConfig(*path)
 	if err != nil {

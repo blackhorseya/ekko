@@ -1,0 +1,14 @@
+basePath: /api
+info:
+  contact:
+    email: blackhorseya@gmail.com
+    name: sean.zheng
+    url: https://blog.seancheng.space
+  description: ekko is a simple issue management system
+  license:
+    name: GPL-3.0
+    url: https://spdx.org/licenses/GPL-3.0-only.html
+  title: ekko
+  version: 0.1.0
+paths: {}
+swagger: "2.0"
