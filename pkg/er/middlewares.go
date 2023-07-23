@@ -18,10 +18,10 @@ func AddErrorHandlingMiddleware() gin.HandlerFunc {
 
 			switch e := err.Err.(type) {
 			case *Error:
-				c.AbortWithStatusJSON(e.Status, e)
+				c.AbortWithStatusJSON(e.Code, e)
 				break
 			default:
-				appError := New(http.StatusInternalServerError, 50099, e.Error(), e.Error())
+				appError := New(http.StatusInternalServerError, e.Error())
 				c.AbortWithStatusJSON(http.StatusInternalServerError, appError)
 				break
 			}

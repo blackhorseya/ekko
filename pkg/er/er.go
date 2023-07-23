@@ -1,29 +1,19 @@
 package er
 
-// Error declare custom error
+// Error is a struct for error
 type Error struct {
-	Status         int         `json:"-"`
-	Code           int         `json:"code"`
-	DisplayMessage string      `json:"msg"`
-	LogMessage     string      `json:"-"`
-	Data           interface{} `json:"data,omitempty"`
+	Code    int    `json:"code,omitempty"`
+	Message string `json:"msg,omitempty"`
 }
 
 func (e *Error) Error() string {
-	return e.DisplayMessage
+	return e.Message
 }
 
-// WithData append data into response
-func (e *Error) WithData(data interface{}) *Error {
+// New is a constructor for Error
+func New(code int, msg string) *Error {
 	return &Error{
-		Status:         e.Status,
-		Code:           e.Code,
-		DisplayMessage: e.DisplayMessage,
-		Data:           data,
+		Code:    code,
+		Message: msg,
 	}
-}
-
-// New a error
-func New(status int, code int, msg string, log string) *Error {
-	return &Error{Status: status, Code: code, DisplayMessage: msg, LogMessage: log}
 }
