@@ -6,6 +6,7 @@ import (
 	"syscall"
 
 	http "github.com/blackhorseya/ekko/internal/pkg/httpx"
+	"github.com/blackhorseya/ekko/pkg/adapters"
 	"github.com/blackhorseya/ekko/pkg/httpx"
 	"github.com/google/wire"
 	"github.com/pkg/errors"
@@ -13,7 +14,7 @@ import (
 )
 
 // ProviderSet define the provider set
-var ProviderSet = wire.NewSet(NewService, http.ServerSet)
+var ProviderSet = wire.NewSet(NewService, http.ServerSet, NewRestful)
 
 // Service define the restful service
 type Service struct {
@@ -22,7 +23,11 @@ type Service struct {
 }
 
 // NewService will create a restful service
-func NewService(logger *zap.Logger, httpserver httpx.Server) *Service {
+func NewService(logger *zap.Logger, httpserver httpx.Server, restful adapters.Restful) *Service {
+	if restful != nil {
+		restful.InitRouting()
+	}
+
 	return &Service{
 		logger:     logger,
 		httpserver: httpserver,

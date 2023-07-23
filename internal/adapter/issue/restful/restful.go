@@ -11,7 +11,6 @@ import (
 	"github.com/blackhorseya/ekko/pkg/er"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
-	"github.com/google/wire"
 	"go.uber.org/zap"
 )
 
@@ -31,10 +30,7 @@ func NewRestful(logger *zap.Logger, router *gin.Engine, biz ib.IBiz) adapters.Re
 	router.Use(contextx.AddContextxWitLoggerMiddleware(logger))
 	router.Use(er.AddErrorHandlingMiddleware())
 
-	return &restful{
-		router: router,
-		biz:    biz,
-	}
+	panic("implement me")
 }
 
 func (i *restful) InitRouting() error {
@@ -42,5 +38,3 @@ func (i *restful) InitRouting() error {
 
 	return nil
 }
-
-var IssueSet = wire.NewSet(NewRestful)

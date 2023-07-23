@@ -36,7 +36,8 @@ func NewLogger(config2 *config.Config) (*zap.Logger, error) {
 func NewService(config2 *config.Config, logger *zap.Logger) (*app.Service, error) {
 	engine := httpx.NewRouter()
 	server := httpx.NewServer(config2, logger, engine)
-	service := app.NewService(logger, server)
+	restful := app.NewRestful(logger, engine)
+	service := app.NewService(logger, server, restful)
 	return service, nil
 }
 
