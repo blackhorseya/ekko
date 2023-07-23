@@ -76,31 +76,6 @@ update-deps-go: ## update go dependencies
 	@git commit -m "build: update package"
 	@echo Successfully updated package
 
-## docker
-.PHONY: build-image
-build-image: ## build image
-	@echo "Building image $(IMAGE_NAME):$(VERSION)"
-	@docker build -t $(IMAGE_NAME):$(VERSION) \
-	--label "app.name=$(APP_NAME)" \
-	--label "app.version=$(VERSION)" \
-	--build-arg MAIN_PKG=$(MAIN_PKG) \
-	--pull --cache-from $(IMAGE_NAME):latest \
-	--platform linux/amd64 \
-	--pull -f Dockerfile .
-
-.PHONY: list-image
-list-image: ## list all images
-	@docker images --filter=label=app.name=$(APP_NAME)
-
-.PHONY: prune-image
-prune-image: ## prune images
-	@docker rmi -f `docker images --filter=label=app.name=$(APP_NAME) -q`
-
-.PHONY: push-image
-push-image: ## publish image
-	@echo "Pushing image $(IMAGE_NAME):$(VERSION)"
-	@bazel run //:push-$(DOMAIN_NAME)-$(SVC_ADAPTER) -- -dst=$(IMAGE_NAME):$(VERSION) -skip-unchanged-digest
-
 ## generate
 .PHONY: gen
 gen: gen-pb gen-mocks gen-swagger ## generate code
@@ -130,8 +105,7 @@ gen-mocks: ## generate mocks
 	@echo Successfully generated wire and mockgen
 
 .PHONY: gen-build
-gen-build: ## run gazelle with bazel
-	@bazel run //:gazelle
+gen-build: gazelle ## generate build files
 
 ## database
 DB_RELEASE_NAME := $(DEPLOY_TO)-$(APP_NAME)-$(DOMAIN_NAME)-db
