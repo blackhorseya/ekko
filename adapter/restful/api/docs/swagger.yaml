@@ -1,4 +1,50 @@
 basePath: /api
+definitions:
+  er.Error:
+    properties:
+      code:
+        type: integer
+      msg:
+        type: string
+    type: object
+  model.Ticket:
+    properties:
+      id:
+        type: integer
+      status:
+        $ref: '#/definitions/model.TicketStatus'
+      title:
+        type: string
+    type: object
+  model.TicketStatus:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - TicketStatus_TICKET_STATUS_UNSPECIFIED
+    - TicketStatus_TICKET_STATUS_TODO
+    - TicketStatus_TICKET_STATUS_INPROGRESS
+    - TicketStatus_TICKET_STATUS_DONE
+  response.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+  tasks.listResponse:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/model.Ticket'
+        type: array
+      total:
+        type: integer
+    type: object
 info:
   contact:
     email: blackhorseya@gmail.com
@@ -10,5 +56,195 @@ info:
     url: https://spdx.org/licenses/GPL-3.0-only.html
   title: ekko
   version: 0.1.0
-paths: {}
+paths:
+  /v1/tasks:
+    get:
+      consumes:
+      - application/json
+      description: List all tasks
+      parameters:
+      - default: 1
+        description: page
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: size
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/tasks.listResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/er.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      summary: List all tasks
+      tags:
+      - Tasks
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Create a issue
+      parameters:
+      - description: title
+        in: formData
+        name: title
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Ticket'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      summary: Create a issue
+      tags:
+      - Tasks
+  /v1/tasks/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a issue by id
+      parameters:
+      - description: ID of issue
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/er.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      summary: Delete a issue by id
+      tags:
+      - Tasks
+    get:
+      consumes:
+      - application/json
+      description: Get a issue by id
+      parameters:
+      - description: ID of issue
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Ticket'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/er.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      summary: Get a issue by id
+      tags:
+      - Tasks
+  /v1/tasks/{id}/status:
+    patch:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Update issue's status by id
+      parameters:
+      - description: ID of issue
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: status
+        in: formData
+        name: status
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Ticket'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      summary: Update issue's status by id
+      tags:
+      - Tasks
 swagger: "2.0"
