@@ -1,6 +1,6 @@
 # env for project
 APP_NAME := ekko
-VERSION := $(shell git describe --tags --always)
+VERSION := $(shell git describe --tags --abbrev=0)
 DOMAIN_NAME := issue
 SVC_ADAPTER := restful
 MAIN_PKG := ./cmd/$(SVC_ADAPTER)/$(DOMAIN_NAME)
@@ -27,6 +27,10 @@ check-%: ## check environment variable is exists
 help: ## show help
 	@grep -hE '^[ a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 	awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-17s\033[0m %s\n", $$1, $$2}'
+
+.PHONY: version
+version: ## show version
+	@echo $(VERSION)
 
 .PHONY: report
 report: ## execute goreportcard
