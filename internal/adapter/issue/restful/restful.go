@@ -27,8 +27,8 @@ func NewRestful(logger *zap.Logger, router *gin.Engine, biz ib.IBiz) adapters.Re
 		UTC:        true,
 		SkipPaths:  []string{"/api/readiness", "/api/liveness"},
 	}))
-	router.Use(contextx.AddContextxWitLoggerMiddleware(logger))
-	router.Use(er.AddErrorHandlingMiddleware())
+	router.Use(contextx.WithContextx(logger))
+	router.Use(er.HandleError())
 
 	panic("implement me")
 }

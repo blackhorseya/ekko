@@ -5,8 +5,8 @@ import (
 	"go.uber.org/zap"
 )
 
-// AddContextxWitLoggerMiddleware add custom contextx middleware
-func AddContextxWitLoggerMiddleware(logger *zap.Logger) gin.HandlerFunc {
+// WithContextx add custom contextx middleware
+func WithContextx(logger *zap.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Set(string(KeyCtx), WithLogger(logger))
 

@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// AddErrorHandlingMiddleware global handle *gin.Context error middleware
-func AddErrorHandlingMiddleware() gin.HandlerFunc {
+// HandleError global handle *gin.Context error middleware
+func HandleError() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {
 			if c.Errors.Last() == nil {
