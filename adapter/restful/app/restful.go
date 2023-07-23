@@ -5,8 +5,10 @@ import (
 	"time"
 
 	_ "github.com/blackhorseya/ekko/adapter/restful/api/docs" // swagger docs
+	v1 "github.com/blackhorseya/ekko/adapter/restful/app/v1"
 	"github.com/blackhorseya/ekko/pkg/adapters"
 	"github.com/blackhorseya/ekko/pkg/contextx"
+	issueB "github.com/blackhorseya/ekko/pkg/entity/domain/issue/biz"
 	"github.com/blackhorseya/ekko/pkg/er"
 	"github.com/blackhorseya/ekko/pkg/response"
 	ginzap "github.com/gin-contrib/zap"
@@ -19,6 +21,7 @@ import (
 type restful struct {
 	logger *zap.Logger
 	router *gin.Engine
+	issue  issueB.IBiz
 }
 
 // NewRestful will create a restful adapter
@@ -48,5 +51,7 @@ func (r *restful) InitRouting() {
 		})
 
 		api.GET("docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+		v1.Handle(api.Group("/v1"), r.issue)
 	}
 }
