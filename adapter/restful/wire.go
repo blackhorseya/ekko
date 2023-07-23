@@ -5,6 +5,7 @@
 package main
 
 import (
+	"github.com/blackhorseya/ekko/adapter/restful/app"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
 	"github.com/blackhorseya/ekko/internal/pkg/log"
 	"github.com/google/wire"
@@ -17,4 +18,8 @@ func NewConfig(path string) (*config.Config, error) {
 
 func NewLogger(config *config.Config) (*zap.Logger, error) {
 	panic(wire.Build(log.NewLogger))
+}
+
+func NewService(config *config.Config, logger *zap.Logger) (*app.Service, error) {
+	panic(wire.Build(app.NewService))
 }

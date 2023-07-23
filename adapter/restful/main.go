@@ -4,6 +4,8 @@ import (
 	"flag"
 	"log"
 	"os"
+
+	"go.uber.org/zap"
 )
 
 var path = flag.String("c", "", "path to config file (default: $HOME/.ekko/config.yaml)")
@@ -39,5 +41,18 @@ func main() {
 		log.Fatal(err)
 	}
 
-	logger.Info("I'm a restful adapter")
+	service, err := NewService(config, logger)
+	if err != nil {
+		logger.Fatal("main: create service", zap.Error(err))
+	}
+
+	err = service.Start()
+	if err != nil {
+		logger.Fatal("main: failed to start service", zap.Error(err))
+	}
+
+	err = service.AwaitSignal()
+	if err != nil {
+		logger.Fatal("main: failed to await signal", zap.Error(err))
+	}
 }

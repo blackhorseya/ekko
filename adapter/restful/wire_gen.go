@@ -7,6 +7,7 @@
 package main
 
 import (
+	"github.com/blackhorseya/ekko/adapter/restful/app"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
 	"github.com/blackhorseya/ekko/internal/pkg/log"
 	"go.uber.org/zap"
@@ -28,4 +29,9 @@ func NewLogger(config2 *config.Config) (*zap.Logger, error) {
 		return nil, err
 	}
 	return logger, nil
+}
+
+func NewService(config2 *config.Config, logger *zap.Logger) (*app.Service, error) {
+	service := app.NewService(logger)
+	return service, nil
 }
