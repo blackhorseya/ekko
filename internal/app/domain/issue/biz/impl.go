@@ -14,6 +14,7 @@ import (
 	"go.uber.org/zap"
 )
 
+// IssueSet presents as issue biz provider set
 var IssueSet = wire.NewSet(NewImpl)
 
 type impl struct {

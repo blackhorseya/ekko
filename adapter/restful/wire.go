@@ -6,8 +6,12 @@ package main
 
 import (
 	"github.com/blackhorseya/ekko/adapter/restful/app"
+	"github.com/blackhorseya/ekko/internal/app/domain/issue/biz"
+	"github.com/blackhorseya/ekko/internal/app/domain/issue/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
+	"github.com/blackhorseya/ekko/internal/pkg/genx"
 	"github.com/blackhorseya/ekko/internal/pkg/log"
+	"github.com/blackhorseya/ekko/internal/pkg/storage/mariadb"
 	"github.com/google/wire"
 	"go.uber.org/zap"
 )
@@ -22,8 +26,14 @@ func NewLogger(config *config.Config) (*zap.Logger, error) {
 
 var providerSet = wire.NewSet(
 	app.ProviderSet,
+
+	mariadb.NewMariadb,
+	genx.NewGenerator,
+
+	biz.IssueSet,
+	repo.MariadbSet,
 )
 
-func NewService(config *config.Config, logger *zap.Logger) (*app.Service, error) {
+func NewService(config *config.Config, logger *zap.Logger, id int64) (*app.Service, error) {
 	panic(wire.Build(providerSet))
 }

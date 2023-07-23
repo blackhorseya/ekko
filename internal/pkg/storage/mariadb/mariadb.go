@@ -5,7 +5,6 @@ import (
 
 	"github.com/blackhorseya/ekko/internal/pkg/config"
 	_ "github.com/go-sql-driver/mysql" // import db driver
-	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
 )
@@ -24,6 +23,3 @@ func NewMariadb(config *config.Config, logger *zap.Logger) (*sqlx.DB, error) {
 
 	return db, nil
 }
-
-// ProviderSet is a provider set for mariadb client
-var ProviderSet = wire.NewSet(NewMariadb)

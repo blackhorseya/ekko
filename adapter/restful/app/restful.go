@@ -25,7 +25,7 @@ type restful struct {
 }
 
 // NewRestful will create a restful adapter
-func NewRestful(logger *zap.Logger, router *gin.Engine) adapters.Restful {
+func NewRestful(logger *zap.Logger, router *gin.Engine, issue issueB.IBiz) adapters.Restful {
 	router.Use(ginzap.GinzapWithConfig(logger, &ginzap.Config{
 		TimeFormat: time.RFC3339,
 		UTC:        true,
@@ -40,6 +40,7 @@ func NewRestful(logger *zap.Logger, router *gin.Engine) adapters.Restful {
 	return &restful{
 		logger: logger,
 		router: router,
+		issue:  issue,
 	}
 }
 

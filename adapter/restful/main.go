@@ -41,7 +41,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	service, err := NewService(config, logger)
+	service, err := NewService(config, logger, 0)
 	if err != nil {
 		logger.Fatal("main: create service", zap.Error(err))
 	}

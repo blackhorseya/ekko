@@ -6,11 +6,15 @@ import (
 
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	im "github.com/blackhorseya/ekko/pkg/entity/domain/issue/model"
+	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
+
+// MariadbSet presents as mariadb provider set
+var MariadbSet = wire.NewSet(NewMariadb)
 
 type mariadb struct {
 	rw *sqlx.DB

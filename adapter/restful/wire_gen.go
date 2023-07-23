@@ -8,9 +8,13 @@ package main
 
 import (
 	"github.com/blackhorseya/ekko/adapter/restful/app"
+	"github.com/blackhorseya/ekko/internal/app/domain/issue/biz"
+	"github.com/blackhorseya/ekko/internal/app/domain/issue/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
+	"github.com/blackhorseya/ekko/internal/pkg/genx"
 	"github.com/blackhorseya/ekko/internal/pkg/httpx"
 	"github.com/blackhorseya/ekko/internal/pkg/log"
+	"github.com/blackhorseya/ekko/internal/pkg/storage/mariadb"
 	"github.com/google/wire"
 	"go.uber.org/zap"
 )
@@ -33,14 +37,24 @@ func NewLogger(config2 *config.Config) (*zap.Logger, error) {
 	return logger, nil
 }
 
-func NewService(config2 *config.Config, logger *zap.Logger) (*app.Service, error) {
+func NewService(config2 *config.Config, logger *zap.Logger, id int64) (*app.Service, error) {
 	engine := httpx.NewRouter()
 	server := httpx.NewServer(config2, logger, engine)
-	restful := app.NewRestful(logger, engine)
+	db, err := mariadb.NewMariadb(config2, logger)
+	if err != nil {
+		return nil, err
+	}
+	iRepo := repo.NewMariadb(db)
+	generator, err := genx.NewGenerator(id)
+	if err != nil {
+		return nil, err
+	}
+	iBiz := biz.NewImpl(iRepo, generator)
+	restful := app.NewRestful(logger, engine, iBiz)
 	service := app.NewService(logger, server, restful)
 	return service, nil
 }
 
 // wire.go:
 
-var providerSet = wire.NewSet(app.ProviderSet)
+var providerSet = wire.NewSet(app.ProviderSet, mariadb.NewMariadb, genx.NewGenerator, biz.IssueSet, repo.MariadbSet)
