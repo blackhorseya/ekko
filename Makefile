@@ -95,7 +95,7 @@ gen-pb-go: ## generate go protobuf
 
 .PHONY: gen-swagger
 gen-swagger: ## generate swagger spec
-	@swag init -q -d ./adapter/restful -o ./adapter/restful/api/docs
+	@swag init -q -d ./adapter/restful,./pkg -o ./adapter/restful/api/docs
 	## Generated swagger spec
 
 .PHONY: gen-mocks
