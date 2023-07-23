@@ -120,7 +120,7 @@ gen-pb: ## generate protobuf messages and services
 
 .PHONY: gen-swagger
 gen-swagger: ## generate swagger spec
-	@swag init -q --dir ./cmd/restful/issue,./ -o ./api/docs
+	@swag init -q -d ./adapter/restful -o ./adapter/restful/api/docs
 	## Generated swagger spec
 
 .PHONY: gen-mocks
