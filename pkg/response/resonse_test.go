@@ -35,18 +35,18 @@ func (s *suiteTester) TestResponse_WithMessage() {
 			fields: fields{Code: 200, Data: nil},
 			args:   args{message: "message"},
 			want: &Response{
-				Code: 200,
-				Msg:  "message",
-				Data: nil,
+				Code:    200,
+				Message: "message",
+				Data:    nil,
 			},
 		},
 	}
 	for _, tt := range tests {
 		s.T().Run(tt.name, func(t *testing.T) {
 			resp := &Response{
-				Code: tt.fields.Code,
-				Msg:  tt.fields.Msg,
-				Data: tt.fields.Data,
+				Code:    tt.fields.Code,
+				Message: tt.fields.Msg,
+				Data:    tt.fields.Data,
 			}
 			if got := resp.WithMessage(tt.args.message); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("WithMessage() = %v, want %v", got, tt.want)
@@ -74,15 +74,15 @@ func (s *suiteTester) TestResponse_WithData() {
 			name:   "append data then success",
 			fields: fields{Code: 200, Msg: "message", Data: nil},
 			args:   args{data: "data"},
-			want:   &Response{Code: 200, Msg: "message", Data: "data"},
+			want:   &Response{Code: 200, Message: "message", Data: "data"},
 		},
 	}
 	for _, tt := range tests {
 		s.T().Run(tt.name, func(t *testing.T) {
 			resp := &Response{
-				Code: tt.fields.Code,
-				Msg:  tt.fields.Msg,
-				Data: tt.fields.Data,
+				Code:    tt.fields.Code,
+				Message: tt.fields.Msg,
+				Data:    tt.fields.Data,
 			}
 			if got := resp.WithData(tt.args.data); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("WithData() = %v, want %v", got, tt.want)

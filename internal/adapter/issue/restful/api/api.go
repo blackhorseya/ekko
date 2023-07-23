@@ -3,7 +3,6 @@ package api
 import (
 	"net/http"
 
-	_ "github.com/blackhorseya/ekko/api/docs" // import swagger spec
 	"github.com/blackhorseya/ekko/internal/adapter/issue/restful/api/v1"
 	"github.com/blackhorseya/ekko/internal/pkg/errorx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
