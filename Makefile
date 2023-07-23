@@ -78,19 +78,19 @@ update-deps-go: ## update go dependencies
 
 ## generate
 .PHONY: gen
-gen: gen-pb gen-mocks gen-swagger ## generate code
+gen: gen-pb-go gen-mocks gen-swagger ## generate code
 
-.PHONY: gen-pb
-gen-pb: ## generate protobuf messages and services
+.PHONY: gen-pb-go
+gen-pb-go: ## generate go protobuf
 	@go get -u google.golang.org/protobuf/proto
 	@go get -u google.golang.org/protobuf/cmd/protoc-gen-go
 
 	## Starting generate pb
-	@protoc --proto_path=./pb --go_out=paths=source_relative:./pkg/entity --go-grpc_out=paths=source_relative,require_unimplemented_servers=false:./pb ./pb/domain/*/*/*.proto
+	@protoc --proto_path=./pb --go_out=paths=source_relative:./entity --go-grpc_out=paths=source_relative,require_unimplemented_servers=false:./pb ./pb/domain/*/*/*.proto
 	@echo Successfully generated proto
 
 	## Starting inject tags
-	@protoc-go-inject-tag -input="./pkg/entity/domain/*/model/*.pb.go"
+	@protoc-go-inject-tag -input="./entity/domain/*/model/*.pb.go"
 	@echo Successfully injected tags
 
 .PHONY: gen-swagger
