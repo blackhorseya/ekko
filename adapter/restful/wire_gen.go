@@ -10,6 +10,7 @@ import (
 	"github.com/blackhorseya/ekko/adapter/restful/app"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
 	"github.com/blackhorseya/ekko/internal/pkg/log"
+	"github.com/google/wire"
 	"go.uber.org/zap"
 )
 
@@ -35,3 +36,7 @@ func NewService(config2 *config.Config, logger *zap.Logger) (*app.Service, error
 	service := app.NewService(logger)
 	return service, nil
 }
+
+// wire.go:
+
+var providerSet = wire.NewSet(app.ProviderSet)

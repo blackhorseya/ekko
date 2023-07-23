@@ -6,9 +6,13 @@ import (
 	"syscall"
 
 	"github.com/blackhorseya/ekko/pkg/httpx"
+	"github.com/google/wire"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 )
+
+// ProviderSet define the provider set
+var ProviderSet = wire.NewSet(NewService)
 
 // Service define the restful service
 type Service struct {

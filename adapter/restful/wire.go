@@ -20,6 +20,10 @@ func NewLogger(config *config.Config) (*zap.Logger, error) {
 	panic(wire.Build(log.NewLogger))
 }
 
+var providerSet = wire.NewSet(
+	app.ProviderSet,
+)
+
 func NewService(config *config.Config, logger *zap.Logger) (*app.Service, error) {
-	panic(wire.Build(app.NewService))
+	panic(wire.Build(providerSet))
 }
