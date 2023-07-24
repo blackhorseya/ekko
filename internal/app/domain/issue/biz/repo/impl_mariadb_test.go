@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	issueM "github.com/blackhorseya/ekko/entity/domain/issue/model"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	im "github.com/blackhorseya/ekko/pkg/entity/domain/issue/model"
 	"github.com/blackhorseya/ekko/test/testdata"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
@@ -60,7 +60,7 @@ func (s *suiteMariadb) Test_mariadb_GetByID() {
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *im.Ticket
+		wantInfo *issueM.Ticket
 		wantErr  bool
 	}{
 		{
@@ -122,13 +122,13 @@ func (s *suiteMariadb) Test_mariadb_GetByID() {
 
 func (s *suiteMariadb) Test_mariadb_Create() {
 	type args struct {
-		created *im.Ticket
+		created *issueM.Ticket
 		mock    func()
 	}
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *im.Ticket
+		wantInfo *issueM.Ticket
 		wantErr  bool
 	}{
 		{
@@ -192,7 +192,7 @@ func (s *suiteMariadb) Test_mariadb_List() {
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo []*im.Ticket
+		wantInfo []*issueM.Ticket
 		wantErr  bool
 	}{
 		{
@@ -225,7 +225,7 @@ func (s *suiteMariadb) Test_mariadb_List() {
 						testdata.Ticket1.UpdatedAt.AsTime(),
 					))
 			}},
-			wantInfo: []*im.Ticket{testdata.Ticket1},
+			wantInfo: []*issueM.Ticket{testdata.Ticket1},
 			wantErr:  false,
 		},
 	}
@@ -295,7 +295,7 @@ func (s *suiteMariadb) Test_mariadb_DeleteByID() {
 
 func (s *suiteMariadb) Test_mariadb_Update() {
 	type args struct {
-		updated *im.Ticket
+		updated *issueM.Ticket
 		mock    func()
 	}
 	tests := []struct {

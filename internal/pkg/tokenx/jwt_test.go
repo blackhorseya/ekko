@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	um "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
+	userM "github.com/blackhorseya/ekko/entity/domain/user/model"
 	"github.com/golang-jwt/jwt"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
@@ -37,7 +37,7 @@ func TestJwt(t *testing.T) {
 
 func (s *jwtSuite) Test_jwtx_NewToken() {
 	type args struct {
-		who *um.Profile
+		who *userM.Profile
 	}
 	tests := []struct {
 		name      string

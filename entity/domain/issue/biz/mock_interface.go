@@ -7,9 +7,9 @@ package biz
 import (
 	reflect "reflect"
 
+	model "github.com/blackhorseya/ekko/entity/domain/issue/model"
+	model0 "github.com/blackhorseya/ekko/entity/domain/user/model"
 	contextx "github.com/blackhorseya/ekko/pkg/contextx"
-	model "github.com/blackhorseya/ekko/pkg/entity/domain/issue/model"
-	model0 "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
 	gomock "github.com/golang/mock/gomock"
 )
 

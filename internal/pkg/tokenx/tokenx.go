@@ -2,7 +2,7 @@
 package tokenx
 
 import (
-	um "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
+	userM "github.com/blackhorseya/ekko/entity/domain/user/model"
 	"github.com/golang-jwt/jwt"
 	"github.com/google/wire"
 )
@@ -15,7 +15,7 @@ type TokenClaims struct {
 // Tokenizer declare token service
 type Tokenizer interface {
 	// NewToken serve caller to given a user and generate a token
-	NewToken(who *um.Profile) (token string, err error)
+	NewToken(who *userM.Profile) (token string, err error)
 
 	// ValidateToken serve caller to given a signed token and validate it
 	ValidateToken(signedToken string) (claims *TokenClaims, err error)

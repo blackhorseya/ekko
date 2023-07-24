@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"strconv"
 
-	ub "github.com/blackhorseya/ekko/entity/domain/user/biz"
+	userB "github.com/blackhorseya/ekko/entity/domain/user/biz"
+	userM "github.com/blackhorseya/ekko/entity/domain/user/model"
 	"github.com/blackhorseya/ekko/internal/app/domain/user/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/errorx"
 	"github.com/blackhorseya/ekko/internal/pkg/tokenx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	um "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
 	"github.com/blackhorseya/ekko/pkg/genx"
 	"go.uber.org/zap"
 )
@@ -22,7 +22,7 @@ type impl struct {
 }
 
 // NewImpl serve caller to create an IBiz
-func NewImpl(repo repo.IRepo, node genx.Generator, tokenizer tokenx.Tokenizer) ub.IBiz {
+func NewImpl(repo repo.IRepo, node genx.Generator, tokenizer tokenx.Tokenizer) userB.IBiz {
 	return &impl{
 		repo:      repo,
 		node:      node,
@@ -30,7 +30,7 @@ func NewImpl(repo repo.IRepo, node genx.Generator, tokenizer tokenx.Tokenizer) u
 	}
 }
 
-func (i *impl) Signup(ctx contextx.Contextx, username, password string) (info *um.Profile, err error) {
+func (i *impl) Signup(ctx contextx.Contextx, username, password string) (info *userM.Profile, err error) {
 	if username == "" {
 		return nil, errorx.ErrInvalidUsername
 	}
@@ -39,7 +39,7 @@ func (i *impl) Signup(ctx contextx.Contextx, username, password string) (info *u
 		return nil, errorx.ErrInvalidPassword
 	}
 
-	newUser := &um.Profile{
+	newUser := &userM.Profile{
 		Id:        i.node.Int64(),
 		Username:  username,
 		Password:  fmt.Sprintf("%x", sha256.Sum256([]byte(password))),
@@ -56,7 +56,7 @@ func (i *impl) Signup(ctx contextx.Contextx, username, password string) (info *u
 	return ret, nil
 }
 
-func (i *impl) Login(ctx contextx.Contextx, username, password string) (info *um.Profile, err error) {
+func (i *impl) Login(ctx contextx.Contextx, username, password string) (info *userM.Profile, err error) {
 	if username == "" {
 		return nil, errorx.ErrInvalidUsername
 	}
@@ -95,7 +95,7 @@ func (i *impl) Login(ctx contextx.Contextx, username, password string) (info *um
 	return ret, nil
 }
 
-func (i *impl) Logout(ctx contextx.Contextx, who *um.Profile) error {
+func (i *impl) Logout(ctx contextx.Contextx, who *userM.Profile) error {
 	if who == nil {
 		return errorx.ErrInvalidProfile
 	}
@@ -109,7 +109,7 @@ func (i *impl) Logout(ctx contextx.Contextx, who *um.Profile) error {
 	return nil
 }
 
-func (i *impl) WhoAmI(ctx contextx.Contextx, token string) (info *um.Profile, err error) {
+func (i *impl) WhoAmI(ctx contextx.Contextx, token string) (info *userM.Profile, err error) {
 	if token == "" {
 		return nil, errorx.ErrInvalidToken
 	}

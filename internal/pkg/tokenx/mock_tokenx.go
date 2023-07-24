@@ -7,7 +7,7 @@ package tokenx
 import (
 	reflect "reflect"
 
-	model "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
+	model "github.com/blackhorseya/ekko/entity/domain/user/model"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -50,16 +50,16 @@ func (mr *MockTokenizerMockRecorder) NewToken(who interface{}) *gomock.Call {
 }
 
 // ValidateToken mocks base method.
-func (m *MockTokenizer) ValidateToken(token string) (*TokenClaims, error) {
+func (m *MockTokenizer) ValidateToken(signedToken string) (*TokenClaims, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ValidateToken", token)
+	ret := m.ctrl.Call(m, "ValidateToken", signedToken)
 	ret0, _ := ret[0].(*TokenClaims)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // ValidateToken indicates an expected call of ValidateToken.
-func (mr *MockTokenizerMockRecorder) ValidateToken(token interface{}) *gomock.Call {
+func (mr *MockTokenizerMockRecorder) ValidateToken(signedToken interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ValidateToken", reflect.TypeOf((*MockTokenizer)(nil).ValidateToken), token)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ValidateToken", reflect.TypeOf((*MockTokenizer)(nil).ValidateToken), signedToken)
 }

@@ -4,10 +4,10 @@ import (
 	"reflect"
 	"testing"
 
-	ib "github.com/blackhorseya/ekko/entity/domain/issue/biz"
+	issueB "github.com/blackhorseya/ekko/entity/domain/issue/biz"
+	issueM "github.com/blackhorseya/ekko/entity/domain/issue/model"
 	"github.com/blackhorseya/ekko/internal/app/domain/issue/biz/repo"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	im "github.com/blackhorseya/ekko/pkg/entity/domain/issue/model"
 	"github.com/blackhorseya/ekko/pkg/genx"
 	"github.com/blackhorseya/ekko/test/testdata"
 	"github.com/golang/mock/gomock"
@@ -22,7 +22,7 @@ type suiteTester struct {
 	ctrl      *gomock.Controller
 	generator *genx.MockGenerator
 	repo      *repo.MockIRepo
-	biz       ib.IBiz
+	biz       issueB.IBiz
 }
 
 func (s *suiteTester) SetupTest() {
@@ -49,7 +49,7 @@ func (s *suiteTester) Test_impl_GetByID() {
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *im.Ticket
+		wantInfo *issueM.Ticket
 		wantErr  bool
 	}{
 		{
@@ -96,7 +96,7 @@ func (s *suiteTester) Test_impl_List() {
 	tests := []struct {
 		name      string
 		args      args
-		wantInfo  []*im.Ticket
+		wantInfo  []*issueM.Ticket
 		wantTotal int
 		wantErr   bool
 	}{
@@ -145,7 +145,7 @@ func (s *suiteTester) Test_impl_List() {
 					Limit:  10,
 					Offset: 10,
 				}
-				s.repo.EXPECT().List(gomock.Any(), condition).Return([]*im.Ticket{testdata.Ticket1}, nil).Times(1)
+				s.repo.EXPECT().List(gomock.Any(), condition).Return([]*issueM.Ticket{testdata.Ticket1}, nil).Times(1)
 
 				s.repo.EXPECT().Count(gomock.Any(), condition).Return(0, errors.New("error")).Times(1)
 			}},
@@ -160,11 +160,11 @@ func (s *suiteTester) Test_impl_List() {
 					Limit:  10,
 					Offset: 10,
 				}
-				s.repo.EXPECT().List(gomock.Any(), condition).Return([]*im.Ticket{testdata.Ticket1}, nil).Times(1)
+				s.repo.EXPECT().List(gomock.Any(), condition).Return([]*issueM.Ticket{testdata.Ticket1}, nil).Times(1)
 
 				s.repo.EXPECT().Count(gomock.Any(), condition).Return(10, nil).Times(1)
 			}},
-			wantInfo:  []*im.Ticket{testdata.Ticket1},
+			wantInfo:  []*issueM.Ticket{testdata.Ticket1},
 			wantTotal: 10,
 			wantErr:   false,
 		},
@@ -198,7 +198,7 @@ func (s *suiteTester) Test_impl_Create() {
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *im.Ticket
+		wantInfo *issueM.Ticket
 		wantErr  bool
 	}{
 		{
@@ -211,10 +211,10 @@ func (s *suiteTester) Test_impl_Create() {
 			name: "create a ticket then error",
 			args: args{title: testdata.Ticket1.Title, mock: func() {
 				s.generator.EXPECT().Int64().Return(testdata.Ticket1.Id).Times(1)
-				created := &im.Ticket{
+				created := &issueM.Ticket{
 					Id:        testdata.Ticket1.Id,
 					Title:     testdata.Ticket1.Title,
-					Status:    im.TicketStatus_TICKET_STATUS_TODO,
+					Status:    issueM.TicketStatus_TICKET_STATUS_TODO,
 					CreatedAt: nil,
 					UpdatedAt: nil,
 				}
@@ -227,10 +227,10 @@ func (s *suiteTester) Test_impl_Create() {
 			name: "ok",
 			args: args{title: testdata.Ticket1.Title, mock: func() {
 				s.generator.EXPECT().Int64().Return(testdata.Ticket1.Id).Times(1)
-				created := &im.Ticket{
+				created := &issueM.Ticket{
 					Id:        testdata.Ticket1.Id,
 					Title:     testdata.Ticket1.Title,
-					Status:    im.TicketStatus_TICKET_STATUS_TODO,
+					Status:    issueM.TicketStatus_TICKET_STATUS_TODO,
 					CreatedAt: nil,
 					UpdatedAt: nil,
 				}
@@ -261,18 +261,18 @@ func (s *suiteTester) Test_impl_Create() {
 func (s *suiteTester) Test_impl_UpdateStatus() {
 	type args struct {
 		id     int64
-		status im.TicketStatus
+		status issueM.TicketStatus
 		mock   func()
 	}
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *im.Ticket
+		wantInfo *issueM.Ticket
 		wantErr  bool
 	}{
 		{
 			name: "get by id then error",
-			args: args{id: testdata.Ticket1.Id, status: im.TicketStatus_TICKET_STATUS_DONE, mock: func() {
+			args: args{id: testdata.Ticket1.Id, status: issueM.TicketStatus_TICKET_STATUS_DONE, mock: func() {
 				s.repo.EXPECT().GetByID(gomock.Any(), testdata.Ticket1.Id).Return(nil, errors.New("error")).Times(1)
 			}},
 			wantInfo: nil,
@@ -280,7 +280,7 @@ func (s *suiteTester) Test_impl_UpdateStatus() {
 		},
 		{
 			name: "if not exists then error",
-			args: args{id: testdata.Ticket1.Id, status: im.TicketStatus_TICKET_STATUS_DONE, mock: func() {
+			args: args{id: testdata.Ticket1.Id, status: issueM.TicketStatus_TICKET_STATUS_DONE, mock: func() {
 				s.repo.EXPECT().GetByID(gomock.Any(), testdata.Ticket1.Id).Return(nil, nil).Times(1)
 			}},
 			wantInfo: nil,
@@ -288,7 +288,7 @@ func (s *suiteTester) Test_impl_UpdateStatus() {
 		},
 		{
 			name: "update status then error",
-			args: args{id: testdata.Ticket1.Id, status: im.TicketStatus_TICKET_STATUS_DONE, mock: func() {
+			args: args{id: testdata.Ticket1.Id, status: issueM.TicketStatus_TICKET_STATUS_DONE, mock: func() {
 				s.repo.EXPECT().GetByID(gomock.Any(), testdata.Ticket1.Id).Return(testdata.Ticket1, nil).Times(1)
 
 				s.repo.EXPECT().Update(gomock.Any(), testdata.Ticket1).Return(errors.New("error")).Times(1)
@@ -298,7 +298,7 @@ func (s *suiteTester) Test_impl_UpdateStatus() {
 		},
 		{
 			name: "ok",
-			args: args{id: testdata.Ticket1.Id, status: im.TicketStatus_TICKET_STATUS_DONE, mock: func() {
+			args: args{id: testdata.Ticket1.Id, status: issueM.TicketStatus_TICKET_STATUS_DONE, mock: func() {
 				s.repo.EXPECT().GetByID(gomock.Any(), testdata.Ticket1.Id).Return(testdata.Ticket1, nil).Times(1)
 
 				s.repo.EXPECT().Update(gomock.Any(), testdata.Ticket1).Return(nil).Times(1)

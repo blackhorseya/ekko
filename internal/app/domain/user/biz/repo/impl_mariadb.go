@@ -5,9 +5,9 @@ import (
 	"errors"
 	"time"
 
+	userM "github.com/blackhorseya/ekko/entity/domain/user/model"
 	"github.com/blackhorseya/ekko/internal/app/domain/user/biz/repo/dao"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	um "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
 	"github.com/jmoiron/sqlx"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -23,7 +23,7 @@ func NewMariadb(rw *sqlx.DB) IRepo {
 	}
 }
 
-func (m *mariadb) GetProfileByUsername(ctx contextx.Contextx, username string) (info *um.Profile, err error) {
+func (m *mariadb) GetProfileByUsername(ctx contextx.Contextx, username string) (info *userM.Profile, err error) {
 	timeout, cancelFunc := contextx.WithTimeout(ctx, 1*time.Second)
 	defer cancelFunc()
 
@@ -42,7 +42,7 @@ func (m *mariadb) GetProfileByUsername(ctx contextx.Contextx, username string) (
 	return ret.ToEntity(), nil
 }
 
-func (m *mariadb) GetProfileByID(ctx contextx.Contextx, id int64) (info *um.Profile, err error) {
+func (m *mariadb) GetProfileByID(ctx contextx.Contextx, id int64) (info *userM.Profile, err error) {
 	timeout, cancelFunc := contextx.WithTimeout(ctx, 1*time.Second)
 	defer cancelFunc()
 
@@ -61,7 +61,7 @@ func (m *mariadb) GetProfileByID(ctx contextx.Contextx, id int64) (info *um.Prof
 	return ret.ToEntity(), nil
 }
 
-func (m *mariadb) Register(ctx contextx.Contextx, who *um.Profile) (info *um.Profile, err error) {
+func (m *mariadb) Register(ctx contextx.Contextx, who *userM.Profile) (info *userM.Profile, err error) {
 	timeout, cancelFunc := contextx.WithTimeout(ctx, 1*time.Second)
 	defer cancelFunc()
 
@@ -77,7 +77,7 @@ func (m *mariadb) Register(ctx contextx.Contextx, who *um.Profile) (info *um.Pro
 	return who, nil
 }
 
-func (m *mariadb) UpdateToken(ctx contextx.Contextx, who *um.Profile, token string) (info *um.Profile, err error) {
+func (m *mariadb) UpdateToken(ctx contextx.Contextx, who *userM.Profile, token string) (info *userM.Profile, err error) {
 	timeout, cancelFunc := contextx.WithTimeout(ctx, 1*time.Second)
 	defer cancelFunc()
 

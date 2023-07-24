@@ -3,9 +3,9 @@
 package biz
 
 import (
+	issueM "github.com/blackhorseya/ekko/entity/domain/issue/model"
+	userM "github.com/blackhorseya/ekko/entity/domain/user/model"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	im "github.com/blackhorseya/ekko/pkg/entity/domain/issue/model"
-	um "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
 )
 
 type ListTasksCondition struct {
@@ -16,20 +16,20 @@ type ListTasksCondition struct {
 // IBiz declare issue domain interface
 type IBiz interface {
 	// GetByID serve caller to given issue's id to get a issue
-	GetByID(ctx contextx.Contextx, id int64) (info *im.Ticket, err error)
+	GetByID(ctx contextx.Contextx, id int64) (info *issueM.Ticket, err error)
 
 	// List serve caller to list all tasks
-	List(ctx contextx.Contextx, page, size int) (info []*im.Ticket, total int, err error)
+	List(ctx contextx.Contextx, page, size int) (info []*issueM.Ticket, total int, err error)
 
 	// Create serve caller to create a issue
-	Create(ctx contextx.Contextx, title string) (info *im.Ticket, err error)
+	Create(ctx contextx.Contextx, title string) (info *issueM.Ticket, err error)
 
 	// UpdateStatus serve caller to update the issue's status by id
-	UpdateStatus(ctx contextx.Contextx, id int64, status im.TicketStatus) (info *im.Ticket, err error)
+	UpdateStatus(ctx contextx.Contextx, id int64, status issueM.TicketStatus) (info *issueM.Ticket, err error)
 
 	// Delete serve caller to given issue's id to delete the issue
 	Delete(ctx contextx.Contextx, id int64) error
 
 	// ListTasks serve caller to given user's profile to list all tasks
-	ListTasks(ctx contextx.Contextx, who *um.Profile, condition ListTasksCondition) (tickets []*im.Ticket, total int, err error)
+	ListTasks(ctx contextx.Contextx, who *userM.Profile, condition ListTasksCondition) (tickets []*issueM.Ticket, total int, err error)
 }

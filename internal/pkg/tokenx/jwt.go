@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"time"
 
-	um "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
+	userM "github.com/blackhorseya/ekko/entity/domain/user/model"
 	"github.com/golang-jwt/jwt"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
@@ -41,7 +41,7 @@ func NewJwtx(opts *Options) Tokenizer {
 	}
 }
 
-func (j *jwtx) NewToken(who *um.Profile) (token string, err error) {
+func (j *jwtx) NewToken(who *userM.Profile) (token string, err error) {
 	if who == nil {
 		return "", errors.New("user is nil")
 	}

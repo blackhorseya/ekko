@@ -3,13 +3,13 @@ package testdata
 import (
 	"time"
 
-	um "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
+	userM "github.com/blackhorseya/ekko/entity/domain/user/model"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 var (
 	// Profile1 user 1
-	Profile1 = &um.Profile{
+	Profile1 = &userM.Profile{
 		Id:        1,
 		Username:  "username",
 		Password:  "password",

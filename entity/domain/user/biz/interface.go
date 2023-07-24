@@ -3,8 +3,8 @@
 package biz
 
 import (
+	userM "github.com/blackhorseya/ekko/entity/domain/user/model"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	userM "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
 )
 
 // IBiz declare user domain interface

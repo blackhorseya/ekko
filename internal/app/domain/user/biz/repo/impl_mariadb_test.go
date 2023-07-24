@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	userM "github.com/blackhorseya/ekko/entity/domain/user/model"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	um "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
 	"github.com/blackhorseya/ekko/test/testdata"
 	"github.com/jmoiron/sqlx"
 	"github.com/stretchr/testify/suite"
@@ -49,7 +49,7 @@ func (s *suiteMariadb) Test_mariadb_GetProfileByUsername() {
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *um.Profile
+		wantInfo *userM.Profile
 		wantErr  bool
 	}{
 		{
@@ -120,7 +120,7 @@ func (s *suiteMariadb) Test_mariadb_GetProfileByID() {
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *um.Profile
+		wantInfo *userM.Profile
 		wantErr  bool
 	}{
 		{
@@ -183,13 +183,13 @@ func (s *suiteMariadb) Test_mariadb_GetProfileByID() {
 
 func (s *suiteMariadb) Test_mariadb_Register() {
 	type args struct {
-		who  *um.Profile
+		who  *userM.Profile
 		mock func()
 	}
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *um.Profile
+		wantInfo *userM.Profile
 		wantErr  bool
 	}{
 		{
@@ -250,14 +250,14 @@ func (s *suiteMariadb) Test_mariadb_Register() {
 
 func (s *suiteMariadb) Test_mariadb_UpdateToken() {
 	type args struct {
-		who   *um.Profile
+		who   *userM.Profile
 		token string
 		mock  func()
 	}
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *um.Profile
+		wantInfo *userM.Profile
 		wantErr  bool
 	}{
 		{

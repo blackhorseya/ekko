@@ -3,7 +3,7 @@ package dao
 import (
 	"time"
 
-	um "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
+	userM "github.com/blackhorseya/ekko/entity/domain/user/model"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -17,7 +17,7 @@ type Profile struct {
 	UpdatedAt time.Time `db:"updated_at"`
 }
 
-func NewProfile(info *um.Profile) *Profile {
+func NewProfile(info *userM.Profile) *Profile {
 	return &Profile{
 		ID:        info.Id,
 		Username:  info.Username,
@@ -29,8 +29,8 @@ func NewProfile(info *um.Profile) *Profile {
 }
 
 // ToEntity serve caller to convert to Profile entity
-func (p *Profile) ToEntity() *um.Profile {
-	return &um.Profile{
+func (p *Profile) ToEntity() *userM.Profile {
+	return &userM.Profile{
 		Id:        p.ID,
 		Username:  p.Username,
 		Password:  p.Password,

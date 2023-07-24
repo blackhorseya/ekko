@@ -10,8 +10,8 @@ import (
 	"reflect"
 	"testing"
 
+	issueM "github.com/blackhorseya/ekko/entity/domain/issue/model"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	im "github.com/blackhorseya/ekko/pkg/entity/domain/issue/model"
 	"github.com/blackhorseya/ekko/pkg/httpx"
 	"github.com/blackhorseya/ekko/pkg/response"
 	"github.com/blackhorseya/ekko/test/testdata"
@@ -53,7 +53,7 @@ func (s *suiteHTTPClient) Test_httpclient_GetByID() {
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *im.Ticket
+		wantInfo *issueM.Ticket
 		wantErr  bool
 	}{
 		{
@@ -86,12 +86,18 @@ func (s *suiteHTTPClient) Test_httpclient_GetByID() {
 				payload, _ := json.Marshal(response.OK.WithData(testdata.Ticket1))
 				body := io.NopCloser(bytes.NewReader(payload))
 				s.client.EXPECT().Do(req).Return(&http.Response{
-					StatusCode: http.StatusNotFound,
+					StatusCode: http.StatusOK,
 					Body:       body,
 				}, nil).Times(1)
 			}},
-			wantInfo: testdata.Ticket1,
-			wantErr:  false,
+			wantInfo: &issueM.Ticket{
+				Id:        testdata.Ticket1.Id,
+				Title:     testdata.Ticket1.Title,
+				Status:    testdata.Ticket1.Status,
+				CreatedAt: nil,
+				UpdatedAt: nil,
+			},
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
@@ -120,7 +126,7 @@ func (s *suiteHTTPClient) Test_httpclient_List() {
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo []*im.Ticket
+		wantInfo []*issueM.Ticket
 		wantErr  bool
 	}{
 		{
@@ -160,17 +166,25 @@ func (s *suiteHTTPClient) Test_httpclient_List() {
 			}, mock: func() {
 				req, _ := http.NewRequest(http.MethodGet, "http://localhost:8080/api/v1/tasks?page=1&size=10", nil)
 				payload, _ := json.Marshal(response.OK.WithData(struct {
-					Total int          `json:"total"`
-					List  []*im.Ticket `json:"list"`
-				}{Total: 10, List: []*im.Ticket{testdata.Ticket1}}))
+					Total int              `json:"total"`
+					List  []*issueM.Ticket `json:"list"`
+				}{Total: 10, List: []*issueM.Ticket{testdata.Ticket1}}))
 				body := io.NopCloser(bytes.NewReader(payload))
 				s.client.EXPECT().Do(req).Return(&http.Response{
-					StatusCode: http.StatusNotFound,
+					StatusCode: http.StatusOK,
 					Body:       body,
 				}, nil).Times(1)
 			}},
-			wantInfo: []*im.Ticket{testdata.Ticket1},
-			wantErr:  false,
+			wantInfo: []*issueM.Ticket{
+				{
+					Id:        testdata.Ticket1.Id,
+					Title:     testdata.Ticket1.Title,
+					Status:    testdata.Ticket1.Status,
+					CreatedAt: nil,
+					UpdatedAt: nil,
+				},
+			},
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {

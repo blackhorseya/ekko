@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"net/url"
 
+	issueM "github.com/blackhorseya/ekko/entity/domain/issue/model"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	im "github.com/blackhorseya/ekko/pkg/entity/domain/issue/model"
 	"github.com/blackhorseya/ekko/pkg/httpx"
 	"github.com/blackhorseya/ekko/pkg/response"
 	"github.com/pkg/errors"
@@ -54,7 +54,7 @@ func NewHTTPClient(opts *HTTPClientOptions, client httpx.Client) (IRepo, error) 
 	}, nil
 }
 
-func (h *httpclient) GetByID(ctx contextx.Contextx, id int64) (info *im.Ticket, err error) {
+func (h *httpclient) GetByID(ctx contextx.Contextx, id int64) (info *issueM.Ticket, err error) {
 	uri := h.baseURL.JoinPath(fmt.Sprintf("/v1/tasks/%v", id))
 
 	req, err := http.NewRequest(http.MethodGet, uri.String(), nil)
@@ -70,7 +70,7 @@ func (h *httpclient) GetByID(ctx contextx.Contextx, id int64) (info *im.Ticket, 
 
 	type dto struct {
 		*response.Response
-		Data *im.Ticket `json:"data"`
+		Data *issueM.Ticket `json:"data"`
 	}
 	var res *dto
 	err = json.NewDecoder(resp.Body).Decode(&res)
@@ -86,7 +86,7 @@ func (h *httpclient) GetByID(ctx contextx.Contextx, id int64) (info *im.Ticket, 
 	return res.Data, nil
 }
 
-func (h *httpclient) List(ctx contextx.Contextx, condition QueryTicketsCondition) (info []*im.Ticket, err error) {
+func (h *httpclient) List(ctx contextx.Contextx, condition QueryTicketsCondition) (info []*issueM.Ticket, err error) {
 	size := condition.Limit
 	page := (condition.Offset / condition.Limit) + 1
 	uri := h.baseURL.JoinPath("/v1/tasks")
@@ -109,8 +109,8 @@ func (h *httpclient) List(ctx contextx.Contextx, condition QueryTicketsCondition
 	type dto struct {
 		*response.Response
 		Data struct {
-			Total int          `json:"total"`
-			List  []*im.Ticket `json:"list"`
+			Total int              `json:"total"`
+			List  []*issueM.Ticket `json:"list"`
 		} `json:"data,omitempty"`
 	}
 	var res *dto
@@ -126,7 +126,7 @@ func (h *httpclient) List(ctx contextx.Contextx, condition QueryTicketsCondition
 	return res.Data.List, nil
 }
 
-func (h *httpclient) Create(ctx contextx.Contextx, created *im.Ticket) (info *im.Ticket, err error) {
+func (h *httpclient) Create(ctx contextx.Contextx, created *issueM.Ticket) (info *issueM.Ticket, err error) {
 	// todo: 2023/4/3|sean|impl me
 	panic("implement me")
 }
@@ -136,7 +136,7 @@ func (h *httpclient) Count(ctx contextx.Contextx, condition QueryTicketsConditio
 	panic("implement me")
 }
 
-func (h *httpclient) Update(ctx contextx.Contextx, updated *im.Ticket) error {
+func (h *httpclient) Update(ctx contextx.Contextx, updated *issueM.Ticket) error {
 	// todo: 2023/4/3|sean|impl me
 	panic("implement me")
 }

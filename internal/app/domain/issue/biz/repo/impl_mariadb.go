@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"strings"
 
+	issueM "github.com/blackhorseya/ekko/entity/domain/issue/model"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	im "github.com/blackhorseya/ekko/pkg/entity/domain/issue/model"
 	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
@@ -24,7 +24,7 @@ func NewMariadb(rw *sqlx.DB) IRepo {
 	return &mariadb{rw: rw}
 }
 
-func (i *mariadb) GetByID(ctx contextx.Contextx, id int64) (info *im.Ticket, err error) {
+func (i *mariadb) GetByID(ctx contextx.Contextx, id int64) (info *issueM.Ticket, err error) {
 	stmt := `SELECT id, title, status, created_at, updated_at FROM tickets WHERE id = ?`
 
 	var ret task
@@ -41,7 +41,7 @@ func (i *mariadb) GetByID(ctx contextx.Contextx, id int64) (info *im.Ticket, err
 	return ret.ToEntity(), nil
 }
 
-func (i *mariadb) Create(ctx contextx.Contextx, created *im.Ticket) (info *im.Ticket, err error) {
+func (i *mariadb) Create(ctx contextx.Contextx, created *issueM.Ticket) (info *issueM.Ticket, err error) {
 	now := timestamppb.Now()
 	created.CreatedAt = now
 	created.UpdatedAt = now
@@ -57,7 +57,7 @@ func (i *mariadb) Create(ctx contextx.Contextx, created *im.Ticket) (info *im.Ti
 	return created, nil
 }
 
-func (i *mariadb) List(ctx contextx.Contextx, condition QueryTicketsCondition) (info []*im.Ticket, err error) {
+func (i *mariadb) List(ctx contextx.Contextx, condition QueryTicketsCondition) (info []*issueM.Ticket, err error) {
 	var args []interface{}
 	query := []string{
 		`select id, title, status, created_at, updated_at from tickets`,
@@ -85,7 +85,7 @@ func (i *mariadb) List(ctx contextx.Contextx, condition QueryTicketsCondition) (
 		return nil, nil
 	}
 
-	ret := make([]*im.Ticket, len(got))
+	ret := make([]*issueM.Ticket, len(got))
 	for idx, t := range got {
 		ret[idx] = t.ToEntity()
 	}
@@ -105,7 +105,7 @@ func (i *mariadb) Count(ctx contextx.Contextx, condition QueryTicketsCondition) 
 	return ret, nil
 }
 
-func (i *mariadb) Update(ctx contextx.Contextx, updated *im.Ticket) error {
+func (i *mariadb) Update(ctx contextx.Contextx, updated *issueM.Ticket) error {
 	updated.UpdatedAt = timestamppb.Now()
 
 	stmt := `update tickets set title=:title, status=:status, updated_at=:updated_at where id = :id`

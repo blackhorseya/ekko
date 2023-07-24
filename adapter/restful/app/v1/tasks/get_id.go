@@ -3,6 +3,7 @@ package tasks
 import (
 	"net/http"
 
+	_ "github.com/blackhorseya/ekko/entity/domain/issue/model"
 	"github.com/blackhorseya/ekko/internal/pkg/errorx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/response"

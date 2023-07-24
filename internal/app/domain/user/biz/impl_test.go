@@ -8,11 +8,11 @@ import (
 	"strconv"
 	"testing"
 
-	ub "github.com/blackhorseya/ekko/entity/domain/user/biz"
+	userB "github.com/blackhorseya/ekko/entity/domain/user/biz"
+	userM "github.com/blackhorseya/ekko/entity/domain/user/model"
 	"github.com/blackhorseya/ekko/internal/app/domain/user/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/tokenx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	um "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
 	"github.com/blackhorseya/ekko/pkg/genx"
 	"github.com/blackhorseya/ekko/test/testdata"
 	"github.com/golang-jwt/jwt"
@@ -30,7 +30,7 @@ type suiteBiz struct {
 	repo      *repo.MockIRepo
 	node      *genx.MockGenerator
 	tokenizer *tokenx.MockTokenizer
-	biz       ub.IBiz
+	biz       userB.IBiz
 }
 
 func (s *suiteBiz) SetupTest() {
@@ -53,7 +53,7 @@ func TestAll(t *testing.T) {
 }
 
 func (s *suiteBiz) Test_impl_Signup() {
-	newUser := &um.Profile{
+	newUser := &userM.Profile{
 		Id:        testdata.Profile1.Id,
 		Username:  testdata.Profile1.Username,
 		Password:  fmt.Sprintf("%x", sha256.Sum256([]byte(testdata.Profile1.Password))),
@@ -70,7 +70,7 @@ func (s *suiteBiz) Test_impl_Signup() {
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *um.Profile
+		wantInfo *userM.Profile
 		wantErr  bool
 	}{
 		{
@@ -137,7 +137,7 @@ func (s *suiteBiz) Test_impl_Login() {
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *um.Profile
+		wantInfo *userM.Profile
 		wantErr  bool
 	}{
 		{
@@ -174,7 +174,7 @@ func (s *suiteBiz) Test_impl_Login() {
 			name: "if password not match then error",
 			args: args{username: testdata.Profile1.Username, password: testdata.Profile1.Password, mock: func() {
 				// mock get profile by username
-				exists := &um.Profile{
+				exists := &userM.Profile{
 					Id:        testdata.Profile1.Id,
 					Username:  testdata.Profile1.Username,
 					Password:  "not match",
@@ -191,7 +191,7 @@ func (s *suiteBiz) Test_impl_Login() {
 			name: "generate token then error",
 			args: args{username: testdata.Profile1.Username, password: testdata.Profile1.Password, mock: func() {
 				// mock get profile by username
-				exists := &um.Profile{
+				exists := &userM.Profile{
 					Id:        testdata.Profile1.Id,
 					Username:  testdata.Profile1.Username,
 					Password:  fmt.Sprintf("%x", sha256.Sum256([]byte(testdata.Profile1.Password))),
@@ -211,7 +211,7 @@ func (s *suiteBiz) Test_impl_Login() {
 			name: "update token then error",
 			args: args{username: testdata.Profile1.Username, password: testdata.Profile1.Password, mock: func() {
 				// mock get profile by username
-				exists := &um.Profile{
+				exists := &userM.Profile{
 					Id:        testdata.Profile1.Id,
 					Username:  testdata.Profile1.Username,
 					Password:  fmt.Sprintf("%x", sha256.Sum256([]byte(testdata.Profile1.Password))),
@@ -234,7 +234,7 @@ func (s *suiteBiz) Test_impl_Login() {
 			name: "login success",
 			args: args{username: testdata.Profile1.Username, password: testdata.Profile1.Password, mock: func() {
 				// mock get profile by username
-				exists := &um.Profile{
+				exists := &userM.Profile{
 					Id:        testdata.Profile1.Id,
 					Username:  testdata.Profile1.Username,
 					Password:  fmt.Sprintf("%x", sha256.Sum256([]byte(testdata.Profile1.Password))),
@@ -274,7 +274,7 @@ func (s *suiteBiz) Test_impl_Login() {
 
 func (s *suiteBiz) Test_impl_Logout() {
 	type args struct {
-		who  *um.Profile
+		who  *userM.Profile
 		mock func()
 	}
 	tests := []struct {
@@ -323,7 +323,7 @@ func (s *suiteBiz) Test_impl_WhoAmI() {
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *um.Profile
+		wantInfo *userM.Profile
 		wantErr  bool
 	}{
 		{

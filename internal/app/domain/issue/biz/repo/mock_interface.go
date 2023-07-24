@@ -7,8 +7,8 @@ package repo
 import (
 	reflect "reflect"
 
+	model "github.com/blackhorseya/ekko/entity/domain/issue/model"
 	contextx "github.com/blackhorseya/ekko/pkg/contextx"
-	model "github.com/blackhorseya/ekko/pkg/entity/domain/issue/model"
 	gomock "github.com/golang/mock/gomock"
 )
 
