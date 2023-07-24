@@ -11,7 +11,7 @@ go_library(
     importpath = "github.com/blackhorseya/ekko/internal/pkg/tokenx",
     visibility = ["//:__subpackages__"],
     deps = [
-        "//pkg/entity/domain/user/model",
+        "//entity/domain/user/model",
         "@com_github_golang_jwt_jwt//:jwt",
         "@com_github_golang_mock//gomock",
         "@com_github_google_wire//:wire",
@@ -25,7 +25,7 @@ go_test(
     srcs = ["jwt_test.go"],
     embed = [":tokenx"],
     deps = [
-        "//pkg/entity/domain/user/model",
+        "//entity/domain/user/model",
         "@com_github_golang_jwt_jwt//:jwt",
         "@com_github_stretchr_testify//suite",
         "@org_uber_go_zap//:zap",

@@ -8,6 +8,5 @@ go_library(
     deps = [
         "//pkg/genx",
         "@com_github_bwmarrin_snowflake//:snowflake",
-        "@com_github_google_wire//:wire",
     ],
 )

@@ -6,11 +6,9 @@ go_library(
     importpath = "github.com/blackhorseya/ekko/internal/pkg/storage/mariadb",
     visibility = ["//:__subpackages__"],
     deps = [
+        "//internal/pkg/config",
         "@com_github_go_sql_driver_mysql//:mysql",
-        "@com_github_google_wire//:wire",
         "@com_github_jmoiron_sqlx//:sqlx",
-        "@com_github_pkg_errors//:errors",
-        "@com_github_spf13_viper//:viper",
         "@org_uber_go_zap//:zap",
     ],
 )

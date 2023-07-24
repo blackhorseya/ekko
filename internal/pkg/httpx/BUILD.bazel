@@ -9,13 +9,12 @@ go_library(
     importpath = "github.com/blackhorseya/ekko/internal/pkg/httpx",
     visibility = ["//:__subpackages__"],
     deps = [
+        "//internal/pkg/config",
         "//pkg/contextx",
         "//pkg/httpx",
-        "//pkg/netx",
         "@com_github_gin_gonic_gin//:gin",
         "@com_github_google_wire//:wire",
         "@com_github_pkg_errors//:errors",
-        "@com_github_spf13_viper//:viper",
         "@org_uber_go_zap//:zap",
     ],
 )

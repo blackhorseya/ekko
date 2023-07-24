@@ -6,8 +6,7 @@ go_library(
     importpath = "github.com/blackhorseya/ekko/internal/pkg/log",
     visibility = ["//:__subpackages__"],
     deps = [
-        "@com_github_google_wire//:wire",
-        "@com_github_spf13_viper//:viper",
+        "//internal/pkg/config",
         "@org_uber_go_zap//:zap",
         "@org_uber_go_zap//zapcore",
     ],
