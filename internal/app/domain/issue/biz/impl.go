@@ -3,10 +3,10 @@ package biz
 import (
 	"strings"
 
+	ib "github.com/blackhorseya/ekko/entity/domain/issue/biz"
 	"github.com/blackhorseya/ekko/internal/app/domain/issue/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/errorx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	ib "github.com/blackhorseya/ekko/pkg/entity/domain/issue/biz"
 	im "github.com/blackhorseya/ekko/pkg/entity/domain/issue/model"
 	"github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
 	"github.com/blackhorseya/ekko/pkg/genx"

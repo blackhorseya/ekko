@@ -2,7 +2,7 @@ package v1
 
 import (
 	"github.com/blackhorseya/ekko/adapter/restful/app/v1/tasks"
-	issueB "github.com/blackhorseya/ekko/pkg/entity/domain/issue/biz"
+	issueB "github.com/blackhorseya/ekko/entity/domain/issue/biz"
 	"github.com/gin-gonic/gin"
 )
 

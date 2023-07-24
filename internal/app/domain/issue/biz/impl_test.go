@@ -4,9 +4,9 @@ import (
 	"reflect"
 	"testing"
 
+	ib "github.com/blackhorseya/ekko/entity/domain/issue/biz"
 	"github.com/blackhorseya/ekko/internal/app/domain/issue/biz/repo"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	ib "github.com/blackhorseya/ekko/pkg/entity/domain/issue/biz"
 	im "github.com/blackhorseya/ekko/pkg/entity/domain/issue/model"
 	"github.com/blackhorseya/ekko/pkg/genx"
 	"github.com/blackhorseya/ekko/test/testdata"

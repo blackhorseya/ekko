@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"testing"
 
+	ub "github.com/blackhorseya/ekko/entity/domain/user/biz"
 	"github.com/blackhorseya/ekko/internal/app/domain/user/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/tokenx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	ub "github.com/blackhorseya/ekko/pkg/entity/domain/user/biz"
 	um "github.com/blackhorseya/ekko/pkg/entity/domain/user/model"
 	"github.com/blackhorseya/ekko/pkg/genx"
 	"github.com/blackhorseya/ekko/test/testdata"
