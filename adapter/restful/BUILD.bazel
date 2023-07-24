@@ -1,4 +1,5 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
 
 go_library(
     name = "restful_lib",
@@ -26,4 +27,22 @@ go_binary(
     name = "restful",
     embed = [":restful_lib"],
     visibility = ["//visibility:public"],
+)
+
+container_image(
+    name = "image",
+    base = "@alpine_linux_amd64//image",
+    directory = "/app",
+    entrypoint = ["./restful"],
+    files = [":restful"],
+    workdir = "/app",
+)
+
+container_push(
+    name = "push-image",
+    format = "Docker",
+    image = ":image",
+    registry = "{dockerRegistry}",
+    repository = "ekko/restful",
+    tag = "{gitVersion}",
 )
