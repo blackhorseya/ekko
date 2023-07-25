@@ -80,3 +80,9 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+config: |-
+  log:
+    level: info
+    format: json
+  
