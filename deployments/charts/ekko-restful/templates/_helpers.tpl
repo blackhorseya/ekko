@@ -40,6 +40,7 @@ helm.sh/chart: {{ include "ekko-restful.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+release: {{ $.Release.Name | quote }}
 {{- end }}
 
 {{/*
@@ -48,6 +49,7 @@ Selector labels
 {{- define "ekko-restful.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "ekko-restful.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+release: {{ $.Release.Name | quote }}
 {{- end }}
 
 {{/*
