@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "ekko-restful.fullname" . }}-test-connection"
+  labels:
+    {{- include "ekko-restful.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "ekko-restful.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
