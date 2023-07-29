@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package task;
+
+option go_package = "github.com/blackhorseya/ekko/pkg/entity/domain/task/model";
