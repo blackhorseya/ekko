@@ -3,7 +3,6 @@ package tasks
 import (
 	"net/http"
 
-	_ "github.com/blackhorseya/ekko/entity/domain/issue/model"
 	"github.com/blackhorseya/ekko/internal/pkg/errorx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/response"
@@ -22,7 +21,7 @@ type getByIDRequest struct {
 // @Accept application/json
 // @Produce application/json
 // @Param id path int true "ID of issue"
-// @Success 200 {object} response.Response{data=model.Ticket}
+// @Success 200 {object} response.Response
 // @Failure 400 {object} er.Error
 // @Failure 404 {object} er.Error
 // @Failure 500 {object} er.Error

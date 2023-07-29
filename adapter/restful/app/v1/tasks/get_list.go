@@ -33,7 +33,7 @@ type listResponse struct {
 // @Produce application/json
 // @Param page query integer false "page" default(1)
 // @Param size query integer false "size" default(10)
-// @Success 200 {object} response.Response{data=listResponse}
+// @Success 200 {object} response.Response
 // @Failure 400 {object} er.Error
 // @Failure 404 {object} er.Error
 // @Failure 500 {object} er.Error
