@@ -11,9 +11,8 @@ type impl struct {
 	task taskB.IBiz
 }
 
-func Handle(g *gin.RouterGroup, biz issueB.IBiz, task taskB.IBiz) {
+func Handle(g *gin.RouterGroup, task taskB.IBiz) {
 	i := &impl{
-		biz:  biz,
 		task: task,
 	}
 

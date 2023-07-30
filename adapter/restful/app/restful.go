@@ -7,7 +7,6 @@ import (
 
 	_ "github.com/blackhorseya/ekko/adapter/restful/api/docs" // swagger docs
 	v1 "github.com/blackhorseya/ekko/adapter/restful/app/v1"
-	issueB "github.com/blackhorseya/ekko/entity/domain/issue/biz"
 	taskB "github.com/blackhorseya/ekko/entity/domain/task/biz"
 	"github.com/blackhorseya/ekko/pkg/adapters"
 	"github.com/blackhorseya/ekko/pkg/contextx"
@@ -23,12 +22,11 @@ import (
 type restful struct {
 	logger *zap.Logger
 	router *gin.Engine
-	issue  issueB.IBiz
 	taskB  taskB.IBiz
 }
 
 // NewRestful will create a restful adapter
-func NewRestful(logger *zap.Logger, router *gin.Engine, issue issueB.IBiz, taskB taskB.IBiz) adapters.Restful {
+func NewRestful(logger *zap.Logger, router *gin.Engine, taskB taskB.IBiz) adapters.Restful {
 	router.Use(ginzap.GinzapWithConfig(logger, &ginzap.Config{
 		TimeFormat: time.RFC3339,
 		UTC:        true,
@@ -47,7 +45,6 @@ func NewRestful(logger *zap.Logger, router *gin.Engine, issue issueB.IBiz, taskB
 	return &restful{
 		logger: logger,
 		router: router,
-		issue:  issue,
 		taskB:  taskB,
 	}
 }
@@ -61,6 +58,6 @@ func (r *restful) InitRouting() {
 
 		api.GET("docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-		v1.Handle(api.Group("/v1"), r.issue, r.taskB)
+		v1.Handle(api.Group("/v1"), r.taskB)
 	}
 }
