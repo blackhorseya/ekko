@@ -8,6 +8,8 @@ import (
 	"github.com/blackhorseya/ekko/adapter/restful/app"
 	"github.com/blackhorseya/ekko/internal/app/domain/issue/biz"
 	"github.com/blackhorseya/ekko/internal/app/domain/issue/biz/repo"
+	taskB "github.com/blackhorseya/ekko/internal/app/domain/task/biz"
+	taskR "github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
 	"github.com/blackhorseya/ekko/internal/pkg/genx"
 	"github.com/blackhorseya/ekko/internal/pkg/log"
@@ -30,8 +32,13 @@ var providerSet = wire.NewSet(
 	mariadb.NewMariadb,
 	genx.NewGenerator,
 
+	// biz
 	biz.IssueSet,
+	taskB.NewImpl,
+
+	// repo
 	repo.MariadbSet,
+	taskR.NewMariadb,
 )
 
 func NewService(config *config.Config, logger *zap.Logger, id int64) (*app.Service, error) {

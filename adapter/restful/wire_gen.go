@@ -10,6 +10,8 @@ import (
 	"github.com/blackhorseya/ekko/adapter/restful/app"
 	"github.com/blackhorseya/ekko/internal/app/domain/issue/biz"
 	"github.com/blackhorseya/ekko/internal/app/domain/issue/biz/repo"
+	biz2 "github.com/blackhorseya/ekko/internal/app/domain/task/biz"
+	repo2 "github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
 	"github.com/blackhorseya/ekko/internal/pkg/genx"
 	"github.com/blackhorseya/ekko/internal/pkg/httpx"
@@ -50,11 +52,13 @@ func NewService(config2 *config.Config, logger *zap.Logger, id int64) (*app.Serv
 		return nil, err
 	}
 	iBiz := biz.NewImpl(iRepo, generator)
-	restful := app.NewRestful(logger, engine, iBiz)
+	repoIRepo := repo2.NewMariadb(db)
+	bizIBiz := biz2.NewImpl(repoIRepo)
+	restful := app.NewRestful(logger, engine, iBiz, bizIBiz)
 	service := app.NewService(logger, server, restful)
 	return service, nil
 }
 
 // wire.go:
 
-var providerSet = wire.NewSet(app.ProviderSet, mariadb.NewMariadb, genx.NewGenerator, biz.IssueSet, repo.MariadbSet)
+var providerSet = wire.NewSet(app.ProviderSet, mariadb.NewMariadb, genx.NewGenerator, biz.IssueSet, biz2.NewImpl, repo.MariadbSet, repo2.NewMariadb)
