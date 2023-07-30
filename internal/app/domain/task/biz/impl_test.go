@@ -1,11 +1,15 @@
 package biz
 
 import (
+	"reflect"
 	"testing"
 
 	taskB "github.com/blackhorseya/ekko/entity/domain/task/biz"
+	taskM "github.com/blackhorseya/ekko/entity/domain/task/model"
 	taskR "github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo"
+	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/golang/mock/gomock"
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
 )
@@ -35,4 +39,70 @@ func TestAll(t *testing.T) {
 	t.Helper()
 
 	suite.Run(t, new(SuiteTester))
+}
+
+func (s *SuiteTester) Test_impl_GetTicketByID() {
+	ticket1 := &taskM.Ticket{
+		Id:     "1",
+		Title:  "title1",
+		Status: taskM.TicketStatus_TICKET_STATUS_TODO,
+	}
+
+	type args struct {
+		id   string
+		mock func()
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantTicket *taskM.Ticket
+		wantErr    bool
+	}{
+		{
+			name:       "empty id then error",
+			args:       args{id: "   "},
+			wantTicket: nil,
+			wantErr:    true,
+		},
+		{
+			name: "get by id then error",
+			args: args{id: ticket1.Id, mock: func() {
+				s.repo.EXPECT().GetTicketByID(gomock.Any(), ticket1.Id).Return(nil, errors.New("error")).Times(1)
+			}},
+			wantTicket: nil,
+			wantErr:    true,
+		},
+		{
+			name: "get by id if not found then error",
+			args: args{id: ticket1.Id, mock: func() {
+				s.repo.EXPECT().GetTicketByID(gomock.Any(), ticket1.Id).Return(nil, nil).Times(1)
+			}},
+			wantTicket: nil,
+			wantErr:    true,
+		},
+		{
+			name: "get by id then success",
+			args: args{id: ticket1.Id, mock: func() {
+				s.repo.EXPECT().GetTicketByID(gomock.Any(), ticket1.Id).Return(ticket1, nil).Times(1)
+			}},
+			wantTicket: ticket1,
+			wantErr:    false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTicket, err := s.biz.GetTicketByID(contextx.WithLogger(s.logger), tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetTicketByID() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTicket, tt.wantTicket) {
+				t.Errorf("GetTicketByID() gotTicket = %v, want %v", gotTicket, tt.wantTicket)
+			}
+		})
+	}
 }

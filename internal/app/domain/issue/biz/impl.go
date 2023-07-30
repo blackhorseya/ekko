@@ -36,8 +36,8 @@ func (i *impl) GetByID(ctx contextx.Contextx, id int64) (info *issueM.Ticket, er
 		return nil, errorx.ErrGetTask
 	}
 	if ret == nil {
-		ctx.Error(errorx.ErrTaskNotExists.Error(), zap.Int64("id", id))
-		return nil, errorx.ErrTaskNotExists
+		ctx.Error(errorx.ErrTicketNotExists.Error(), zap.Int64("id", id))
+		return nil, errorx.ErrTicketNotExists
 	}
 
 	return ret, nil
@@ -64,8 +64,8 @@ func (i *impl) List(ctx contextx.Contextx, page, size int) (info []*issueM.Ticke
 		return nil, 0, errorx.ErrListTasks
 	}
 	if ret == nil {
-		ctx.Error(errorx.ErrTaskNotExists.Error(), zap.Int("page", page), zap.Int("size", size))
-		return nil, 0, errorx.ErrTaskNotExists
+		ctx.Error(errorx.ErrTicketNotExists.Error(), zap.Int("page", page), zap.Int("size", size))
+		return nil, 0, errorx.ErrTicketNotExists
 	}
 
 	total, err = i.repo.Count(ctx, condition)
@@ -107,8 +107,8 @@ func (i *impl) UpdateStatus(ctx contextx.Contextx, id int64, status issueM.Ticke
 		return nil, errorx.ErrGetTask
 	}
 	if exists == nil {
-		ctx.Error(errorx.ErrTaskNotExists.Error())
-		return nil, errorx.ErrTaskNotExists
+		ctx.Error(errorx.ErrTicketNotExists.Error())
+		return nil, errorx.ErrTicketNotExists
 	}
 
 	exists.Status = status

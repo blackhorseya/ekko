@@ -1,10 +1,14 @@
 package biz
 
 import (
+	"strings"
+
 	taskB "github.com/blackhorseya/ekko/entity/domain/task/biz"
 	taskM "github.com/blackhorseya/ekko/entity/domain/task/model"
 	taskR "github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo"
+	"github.com/blackhorseya/ekko/internal/pkg/errorx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
+	"go.uber.org/zap"
 )
 
 type impl struct {
@@ -19,8 +23,23 @@ func NewImpl(repo taskR.IRepo) taskB.IBiz {
 }
 
 func (i *impl) GetTicketByID(ctx contextx.Contextx, id string) (ticket *taskM.Ticket, err error) {
-	// todo: 2023/7/31|sean|implement me
-	panic("implement me")
+	id = strings.Trim(id, " ")
+	if id == "" {
+		ctx.Error("id is empty then error")
+		return nil, errorx.ErrInvalidID
+	}
+
+	ret, err := i.repo.GetTicketByID(ctx, id)
+	if err != nil {
+		ctx.Error("get ticket by id from repo failed", zap.Error(err), zap.String("id", id))
+		return nil, err
+	}
+	if ret == nil {
+		ctx.Error("ticket is not exists", zap.String("id", id))
+		return nil, errorx.ErrTicketNotExists
+	}
+
+	return ret, nil
 }
 
 func (i *impl) ListTickets(ctx contextx.Contextx, condition taskB.ListTicketsCondition) (tickets []*taskM.Ticket, total int, err error) {
