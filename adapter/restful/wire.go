@@ -6,8 +6,6 @@ package main
 
 import (
 	"github.com/blackhorseya/ekko/adapter/restful/app"
-	"github.com/blackhorseya/ekko/internal/app/domain/issue/biz"
-	"github.com/blackhorseya/ekko/internal/app/domain/issue/biz/repo"
 	taskB "github.com/blackhorseya/ekko/internal/app/domain/task/biz"
 	taskR "github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
@@ -33,11 +31,9 @@ var providerSet = wire.NewSet(
 	genx.NewGenerator,
 
 	// biz
-	biz.IssueSet,
 	taskB.NewImpl,
 
 	// repo
-	repo.MariadbSet,
 	taskR.NewMariadb,
 )
 
