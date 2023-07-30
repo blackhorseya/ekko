@@ -18,6 +18,8 @@ message Ticket {
     string title = 2;
     string description = 3;
     TicketStatus status = 4;
+    // @inject_tag: swaggertype:"primitive,string"
     google.protobuf.Timestamp created_at = 5;
+    // @inject_tag: swaggertype:"primitive,string"
     google.protobuf.Timestamp updated_at = 6;
 }

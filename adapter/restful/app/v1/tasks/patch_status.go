@@ -29,7 +29,7 @@ type patchStatusIDRequest struct {
 // @Produce application/json
 // @Param id path int true "ID of issue"
 // @Param status formData integer true "status"
-// @Success 200 {object} response.Response
+// @Success 200 {object} response.Response{data=model.Ticket}
 // @Failure 400 {object} er.Error
 // @Failure 500 {object} er.Error
 // @Router /v1/tasks/{id}/status [patch]
