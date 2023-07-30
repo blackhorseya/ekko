@@ -7,6 +7,35 @@ definitions:
       msg:
         type: string
     type: object
+  model.Ticket:
+    properties:
+      created_at:
+        description: '@inject_tag: swaggertype:"primitive,string"'
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      status:
+        $ref: '#/definitions/model.TicketStatus'
+      title:
+        type: string
+      updated_at:
+        description: '@inject_tag: swaggertype:"primitive,string"'
+        type: string
+    type: object
+  model.TicketStatus:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - TicketStatus_TICKET_STATUS_UNSPECIFIED
+    - TicketStatus_TICKET_STATUS_TODO
+    - TicketStatus_TICKET_STATUS_IN_PROGRESS
+    - TicketStatus_TICKET_STATUS_DONE
   response.Response:
     properties:
       code:
@@ -14,6 +43,15 @@ definitions:
       data: {}
       msg:
         type: string
+    type: object
+  tasks.listResponse:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/model.Ticket'
+        type: array
+      total:
+        type: integer
     type: object
 info:
   contact:
@@ -49,7 +87,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.Response'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/tasks.listResponse'
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -81,7 +124,12 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/response.Response'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Ticket'
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -147,7 +195,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.Response'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Ticket'
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -185,7 +238,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.Response'
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Ticket'
+              type: object
         "400":
           description: Bad Request
           schema:

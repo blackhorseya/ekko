@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/blackhorseya/ekko/entity/domain/issue/model"
+	taskM "github.com/blackhorseya/ekko/entity/domain/task/model"
 	"github.com/blackhorseya/ekko/internal/pkg/errorx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/response"
@@ -17,7 +18,7 @@ const (
 )
 
 type patchStatusIDRequest struct {
-	ID int64 `uri:"id"`
+	ID string `uri:"id"`
 }
 
 // UpdateStatus
@@ -28,7 +29,7 @@ type patchStatusIDRequest struct {
 // @Produce application/json
 // @Param id path int true "ID of issue"
 // @Param status formData integer true "status"
-// @Success 200 {object} response.Response
+// @Success 200 {object} response.Response{data=model.Ticket}
 // @Failure 400 {object} er.Error
 // @Failure 500 {object} er.Error
 // @Router /v1/tasks/{id}/status [patch]
@@ -61,7 +62,7 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 		return
 	}
 
-	ret, err := i.biz.UpdateStatus(ctx, req.ID, model.TicketStatus(statusVal))
+	ret, err := i.task.UpdateTicketStatus(ctx, req.ID, taskM.TicketStatus(statusVal))
 	if err != nil {
 		_ = c.Error(err)
 		return

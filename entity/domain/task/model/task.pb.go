@@ -78,12 +78,14 @@ type Ticket struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Title       string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Description string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	Status      TicketStatus           `protobuf:"varint,4,opt,name=status,proto3,enum=task.TicketStatus" json:"status,omitempty"`
-	CreatedAt   *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt   *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	Id          string       `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Title       string       `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	Description string       `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	Status      TicketStatus `protobuf:"varint,4,opt,name=status,proto3,enum=task.TicketStatus" json:"status,omitempty"`
+	// @inject_tag: swaggertype:"primitive,string"
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" swaggertype:"primitive,string"`
+	// @inject_tag: swaggertype:"primitive,string"
+	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" swaggertype:"primitive,string"`
 }
 
 func (x *Ticket) Reset() {

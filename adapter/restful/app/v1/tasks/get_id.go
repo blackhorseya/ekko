@@ -11,7 +11,7 @@ import (
 )
 
 type getByIDRequest struct {
-	ID int64 `uri:"id"`
+	ID string `uri:"id"`
 }
 
 // GetByID
@@ -21,7 +21,7 @@ type getByIDRequest struct {
 // @Accept application/json
 // @Produce application/json
 // @Param id path int true "ID of issue"
-// @Success 200 {object} response.Response
+// @Success 200 {object} response.Response{data=model.Ticket}
 // @Failure 400 {object} er.Error
 // @Failure 404 {object} er.Error
 // @Failure 500 {object} er.Error
@@ -41,7 +41,7 @@ func (i *impl) GetByID(c *gin.Context) {
 		return
 	}
 
-	ret, err := i.biz.GetByID(ctx, req.ID)
+	ret, err := i.task.GetTicketByID(ctx, req.ID)
 	if err != nil {
 		_ = c.Error(err)
 		return

@@ -57,7 +57,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/tasks.listResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -105,7 +117,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Ticket"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -149,7 +173,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Ticket"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -266,7 +302,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Ticket"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -297,6 +345,46 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Ticket": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "@inject_tag: swaggertype:\"primitive,string\"",
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/model.TicketStatus"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "description": "@inject_tag: swaggertype:\"primitive,string\"",
+                    "type": "string"
+                }
+            }
+        },
+        "model.TicketStatus": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "x-enum-varnames": [
+                "TicketStatus_TICKET_STATUS_UNSPECIFIED",
+                "TicketStatus_TICKET_STATUS_TODO",
+                "TicketStatus_TICKET_STATUS_IN_PROGRESS",
+                "TicketStatus_TICKET_STATUS_DONE"
+            ]
+        },
         "response.Response": {
             "type": "object",
             "properties": {
@@ -306,6 +394,20 @@ const docTemplate = `{
                 "data": {},
                 "msg": {
                     "type": "string"
+                }
+            }
+        },
+        "tasks.listResponse": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ticket"
+                    }
+                },
+                "total": {
+                    "type": "integer"
                 }
             }
         }

@@ -11,7 +11,7 @@ import (
 )
 
 type deleteByIDRequest struct {
-	ID int64 `uri:"id"`
+	ID string `uri:"id"`
 }
 
 // Delete
@@ -41,7 +41,7 @@ func (i *impl) Delete(c *gin.Context) {
 		return
 	}
 
-	err = i.biz.Delete(ctx, req.ID)
+	err = i.task.DeleteTicket(ctx, req.ID)
 	if err != nil {
 		_ = c.Error(err)
 		return

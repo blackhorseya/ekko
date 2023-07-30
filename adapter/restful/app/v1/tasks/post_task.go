@@ -22,7 +22,7 @@ const (
 // @Accept application/x-www-form-urlencoded
 // @Produce application/json
 // @Param title formData string true "title"
-// @Success 201 {object} response.Response
+// @Success 201 {object} response.Response{data=model.Ticket}
 // @Failure 400 {object} er.Error
 // @Failure 500 {object} er.Error
 // @Router /v1/tasks [post]
@@ -40,7 +40,7 @@ func (i *impl) Create(c *gin.Context) {
 		return
 	}
 
-	ret, err := i.biz.Create(ctx, title)
+	ret, err := i.task.CreateTicket(ctx, title)
 	if err != nil {
 		_ = c.Error(err)
 		return

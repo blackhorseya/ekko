@@ -4,7 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/blackhorseya/ekko/entity/domain/issue/model"
+	taskB "github.com/blackhorseya/ekko/entity/domain/task/biz"
+	taskM "github.com/blackhorseya/ekko/entity/domain/task/model"
 	"github.com/blackhorseya/ekko/internal/pkg/errorx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/response"
@@ -22,7 +23,7 @@ const (
 
 type listResponse struct {
 	Total int             `json:"total"`
-	List  []*model.Ticket `json:"list"`
+	List  []*taskM.Ticket `json:"list"`
 }
 
 // List
@@ -33,7 +34,7 @@ type listResponse struct {
 // @Produce application/json
 // @Param page query integer false "page" default(1)
 // @Param size query integer false "size" default(10)
-// @Success 200 {object} response.Response
+// @Success 200 {object} response.Response{data=listResponse}
 // @Failure 400 {object} er.Error
 // @Failure 404 {object} er.Error
 // @Failure 500 {object} er.Error
@@ -59,7 +60,7 @@ func (i *impl) List(c *gin.Context) {
 		return
 	}
 
-	ret, total, err := i.biz.List(ctx, page, size)
+	ret, total, err := i.task.ListTickets(ctx, taskB.ListTicketsCondition{Page: page, Size: size})
 	if err != nil {
 		_ = c.Error(err)
 		return
