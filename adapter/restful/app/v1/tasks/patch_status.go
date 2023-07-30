@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/blackhorseya/ekko/entity/domain/issue/model"
 	taskM "github.com/blackhorseya/ekko/entity/domain/task/model"
 	"github.com/blackhorseya/ekko/internal/pkg/errorx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
@@ -55,7 +54,7 @@ func (i *impl) UpdateStatus(c *gin.Context) {
 		return
 	}
 
-	_, ok = model.TicketStatus_name[int32(statusVal)]
+	_, ok = taskM.TicketStatus_name[int32(statusVal)]
 	if !ok {
 		ctx.Error(errorx.ErrInvalidStatus.Error(), zap.String(_formStatus, c.PostForm(_formStatus)))
 		_ = c.Error(errorx.ErrInvalidStatus)

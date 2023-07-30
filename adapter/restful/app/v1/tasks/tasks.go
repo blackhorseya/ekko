@@ -1,13 +1,11 @@
 package tasks
 
 import (
-	issueB "github.com/blackhorseya/ekko/entity/domain/issue/biz"
 	taskB "github.com/blackhorseya/ekko/entity/domain/task/biz"
 	"github.com/gin-gonic/gin"
 )
 
 type impl struct {
-	biz  issueB.IBiz
 	task taskB.IBiz
 }
 
