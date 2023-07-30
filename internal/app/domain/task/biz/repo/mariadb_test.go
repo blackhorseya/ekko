@@ -311,3 +311,59 @@ func (s *SuiteMariadb) Test_mariadb_CreateTicket() {
 		})
 	}
 }
+
+func (s *SuiteMariadb) Test_mariadb_UpdateTicket() {
+	ticket1 := &taskM.Ticket{
+		Id:          "1",
+		Title:       "title",
+		Description: "",
+		Status:      taskM.TicketStatus_TICKET_STATUS_TODO,
+		CreatedAt:   timestamppb.New(now),
+		UpdatedAt:   timestamppb.New(now),
+	}
+	stmt := `UPDATE tickets SET title = ?, status = ?, updated_at = ? WHERE id = ?`
+
+	type args struct {
+		updated *taskM.Ticket
+		mock    func()
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "update then error",
+			args: args{updated: ticket1, mock: func() {
+				s.rw.ExpectExec(regexp.QuoteMeta(stmt)).
+					WithArgs(ticket1.Title, ticket1.Status, ticket1.UpdatedAt.AsTime(), ticket1.Id).
+					WillReturnError(errors.New("error"))
+			}},
+			wantErr: true,
+		},
+		{
+			name: "update then error",
+			args: args{updated: ticket1, mock: func() {
+				s.rw.ExpectExec(regexp.QuoteMeta(stmt)).
+					WithArgs(ticket1.Title, ticket1.Status, ticket1.UpdatedAt.AsTime(), ticket1.Id).
+					WillReturnResult(sqlmock.NewResult(1, 1))
+			}},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			if err := s.repo.UpdateTicket(contextx.WithLogger(s.logger), tt.args.updated); (err != nil) != tt.wantErr {
+				t.Errorf("UpdateTicket() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			err := s.rw.ExpectationsWereMet()
+			if err != nil {
+				t.Errorf("there were unfulfilled expectations: %s", err)
+			}
+		})
+	}
+}
