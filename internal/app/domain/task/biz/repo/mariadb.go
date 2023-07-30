@@ -11,8 +11,10 @@ type mariadb struct {
 }
 
 // NewMariadb will create an object that represent the IRepo interface
-func NewMariadb() IRepo {
-	return &mariadb{}
+func NewMariadb(rw *sqlx.DB) IRepo {
+	return &mariadb{
+		rw: rw,
+	}
 }
 
 func (m *mariadb) GetTicketByID(ctx contextx.Contextx, id string) (ticket *model.Ticket, err error) {
