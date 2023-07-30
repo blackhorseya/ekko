@@ -12,7 +12,10 @@ type impl struct {
 }
 
 func Handle(g *gin.RouterGroup, biz issueB.IBiz, task taskB.IBiz) {
-	i := &impl{biz: biz}
+	i := &impl{
+		biz:  biz,
+		task: task,
+	}
 
 	g.GET(":id", i.GetByID)
 	g.GET("", i.List)
