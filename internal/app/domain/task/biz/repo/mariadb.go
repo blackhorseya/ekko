@@ -78,11 +78,24 @@ func (m *mariadb) CreateTicket(ctx contextx.Contextx, created *taskM.Ticket) (ti
 }
 
 func (m *mariadb) UpdateTicket(ctx contextx.Contextx, updated *taskM.Ticket) error {
-	// todo: 2023/7/30|sean|implement me
-	panic("implement me")
+	stmt := `UPDATE tickets SET title = :title, status = :status, updated_at = :updated_at WHERE id = :id`
+
+	arg := dao.NewTicket(updated)
+	_, err := m.rw.NamedExecContext(ctx, stmt, arg)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (m *mariadb) DeleteTicketByID(ctx contextx.Contextx, id string) error {
-	// todo: 2023/7/30|sean|implement me
-	panic("implement me")
+	stmt := `DELETE FROM tickets WHERE id = ?`
+
+	_, err := m.rw.ExecContext(ctx, stmt, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
