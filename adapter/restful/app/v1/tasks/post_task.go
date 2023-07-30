@@ -40,7 +40,7 @@ func (i *impl) Create(c *gin.Context) {
 		return
 	}
 
-	ret, err := i.biz.Create(ctx, title)
+	ret, err := i.task.CreateTicket(ctx, title)
 	if err != nil {
 		_ = c.Error(err)
 		return

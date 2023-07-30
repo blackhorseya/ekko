@@ -11,7 +11,7 @@ import (
 )
 
 type getByIDRequest struct {
-	ID int64 `uri:"id"`
+	ID string `uri:"id"`
 }
 
 // GetByID
@@ -41,7 +41,7 @@ func (i *impl) GetByID(c *gin.Context) {
 		return
 	}
 
-	ret, err := i.biz.GetByID(ctx, req.ID)
+	ret, err := i.task.GetTicketByID(ctx, req.ID)
 	if err != nil {
 		_ = c.Error(err)
 		return
