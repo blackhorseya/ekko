@@ -35,21 +35,6 @@ func (m *MockIRepo) EXPECT() *MockIRepoMockRecorder {
 	return m.recorder
 }
 
-// CountTickets mocks base method.
-func (m *MockIRepo) CountTickets(ctx contextx.Contextx, condition ListTicketsCondition) (int, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CountTickets", ctx, condition)
-	ret0, _ := ret[0].(int)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CountTickets indicates an expected call of CountTickets.
-func (mr *MockIRepoMockRecorder) CountTickets(ctx, condition interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountTickets", reflect.TypeOf((*MockIRepo)(nil).CountTickets), ctx, condition)
-}
-
 // CreateTicket mocks base method.
 func (m *MockIRepo) CreateTicket(ctx contextx.Contextx, created *model.Ticket) (*model.Ticket, error) {
 	m.ctrl.T.Helper()

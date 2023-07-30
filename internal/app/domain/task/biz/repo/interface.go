@@ -21,9 +21,6 @@ type IRepo interface {
 	// ListTickets serve caller to list all tickets
 	ListTickets(ctx contextx.Contextx, condition ListTicketsCondition) (tickets []*taskM.Ticket, total int, err error)
 
-	// CountTickets serve caller to count all tickets
-	CountTickets(ctx contextx.Contextx, condition ListTicketsCondition) (total int, err error)
-
 	// CreateTicket serve caller to create a ticket
 	CreateTicket(ctx contextx.Contextx, created *taskM.Ticket) (ticket *taskM.Ticket, err error)
 
