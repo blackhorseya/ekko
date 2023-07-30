@@ -99,8 +99,32 @@ func (i *impl) CreateTicket(ctx contextx.Contextx, title string) (ticket *taskM.
 }
 
 func (i *impl) UpdateTicketStatus(ctx contextx.Contextx, id string, status taskM.TicketStatus) (ticket *taskM.Ticket, err error) {
-	// todo: 2023/7/31|sean|implement me
-	panic("implement me")
+	id = strings.Trim(id, " ")
+	if id == "" {
+		ctx.Error("id is empty then error")
+		return nil, errorx.ErrInvalidID
+	}
+	uid, err := uuid.Parse(id)
+	if err != nil {
+		ctx.Error("parse id to uuid failed", zap.Error(err), zap.String("id", id))
+		return nil, errorx.ErrInvalidID
+	}
+
+	got, err := i.GetTicketByID(ctx, uid.String())
+	if err != nil {
+		return nil, err
+	}
+
+	now := time.Now()
+	got.Status = status
+	got.UpdatedAt = timestamppb.New(now)
+	err = i.repo.UpdateTicket(ctx, got)
+	if err != nil {
+		ctx.Error("update ticket from repo failed", zap.Error(err), zap.Any("ticket", got))
+		return nil, err
+	}
+
+	return got, nil
 }
 
 func (i *impl) DeleteTicket(ctx contextx.Contextx, id string) error {

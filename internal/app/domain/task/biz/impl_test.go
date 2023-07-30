@@ -252,3 +252,76 @@ func (s *SuiteTester) Test_impl_CreateTicket() {
 		})
 	}
 }
+
+func (s *SuiteTester) Test_impl_UpdateTicketStatus() {
+	ticket1 := &taskM.Ticket{
+		Id: "c8c15118-15ca-4684-9c39-2b6ce1f1c489",
+	}
+
+	type args struct {
+		id     string
+		status taskM.TicketStatus
+		mock   func()
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantTicket *taskM.Ticket
+		wantErr    bool
+	}{
+		{
+			name:       "empty id then error",
+			args:       args{id: "   "},
+			wantTicket: nil,
+			wantErr:    true,
+		},
+		{
+			name:       "not an uuid then error",
+			args:       args{id: "123"},
+			wantTicket: nil,
+			wantErr:    true,
+		},
+		{
+			name: "get by id then error",
+			args: args{id: ticket1.Id, mock: func() {
+				s.repo.EXPECT().GetTicketByID(gomock.Any(), ticket1.Id).Return(nil, errors.New("error")).Times(1)
+			}},
+			wantTicket: nil,
+			wantErr:    true,
+		},
+		{
+			name: "update ticket then error",
+			args: args{id: ticket1.Id, mock: func() {
+				s.repo.EXPECT().GetTicketByID(gomock.Any(), ticket1.Id).Return(ticket1, nil).Times(1)
+				s.repo.EXPECT().UpdateTicket(gomock.Any(), gomock.Any()).Return(errors.New("error")).Times(1)
+			}},
+			wantTicket: nil,
+			wantErr:    true,
+		},
+		{
+			name: "ok",
+			args: args{id: ticket1.Id, mock: func() {
+				s.repo.EXPECT().GetTicketByID(gomock.Any(), ticket1.Id).Return(ticket1, nil).Times(1)
+				s.repo.EXPECT().UpdateTicket(gomock.Any(), gomock.Any()).Return(nil).Times(1)
+			}},
+			wantTicket: ticket1,
+			wantErr:    false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTicket, err := s.biz.UpdateTicketStatus(contextx.WithLogger(s.logger), tt.args.id, tt.args.status)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("UpdateTicketStatus() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTicket, tt.wantTicket) {
+				t.Errorf("UpdateTicketStatus() gotTicket = %v, want %v", gotTicket, tt.wantTicket)
+			}
+		})
+	}
+}
