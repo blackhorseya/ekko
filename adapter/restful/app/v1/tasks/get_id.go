@@ -20,7 +20,7 @@ type getByIDRequest struct {
 // @Tags Tasks
 // @Accept application/json
 // @Produce application/json
-// @Param id path int true "ID of issue"
+// @Param id path string true "ID of issue"
 // @Success 200 {object} response.Response{data=model.Ticket}
 // @Failure 400 {object} er.Error
 // @Failure 404 {object} er.Error
