@@ -90,6 +90,12 @@ func (m *mariadb) UpdateTicket(ctx contextx.Contextx, updated *taskM.Ticket) err
 }
 
 func (m *mariadb) DeleteTicketByID(ctx contextx.Contextx, id string) error {
-	// todo: 2023/7/30|sean|implement me
-	panic("implement me")
+	stmt := `DELETE FROM tickets WHERE id = ?`
+
+	_, err := m.rw.ExecContext(ctx, stmt, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

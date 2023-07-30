@@ -367,3 +367,53 @@ func (s *SuiteMariadb) Test_mariadb_UpdateTicket() {
 		})
 	}
 }
+
+func (s *SuiteMariadb) Test_mariadb_DeleteTicketByID() {
+	id1 := "1"
+
+	stmt := `DELETE FROM tickets WHERE id = ?`
+
+	type args struct {
+		id   string
+		mock func()
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "delete by id then error",
+			args: args{id: id1, mock: func() {
+				s.rw.ExpectExec(regexp.QuoteMeta(stmt)).
+					WithArgs(id1).
+					WillReturnError(errors.New("error"))
+			}},
+			wantErr: true,
+		},
+		{
+			name: "delete by id then ok",
+			args: args{id: id1, mock: func() {
+				s.rw.ExpectExec(regexp.QuoteMeta(stmt)).
+					WithArgs(id1).
+					WillReturnResult(sqlmock.NewResult(1, 1))
+			}},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			if err := s.repo.DeleteTicketByID(contextx.WithLogger(s.logger), tt.args.id); (err != nil) != tt.wantErr {
+				t.Errorf("DeleteTicketByID() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			err := s.rw.ExpectationsWereMet()
+			if err != nil {
+				t.Errorf("there were unfulfilled expectations: %s", err)
+			}
+		})
+	}
+}
