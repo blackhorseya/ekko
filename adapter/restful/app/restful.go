@@ -56,6 +56,6 @@ func (r *restful) InitRouting() {
 
 		api.GET("docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-		v1.Handle(api.Group("/v1"), r.issue)
+		v1.Handle(api.Group("/v1"), r.issue, r.taskB)
 	}
 }
