@@ -16,6 +16,17 @@ type Ticket struct {
 	UpdatedAt time.Time          `json:"updated_at" db:"updated_at"`
 }
 
+// NewTicket is used to create a new ticket model
+func NewTicket(t *taskM.Ticket) *Ticket {
+	return &Ticket{
+		ID:        t.Id,
+		Title:     t.Title,
+		Status:    t.Status,
+		CreatedAt: t.CreatedAt.AsTime(),
+		UpdatedAt: t.UpdatedAt.AsTime(),
+	}
+}
+
 // ToEntity is used to convert the ticket model to ticket entity
 func (t *Ticket) ToEntity() *taskM.Ticket {
 	return &taskM.Ticket{

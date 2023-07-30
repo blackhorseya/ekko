@@ -66,8 +66,15 @@ func (m *mariadb) ListTickets(ctx contextx.Contextx, condition ListTicketsCondit
 }
 
 func (m *mariadb) CreateTicket(ctx contextx.Contextx, created *taskM.Ticket) (ticket *taskM.Ticket, err error) {
-	// todo: 2023/7/30|sean|implement me
-	panic("implement me")
+	stmt := `INSERT INTO tickets (id, title, status, created_at, updated_at) VALUES (:id, :title, :status, :created_at, :updated_at)`
+
+	arg := dao.NewTicket(created)
+	_, err = m.rw.NamedExecContext(ctx, stmt, arg)
+	if err != nil {
+		return nil, err
+	}
+
+	return created, nil
 }
 
 func (m *mariadb) UpdateTicket(ctx contextx.Contextx, updated *taskM.Ticket) error {

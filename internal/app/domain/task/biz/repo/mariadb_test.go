@@ -239,3 +239,75 @@ func (s *SuiteMariadb) Test_mariadb_ListTickets() {
 		})
 	}
 }
+
+func (s *SuiteMariadb) Test_mariadb_CreateTicket() {
+	ticket1 := &taskM.Ticket{
+		Id:          "1",
+		Title:       "title",
+		Description: "",
+		Status:      taskM.TicketStatus_TICKET_STATUS_TODO,
+		CreatedAt:   timestamppb.New(now),
+		UpdatedAt:   timestamppb.New(now),
+	}
+	stmt := `INSERT INTO tickets (id, title, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?)`
+
+	type args struct {
+		created *taskM.Ticket
+		mock    func()
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantTicket *taskM.Ticket
+		wantErr    bool
+	}{
+		{
+			name: "create then error",
+			args: args{created: ticket1, mock: func() {
+				s.rw.ExpectExec(regexp.QuoteMeta(stmt)).WithArgs(
+					ticket1.Id,
+					ticket1.Title,
+					ticket1.Status,
+					ticket1.CreatedAt.AsTime(),
+					ticket1.UpdatedAt.AsTime(),
+				).WillReturnError(errors.New("error"))
+			}},
+			wantTicket: nil,
+			wantErr:    true,
+		},
+		{
+			name: "create then ok",
+			args: args{created: ticket1, mock: func() {
+				s.rw.ExpectExec(regexp.QuoteMeta(stmt)).WithArgs(
+					ticket1.Id,
+					ticket1.Title,
+					ticket1.Status,
+					ticket1.CreatedAt.AsTime(),
+					ticket1.UpdatedAt.AsTime(),
+				).WillReturnResult(sqlmock.NewResult(1, 1))
+			}},
+			wantTicket: ticket1,
+			wantErr:    false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTicket, err := s.repo.CreateTicket(contextx.WithLogger(s.logger), tt.args.created)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CreateTicket() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTicket, tt.wantTicket) {
+				t.Errorf("CreateTicket() gotTicket = %v, want %v", gotTicket, tt.wantTicket)
+			}
+			err = s.rw.ExpectationsWereMet()
+			if err != nil {
+				t.Errorf("there were unfulfilled expectations: %s", err)
+			}
+		})
+	}
+}
