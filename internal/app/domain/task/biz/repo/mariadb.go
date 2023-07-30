@@ -2,6 +2,7 @@ package repo
 
 import (
 	"database/sql"
+	"fmt"
 
 	taskM "github.com/blackhorseya/ekko/entity/domain/task/model"
 	"github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo/dao"
@@ -38,8 +39,30 @@ func (m *mariadb) GetTicketByID(ctx contextx.Contextx, id string) (ticket *taskM
 }
 
 func (m *mariadb) ListTickets(ctx contextx.Contextx, condition ListTicketsCondition) (tickets []*taskM.Ticket, total int, err error) {
-	// todo: 2023/7/30|sean|implement me
-	panic("implement me")
+	stmt := `SELECT id, title, status, created_at, updated_at FROM tickets`
+	count := fmt.Sprintf(`SELECT COUNT(*) FROM (%s) AS total`, stmt)
+
+	err = m.rw.GetContext(ctx, &total, count)
+	if err != nil {
+		return nil, 0, err
+	}
+	if total == 0 {
+		return nil, 0, nil
+	}
+
+	stmt = fmt.Sprintf("%s LIMIT ? OFFSET ?", stmt)
+
+	var got dao.Tickets
+	err = m.rw.SelectContext(ctx, &got, stmt, condition.Limit, condition.Offset)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, total, nil
+		}
+
+		return nil, 0, err
+	}
+
+	return got.ToEntity(), total, nil
 }
 
 func (m *mariadb) CountTickets(ctx contextx.Contextx, condition ListTicketsCondition) (total int, err error) {

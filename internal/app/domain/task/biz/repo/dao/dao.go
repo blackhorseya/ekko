@@ -29,3 +29,13 @@ func (t *Ticket) ToEntity() *taskM.Ticket {
 
 // Tickets is the slice of ticket model
 type Tickets []*Ticket
+
+// ToEntity is used to convert the slice of ticket model to slice of ticket entity
+func (slice Tickets) ToEntity() []*taskM.Ticket {
+	tickets := make([]*taskM.Ticket, 0, len(slice))
+	for _, ticket := range slice {
+		tickets = append(tickets, ticket.ToEntity())
+	}
+
+	return tickets
+}

@@ -2,7 +2,9 @@ package repo
 
 import (
 	"database/sql"
+	"fmt"
 	"reflect"
+	"regexp"
 	"testing"
 	"time"
 
@@ -34,13 +36,6 @@ func (s *SuiteMariadb) SetupTest() {
 	}
 	s.rw = mock
 	s.repo = NewMariadb(sqlx.NewDb(db, "mysql"))
-}
-
-func (s *SuiteMariadb) TearDownSuite() {
-	err := s.rw.ExpectationsWereMet()
-	if err != nil {
-		s.T().Errorf("there were unfulfilled expectations: %s", err)
-	}
 }
 
 func TestMariadb(t *testing.T) {
@@ -101,11 +96,11 @@ func (s *SuiteMariadb) Test_mariadb_GetTicketByID() {
 					WithArgs(id1).
 					WillReturnRows(sqlmock.NewRows(column).
 						AddRow(
-							id1,
+							ticket1.Id,
 							ticket1.Title,
 							ticket1.Status,
-							now,
-							now,
+							ticket1.CreatedAt.AsTime(),
+							ticket1.UpdatedAt.AsTime(),
 						),
 					)
 			}},
@@ -126,6 +121,120 @@ func (s *SuiteMariadb) Test_mariadb_GetTicketByID() {
 			}
 			if !reflect.DeepEqual(gotTicket, tt.wantTicket) {
 				t.Errorf("GetTicketByID() gotTicket = %v, want %v", gotTicket, tt.wantTicket)
+			}
+		})
+	}
+}
+
+func (s *SuiteMariadb) Test_mariadb_ListTickets() {
+	condition := ListTicketsCondition{Limit: 10, Offset: 0}
+	ticket1 := &taskM.Ticket{
+		Id:          "1",
+		Title:       "title",
+		Description: "",
+		Status:      taskM.TicketStatus_TICKET_STATUS_TODO,
+		CreatedAt:   timestamppb.New(now),
+		UpdatedAt:   timestamppb.New(now),
+	}
+	tickets := []*taskM.Ticket{ticket1}
+
+	column := []string{"id", "title", "status", "created_at", "updated_at"}
+	stmt := `SELECT id, title, status, created_at, updated_at FROM tickets`
+	count := fmt.Sprintf(`SELECT COUNT(*) FROM (%s) AS total`, stmt)
+
+	type args struct {
+		mock func()
+	}
+	tests := []struct {
+		name        string
+		args        args
+		wantTickets []*taskM.Ticket
+		wantTotal   int
+		wantErr     bool
+	}{
+		{
+			name: "count all then error",
+			args: args{mock: func() {
+				s.rw.ExpectQuery(regexp.QuoteMeta(count)).WillReturnError(errors.New("error"))
+			}},
+			wantTickets: nil,
+			wantTotal:   0,
+			wantErr:     true,
+		},
+		{
+			name: "count all got 0 return nil",
+			args: args{mock: func() {
+				s.rw.ExpectQuery(regexp.QuoteMeta(count)).WillReturnRows(sqlmock.NewRows([]string{"total"}).AddRow(0))
+			}},
+			wantTickets: nil,
+			wantTotal:   0,
+			wantErr:     false,
+		},
+		{
+			name: "select then error",
+			args: args{mock: func() {
+				s.rw.ExpectQuery(regexp.QuoteMeta(count)).WillReturnRows(sqlmock.NewRows([]string{"total"}).AddRow(10))
+				s.rw.ExpectQuery(regexp.QuoteMeta(stmt)).
+					WithArgs(condition.Limit, condition.Offset).
+					WillReturnError(errors.New("error"))
+			}},
+			wantTickets: nil,
+			wantTotal:   0,
+			wantErr:     true,
+		},
+		{
+			name: "select not found then return nil",
+			args: args{mock: func() {
+				s.rw.ExpectQuery(regexp.QuoteMeta(count)).WillReturnRows(sqlmock.NewRows([]string{"total"}).AddRow(10))
+				s.rw.ExpectQuery(regexp.QuoteMeta(stmt)).
+					WithArgs(condition.Limit, condition.Offset).
+					WillReturnError(sql.ErrNoRows)
+			}},
+			wantTickets: nil,
+			wantTotal:   10,
+			wantErr:     false,
+		},
+		{
+			name: "select then ok",
+			args: args{mock: func() {
+				s.rw.ExpectQuery(regexp.QuoteMeta(count)).WillReturnRows(sqlmock.NewRows([]string{"total"}).AddRow(100))
+				s.rw.ExpectQuery(regexp.QuoteMeta(stmt)).
+					WithArgs(condition.Limit, condition.Offset).
+					WillReturnRows(sqlmock.NewRows(column).
+						AddRow(
+							ticket1.Id,
+							ticket1.Title,
+							ticket1.Status,
+							ticket1.CreatedAt.AsTime(),
+							ticket1.UpdatedAt.AsTime(),
+						),
+					)
+			}},
+			wantTickets: tickets,
+			wantTotal:   100,
+			wantErr:     false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTickets, gotTotal, err := s.repo.ListTickets(contextx.WithLogger(s.logger), condition)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ListTickets() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTickets, tt.wantTickets) {
+				t.Errorf("ListTickets() gotTickets = %v, want %v", gotTickets, tt.wantTickets)
+			}
+			if gotTotal != tt.wantTotal {
+				t.Errorf("ListTickets() gotTotal = %v, want %v", gotTotal, tt.wantTotal)
+			}
+			err = s.rw.ExpectationsWereMet()
+			if err != nil {
+				t.Errorf("there were unfulfilled expectations: %s", err)
 			}
 		})
 	}
