@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -35,7 +36,11 @@ func NewRestful(logger *zap.Logger, router *gin.Engine, issue issueB.IBiz, taskB
 		TraceID:    false,
 		Context:    nil,
 	}))
-	router.Use(ginzap.RecoveryWithZap(logger, true))
+	router.Use(ginzap.CustomRecoveryWithZap(logger, true, func(c *gin.Context, err any) {
+		msg := fmt.Sprintf("%v", err)
+		resp := er.New(http.StatusInternalServerError, msg)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, resp)
+	}))
 	router.Use(contextx.WithContextx(logger))
 	router.Use(er.HandleError())
 
