@@ -325,3 +325,55 @@ func (s *SuiteTester) Test_impl_UpdateTicketStatus() {
 		})
 	}
 }
+
+func (s *SuiteTester) Test_impl_DeleteTicket() {
+	ticket1 := &taskM.Ticket{
+		Id: "c8c15118-15ca-4684-9c39-2b6ce1f1c489",
+	}
+
+	type args struct {
+		id   string
+		mock func()
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name:    "empty id then error",
+			args:    args{id: "   "},
+			wantErr: true,
+		},
+		{
+			name:    "not an uuid then error",
+			args:    args{id: "123"},
+			wantErr: true,
+		},
+		{
+			name: "delete ticket then error",
+			args: args{id: ticket1.Id, mock: func() {
+				s.repo.EXPECT().DeleteTicketByID(gomock.Any(), ticket1.Id).Return(errors.New("error")).Times(1)
+			}},
+			wantErr: true,
+		},
+		{
+			name: "delete ticket then ok",
+			args: args{id: ticket1.Id, mock: func() {
+				s.repo.EXPECT().DeleteTicketByID(gomock.Any(), ticket1.Id).Return(nil).Times(1)
+			}},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			if err := s.biz.DeleteTicket(contextx.WithLogger(s.logger), tt.args.id); (err != nil) != tt.wantErr {
+				t.Errorf("DeleteTicket() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

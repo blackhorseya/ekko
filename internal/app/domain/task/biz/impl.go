@@ -128,6 +128,22 @@ func (i *impl) UpdateTicketStatus(ctx contextx.Contextx, id string, status taskM
 }
 
 func (i *impl) DeleteTicket(ctx contextx.Contextx, id string) error {
-	// todo: 2023/7/31|sean|implement me
-	panic("implement me")
+	id = strings.Trim(id, " ")
+	if id == "" {
+		ctx.Error("id is empty then error")
+		return errorx.ErrInvalidID
+	}
+	uid, err := uuid.Parse(id)
+	if err != nil {
+		ctx.Error("parse id to uuid failed", zap.Error(err), zap.String("id", id))
+		return errorx.ErrInvalidID
+	}
+
+	err = i.repo.DeleteTicketByID(ctx, uid.String())
+	if err != nil {
+		ctx.Error("delete ticket by id from repo failed", zap.Error(err), zap.String("id", uid.String()))
+		return err
+	}
+
+	return nil
 }
