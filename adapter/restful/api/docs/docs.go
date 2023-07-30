@@ -162,7 +162,7 @@ const docTemplate = `{
                 "summary": "Get a issue by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID of issue",
                         "name": "id",
                         "in": "path",
@@ -222,7 +222,7 @@ const docTemplate = `{
                 "summary": "Delete a issue by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID of issue",
                         "name": "id",
                         "in": "path",
@@ -284,7 +284,7 @@ const docTemplate = `{
                 "summary": "Update issue's status by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID of issue",
                         "name": "id",
                         "in": "path",

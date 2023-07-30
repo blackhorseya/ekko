@@ -154,7 +154,7 @@
                 "summary": "Get a issue by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID of issue",
                         "name": "id",
                         "in": "path",
@@ -214,7 +214,7 @@
                 "summary": "Delete a issue by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID of issue",
                         "name": "id",
                         "in": "path",
@@ -276,7 +276,7 @@
                 "summary": "Update issue's status by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID of issue",
                         "name": "id",
                         "in": "path",

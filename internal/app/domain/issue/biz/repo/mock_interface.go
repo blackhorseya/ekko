@@ -9,7 +9,7 @@ import (
 
 	model "github.com/blackhorseya/ekko/entity/domain/issue/model"
 	contextx "github.com/blackhorseya/ekko/pkg/contextx"
-	gomock "github.com/golang/mock/gomock"
+	gomock "go.uber.org/mock/gomock"
 )
 
 // MockIRepo is a mock of IRepo interface.

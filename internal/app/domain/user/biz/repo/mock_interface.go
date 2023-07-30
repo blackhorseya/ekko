@@ -5,11 +5,11 @@
 package repo
 
 import (
-	reflect "reflect"
+	"reflect"
 
-	model "github.com/blackhorseya/ekko/entity/domain/user/model"
-	contextx "github.com/blackhorseya/ekko/pkg/contextx"
-	gomock "github.com/golang/mock/gomock"
+	"github.com/blackhorseya/ekko/entity/domain/user/model"
+	"github.com/blackhorseya/ekko/pkg/contextx"
+	"go.uber.org/mock/gomock"
 )
 
 // MockIRepo is a mock of IRepo interface.

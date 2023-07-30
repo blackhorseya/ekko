@@ -27,7 +27,7 @@ type patchStatusIDRequest struct {
 // @Tags Tasks
 // @Accept application/x-www-form-urlencoded
 // @Produce application/json
-// @Param id path int true "ID of issue"
+// @Param id path string true "ID of issue"
 // @Param status formData integer true "status"
 // @Success 200 {object} response.Response{data=model.Ticket}
 // @Failure 400 {object} er.Error

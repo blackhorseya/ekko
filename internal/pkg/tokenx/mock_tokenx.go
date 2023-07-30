@@ -8,7 +8,7 @@ import (
 	reflect "reflect"
 
 	model "github.com/blackhorseya/ekko/entity/domain/user/model"
-	gomock "github.com/golang/mock/gomock"
+	gomock "go.uber.org/mock/gomock"
 )
 
 // MockTokenizer is a mock of Tokenizer interface.

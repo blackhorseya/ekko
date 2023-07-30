@@ -10,7 +10,7 @@ import (
 	model "github.com/blackhorseya/ekko/entity/domain/issue/model"
 	model0 "github.com/blackhorseya/ekko/entity/domain/user/model"
 	contextx "github.com/blackhorseya/ekko/pkg/contextx"
-	gomock "github.com/golang/mock/gomock"
+	gomock "go.uber.org/mock/gomock"
 )
 
 // MockIBiz is a mock of IBiz interface.
