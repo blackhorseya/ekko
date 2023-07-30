@@ -2,13 +2,16 @@ package biz
 
 import (
 	"strings"
+	"time"
 
 	taskB "github.com/blackhorseya/ekko/entity/domain/task/biz"
 	taskM "github.com/blackhorseya/ekko/entity/domain/task/model"
 	taskR "github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/errorx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
+	"github.com/google/uuid"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type impl struct {
@@ -77,8 +80,22 @@ func (i *impl) CreateTicket(ctx contextx.Contextx, title string) (ticket *taskM.
 		return nil, errorx.ErrInvalidTitle
 	}
 
-	// todo: 2023/7/31|sean|implement me
-	panic("implement me")
+	now := time.Now()
+	ticket = &taskM.Ticket{
+		Id:          uuid.New().String(),
+		Title:       title,
+		Description: "",
+		Status:      taskM.TicketStatus_TICKET_STATUS_TODO,
+		CreatedAt:   timestamppb.New(now),
+		UpdatedAt:   timestamppb.New(now),
+	}
+	ret, err := i.repo.CreateTicket(ctx, ticket)
+	if err != nil {
+		ctx.Error("create ticket from repo failed", zap.Error(err), zap.Any("ticket", ticket))
+		return nil, err
+	}
+
+	return ret, nil
 }
 
 func (i *impl) UpdateTicketStatus(ctx contextx.Contextx, id string, status taskM.TicketStatus) (ticket *taskM.Ticket, err error) {

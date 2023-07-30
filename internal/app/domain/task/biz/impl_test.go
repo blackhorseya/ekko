@@ -195,6 +195,13 @@ func (s *SuiteTester) Test_impl_ListTickets() {
 }
 
 func (s *SuiteTester) Test_impl_CreateTicket() {
+	ticket1 := &taskM.Ticket{
+		Id:          "1",
+		Title:       "title1",
+		Description: "",
+		Status:      taskM.TicketStatus_TICKET_STATUS_TODO,
+	}
+
 	type args struct {
 		title string
 		mock  func()
@@ -210,6 +217,22 @@ func (s *SuiteTester) Test_impl_CreateTicket() {
 			args:       args{title: "   "},
 			wantTicket: nil,
 			wantErr:    true,
+		},
+		{
+			name: "create ticket then error",
+			args: args{title: ticket1.Title, mock: func() {
+				s.repo.EXPECT().CreateTicket(gomock.Any(), gomock.Any()).Return(nil, errors.New("error")).Times(1)
+			}},
+			wantTicket: nil,
+			wantErr:    true,
+		},
+		{
+			name: "create ticket then success",
+			args: args{title: ticket1.Title, mock: func() {
+				s.repo.EXPECT().CreateTicket(gomock.Any(), gomock.Any()).Return(ticket1, nil).Times(1)
+			}},
+			wantTicket: ticket1,
+			wantErr:    false,
 		},
 	}
 	for _, tt := range tests {
