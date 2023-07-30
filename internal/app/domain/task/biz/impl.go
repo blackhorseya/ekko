@@ -3,16 +3,16 @@ package biz
 import (
 	taskB "github.com/blackhorseya/ekko/entity/domain/task/biz"
 	taskM "github.com/blackhorseya/ekko/entity/domain/task/model"
-	"github.com/blackhorseya/ekko/internal/app/domain/user/biz/repo"
+	taskR "github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 )
 
 type impl struct {
-	repo repo.IRepo
+	repo taskR.IRepo
 }
 
 // NewImpl will create an object that implement IBiz interface
-func NewImpl(repo repo.IRepo) taskB.IBiz {
+func NewImpl(repo taskR.IRepo) taskB.IBiz {
 	return &impl{
 		repo: repo,
 	}
