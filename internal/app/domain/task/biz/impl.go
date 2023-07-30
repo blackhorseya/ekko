@@ -42,9 +42,32 @@ func (i *impl) GetTicketByID(ctx contextx.Contextx, id string) (ticket *taskM.Ti
 	return ret, nil
 }
 
-func (i *impl) ListTickets(ctx contextx.Contextx, condition taskB.ListTicketsCondition) (tickets []*taskM.Ticket, total int, err error) {
-	// todo: 2023/7/31|sean|implement me
-	panic("implement me")
+func (i *impl) ListTickets(ctx contextx.Contextx, passCondition taskB.ListTicketsCondition) (tickets []*taskM.Ticket, total int, err error) {
+	if passCondition.Page < 1 {
+		ctx.Error("page is less than 1 then error", zap.Int("page", passCondition.Page))
+		return nil, 0, errorx.ErrInvalidPage
+	}
+
+	if passCondition.Size < 1 {
+		ctx.Error("size is less than 1 then error", zap.Int("size", passCondition.Size))
+		return nil, 0, errorx.ErrInvalidSize
+	}
+
+	condition := taskR.ListTicketsCondition{
+		Limit:  passCondition.Size,
+		Offset: (passCondition.Page - 1) * passCondition.Size,
+	}
+	ret, total, err := i.repo.ListTickets(ctx, condition)
+	if err != nil {
+		ctx.Error("list tickets from repo failed", zap.Error(err), zap.Any("pass_condition", passCondition), zap.Any("condition", condition))
+		return nil, 0, err
+	}
+	if ret == nil {
+		ctx.Error("not found any tickets", zap.Any("pass_condition", passCondition), zap.Any("condition", condition))
+		return nil, 0, errorx.ErrTicketNotExists
+	}
+
+	return ret, total, nil
 }
 
 func (i *impl) CreateTicket(ctx contextx.Contextx, title string) (ticket *taskM.Ticket, err error) {

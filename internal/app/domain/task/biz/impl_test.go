@@ -106,3 +106,90 @@ func (s *SuiteTester) Test_impl_GetTicketByID() {
 		})
 	}
 }
+
+func (s *SuiteTester) Test_impl_ListTickets() {
+	condB := taskB.ListTicketsCondition{Page: 1, Size: 10}
+	condR := taskR.ListTicketsCondition{
+		Limit:  10,
+		Offset: 0,
+	}
+	ticket1 := &taskM.Ticket{
+		Id:     "1",
+		Title:  "title1",
+		Status: taskM.TicketStatus_TICKET_STATUS_TODO,
+	}
+	tickets := []*taskM.Ticket{ticket1}
+
+	type args struct {
+		condition taskB.ListTicketsCondition
+		mock      func()
+	}
+	tests := []struct {
+		name        string
+		args        args
+		wantTickets []*taskM.Ticket
+		wantTotal   int
+		wantErr     bool
+	}{
+		{
+			name:        "invalid page then error",
+			args:        args{condition: taskB.ListTicketsCondition{Page: -1, Size: 10}},
+			wantTickets: nil,
+			wantTotal:   0,
+			wantErr:     true,
+		},
+		{
+			name:        "invalid size then error",
+			args:        args{condition: taskB.ListTicketsCondition{Page: 1, Size: -1}},
+			wantTickets: nil,
+			wantTotal:   0,
+			wantErr:     true,
+		},
+		{
+			name: "list tickets then error",
+			args: args{condition: condB, mock: func() {
+				s.repo.EXPECT().ListTickets(gomock.Any(), condR).Return(nil, 0, errors.New("error")).Times(1)
+			}},
+			wantTickets: nil,
+			wantTotal:   0,
+			wantErr:     true,
+		},
+		{
+			name: "list tickets if not found then error",
+			args: args{condition: condB, mock: func() {
+				s.repo.EXPECT().ListTickets(gomock.Any(), condR).Return(nil, 10, nil).Times(1)
+			}},
+			wantTickets: nil,
+			wantTotal:   0,
+			wantErr:     true,
+		},
+		{
+			name: "list tickets then success",
+			args: args{condition: condB, mock: func() {
+				s.repo.EXPECT().ListTickets(gomock.Any(), condR).Return(tickets, 10, nil).Times(1)
+			}},
+			wantTickets: tickets,
+			wantTotal:   10,
+			wantErr:     false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTickets, gotTotal, err := s.biz.ListTickets(contextx.WithLogger(s.logger), tt.args.condition)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ListTickets() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTickets, tt.wantTickets) {
+				t.Errorf("ListTickets() gotTickets = %v, want %v", gotTickets, tt.wantTickets)
+			}
+			if gotTotal != tt.wantTotal {
+				t.Errorf("ListTickets() gotTotal = %v, want %v", gotTotal, tt.wantTotal)
+			}
+		})
+	}
+}
