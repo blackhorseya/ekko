@@ -71,6 +71,12 @@ func (i *impl) ListTickets(ctx contextx.Contextx, passCondition taskB.ListTicket
 }
 
 func (i *impl) CreateTicket(ctx contextx.Contextx, title string) (ticket *taskM.Ticket, err error) {
+	title = strings.Trim(title, " ")
+	if title == "" {
+		ctx.Error("title is empty then error")
+		return nil, errorx.ErrInvalidTitle
+	}
+
 	// todo: 2023/7/31|sean|implement me
 	panic("implement me")
 }

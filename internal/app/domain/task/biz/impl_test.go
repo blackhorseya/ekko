@@ -8,9 +8,9 @@ import (
 	taskM "github.com/blackhorseya/ekko/entity/domain/task/model"
 	taskR "github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	"github.com/golang/mock/gomock"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/suite"
+	"go.uber.org/mock/gomock"
 	"go.uber.org/zap"
 )
 
@@ -189,6 +189,42 @@ func (s *SuiteTester) Test_impl_ListTickets() {
 			}
 			if gotTotal != tt.wantTotal {
 				t.Errorf("ListTickets() gotTotal = %v, want %v", gotTotal, tt.wantTotal)
+			}
+		})
+	}
+}
+
+func (s *SuiteTester) Test_impl_CreateTicket() {
+	type args struct {
+		title string
+		mock  func()
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantTicket *taskM.Ticket
+		wantErr    bool
+	}{
+		{
+			name:       "empty title then error",
+			args:       args{title: "   "},
+			wantTicket: nil,
+			wantErr:    true,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotTicket, err := s.biz.CreateTicket(contextx.WithLogger(s.logger), tt.args.title)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CreateTicket() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotTicket, tt.wantTicket) {
+				t.Errorf("CreateTicket() gotTicket = %v, want %v", gotTicket, tt.wantTicket)
 			}
 		})
 	}

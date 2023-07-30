@@ -15,8 +15,8 @@ import (
 	"github.com/blackhorseya/ekko/pkg/httpx"
 	"github.com/blackhorseya/ekko/pkg/response"
 	"github.com/blackhorseya/ekko/test/testdata"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/suite"
+	"go.uber.org/mock/gomock"
 	"go.uber.org/zap"
 )
 
