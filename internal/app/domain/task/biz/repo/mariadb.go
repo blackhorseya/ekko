@@ -65,11 +65,6 @@ func (m *mariadb) ListTickets(ctx contextx.Contextx, condition ListTicketsCondit
 	return got.ToEntity(), total, nil
 }
 
-func (m *mariadb) CountTickets(ctx contextx.Contextx, condition ListTicketsCondition) (total int, err error) {
-	// todo: 2023/7/30|sean|implement me
-	panic("implement me")
-}
-
 func (m *mariadb) CreateTicket(ctx contextx.Contextx, created *taskM.Ticket) (ticket *taskM.Ticket, err error) {
 	// todo: 2023/7/30|sean|implement me
 	panic("implement me")
