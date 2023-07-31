@@ -76,6 +76,10 @@ update-deps-go: ## update go dependencies
 	@git commit -m "build: update package"
 	@echo Successfully updated package
 
+.PHONY: push-image
+push-image: ## push image to gcr
+	@bazel run //adapter/restful:push-image
+
 ## generate
 .PHONY: gen
 gen: gen-pb-go gen-mocks gen-swagger ## generate code
