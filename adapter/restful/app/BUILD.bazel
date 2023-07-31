@@ -11,7 +11,7 @@ go_library(
     deps = [
         "//adapter/restful/api/docs",
         "//adapter/restful/app/v1:app",
-        "//entity/domain/issue/biz",
+        "//entity/domain/task/biz",
         "//internal/pkg/httpx",
         "//pkg/adapters",
         "//pkg/contextx",

@@ -3,35 +3,34 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 go_library(
     name = "repo",
     srcs = [
-        "impl_mariadb.go",
         "interface.go",
+        "mariadb.go",
         "mock_interface.go",
-        "wire_gen.go",
     ],
-    importpath = "github.com/blackhorseya/ekko/internal/app/domain/user/biz/repo",
+    importpath = "github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo",
     visibility = ["//:__subpackages__"],
     deps = [
-        "//entity/domain/user/model",
-        "//internal/app/domain/user/biz/repo/dao",
+        "//entity/domain/task/model",
+        "//internal/app/domain/task/biz/repo/dao",
         "//pkg/contextx",
-        "@com_github_google_wire//:wire",
         "@com_github_jmoiron_sqlx//:sqlx",
-        "@org_golang_google_protobuf//types/known/timestamppb",
+        "@com_github_pkg_errors//:errors",
         "@org_uber_go_mock//gomock",
     ],
 )
 
 go_test(
     name = "repo_test",
-    srcs = ["impl_mariadb_test.go"],
+    srcs = ["mariadb_test.go"],
     embed = [":repo"],
     deps = [
-        "//entity/domain/user/model",
+        "//entity/domain/task/model",
         "//pkg/contextx",
-        "//test/testdata",
         "@com_github_data_dog_go_sqlmock//:go-sqlmock",
         "@com_github_jmoiron_sqlx//:sqlx",
+        "@com_github_pkg_errors//:errors",
         "@com_github_stretchr_testify//suite",
+        "@org_golang_google_protobuf//types/known/timestamppb",
         "@org_uber_go_zap//:zap",
     ],
 )

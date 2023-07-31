@@ -11,8 +11,8 @@ go_library(
     visibility = ["//visibility:private"],
     deps = [
         "//adapter/restful/app",
-        "//internal/app/domain/issue/biz",
-        "//internal/app/domain/issue/biz/repo",
+        "//internal/app/domain/task/biz",
+        "//internal/app/domain/task/biz/repo",
         "//internal/pkg/config",
         "//internal/pkg/genx",
         "//internal/pkg/httpx",
