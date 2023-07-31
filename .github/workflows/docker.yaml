@@ -48,7 +48,7 @@ jobs:
 
       - name: Push image
         run: |
-          bazel run //adapter/restful:push-image
+          make push-image
 
   create-release:
     runs-on: ubuntu-latest
