@@ -2,21 +2,11 @@
 APP_NAME := ekko
 VERSION := $(shell git describe --tags --abbrev=0)
 DOMAIN_NAME := issue
-SVC_ADAPTER := restful
-MAIN_PKG := ./cmd/$(SVC_ADAPTER)/$(DOMAIN_NAME)
-
-# env for gcp
-PROJECT_ID := $(shell gcloud config get-value project)
-REGISTRY := gcr.io
-IMAGE_NAME := $(REGISTRY)/$(PROJECT_ID)/$(APP_NAME)-$(DOMAIN_NAME)-$(SVC_ADAPTER)
-
-# env for helm
-HELM_REPO_NAME := sean-side
 
 # env for k8s
 DEPLOY_TO := prod
 NS := $(APP_NAME)
-RELEASE_NAME := $(DEPLOY_TO)-$(APP_NAME)-$(DOMAIN_NAME)-$(SVC_ADAPTER)
+RELEASE_NAME := $(DEPLOY_TO)-$(APP_NAME)
 
 ## common
 .PHONY: check-%
@@ -133,6 +123,8 @@ migrate-down: ## run migration down
 	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migrations down $(N)
 
 ## helm
+HELM_REPO_NAME := sean-side
+
 .PHONY: lint-helm
 lint-helm: ## lint helm chart
 	@helm lint deployments/charts/*
@@ -164,5 +156,4 @@ upgrade-helm: ## upgrade helm chart
 	@helm upgrade $(RELEASE_NAME) $(HELM_REPO_NAME)/$(APP_NAME) \
 	--install --namespace $(NS) --create-namespace \
 	--history-max 3 \
-	--values ./deployments/configs/$(DEPLOY_TO)/values.yaml \
-	--set image.tag=$(VERSION)
+	--values ./deployments/configs/$(DEPLOY_TO)/$(APP_NAME).yaml
