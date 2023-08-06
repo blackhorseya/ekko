@@ -148,7 +148,7 @@ add-helm-repo: ## add helm repo
 
 .PHONY: package-helm
 package-helm: ## package helm chart
-	@helm package ./deployments/charts/$(APP_NAME) --destination ./deployments/charts
+	@helm package ./deployments/charts/* --destination ./deployments/charts
 
 .PHONY: push-helm
 push-helm: ## push helm chart to gcs
