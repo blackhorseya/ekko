@@ -8,6 +8,8 @@ package main
 
 import (
 	"github.com/blackhorseya/ekko/internal/pkg/config"
+	"github.com/blackhorseya/ekko/internal/pkg/log"
+	"go.uber.org/zap"
 )
 
 // Injectors from wire.go:
@@ -18,4 +20,12 @@ func NewConfig(path2 string) (*config.Config, error) {
 		return nil, err
 	}
 	return configConfig, nil
+}
+
+func NewLogger(config2 *config.Config) (*zap.Logger, error) {
+	logger, err := log.NewLogger(config2)
+	if err != nil {
+		return nil, err
+	}
+	return logger, nil
 }

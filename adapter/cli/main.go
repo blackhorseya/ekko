@@ -2,11 +2,8 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"os"
-
-	"github.com/davecgh/go-spew/spew"
 )
 
 var path = flag.String("c", "", "path to config file (default: $HOME/.ekko/config.yaml)")
@@ -25,7 +22,10 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	spew.Dump(config)
+	logger, err := NewLogger(config)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-	fmt.Println("I'm a CLI")
+	logger.Debug("I'm a CLI")
 }
