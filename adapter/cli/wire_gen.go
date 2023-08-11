@@ -7,8 +7,10 @@
 package main
 
 import (
+	"github.com/blackhorseya/ekko/adapter/cli/app"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
 	"github.com/blackhorseya/ekko/internal/pkg/log"
+	"github.com/blackhorseya/ekko/pkg/adapters"
 	"go.uber.org/zap"
 )
 
@@ -28,4 +30,9 @@ func NewLogger(config2 *config.Config) (*zap.Logger, error) {
 		return nil, err
 	}
 	return logger, nil
+}
+
+func NewCmd(config2 config.Config, logger *zap.Logger) (adapters.CLI, error) {
+	cli := app.NewCmd()
+	return cli, nil
 }

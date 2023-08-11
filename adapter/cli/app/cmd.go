@@ -13,5 +13,6 @@ func NewCmd() adapters.CLI {
 }
 
 func (c *cmd) Execute() error {
+	// todo: 2023/8/12|sean|impl me
 	panic("implement me")
 }

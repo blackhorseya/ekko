@@ -4,6 +4,8 @@ import (
 	"flag"
 	"log"
 	"os"
+
+	"go.uber.org/zap"
 )
 
 var path = flag.String("c", "", "path to config file (default: $HOME/.ekko/config.yaml)")
@@ -27,5 +29,14 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	logger.Debug("I'm a CLI")
+	cmd, err := NewCmd(*config, logger)
+	if err != nil {
+		logger.Fatal("failed to create cmd", zap.Error(err))
+	}
+
+	err = cmd.Execute()
+	if err != nil {
+		logger.Error("failed to execute cmd", zap.Error(err))
+		os.Exit(1)
+	}
 }
