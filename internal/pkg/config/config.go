@@ -50,12 +50,20 @@ type Jwt struct {
 	Signature string `json:"signature" yaml:"signature"`
 }
 
+// Application is a struct
+type Application struct {
+	Name     string `json:"name" yaml:"name"`
+	Version  string `json:"version" yaml:"version"`
+	Endpoint string `json:"endpoint" yaml:"endpoint"`
+}
+
 // Config is a struct
 type Config struct {
-	Log  Log  `json:"log" yaml:"log"`
-	HTTP HTTP `json:"http" yaml:"http"`
-	DB   DB   `json:"db" yaml:"db"`
-	Jwt  Jwt  `json:"jwt" yaml:"jwt"`
+	App  Application `json:"app" yaml:"app"`
+	Log  Log         `json:"log" yaml:"log"`
+	HTTP HTTP        `json:"http" yaml:"http"`
+	DB   DB          `json:"db" yaml:"db"`
+	Jwt  Jwt         `json:"jwt" yaml:"jwt"`
 }
 
 // NewWithPath creates a new config with path
