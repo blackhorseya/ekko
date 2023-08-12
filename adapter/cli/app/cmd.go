@@ -8,6 +8,7 @@ import (
 )
 
 type cmd struct {
+	path    string
 	rootCmd *cobra.Command
 }
 
@@ -18,10 +19,14 @@ func NewCmd() adapters.CLI {
 		SilenceUsage: true,
 	}
 
+	var path string
+	rootCmd.PersistentFlags().StringVarP(&path, "config", "f", "", "path to config file (default: $HOME/.ekko/config.yaml)")
+
 	rootCmd.AddCommand(version.NewVersionCmd())
 	rootCmd.AddCommand(config.NewConfigCmd())
 
 	return &cmd{
+		path:    path,
 		rootCmd: rootCmd,
 	}
 }
