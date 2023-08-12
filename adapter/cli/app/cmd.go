@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/blackhorseya/ekko/adapter/cli/app/version"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
 	"github.com/blackhorseya/ekko/pkg/adapters"
 	"github.com/spf13/cobra"
@@ -17,7 +18,7 @@ func NewCmd(config *config.Config) adapters.CLI {
 		SilenceUsage: true,
 	}
 
-	rootCmd.AddCommand(newVersionCmd())
+	rootCmd.AddCommand(version.NewVersionCmd())
 	rootCmd.AddCommand(newConfigCmd(config))
 
 	return &cmd{

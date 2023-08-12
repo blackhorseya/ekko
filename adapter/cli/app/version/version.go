@@ -1,4 +1,4 @@
-package app
+package version
 
 import (
 	"fmt"
@@ -6,7 +6,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newVersionCmd() *cobra.Command {
+// NewVersionCmd is used to create a new version cmd instance
+func NewVersionCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "version",
 		Short: "Print the version number of ekko",
