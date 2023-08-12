@@ -11,8 +11,10 @@ func NewVersionCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "version",
 		Short: "Print the version number of ekko",
-		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("ekko version: v0.0.1")
+		RunE: func(cmd *cobra.Command, args []string) error {
+			fmt.Println("ekko version 0.0.1")
+
+			return nil
 		},
 	}
 }
