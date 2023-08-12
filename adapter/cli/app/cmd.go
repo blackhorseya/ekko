@@ -18,6 +18,7 @@ func NewCmd(config *config.Config) adapters.CLI {
 	}
 
 	rootCmd.AddCommand(newVersionCmd(config))
+	rootCmd.AddCommand(newConfigCmd(config))
 
 	return &cmd{
 		rootCmd: rootCmd,
