@@ -7,7 +7,6 @@ import (
 )
 
 type cmd struct {
-	config  *config.Config
 	rootCmd *cobra.Command
 }
 
