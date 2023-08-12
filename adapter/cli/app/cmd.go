@@ -18,7 +18,7 @@ func NewCmd(config *config.Config) adapters.CLI {
 	}
 
 	rootCmd.PersistentFlags().StringP("config", "c", "", "config file (default is $HOME/.ekko.yaml)")
-	rootCmd.AddCommand(newVersionCmd(config))
+	rootCmd.AddCommand(newVersionCmd())
 	rootCmd.AddCommand(newConfigCmd(config))
 
 	return &cmd{
