@@ -6,6 +6,11 @@ import (
 )
 
 var defaultConfig = &Config{
+	App: Application{
+		Name:     "ekko",
+		Version:  "0.0.1",
+		Endpoint: "http://localhost:1992",
+	},
 	Log: Log{
 		Level:  "info",
 		Format: "json",
