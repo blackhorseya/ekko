@@ -11,11 +11,15 @@ type cmd struct {
 
 // NewCmd is used to create a new cmd instance
 func NewCmd() adapters.CLI {
+	rootCmd := &cobra.Command{
+		Short:        "ekko is a tool for todo list management",
+		SilenceUsage: true,
+	}
+
+	rootCmd.AddCommand(newVersionCmd())
+
 	return &cmd{
-		rootCmd: &cobra.Command{
-			Short:        "ekko is a tool for todo list management",
-			SilenceUsage: true,
-		},
+		rootCmd: rootCmd,
 	}
 }
 
