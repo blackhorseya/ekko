@@ -8,7 +8,6 @@ import (
 )
 
 type cmd struct {
-	path    string
 	rootCmd *cobra.Command
 }
 
@@ -26,7 +25,6 @@ func NewCmd() adapters.CLI {
 	rootCmd.AddCommand(config.NewConfigCmd())
 
 	return &cmd{
-		path:    path,
 		rootCmd: rootCmd,
 	}
 }
