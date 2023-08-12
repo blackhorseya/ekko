@@ -1,8 +1,12 @@
 package app
 
 import (
+	"context"
+	"os"
+
 	"github.com/blackhorseya/ekko/adapter/cli/app/config"
 	"github.com/blackhorseya/ekko/adapter/cli/app/version"
+	configx "github.com/blackhorseya/ekko/internal/pkg/config"
 	"github.com/blackhorseya/ekko/pkg/adapters"
 	"github.com/spf13/cobra"
 )
@@ -23,6 +27,17 @@ func NewCmd() adapters.CLI {
 
 	rootCmd.AddCommand(version.NewVersionCmd())
 	rootCmd.AddCommand(config.NewConfigCmd())
+
+	rootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
+		if path == "" {
+			path = os.Getenv("HOME") + "/.ekko/config.yaml"
+		}
+
+		cfg, err := configx.NewWithPath(path)
+		cobra.CheckErr(err)
+
+		cmd.SetContext(context.WithValue(cmd.Context(), "config", cfg))
+	}
 
 	return &cmd{
 		rootCmd: rootCmd,
