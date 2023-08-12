@@ -9,9 +9,7 @@ package main
 import (
 	"github.com/blackhorseya/ekko/adapter/cli/app"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
-	"github.com/blackhorseya/ekko/internal/pkg/log"
 	"github.com/blackhorseya/ekko/pkg/adapters"
-	"go.uber.org/zap"
 )
 
 // Injectors from wire.go:
@@ -24,15 +22,7 @@ func NewConfig(path2 string) (*config.Config, error) {
 	return configConfig, nil
 }
 
-func NewLogger(config2 *config.Config) (*zap.Logger, error) {
-	logger, err := log.NewLogger(config2)
-	if err != nil {
-		return nil, err
-	}
-	return logger, nil
-}
-
-func NewCmd(config2 config.Config, logger *zap.Logger) (adapters.CLI, error) {
+func NewCmd(config2 config.Config) (adapters.CLI, error) {
 	cli := app.NewCmd()
 	return cli, nil
 }
