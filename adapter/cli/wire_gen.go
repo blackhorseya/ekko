@@ -22,7 +22,7 @@ func NewConfig(path2 string) (*config.Config, error) {
 	return configConfig, nil
 }
 
-func NewCmd(config2 config.Config) (adapters.CLI, error) {
-	cli := app.NewCmd()
+func NewCmd(config2 *config.Config) (adapters.CLI, error) {
+	cli := app.NewCmd(config2)
 	return cli, nil
 }

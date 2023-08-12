@@ -22,7 +22,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	cmd, err := NewCmd(*config)
+	cmd, err := NewCmd(config)
 	if err != nil {
 		log.Fatalln(err)
 	}

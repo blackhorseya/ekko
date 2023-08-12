@@ -15,6 +15,6 @@ func NewConfig(path string) (*config.Config, error) {
 	panic(wire.Build(config.NewWithPath))
 }
 
-func NewCmd(config config.Config) (adapters.CLI, error) {
+func NewCmd(config *config.Config) (adapters.CLI, error) {
 	panic(wire.Build(app.NewCmd))
 }

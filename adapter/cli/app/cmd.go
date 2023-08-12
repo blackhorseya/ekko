@@ -1,16 +1,18 @@
 package app
 
 import (
+	"github.com/blackhorseya/ekko/internal/pkg/config"
 	"github.com/blackhorseya/ekko/pkg/adapters"
 	"github.com/spf13/cobra"
 )
 
 type cmd struct {
+	config  *config.Config
 	rootCmd *cobra.Command
 }
 
 // NewCmd is used to create a new cmd instance
-func NewCmd() adapters.CLI {
+func NewCmd(config *config.Config) adapters.CLI {
 	rootCmd := &cobra.Command{
 		Short:        "ekko is a tool for todo list management",
 		SilenceUsage: true,
@@ -19,6 +21,7 @@ func NewCmd() adapters.CLI {
 	rootCmd.AddCommand(newVersionCmd())
 
 	return &cmd{
+		config:  config,
 		rootCmd: rootCmd,
 	}
 }
