@@ -17,10 +17,16 @@ type mariadb struct {
 }
 
 // NewMariadb will create an object that represent the IRepo interface
-func NewMariadb(rw *sqlx.DB, m *migrate.Migrate) IRepo {
+func NewMariadb(rw *sqlx.DB, m *migrate.Migrate) (IRepo, error) {
+	if m != nil {
+		if err := m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
+			return nil, err
+		}
+	}
+
 	return &mariadb{
 		rw: rw,
-	}
+	}, nil
 }
 
 func (m *mariadb) GetTicketByID(ctx contextx.Contextx, id string) (ticket *taskM.Ticket, err error) {
