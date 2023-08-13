@@ -106,7 +106,20 @@ readinessProbe:
   successThreshold: 1
 
 config: |-
-  log:
-    level: info
-    format: json
+  http:
+    host: 0.0.0.0
+    port: 1992
+    mode: debug
   
+  db:
+    dsn: "root:changeme@tcp(localhost:3306)/ekko?charset=utf8mb4&parseTime=True&loc=Local"
+    conns: 100
+  
+  log:
+    format: console
+    level: info
+  
+  jwt:
+    issuer: ekko
+    signature: changeme
+
