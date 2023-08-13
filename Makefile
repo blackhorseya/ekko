@@ -89,9 +89,6 @@ gen-mocks: ## generate mocks
 	@go generate -tags="wireinject" ./...
 	@echo Successfully generated wire and mockgen
 
-.PHONY: gen-build
-gen-build: gazelle ## generate build files
-
 ## database
 DB_RELEASE_NAME := $(DEPLOY_TO)-$(APP_NAME)-$(DOMAIN_NAME)-db
 DB_URI := 'mysql://root:changeme@tcp(localhost:3306)/ekko?charset=utf8mb4&parseTime=True&loc=Local'
