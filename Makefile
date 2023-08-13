@@ -1,6 +1,5 @@
 # env for project
 PROJECT_NAME := ekko
-APP_NAME := ekko
 VERSION := $(shell git describe --tags --abbrev=0)
 
 ## common
@@ -85,9 +84,10 @@ gen-mocks: ## generate mocks
 
 ## helm
 HELM_REPO_NAME := sean-side
+CHART_NAME := ekko-restful
 DEPLOY_TO := prod
 NS := $(PROJECT_NAME)
-RELEASE_NAME := $(DEPLOY_TO)-$(APP_NAME)
+RELEASE_NAME := $(DEPLOY_TO)-$(CHART_NAME)
 
 .PHONY: lint-helm
 lint-helm: ## lint helm chart
@@ -116,5 +116,5 @@ push-helm: ## push helm chart to gcs
 
 .PHONY: upgrade-helm
 upgrade-helm: ## upgrade helm chart
-	@echo "Upgrading $(RELEASE_NAME) in $(NS) namespace with $(HELM_REPO_NAME)/$(APP_NAME)"
-	@echo "Using values from ./deployments/configs/$(DEPLOY_TO)/$(APP_NAME).yaml"
+	@echo "Upgrading $(RELEASE_NAME) in $(NS) namespace with $(HELM_REPO_NAME)/$(CHART_NAME)"
+	@echo "Using values from ./deployments/configs/$(DEPLOY_TO)/$(CHART_NAME)/values.yaml"
