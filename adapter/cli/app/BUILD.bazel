@@ -1,0 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "app",
+    srcs = ["cmd.go"],
+    importpath = "github.com/blackhorseya/ekko/adapter/cli/app",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//adapter/cli/app/config",
+        "//adapter/cli/app/version",
+        "//internal/pkg/config",
+        "//pkg/adapters",
+        "@com_github_spf13_cobra//:cobra",
+    ],
+)

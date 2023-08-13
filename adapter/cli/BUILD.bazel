@@ -1,0 +1,21 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "cli_lib",
+    srcs = [
+        "main.go",
+        "wire_gen.go",
+    ],
+    importpath = "github.com/blackhorseya/ekko/adapter/cli",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//adapter/cli/app",
+        "//pkg/adapters",
+    ],
+)
+
+go_binary(
+    name = "cli",
+    embed = [":cli_lib"],
+    visibility = ["//visibility:public"],
+)
