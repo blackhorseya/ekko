@@ -4,11 +4,6 @@ APP_NAME := ekko
 VERSION := $(shell git describe --tags --abbrev=0)
 DOMAIN_NAME := issue
 
-# env for k8s
-DEPLOY_TO := prod
-NS := $(APP_NAME)
-RELEASE_NAME := $(DEPLOY_TO)-$(APP_NAME)
-
 ## common
 .PHONY: check-%
 check-%: ## check environment variable is exists
@@ -112,6 +107,9 @@ migrate-down: ## run migration down
 
 ## helm
 HELM_REPO_NAME := sean-side
+DEPLOY_TO := prod
+NS := $(PROJECT_NAME)
+RELEASE_NAME := $(DEPLOY_TO)-$(APP_NAME)
 
 .PHONY: lint-helm
 lint-helm: ## lint helm chart
