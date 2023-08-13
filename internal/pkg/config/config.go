@@ -21,8 +21,9 @@ var defaultConfig = &Config{
 		Mode: "debug",
 	},
 	DB: DB{
-		DSN:   "root:changeme@tcp(localhost:3306)/ekko?charset=utf8mb4&parseTime=True&loc=Local",
-		Conns: 100,
+		DSN:    "root:changeme@tcp(localhost:3306)/ekko?charset=utf8mb4&parseTime=True&loc=Local",
+		Conns:  100,
+		Source: "github://blackhorseya/ekko/scripts/migrations",
 	},
 	Jwt: Jwt{
 		Issuer:    "ekko",
@@ -45,8 +46,9 @@ type HTTP struct {
 
 // DB is a struct
 type DB struct {
-	DSN   string `json:"dsn" yaml:"dsn"`
-	Conns int    `json:"conns" yaml:"conns"`
+	DSN    string `json:"dsn" yaml:"dsn"`
+	Conns  int    `json:"conns" yaml:"conns"`
+	Source string `json:"source" yaml:"source"`
 }
 
 // Jwt is a struct

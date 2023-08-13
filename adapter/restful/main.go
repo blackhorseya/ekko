@@ -3,19 +3,14 @@ package main
 import (
 	"flag"
 	"log"
-	"os"
 
 	"go.uber.org/zap"
 )
 
-var path = flag.String("c", "", "path to config file (default: $HOME/.ekko/config.yaml)")
+var path = flag.String("c", "./configs/default.yaml", "path to config file (default: ./configs/default.yaml")
 
 func init() {
 	flag.Parse()
-
-	if *path == "" {
-		*path = os.Getenv("HOME") + "/.ekko/config.yaml"
-	}
 }
 
 // @title ekko

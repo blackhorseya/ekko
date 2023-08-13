@@ -44,7 +44,14 @@ func NewService(config2 *config.Config, logger *zap.Logger, id int64) (*app.Serv
 	if err != nil {
 		return nil, err
 	}
-	iRepo := repo.NewMariadb(db)
+	migrate, err := mariadb.NewMigration(config2, db)
+	if err != nil {
+		return nil, err
+	}
+	iRepo, err := repo.NewMariadb(db, migrate)
+	if err != nil {
+		return nil, err
+	}
 	iBiz := biz.NewImpl(iRepo)
 	restful := app.NewRestful(logger, engine, iBiz)
 	service := app.NewService(logger, server, restful)
@@ -53,4 +60,4 @@ func NewService(config2 *config.Config, logger *zap.Logger, id int64) (*app.Serv
 
 // wire.go:
 
-var providerSet = wire.NewSet(app.ProviderSet, mariadb.NewMariadb, genx.NewGenerator, biz.NewImpl, repo.NewMariadb)
+var providerSet = wire.NewSet(app.ProviderSet, mariadb.NewMariadb, mariadb.NewMigration, genx.NewGenerator, biz.NewImpl, repo.NewMariadb)
