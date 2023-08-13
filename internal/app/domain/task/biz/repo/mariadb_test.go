@@ -35,7 +35,7 @@ func (s *SuiteMariadb) SetupTest() {
 		s.T().Fatalf("an error '%s' was not expected when opening a stub database connection", err)
 	}
 	s.rw = mock
-	s.repo = NewMariadb(sqlx.NewDb(db, "mysql"))
+	s.repo = NewMariadb(sqlx.NewDb(db, "mysql"), nil)
 }
 
 func TestMariadb(t *testing.T) {

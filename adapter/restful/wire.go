@@ -28,6 +28,7 @@ var providerSet = wire.NewSet(
 	app.ProviderSet,
 
 	mariadb.NewMariadb,
+	mariadb.NewMigration,
 	genx.NewGenerator,
 
 	// biz
