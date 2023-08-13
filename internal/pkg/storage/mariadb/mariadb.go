@@ -6,8 +6,8 @@ import (
 	"github.com/blackhorseya/ekko/internal/pkg/config"
 	_ "github.com/go-sql-driver/mysql" // import db driver
 	"github.com/golang-migrate/migrate/v4"
-	_ "github.com/golang-migrate/migrate/v4/database/mysql" // import MySQL driver
-	_ "github.com/golang-migrate/migrate/v4/source/github"  // import GitHub source
+	"github.com/golang-migrate/migrate/v4/database/mysql"
+	_ "github.com/golang-migrate/migrate/v4/source/github" // import GitHub source
 	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
 )
@@ -28,6 +28,16 @@ func NewMariadb(config *config.Config, logger *zap.Logger) (*sqlx.DB, error) {
 }
 
 // NewMigration init migration
-func NewMigration(config *config.Config, logger *zap.Logger, rw *sqlx.DB) (*migrate.Migrate, error) {
-	panic("implement me")
+func NewMigration(config *config.Config, rw *sqlx.DB) (*migrate.Migrate, error) {
+	instance, err := mysql.WithInstance(rw.DB, &mysql.Config{})
+	if err != nil {
+		return nil, err
+	}
+
+	m, err := migrate.NewWithDatabaseInstance(config.DB.Source, "mysql", instance)
+	if err != nil {
+		return nil, err
+	}
+
+	return m, nil
 }

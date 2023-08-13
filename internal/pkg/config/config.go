@@ -21,8 +21,9 @@ var defaultConfig = &Config{
 		Mode: "debug",
 	},
 	DB: DB{
-		DSN:   "root:changeme@tcp(localhost:3306)/ekko?charset=utf8mb4&parseTime=True&loc=Local",
-		Conns: 100,
+		DSN:    "root:changeme@tcp(localhost:3306)/ekko?charset=utf8mb4&parseTime=True&loc=Local",
+		Conns:  100,
+		Source: "github://blackhorseya/ekko/scripts/migrations",
 	},
 	Jwt: Jwt{
 		Issuer:    "ekko",
