@@ -48,7 +48,10 @@ func NewService(config2 *config.Config, logger *zap.Logger, id int64) (*app.Serv
 	if err != nil {
 		return nil, err
 	}
-	iRepo := repo.NewMariadb(db, migrate)
+	iRepo, err := repo.NewMariadb(db, migrate)
+	if err != nil {
+		return nil, err
+	}
 	iBiz := biz.NewImpl(iRepo)
 	restful := app.NewRestful(logger, engine, iBiz)
 	service := app.NewService(logger, server, restful)
