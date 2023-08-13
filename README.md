@@ -14,3 +14,15 @@ functionality make it a valuable tool for teams of all sizes looking to streamli
 productivity.
 
 ## Installation
+
+Deploy `ekko-restful` adapter to your server, and then you can use `ekko-cli` to manage your todo list.
+
+```shell
+make upgrade-helm DEPLOY_TO=prod
+```
+
+Deploy database for `ekko-restful` adapter.
+
+```shell
+make deploy-database 
+```
