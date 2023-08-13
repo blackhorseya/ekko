@@ -1,4 +1,5 @@
 # env for project
+PROJECT_NAME := ekko
 APP_NAME := ekko
 VERSION := $(shell git describe --tags --abbrev=0)
 DOMAIN_NAME := issue
@@ -55,16 +56,6 @@ build-go: ## build go binary
 .PHONY: test-go
 test-go: ## test go binary
 	@sh $(shell pwd)/scripts/go.test.sh
-
-.PHONY: update-deps-go
-update-deps-go: ## update go dependencies
-	@echo Starting update package
-	@go get -u ./...
-	@go mod tidy
-
-	@git add go.mod go.sum
-	@git commit -m "build: update package"
-	@echo Successfully updated package
 
 .PHONY: push-image
 push-image: ## push image to gcr
