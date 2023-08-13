@@ -123,3 +123,13 @@ upgrade-helm: ## upgrade helm chart
 	--install --namespace $(NS) --create-namespace \
 	--history-max 3 \
 	-f ./deployments/configs/$(DEPLOY_TO)/$(CHART_NAME)/values.yaml
+
+## database
+.PHONY: deploy-database
+deploy-database: ## deploy database
+	$(eval repo_name := bitnami)
+	$(eval chart_name := mariadb)
+	$(eval release_name := $(DEPLOY_TO)-$(PROJECT_NAME)-$(chart_name))
+
+	@echo "Upgrading $(release_name) in $(NS) namespace with $(repo_name)/$(chart_name)"
+	@echo "Using values from ./deployments/configs/$(DEPLOY_TO)/$(chart_name)/values.yaml"
