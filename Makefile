@@ -84,27 +84,6 @@ gen-mocks: ## generate mocks
 	@go generate -tags="wireinject" ./...
 	@echo Successfully generated wire and mockgen
 
-## database
-DB_RELEASE_NAME := $(DEPLOY_TO)-$(APP_NAME)-$(DOMAIN_NAME)-db
-DB_URI := 'mysql://root:changeme@tcp(localhost:3306)/ekko?charset=utf8mb4&parseTime=True&loc=Local'
-N := 1
-
-.PHONY: upgrade-db
-upgrade-db: ## upgrade database
-	@echo "Deploying database $(DB_RELEASE_NAME) to $(DEPLOY_TO)"
-	@helm upgrade $(DB_RELEASE_NAME) bitnami/mariadb \
-	--install --namespace $(NS) --create-namespace \
-	--history-max 3 \
-	--values ./deployments/configs/$(DEPLOY_TO)/db.yaml
-
-.PHONY: migrate-up
-migrate-up: ## run migration up
-	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migrations up
-
-.PHONY: migrate-down
-migrate-down: ## run migration down
-	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migrations down $(N)
-
 ## helm
 HELM_REPO_NAME := sean-side
 DEPLOY_TO := prod
