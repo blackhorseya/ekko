@@ -1,13 +1,6 @@
 # env for project
 PROJECT_NAME := ekko
-APP_NAME := ekko
 VERSION := $(shell git describe --tags --abbrev=0)
-DOMAIN_NAME := issue
-
-# env for k8s
-DEPLOY_TO := prod
-NS := $(APP_NAME)
-RELEASE_NAME := $(DEPLOY_TO)-$(APP_NAME)
 
 ## common
 .PHONY: check-%
@@ -89,29 +82,12 @@ gen-mocks: ## generate mocks
 	@go generate -tags="wireinject" ./...
 	@echo Successfully generated wire and mockgen
 
-## database
-DB_RELEASE_NAME := $(DEPLOY_TO)-$(APP_NAME)-$(DOMAIN_NAME)-db
-DB_URI := 'mysql://root:changeme@tcp(localhost:3306)/ekko?charset=utf8mb4&parseTime=True&loc=Local'
-N := 1
-
-.PHONY: upgrade-db
-upgrade-db: ## upgrade database
-	@echo "Deploying database $(DB_RELEASE_NAME) to $(DEPLOY_TO)"
-	@helm upgrade $(DB_RELEASE_NAME) bitnami/mariadb \
-	--install --namespace $(NS) --create-namespace \
-	--history-max 3 \
-	--values ./deployments/configs/$(DEPLOY_TO)/db.yaml
-
-.PHONY: migrate-up
-migrate-up: ## run migration up
-	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migrations up
-
-.PHONY: migrate-down
-migrate-down: ## run migration down
-	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migrations down $(N)
-
 ## helm
 HELM_REPO_NAME := sean-side
+CHART_NAME := ekko-restful
+DEPLOY_TO := prod
+NS := $(PROJECT_NAME)
+RELEASE_NAME := $(DEPLOY_TO)-$(CHART_NAME)
 
 .PHONY: lint-helm
 lint-helm: ## lint helm chart
@@ -140,8 +116,10 @@ push-helm: ## push helm chart to gcs
 
 .PHONY: upgrade-helm
 upgrade-helm: ## upgrade helm chart
-	@echo "Upgrading $(RELEASE_NAME) to $(VERSION)"
-	@helm upgrade $(RELEASE_NAME) $(HELM_REPO_NAME)/$(APP_NAME) \
+	@echo "Upgrading $(RELEASE_NAME) in $(NS) namespace with $(HELM_REPO_NAME)/$(CHART_NAME)"
+	@echo "Using values from ./deployments/configs/$(DEPLOY_TO)/$(CHART_NAME)/values.yaml"
+
+	@helm upgrade $(RELEASE_NAME) $(HELM_REPO_NAME)/$(CHART_NAME) \
 	--install --namespace $(NS) --create-namespace \
 	--history-max 3 \
-	--values ./deployments/configs/$(DEPLOY_TO)/$(APP_NAME).yaml
+	-f ./deployments/configs/$(DEPLOY_TO)/$(CHART_NAME)/values.yaml
