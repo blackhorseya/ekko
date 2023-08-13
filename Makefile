@@ -133,3 +133,8 @@ deploy-database: ## deploy database
 
 	@echo "Upgrading $(release_name) in $(NS) namespace with $(repo_name)/$(chart_name)"
 	@echo "Using values from ./deployments/configs/$(DEPLOY_TO)/$(chart_name)/values.yaml"
+
+	@helm upgrade $(release_name) $(repo_name)/$(chart_name) \
+	--install --namespace $(NS) --create-namespace \
+	--history-max 3 \
+	-f ./deployments/configs/$(DEPLOY_TO)/$(chart_name)/values.yaml
