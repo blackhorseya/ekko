@@ -116,8 +116,5 @@ push-helm: ## push helm chart to gcs
 
 .PHONY: upgrade-helm
 upgrade-helm: ## upgrade helm chart
-	@echo "Upgrading $(RELEASE_NAME) to $(VERSION)"
-	@helm upgrade $(RELEASE_NAME) $(HELM_REPO_NAME)/$(APP_NAME) \
-	--install --namespace $(NS) --create-namespace \
-	--history-max 3 \
-	--values ./deployments/configs/$(DEPLOY_TO)/$(APP_NAME).yaml
+	@echo "Upgrading $(RELEASE_NAME) in $(NS) namespace with $(HELM_REPO_NAME)/$(APP_NAME)"
+	@echo "Using values from ./deployments/configs/$(DEPLOY_TO)/$(APP_NAME).yaml"
