@@ -1,3 +1,4 @@
 [submodule "deployments/configs"]
 	path = deployments/configs
 	url = git@github.com:blackhorseya/ekko-configs.git
+	branch = main
