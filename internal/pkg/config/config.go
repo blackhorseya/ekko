@@ -45,8 +45,9 @@ type HTTP struct {
 
 // DB is a struct
 type DB struct {
-	DSN   string `json:"dsn" yaml:"dsn"`
-	Conns int    `json:"conns" yaml:"conns"`
+	DSN    string `json:"dsn" yaml:"dsn"`
+	Conns  int    `json:"conns" yaml:"conns"`
+	Source string `json:"source" yaml:"source"`
 }
 
 // Jwt is a struct
