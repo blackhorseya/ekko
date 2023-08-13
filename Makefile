@@ -118,3 +118,8 @@ push-helm: ## push helm chart to gcs
 upgrade-helm: ## upgrade helm chart
 	@echo "Upgrading $(RELEASE_NAME) in $(NS) namespace with $(HELM_REPO_NAME)/$(CHART_NAME)"
 	@echo "Using values from ./deployments/configs/$(DEPLOY_TO)/$(CHART_NAME)/values.yaml"
+
+	@helm upgrade $(RELEASE_NAME) $(HELM_REPO_NAME)/$(CHART_NAME) \
+	--install --namespace $(NS) --create-namespace \
+	--history-max 3 \
+	-f ./deployments/configs/$(DEPLOY_TO)/$(CHART_NAME)/values.yaml
