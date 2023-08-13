@@ -2,7 +2,6 @@
 PROJECT_NAME := ekko
 APP_NAME := ekko
 VERSION := $(shell git describe --tags --abbrev=0)
-DOMAIN_NAME := issue
 
 ## common
 .PHONY: check-%
