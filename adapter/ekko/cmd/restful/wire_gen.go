@@ -7,11 +7,18 @@
 package restful
 
 import (
+	"github.com/blackhorseya/ekko/internal/app/domain/task/biz"
+	"github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
 	"github.com/blackhorseya/ekko/internal/pkg/httpx"
+	"github.com/blackhorseya/ekko/internal/pkg/storage/mariadb"
 	"github.com/blackhorseya/ekko/pkg/adapters"
 	"github.com/google/wire"
 	"go.uber.org/zap"
+)
+
+import (
+	_ "github.com/blackhorseya/ekko/adapter/ekko/api/docs"
 )
 
 // Injectors from wire.go:
@@ -19,10 +26,19 @@ import (
 func NewService(config2 *config.Config, logger *zap.Logger) (adapters.Restful, error) {
 	engine := httpx.NewRouter()
 	server := httpx.NewServer(config2, logger, engine)
-	restful := newRestful(logger, server, engine)
+	db, err := mariadb.NewMariadb(config2, logger)
+	if err != nil {
+		return nil, err
+	}
+	iRepo, err := repo.NewMariadb(db)
+	if err != nil {
+		return nil, err
+	}
+	iBiz := biz.NewImpl(iRepo)
+	restful := newRestful(logger, server, engine, iBiz)
 	return restful, nil
 }
 
 // wire.go:
 
-var providerSet = wire.NewSet(httpx.ServerSet, newRestful)
+var providerSet = wire.NewSet(httpx.ServerSet, newRestful, mariadb.NewMariadb, biz.TaskBizSet)

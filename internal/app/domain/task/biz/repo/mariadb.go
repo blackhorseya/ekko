@@ -7,7 +7,6 @@ import (
 	taskM "github.com/blackhorseya/ekko/entity/domain/task/model"
 	"github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo/dao"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	"github.com/golang-migrate/migrate/v4"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 )
@@ -17,13 +16,7 @@ type mariadb struct {
 }
 
 // NewMariadb will create an object that represent the IRepo interface
-func NewMariadb(rw *sqlx.DB, m *migrate.Migrate) (IRepo, error) {
-	if m != nil {
-		if err := m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
-			return nil, err
-		}
-	}
-
+func NewMariadb(rw *sqlx.DB) (IRepo, error) {
 	return &mariadb{
 		rw: rw,
 	}, nil

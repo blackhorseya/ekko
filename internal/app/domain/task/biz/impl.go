@@ -10,9 +10,13 @@ import (
 	"github.com/blackhorseya/ekko/internal/pkg/errorx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/google/uuid"
+	"github.com/google/wire"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
+
+// TaskBizSet will be used by wire
+var TaskBizSet = wire.NewSet(NewImpl, taskR.NewMariadb)
 
 type impl struct {
 	repo taskR.IRepo

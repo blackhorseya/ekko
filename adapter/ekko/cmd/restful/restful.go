@@ -9,6 +9,8 @@ import (
 	"time"
 
 	_ "github.com/blackhorseya/ekko/adapter/ekko/api/docs" // import swagger docs
+	v1 "github.com/blackhorseya/ekko/adapter/ekko/cmd/restful/v1"
+	taskB "github.com/blackhorseya/ekko/entity/domain/task/biz"
 	"github.com/blackhorseya/ekko/pkg/adapters"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/cors"
@@ -27,13 +29,16 @@ type impl struct {
 
 	server httpx.Server
 	router *gin.Engine
+
+	task taskB.IBiz
 }
 
-func newRestful(logger *zap.Logger, server httpx.Server, router *gin.Engine) adapters.Restful {
+func newRestful(logger *zap.Logger, server httpx.Server, router *gin.Engine, task taskB.IBiz) adapters.Restful {
 	return &impl{
 		logger: logger.With(zap.String("type", "restful")),
 		server: server,
 		router: router,
+		task:   task,
 	}
 }
 
@@ -61,6 +66,8 @@ func (i *impl) InitRouting() {
 	{
 		apiG.GET("/healthz", i.healthz)
 		apiG.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+		v1.Handle(apiG.Group("/v1"), i.task)
 	}
 }
 

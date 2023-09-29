@@ -6,6 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Handle(g *gin.RouterGroup, taskB taskB.IBiz) {
-	tasks.Handle(g.Group("/tasks"), taskB)
+func Handle(g *gin.RouterGroup, task taskB.IBiz) {
+	tasks.Handle(g.Group("/tasks"), task)
 }
