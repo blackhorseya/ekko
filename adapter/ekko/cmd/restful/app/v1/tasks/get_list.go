@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	taskB "github.com/blackhorseya/ekko/entity/domain/task/biz"
-	taskM "github.com/blackhorseya/ekko/entity/domain/task/model"
+	"github.com/blackhorseya/ekko/entity/domain/task/model"
 	"github.com/blackhorseya/ekko/internal/pkg/errorx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/response"
@@ -23,7 +23,7 @@ const (
 
 type listResponse struct {
 	Total int             `json:"total"`
-	List  []*taskM.Ticket `json:"list"`
+	List  []*model.Ticket `json:"list"`
 }
 
 // List

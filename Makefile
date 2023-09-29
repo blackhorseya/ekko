@@ -73,7 +73,7 @@ gen-pb-go: ## generate go protobuf
 
 .PHONY: gen-swagger
 gen-swagger: ## generate swagger spec
-	@swag init -q -d ./adapter/restful,./pkg,./entity/domain/task/model -o ./adapter/restful/api/docs
+	@swag init -q -d ./adapter/ekko,./pkg,./entity -o ./adapter/ekko/api/docs
 	## Generated swagger spec
 
 .PHONY: gen-mocks
