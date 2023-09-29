@@ -52,7 +52,7 @@ test-go: ## test go binary
 
 .PHONY: push-image
 push-image: ## push image to gcr
-	@bazel run //adapter/restful:push-image
+	@bazel run //adapter/ekko:push-image
 
 ## generate
 .PHONY: gen
