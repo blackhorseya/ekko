@@ -97,3 +97,19 @@ func NewWithPath(path string) (*Config, error) {
 
 	return config, nil
 }
+
+// NewConfigWithViper creates a new config with viper
+func NewConfigWithViper(v *viper.Viper) (*Config, error) {
+	err := v.ReadInConfig()
+	if err != nil {
+		return nil, errors.Wrap(err, "read config failed")
+	}
+
+	config := defaultConfig
+	err = v.Unmarshal(&config)
+	if err != nil {
+		return nil, errors.Wrap(err, "unmarshal config failed")
+	}
+
+	return config, nil
+}
