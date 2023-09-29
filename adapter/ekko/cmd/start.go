@@ -1,9 +1,11 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/blackhorseya/ekko/adapter/ekko/cmd/restful"
+	"github.com/blackhorseya/ekko/internal/pkg/config"
+	"github.com/blackhorseya/ekko/internal/pkg/log"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // startCmd represents the start command
@@ -32,6 +34,19 @@ var startApiCmd = &cobra.Command{
 	Use:   "api",
 	Short: "start api service",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("start api called")
+		cfg, err := config.NewConfigWithViper(viper.GetViper())
+		cobra.CheckErr(err)
+
+		logger, err := log.NewLogger(cfg)
+		cobra.CheckErr(err)
+
+		service, err := restful.NewService(cfg, logger)
+		cobra.CheckErr(err)
+
+		err = service.Start()
+		cobra.CheckErr(err)
+
+		err = service.AwaitSignal()
+		cobra.CheckErr(err)
 	},
 }
