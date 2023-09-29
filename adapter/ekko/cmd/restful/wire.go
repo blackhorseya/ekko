@@ -1,0 +1,22 @@
+//go:build wireinject
+
+//go:generate wire
+
+package restful
+
+import (
+	"github.com/blackhorseya/ekko/internal/pkg/config"
+	"github.com/blackhorseya/ekko/internal/pkg/httpx"
+	"github.com/blackhorseya/ekko/pkg/adapters"
+	"github.com/google/wire"
+	"go.uber.org/zap"
+)
+
+var providerSet = wire.NewSet(
+	httpx.ServerSet,
+	newRestful,
+)
+
+func NewService(config *config.Config, logger *zap.Logger) (adapters.Restful, error) {
+	panic(wire.Build(providerSet))
+}
