@@ -1,0 +1,18 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "cmd",
+    srcs = [
+        "root.go",
+        "start.go",
+    ],
+    importpath = "github.com/blackhorseya/ekko/adapter/ekko/cmd",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//adapter/ekko/cmd/restful",
+        "//internal/pkg/config",
+        "//internal/pkg/log",
+        "@com_github_spf13_cobra//:cobra",
+        "@com_github_spf13_viper//:viper",
+    ],
+)

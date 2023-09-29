@@ -1,0 +1,24 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "tasks",
+    srcs = [
+        "delete_id.go",
+        "get_id.go",
+        "get_list.go",
+        "patch_status.go",
+        "post_task.go",
+        "tasks.go",
+    ],
+    importpath = "github.com/blackhorseya/ekko/adapter/ekko/cmd/restful/v1/tasks",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//entity/domain/task/biz",
+        "//entity/domain/task/model",
+        "//internal/pkg/errorx",
+        "//pkg/contextx",
+        "//pkg/response",
+        "@com_github_gin_gonic_gin//:gin",
+        "@org_uber_go_zap//:zap",
+    ],
+)
