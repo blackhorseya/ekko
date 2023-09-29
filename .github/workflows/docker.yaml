@@ -22,8 +22,10 @@ jobs:
       - name: Mount bazel cache
         uses: actions/cache@v3
         with:
-          path: "/.cache/bazel"
+          path: "/home/runner/.cache/bazel"
           key: bazel
+          restore-keys: |
+              bazel
 
       - name: Setup Go
         uses: actions/setup-go@v4
@@ -61,5 +63,5 @@ jobs:
         uses: ncipollo/release-action@v1.12.0
         with:
           generateReleaseNotes: true
-          prerelease: true
-          makeLatest: false
+          prerelease: false
+          makeLatest: true
