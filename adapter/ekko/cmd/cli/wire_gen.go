@@ -7,7 +7,7 @@
 package main
 
 import (
-	"github.com/blackhorseya/ekko/adapter/cli/app"
+	"github.com/blackhorseya/ekko/adapter/ekko/cmd/cli/app"
 	"github.com/blackhorseya/ekko/pkg/adapters"
 )
 

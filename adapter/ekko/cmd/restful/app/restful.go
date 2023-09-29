@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/blackhorseya/ekko/adapter/ekko/cmd/restful/app/v1"
 	_ "github.com/blackhorseya/ekko/adapter/restful/api/docs" // swagger docs
-	v1 "github.com/blackhorseya/ekko/adapter/restful/app/v1"
 	taskB "github.com/blackhorseya/ekko/entity/domain/task/biz"
 	"github.com/blackhorseya/ekko/pkg/adapters"
 	"github.com/blackhorseya/ekko/pkg/contextx"

@@ -4,8 +4,8 @@ import (
 	"context"
 	"os"
 
-	"github.com/blackhorseya/ekko/adapter/cli/app/config"
-	"github.com/blackhorseya/ekko/adapter/cli/app/version"
+	"github.com/blackhorseya/ekko/adapter/ekko/cmd/cli/app/config"
+	"github.com/blackhorseya/ekko/adapter/ekko/cmd/cli/app/version"
 	configx "github.com/blackhorseya/ekko/internal/pkg/config"
 	"github.com/blackhorseya/ekko/pkg/adapters"
 	"github.com/spf13/cobra"

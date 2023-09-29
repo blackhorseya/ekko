@@ -5,7 +5,7 @@
 package main
 
 import (
-	"github.com/blackhorseya/ekko/adapter/restful/app"
+	"github.com/blackhorseya/ekko/adapter/ekko/cmd/restful/app"
 	taskB "github.com/blackhorseya/ekko/internal/app/domain/task/biz"
 	taskR "github.com/blackhorseya/ekko/internal/app/domain/task/biz/repo"
 	"github.com/blackhorseya/ekko/internal/pkg/config"
