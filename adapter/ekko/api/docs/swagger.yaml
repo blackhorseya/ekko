@@ -1,3 +1,4 @@
+basePath: /api
 definitions:
   er.Error:
     properties:
@@ -53,8 +54,34 @@ definitions:
         type: integer
     type: object
 info:
-  contact: {}
+  contact:
+    email: blackhorseya@gmail.com
+    name: blackhorseya
+    url: https://blog.seancheng.space
+  description: ekko service api doc
+  license:
+    name: GPL-3.0
+    url: https://spdx.org/licenses/GPL-3.0-only.html
+  title: Ekko API
+  version: 0.0.1
 paths:
+  /healthz:
+    get:
+      description: Health check
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Health check
+      tags:
+      - Health
   /v1/tasks:
     get:
       consumes:
@@ -245,4 +272,9 @@ paths:
       summary: Update issue's status by id
       tags:
       - Tasks
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
