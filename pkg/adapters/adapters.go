@@ -3,6 +3,10 @@ package adapters
 // Restful restful adapters
 type Restful interface {
 	InitRouting()
+
+	Start() error
+
+	AwaitSignal() error
 }
 
 // Kafka is a consumer adapters

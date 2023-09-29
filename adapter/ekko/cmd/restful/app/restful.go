@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	_ "github.com/blackhorseya/ekko/adapter/ekko/api/docs" // swagger docs
 	"github.com/blackhorseya/ekko/adapter/ekko/cmd/restful/app/v1"
-	_ "github.com/blackhorseya/ekko/adapter/restful/api/docs" // swagger docs
 	taskB "github.com/blackhorseya/ekko/entity/domain/task/biz"
 	"github.com/blackhorseya/ekko/pkg/adapters"
 	"github.com/blackhorseya/ekko/pkg/contextx"
@@ -23,6 +23,16 @@ type restful struct {
 	logger *zap.Logger
 	router *gin.Engine
 	taskB  taskB.IBiz
+}
+
+func (r *restful) Start() error {
+	// todo: 2023/9/30|sean|impl me
+	panic("implement me")
+}
+
+func (r *restful) AwaitSignal() error {
+	// todo: 2023/9/30|sean|impl me
+	panic("implement me")
 }
 
 // NewRestful will create a restful adapter
