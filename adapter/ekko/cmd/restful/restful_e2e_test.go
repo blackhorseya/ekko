@@ -10,6 +10,26 @@ import (
 	"go.uber.org/zap"
 )
 
+func TestStart(t *testing.T) {
+	logger := zap.NewExample()
+
+	cfg := config.NewDefaultConfig()
+	service, err := NewService(cfg, logger)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = service.Start()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = service.AwaitSignal()
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestHealthz(t *testing.T) {
 	logger := zap.NewExample()
 
