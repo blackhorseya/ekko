@@ -113,3 +113,8 @@ func NewConfigWithViper(v *viper.Viper) (*Config, error) {
 
 	return config, nil
 }
+
+// NewDefaultConfig creates a new default config
+func NewDefaultConfig() *Config {
+	return defaultConfig
+}
