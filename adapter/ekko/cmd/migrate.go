@@ -3,7 +3,12 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/blackhorseya/ekko/adapter/ekko/cmd/migration"
+	"github.com/blackhorseya/ekko/internal/pkg/config"
+	"github.com/blackhorseya/ekko/internal/pkg/log"
+	"github.com/golang-migrate/migrate/v4"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // migrateCmd represents the migrate command
@@ -33,7 +38,22 @@ var migrateUpCmd = &cobra.Command{
 	Use:   "up",
 	Short: "migrate up",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("migrate up")
+		cfg, err := config.NewConfigWithViper(viper.GetViper())
+		cobra.CheckErr(err)
+
+		logger, err := log.NewLogger(cfg)
+		cobra.CheckErr(err)
+
+		m, err := migration.NewMigration(cfg, logger)
+		cobra.CheckErr(err)
+
+		err = m.Up()
+		if err != nil && err != migrate.ErrNoChange {
+			cobra.CheckErr(err)
+		}
+
+		version, _, _ := m.Version()
+		fmt.Printf("migrate to version %d\n", version)
 	},
 }
 
