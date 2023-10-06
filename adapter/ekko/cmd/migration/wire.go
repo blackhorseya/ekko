@@ -2,7 +2,7 @@
 
 //go:generate wire
 
-package migrate
+package migration
 
 import (
 	"github.com/blackhorseya/ekko/internal/pkg/config"

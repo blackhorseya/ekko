@@ -4,7 +4,7 @@
 //go:build !wireinject
 // +build !wireinject
 
-package migrate
+package migration
 
 import (
 	"github.com/blackhorseya/ekko/internal/pkg/config"
