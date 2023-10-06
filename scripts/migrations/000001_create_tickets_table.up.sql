@@ -1,4 +1,4 @@
-create table tickets
+create table if not exists tickets
 (
     id          uuid                                      not null,
     title       text                                      not null comment 'title',
