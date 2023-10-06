@@ -61,6 +61,21 @@ var migrateDownCmd = &cobra.Command{
 	Use:   "down",
 	Short: "migrate down",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("migrate down")
+		cfg, err := config.NewConfigWithViper(viper.GetViper())
+		cobra.CheckErr(err)
+
+		logger, err := log.NewLogger(cfg)
+		cobra.CheckErr(err)
+
+		m, err := migration.NewMigration(cfg, logger)
+		cobra.CheckErr(err)
+
+		err = m.Down()
+		if err != nil && err != migrate.ErrNoChange {
+			cobra.CheckErr(err)
+		}
+
+		version, _, _ := m.Version()
+		fmt.Printf("migrate to version %d\n", version)
 	},
 }
