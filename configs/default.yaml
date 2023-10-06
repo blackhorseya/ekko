@@ -18,4 +18,3 @@ log:
 jwt:
   issuer: ekko
   signature: changeme
-
