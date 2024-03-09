@@ -1,0 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "migration",
+    srcs = ["wire_gen.go"],
+    importpath = "github.com/blackhorseya/ekko/adapter/ekko/cmd/migration",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//internal/pkg/config",
+        "//internal/pkg/storage/mariadb",
+        "@com_github_golang_migrate_migrate_v4//:migrate",
+        "@com_github_google_wire//:wire",
+        "@org_uber_go_zap//:zap",
+    ],
+)
