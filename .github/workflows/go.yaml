@@ -1,0 +1,41 @@
+name: Go
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.go'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**.go'
+  workflow_dispatch: { }
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '^1.20'
+          cache: true
+
+      - uses: bazelbuild/setup-bazelisk@v2
+
+      - name: Mount bazel cache
+        id: cache-bazel
+        uses: actions/cache@v3
+        with:
+          path: "/home/runner/.cache/bazel"
+          key: bazel
+
+      - name: Build
+        run: bazel build //...
+
+      - name: Test
+        run: bazel test //...
