@@ -1,0 +1,11 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "timex",
+    srcs = [
+        "const.go",
+        "converter.go",
+    ],
+    importpath = "github.com/blackhorseya/ekko/pkg/timex",
+    visibility = ["//visibility:public"],
+)

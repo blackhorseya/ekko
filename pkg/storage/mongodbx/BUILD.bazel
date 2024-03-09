@@ -1,0 +1,17 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "mongodbx",
+    srcs = ["mongodbx.go"],
+    importpath = "github.com/blackhorseya/ekko/pkg/storage/mongodbx",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/configx",
+        "//pkg/contextx",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_testcontainers_testcontainers_go//:testcontainers-go",
+        "@com_github_testcontainers_testcontainers_go_modules_mongodb//:mongodb",
+        "@org_mongodb_go_mongo_driver//mongo",
+        "@org_mongodb_go_mongo_driver//mongo/options",
+    ],
+)

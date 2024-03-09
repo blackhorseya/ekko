@@ -1,0 +1,15 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "contextx",
+    srcs = [
+        "contextx.go",
+        "middleware.go",
+    ],
+    importpath = "github.com/blackhorseya/ekko/pkg/contextx",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_gin_gonic_gin//:gin",
+        "@org_uber_go_zap//:zap",
+    ],
+)

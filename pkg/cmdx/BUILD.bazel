@@ -1,0 +1,13 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "cmdx",
+    srcs = ["cmdx.go"],
+    importpath = "github.com/blackhorseya/ekko/pkg/cmdx",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/adapterx",
+        "@com_github_spf13_cobra//:cobra",
+        "@com_github_spf13_viper//:viper",
+    ],
+)

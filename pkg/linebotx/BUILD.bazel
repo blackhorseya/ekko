@@ -1,0 +1,12 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "linebotx",
+    srcs = ["linebotx.go"],
+    importpath = "github.com/blackhorseya/ekko/pkg/linebotx",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/configx",
+        "@com_github_line_line_bot_sdk_go_v8//linebot/messaging_api",
+    ],
+)

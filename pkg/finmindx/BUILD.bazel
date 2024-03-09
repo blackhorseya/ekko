@@ -1,0 +1,19 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "finmindx",
+    srcs = [
+        "client.go",
+        "interface.go",
+        "mock_interface.go",
+        "model.go",
+    ],
+    importpath = "github.com/blackhorseya/ekko/pkg/finmindx",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/configx",
+        "//pkg/contextx",
+        "//pkg/timex",
+        "@org_uber_go_mock//gomock",
+    ],
+)

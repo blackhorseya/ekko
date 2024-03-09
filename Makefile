@@ -26,12 +26,8 @@ clean:  ## remove artifacts
 lint: ## run golangci-lint
 	@golangci-lint run ./...
 
-.PHONY: gazelle-repos
-gazelle-repos: ## update gazelle repos
-	@bazel run //:gazelle -- update-repos -from_file=go.mod -to_macro=deps.bzl%go_dependencies -prune
-
 .PHONY: gazelle
-gazelle: gazelle-repos ## run gazelle with bazel
+gazelle: ## run gazelle with bazel
 	@bazel run //:gazelle
 
 .PHONY: test
