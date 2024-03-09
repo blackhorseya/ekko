@@ -46,8 +46,8 @@ gazelle: gazelle-repos ## run gazelle with bazel
 build-go: ## build go binary
 	@bazel build //...
 
-.PHONY: test-go
-test-go: ## test go binary
+.PHONY: test
+test: ## test go binary
 	@bazel test //...
 
 .PHONY: push-image
