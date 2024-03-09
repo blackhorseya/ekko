@@ -48,7 +48,7 @@ build-go: ## build go binary
 
 .PHONY: test-go
 test-go: ## test go binary
-	@sh $(shell pwd)/scripts/go.test.sh
+	@bazel test //...
 
 .PHONY: push-image
 push-image: ## push image to gcr
