@@ -1,4 +1,2 @@
-build --@io_bazel_rules_docker//transitions:enable=false
-run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64
+common --enable_bzlmod
 build --workspace_status_command scripts/print-workspace-status.sh
-run --stamp
