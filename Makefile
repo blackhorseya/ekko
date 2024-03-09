@@ -3,10 +3,6 @@ PROJECT_NAME := ekko
 VERSION := $(shell git describe --tags --abbrev=0)
 
 ## common
-.PHONY: check-%
-check-%: ## check environment variable is exists
-	@if [ -z '${${*}}' ]; then echo 'Environment variable $* not set' && exit 1; fi
-
 .PHONY: help
 help: ## show help
 	@grep -hE '^[ a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -26,13 +22,9 @@ clean:  ## remove artifacts
 	@echo Successfuly removed artifacts
 
 ## go
-.PHONY: test-e2e
-test-e2e: ## execute e2e test
-	@cd ./test/e2e && npx playwright test ./tests
-
 .PHONY: lint
-lint: ## execute golint
-	@golint ./...
+lint: ## run golangci-lint
+	@golangci-lint run ./...
 
 .PHONY: gazelle-repos
 gazelle-repos: ## update gazelle repos
@@ -42,99 +34,6 @@ gazelle-repos: ## update gazelle repos
 gazelle: gazelle-repos ## run gazelle with bazel
 	@bazel run //:gazelle
 
-.PHONY: build-go
-build-go: ## build go binary
-	@bazel build //...
-
 .PHONY: test
 test: ## test go binary
 	@bazel test //...
-
-.PHONY: push-image
-push-image: ## push image to gcr
-	@bazel run //adapter/ekko:push-image
-
-## generate
-.PHONY: gen
-gen: gen-pb-go gen-mocks gen-swagger ## generate code
-
-.PHONY: gen-pb-go
-gen-pb-go: ## generate go protobuf
-	@go get -u google.golang.org/protobuf/proto
-	@go get -u google.golang.org/protobuf/cmd/protoc-gen-go
-
-	## Starting generate pb
-	@protoc --proto_path=./pb --go_out=paths=source_relative:./entity --go-grpc_out=paths=source_relative,require_unimplemented_servers=false:./pb ./pb/domain/*/*/*.proto
-	@echo Successfully generated proto
-
-	## Starting inject tags
-	@protoc-go-inject-tag -input="./entity/domain/*/model/*.pb.go"
-	@echo Successfully injected tags
-
-.PHONY: gen-swagger
-gen-swagger: ## generate swagger spec
-	@swag init -q -d ./adapter/ekko,./pkg,./entity -o ./adapter/ekko/api/docs
-	## Generated swagger spec
-
-.PHONY: gen-mocks
-gen-mocks: ## generate mocks
-	## Starting generate wire and mockgen
-	@go generate -tags="wireinject" ./...
-	@echo Successfully generated wire and mockgen
-
-## helm
-HELM_REPO_NAME := sean-side
-CHART_NAME := ekko-restful
-DEPLOY_TO := prod
-NS := $(PROJECT_NAME)
-RELEASE_NAME := $(DEPLOY_TO)-$(CHART_NAME)
-
-.PHONY: lint-helm
-lint-helm: ## lint helm chart
-	@helm lint deployments/charts/*
-
-.PHONY: install-helm-plugins
-install-helm-plugins: ## install helm plugins
-	@helm plugin install https://github.com/hayorov/helm-gcs.git
-
-.PHONY: add-helm-repo
-add-helm-repo: ## add helm repo
-	@helm repo add --no-update $(HELM_REPO_NAME) gs://sean-helm-charts/charts
-	@helm repo update $(HELM_REPO_NAME)
-
-.PHONY: package-helm
-package-helm: ## package helm chart
-	@helm package ./deployments/charts/* --destination ./deployments/charts
-
-.PHONY: push-helm
-push-helm: ## push helm chart to gcs
-	@for file in $(wildcard ./deployments/charts/*.tgz); do \
-		filename=$$(basename $$file); \
-		helm gcs push --force $$file $(HELM_REPO_NAME); \
-	done
-	@helm repo update $(HELM_REPO_NAME)
-
-.PHONY: upgrade-helm
-upgrade-helm: ## upgrade helm chart
-	@echo "Upgrading $(RELEASE_NAME) in $(NS) namespace with $(HELM_REPO_NAME)/$(CHART_NAME)"
-	@echo "Using values from ./deployments/configs/$(DEPLOY_TO)/$(CHART_NAME)/values.yaml"
-
-	@helm upgrade $(RELEASE_NAME) $(HELM_REPO_NAME)/$(CHART_NAME) \
-	--install --namespace $(NS) --create-namespace \
-	--history-max 3 \
-	-f ./deployments/configs/$(DEPLOY_TO)/$(CHART_NAME)/values.yaml
-
-## database
-.PHONY: deploy-database
-deploy-database: ## deploy database
-	$(eval repo_name := bitnami)
-	$(eval chart_name := mariadb)
-	$(eval release_name := $(DEPLOY_TO)-$(PROJECT_NAME)-$(chart_name))
-
-	@echo "Upgrading $(release_name) in $(NS) namespace with $(repo_name)/$(chart_name)"
-	@echo "Using values from ./deployments/configs/$(DEPLOY_TO)/$(chart_name)/values.yaml"
-
-	@helm upgrade $(release_name) $(repo_name)/$(chart_name) \
-	--install --namespace $(NS) --create-namespace \
-	--history-max 3 \
-	-f ./deployments/configs/$(DEPLOY_TO)/$(chart_name)/values.yaml
