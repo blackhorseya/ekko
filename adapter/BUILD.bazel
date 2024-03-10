@@ -1,0 +1,15 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "adapter_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/blackhorseya/ekko/adapter",
+    visibility = ["//visibility:private"],
+    deps = ["//adapter/cmd"],
+)
+
+go_binary(
+    name = "adapter",
+    embed = [":adapter_lib"],
+    visibility = ["//visibility:public"],
+)
