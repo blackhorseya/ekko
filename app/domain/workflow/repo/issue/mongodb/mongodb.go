@@ -6,6 +6,7 @@ import (
 	"github.com/blackhorseya/ekko/entity/domain/workflow/agg"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/repo"
 	"github.com/blackhorseya/ekko/pkg/contextx"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -36,8 +37,31 @@ func (i *impl) GetByID(ctx contextx.Contextx, id string) (item *agg.Issue, err e
 }
 
 func (i *impl) Create(ctx contextx.Contextx, item *agg.Issue) (err error) {
-	// todo: 2024/3/10|sean|implement me
-	panic("implement me")
+	timeout, cancelFunc := contextx.WithTimeout(ctx, timeoutDuration)
+	defer cancelFunc()
+
+	ownerID, err := primitive.ObjectIDFromHex(item.OwnerID)
+	if err != nil {
+		return err
+	}
+
+	now := time.Now()
+	created := &issue{
+		ID:        primitive.NewObjectIDFromTimestamp(now),
+		Title:     item.Title,
+		Completed: item.Completed,
+		OwnerID:   ownerID,
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+	coll := i.rw.Database(dbName).Collection(collName)
+	_, err = coll.InsertOne(timeout, created)
+	if err != nil {
+		return err
+	}
+
+	item.ID = created.ID.Hex()
+	return nil
 }
 
 func (i *impl) Update(ctx contextx.Contextx, item *agg.Issue) (err error) {

@@ -4,17 +4,63 @@ package mongodb
 
 import (
 	"testing"
+	"time"
 
+	"github.com/blackhorseya/ekko/entity/domain/workflow/agg"
+	"github.com/blackhorseya/ekko/entity/domain/workflow/model"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/repo"
+	"github.com/blackhorseya/ekko/pkg/configx"
+	"github.com/blackhorseya/ekko/pkg/contextx"
+	"github.com/blackhorseya/ekko/pkg/storage/mongodbx"
 	"github.com/stretchr/testify/suite"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.uber.org/zap"
 )
 
 type suiteExternal struct {
 	suite.Suite
 
+	rw   *mongo.Client
 	repo repo.IIssueRepo
+}
+
+func (s *suiteExternal) SetupTest() {
+	err := configx.LoadWithPathAndName("", "ekko")
+	s.Require().NoError(err)
+
+	client, err := mongodbx.NewClient()
+	s.Require().NoError(err)
+	s.rw = client
+
+	s.repo = NewIssueRepo(s.rw)
+}
+
+func (s *suiteExternal) TearDownTest() {
+	if s.rw != nil {
+		_ = s.rw.Disconnect(contextx.Background())
+	}
 }
 
 func TestExternal(t *testing.T) {
 	suite.Run(t, new(suiteExternal))
+}
+
+func (s *suiteExternal) Test_Impl_Create() {
+	ctx := contextx.Background()
+
+	item := &agg.Issue{
+		Ticket: &model.Ticket{
+			ID:        "",
+			Title:     "test",
+			Completed: false,
+			OwnerID:   primitive.NewObjectID().Hex(),
+			CreatedAt: time.Time{},
+			UpdatedAt: time.Time{},
+		},
+	}
+	err := s.repo.Create(ctx, item)
+	s.Require().NoError(err)
+
+	ctx.Debug("create issue success", zap.Any("item", &item))
 }
