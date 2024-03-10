@@ -5,5 +5,4 @@ go_library(
     srcs = ["ticket.go"],
     importpath = "github.com/blackhorseya/ekko/entity/domain/workflow/model",
     visibility = ["//visibility:public"],
-    deps = ["@com_github_google_uuid//:uuid"],
 )

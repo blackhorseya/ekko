@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "cc7efe04bac350e3901fce80fe37e70c711885e8610072a2ffbcac00d9f4d544",
+  "moduleFileHash": "51b478c1ad0993f08ce00b4242b6e9ec7f522b9ebb62459e9845955f86dda873",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -38,7 +38,6 @@
             "com_github_awslabs_aws_lambda_go_api_proxy": "com_github_awslabs_aws_lambda_go_api_proxy",
             "com_github_gin_contrib_zap": "com_github_gin_contrib_zap",
             "com_github_gin_gonic_gin": "com_github_gin_gonic_gin",
-            "com_github_google_uuid": "com_github_google_uuid",
             "com_github_google_wire": "com_github_google_wire",
             "com_github_gorilla_websocket": "com_github_gorilla_websocket",
             "com_github_line_line_bot_sdk_go_v8": "com_github_line_line_bot_sdk_go_v8",
@@ -1076,7 +1075,7 @@
       "general": {
         "bzlTransitiveDigest": "zP01muRk4s4xWGK3gNPXOyDMQkOPsIhu99akeKWFFQ0=",
         "accumulatedFileDigests": {
-          "@@//:go.mod": "d48dcd6611874e665d8da7d942452bd926a53cacddb8bf59e28364bbbca5b8d8",
+          "@@//:go.mod": "d38744a2252194ccb03bd488bc5c0745e3b3335f3237cc71549216ead32ce4a6",
           "@@rules_go~0.46.0//:go.sum": "d56fdb19b21a5f12bcf625c49432371ac39c2def0f564098fbda107f7c080f40",
           "@@//:go.sum": "2411e1ab6ab2b4d19e94b7eee464cc2fb598ceb6353fda461ab1c4278bbad654",
           "@@gazelle~0.35.0//:go.mod": "48dc6e771c3028ee1c18b9ffc81e596fd5f6d7e0016c5ef280e30f2821f60473",
@@ -2859,7 +2858,6 @@
                 "com_github_awslabs_aws_lambda_go_api_proxy": "github.com/awslabs/aws-lambda-go-api-proxy",
                 "com_github_gin_contrib_zap": "github.com/gin-contrib/zap",
                 "com_github_gin_gonic_gin": "github.com/gin-gonic/gin",
-                "com_github_google_uuid": "github.com/google/uuid",
                 "com_github_google_wire": "github.com/google/wire",
                 "com_github_gorilla_websocket": "github.com/gorilla/websocket",
                 "com_github_line_line_bot_sdk_go_v8": "github.com/line/line-bot-sdk-go/v8",
@@ -2902,6 +2900,7 @@
                 "com_github_gogo_protobuf": "github.com/gogo/protobuf",
                 "com_github_golang_protobuf": "github.com/golang/protobuf",
                 "com_github_golang_snappy": "github.com/golang/snappy",
+                "com_github_google_uuid": "github.com/google/uuid",
                 "com_github_hashicorp_hcl": "github.com/hashicorp/hcl",
                 "com_github_inconshreveable_mousetrap": "github.com/inconshreveable/mousetrap",
                 "com_github_json_iterator_go": "github.com/json-iterator/go",
@@ -3067,7 +3066,6 @@
             "com_github_awslabs_aws_lambda_go_api_proxy",
             "com_github_gin_contrib_zap",
             "com_github_gin_gonic_gin",
-            "com_github_google_uuid",
             "com_github_google_wire",
             "com_github_gorilla_websocket",
             "com_github_line_line_bot_sdk_go_v8",
