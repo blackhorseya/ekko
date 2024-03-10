@@ -12,6 +12,7 @@ type impl struct {
 	issues repo.IIssueRepo
 }
 
+// NewWorkflowBiz is to create a new workflow business logic.
 func NewWorkflowBiz(issues repo.IIssueRepo) biz.IWorkflowBiz {
 	return &impl{issues: issues}
 }

@@ -5,6 +5,7 @@ go_library(
     srcs = [
         "model.go",
         "mongodb.go",
+        "wire_gen.go",
     ],
     importpath = "github.com/blackhorseya/ekko/app/domain/workflow/repo/issue/mongodb",
     visibility = ["//visibility:public"],
@@ -13,6 +14,8 @@ go_library(
         "//entity/domain/workflow/model",
         "//entity/domain/workflow/repo",
         "//pkg/contextx",
+        "//pkg/storage/mongodbx",
+        "@com_github_google_wire//:wire",
         "@org_mongodb_go_mongo_driver//bson",
         "@org_mongodb_go_mongo_driver//bson/primitive",
         "@org_mongodb_go_mongo_driver//mongo",

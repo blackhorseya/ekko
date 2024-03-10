@@ -2,14 +2,20 @@ load("@rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "biz",
-    srcs = ["impl.go"],
+    srcs = [
+        "impl.go",
+        "wire_gen.go",
+    ],
     importpath = "github.com/blackhorseya/ekko/app/domain/workflow/biz",
     visibility = ["//visibility:public"],
     deps = [
+        "//app/domain/workflow/repo/issue/mongodb",
         "//entity/domain/identity/model",
         "//entity/domain/workflow/agg",
         "//entity/domain/workflow/biz",
         "//entity/domain/workflow/repo",
         "//pkg/contextx",
+        "//pkg/storage/mongodbx",
+        "@com_github_google_wire//:wire",
     ],
 )
