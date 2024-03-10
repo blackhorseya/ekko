@@ -1,11 +1,15 @@
 package biz
 
 import (
+	"time"
+
 	idM "github.com/blackhorseya/ekko/entity/domain/identity/model"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/agg"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/biz"
+	"github.com/blackhorseya/ekko/entity/domain/workflow/model"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/repo"
 	"github.com/blackhorseya/ekko/pkg/contextx"
+	"go.uber.org/zap"
 )
 
 type impl struct {
@@ -18,8 +22,23 @@ func NewWorkflowBiz(issues repo.IIssueRepo) biz.IWorkflowBiz {
 }
 
 func (i *impl) CreateTodo(ctx contextx.Contextx, who *idM.User, title string) (item *agg.Issue, err error) {
-	// TODO implement me
-	panic("implement me")
+	issue := &agg.Issue{
+		Ticket: &model.Ticket{
+			ID:        "",
+			Title:     title,
+			Completed: false,
+			OwnerID:   who.ID,
+			CreatedAt: time.Time{},
+			UpdatedAt: time.Time{},
+		},
+	}
+	err = i.issues.Create(ctx, issue)
+	if err != nil {
+		ctx.Error("repo.IIssueRepo.Create", zap.Error(err))
+		return nil, err
+	}
+
+	return issue, nil
 }
 
 func (i *impl) ListTodos(
