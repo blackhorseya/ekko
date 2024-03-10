@@ -78,5 +78,6 @@ func (i *impl) GetRouter() *gin.Engine {
 }
 
 func (i *impl) callback(c *gin.Context) {
-	c.JSON(http.StatusInternalServerError, response.Err.WithMessage("not implemented"))
+	// todo: 2024/3/10|sean|implement callback logic
+	c.JSON(http.StatusOK, response.OK)
 }
