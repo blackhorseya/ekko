@@ -229,3 +229,5 @@ $RECYCLE.BIN/
 **/charts/*.tgz
 
 # End of https://www.toptal.com/developers/gitignore/api/helm
+
+deployments
