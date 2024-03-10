@@ -1,0 +1,12 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "biz",
+    srcs = [
+        "interface.go",
+        "mock_interface.go",
+    ],
+    importpath = "github.com/blackhorseya/ekko/entity/domain/workflow/biz",
+    visibility = ["//visibility:public"],
+    deps = ["@org_uber_go_mock//gomock"],
+)
