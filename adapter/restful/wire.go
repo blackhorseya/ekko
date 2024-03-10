@@ -5,22 +5,28 @@
 package restful
 
 import (
+	"github.com/blackhorseya/ekko/app/domain/workflow/biz"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/transports/httpx"
 	"github.com/google/wire"
 	"github.com/spf13/viper"
 )
 
+var providerSet = wire.NewSet(
+	httpx.NewServer,
+	biz.DefaultWorkflowSet,
+)
+
 func New(v *viper.Viper) (adapterx.Servicer, error) {
 	panic(wire.Build(
-		httpx.NewServer,
 		newService,
+		providerSet,
 	))
 }
 
 func NewRestful(v *viper.Viper) (adapterx.Restful, error) {
 	panic(wire.Build(
-		httpx.NewServer,
 		newRestful,
+		providerSet,
 	))
 }

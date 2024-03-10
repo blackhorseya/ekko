@@ -6,6 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/blackhorseya/ekko/entity/domain/workflow/biz"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/configx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
@@ -16,15 +17,19 @@ import (
 )
 
 type impl struct {
-	server *httpx.Server
+	server   *httpx.Server
+	workflow biz.IWorkflowBiz
 }
 
-func newRestful(server *httpx.Server) adapterx.Restful {
-	return &impl{server: server}
+func newRestful(server *httpx.Server, workflow biz.IWorkflowBiz) adapterx.Restful {
+	return &impl{
+		server:   server,
+		workflow: workflow,
+	}
 }
 
-func newService(server *httpx.Server) adapterx.Servicer {
-	return newRestful(server)
+func newService(server *httpx.Server, workflow biz.IWorkflowBiz) adapterx.Servicer {
+	return newRestful(server, workflow)
 }
 
 func (i *impl) Start() error {

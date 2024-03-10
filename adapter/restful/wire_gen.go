@@ -7,8 +7,12 @@
 package restful
 
 import (
+	"github.com/blackhorseya/ekko/app/domain/workflow/biz"
+	"github.com/blackhorseya/ekko/app/domain/workflow/repo/issue/mongodb"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
+	"github.com/blackhorseya/ekko/pkg/storage/mongodbx"
 	"github.com/blackhorseya/ekko/pkg/transports/httpx"
+	"github.com/google/wire"
 	"github.com/spf13/viper"
 )
 
@@ -19,7 +23,13 @@ func New(v *viper.Viper) (adapterx.Servicer, error) {
 	if err != nil {
 		return nil, err
 	}
-	servicer := newService(server)
+	client, err := mongodbx.NewClient()
+	if err != nil {
+		return nil, err
+	}
+	iIssueRepo := mongodb.NewIssueRepo(client)
+	iWorkflowBiz := biz.NewWorkflowBiz(iIssueRepo)
+	servicer := newService(server, iWorkflowBiz)
 	return servicer, nil
 }
 
@@ -28,6 +38,16 @@ func NewRestful(v *viper.Viper) (adapterx.Restful, error) {
 	if err != nil {
 		return nil, err
 	}
-	restful := newRestful(server)
+	client, err := mongodbx.NewClient()
+	if err != nil {
+		return nil, err
+	}
+	iIssueRepo := mongodb.NewIssueRepo(client)
+	iWorkflowBiz := biz.NewWorkflowBiz(iIssueRepo)
+	restful := newRestful(server, iWorkflowBiz)
 	return restful, nil
 }
+
+// wire.go:
+
+var providerSet = wire.NewSet(httpx.NewServer, biz.DefaultWorkflowSet)
