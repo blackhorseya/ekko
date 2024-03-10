@@ -66,42 +66,12 @@ func bindEnv(v *viper.Viper) (err error) {
 		return err
 	}
 
-	err = v.BindEnv("lineNotify.endpoint", "LINE_NOTIFY_ENDPOINT")
-	if err != nil {
-		return err
-	}
-
-	err = v.BindEnv("lineNotify.accessToken", "LINE_NOTIFY_ACCESS_TOKEN")
-	if err != nil {
-		return err
-	}
-
 	err = v.BindEnv("linebot.secret", "LINEBOT_SECRET")
 	if err != nil {
 		return err
 	}
 
 	err = v.BindEnv("linebot.token", "LINEBOT_TOKEN")
-	if err != nil {
-		return err
-	}
-
-	err = v.BindEnv("finmind.http.url", "FINMIND_HTTP_URL")
-	if err != nil {
-		return err
-	}
-
-	err = v.BindEnv("finmind.token", "FINMIND_TOKEN")
-	if err != nil {
-		return err
-	}
-
-	err = v.BindEnv("fugle.http.url", "FUGLE_HTTP_URL")
-	if err != nil {
-		return err
-	}
-
-	err = v.BindEnv("fugle.apiKey", "FUGLE_API_KEY")
 	if err != nil {
 		return err
 	}
