@@ -11,6 +11,7 @@ go_library(
     deps = [
         "//app/domain/workflow/biz",
         "//app/domain/workflow/repo/issue/mongodb",
+        "//entity/domain/identity/model",
         "//entity/domain/workflow/biz",
         "//pkg/adapterx",
         "//pkg/configx",

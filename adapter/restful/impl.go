@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	idM "github.com/blackhorseya/ekko/entity/domain/identity/model"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/biz"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/configx"
@@ -145,7 +146,7 @@ func (i *impl) callback(c *gin.Context) {
 }
 
 func (i *impl) handleTextMessage(
-	_ contextx.Contextx,
+	ctx contextx.Contextx,
 	event webhook.MessageEvent,
 	message webhook.TextMessageContent,
 ) ([]messaging_api.MessageInterface, error) {
@@ -158,14 +159,14 @@ func (i *impl) handleTextMessage(
 		}, nil
 	}
 
-	var userID string
+	who := &idM.User{}
 	switch source := event.Source.(type) {
 	case webhook.UserSource:
-		userID = source.UserId
+		who.ID = source.UserId
 	case webhook.GroupSource:
-		userID = source.GroupId
+		who.ID = source.GroupId
 	case webhook.RoomSource:
-		userID = source.RoomId
+		who.ID = source.RoomId
 	default:
 		return nil, errors.New("source type not support")
 	}
@@ -173,7 +174,7 @@ func (i *impl) handleTextMessage(
 	if text == "whoami" {
 		return []messaging_api.MessageInterface{
 			&messaging_api.TextMessage{
-				Text: userID,
+				Text: who.ID,
 			},
 		}, nil
 	}
