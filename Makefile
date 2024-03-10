@@ -30,6 +30,10 @@ lint: ## run golangci-lint
 gazelle: ## run gazelle with bazel
 	@bazel run //:gazelle
 
+.PHONY: build
+build: ## build go binary
+	@bazel build //...
+
 .PHONY: test
 test: ## test go binary
 	@bazel test //...
