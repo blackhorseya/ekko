@@ -40,17 +40,12 @@ func (i *impl) Create(ctx contextx.Contextx, item *agg.Issue) (err error) {
 	timeout, cancelFunc := contextx.WithTimeout(ctx, timeoutDuration)
 	defer cancelFunc()
 
-	ownerID, err := primitive.ObjectIDFromHex(item.OwnerID)
-	if err != nil {
-		return err
-	}
-
 	now := time.Now()
 	created := &issue{
 		ID:        primitive.NewObjectIDFromTimestamp(now),
 		Title:     item.Title,
 		Completed: item.Completed,
-		OwnerID:   ownerID,
+		OwnerID:   item.OwnerID,
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
