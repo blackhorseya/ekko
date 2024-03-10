@@ -5,9 +5,11 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	idM "github.com/blackhorseya/ekko/entity/domain/identity/model"
+	"github.com/blackhorseya/ekko/entity/domain/workflow/agg"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/biz"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/configx"
@@ -179,5 +181,70 @@ func (i *impl) handleTextMessage(
 		}, nil
 	}
 
+	if text == "list" {
+		var items agg.Issues
+		items, _, err := i.workflow.ListTodos(ctx, who, biz.ListTodosOptions{
+			Page: 1,
+			Size: 5,
+		})
+		if err != nil {
+			return handleError(err)
+		}
+
+		if len(items) == 0 {
+			return []messaging_api.MessageInterface{
+				&messaging_api.TextMessage{
+					Text: "no todos",
+				},
+			}, nil
+		}
+
+		flexMessage, err := items.FlexMessage()
+		if err != nil {
+			return handleError(err)
+		}
+
+		return []messaging_api.MessageInterface{
+			flexMessage,
+		}, nil
+	}
+
+	if strings.HasPrefix(text, "create.") {
+		title := strings.TrimPrefix(text, "create.")
+		if len(title) == 0 {
+			return []messaging_api.MessageInterface{
+				&messaging_api.TextMessage{
+					Text: "title is required",
+				},
+			}, nil
+		}
+
+		item, err := i.workflow.CreateTodo(ctx, who, title)
+		if err != nil {
+			return handleError(err)
+		}
+
+		flexMessage, err := item.FlexMessage()
+		if err != nil {
+			return []messaging_api.MessageInterface{
+				&messaging_api.TextMessage{
+					Text: err.Error(),
+				},
+			}, nil
+		}
+
+		return []messaging_api.MessageInterface{
+			flexMessage,
+		}, nil
+	}
+
 	return nil, errors.New("not support")
+}
+
+func handleError(err error) ([]messaging_api.MessageInterface, error) {
+	return []messaging_api.MessageInterface{
+		&messaging_api.TextMessage{
+			Text: err.Error(),
+		},
+	}, nil
 }

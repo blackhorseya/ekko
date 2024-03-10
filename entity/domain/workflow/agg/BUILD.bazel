@@ -5,5 +5,8 @@ go_library(
     srcs = ["issue.go"],
     importpath = "github.com/blackhorseya/ekko/entity/domain/workflow/agg",
     visibility = ["//visibility:public"],
-    deps = ["//entity/domain/workflow/model"],
+    deps = [
+        "//entity/domain/workflow/model",
+        "@com_github_line_line_bot_sdk_go_v8//linebot/messaging_api",
+    ],
 )
