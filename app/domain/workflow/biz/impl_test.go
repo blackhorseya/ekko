@@ -91,3 +91,67 @@ func (s *suiteTester) Test_impl_CreateTodo() {
 		})
 	}
 }
+
+func (s *suiteTester) Test_impl_ListTodos() {
+	user1 := &idM.User{
+		ID: "user1",
+	}
+	issue1 := &agg.Issue{
+		Ticket: &model.Ticket{
+			ID:        "",
+			Title:     "issue1",
+			Completed: false,
+			OwnerID:   user1.ID,
+			CreatedAt: time.Time{},
+			UpdatedAt: time.Time{},
+		},
+	}
+
+	type args struct {
+		ctx  contextx.Contextx
+		who  *idM.User
+		opts biz.ListTodosOptions
+		mock func()
+	}
+	tests := []struct {
+		name      string
+		args      args
+		wantItems []*agg.Issue
+		wantTotal int
+		wantErr   bool
+	}{
+		{
+			name: "list todos then ok",
+			args: args{who: user1, opts: biz.ListTodosOptions{Page: 1, Size: 5}, mock: func() {
+				s.issues.EXPECT().List(gomock.Any(), repo.ListIssueOptions{
+					OwnerID: user1.ID,
+					Limit:   5,
+					Offset:  0,
+				}).Return([]*agg.Issue{issue1}, 10, nil).Times(1)
+			}},
+			wantItems: []*agg.Issue{issue1},
+			wantTotal: 10,
+			wantErr:   false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			tt.args.ctx = contextx.Background()
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotItems, gotTotal, err := s.biz.ListTodos(tt.args.ctx, tt.args.who, tt.args.opts)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ListTodos() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotItems, tt.wantItems) {
+				t.Errorf("ListTodos() gotItems = %v, want %v", gotItems, tt.wantItems)
+			}
+			if gotTotal != tt.wantTotal {
+				t.Errorf("ListTodos() gotTotal = %v, want %v", gotTotal, tt.wantTotal)
+			}
+		})
+	}
+}

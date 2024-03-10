@@ -46,6 +46,15 @@ func (i *impl) ListTodos(
 	who *idM.User,
 	opts biz.ListTodosOptions,
 ) (items []*agg.Issue, total int, err error) {
-	// TODO implement me
-	panic("implement me")
+	ret, t, err := i.issues.List(ctx, repo.ListIssueOptions{
+		OwnerID: who.ID,
+		Limit:   opts.Size,
+		Offset:  (opts.Page - 1) * opts.Size,
+	})
+	if err != nil {
+		ctx.Error("repo.IIssueRepo.List", zap.Error(err))
+		return nil, 0, err
+	}
+
+	return ret, t, nil
 }
