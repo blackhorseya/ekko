@@ -2,12 +2,18 @@ load("@rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "cmd",
-    srcs = ["root.go"],
+    srcs = [
+        "info.go",
+        "root.go",
+        "start.go",
+    ],
     importpath = "github.com/blackhorseya/ekko/adapter/cmd",
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/configx",
+        "//pkg/contextx",
         "//pkg/logging",
         "@com_github_spf13_cobra//:cobra",
+        "@org_uber_go_zap//:zap",
     ],
 )
