@@ -1,0 +1,16 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "repo",
+    srcs = [
+        "issue.go",
+        "mock_issue.go",
+    ],
+    importpath = "github.com/blackhorseya/ekko/entity/domain/workflow/repo",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//entity/domain/workflow/agg",
+        "//pkg/contextx",
+        "@org_uber_go_mock//gomock",
+    ],
+)
