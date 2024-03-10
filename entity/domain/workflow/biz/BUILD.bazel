@@ -8,5 +8,10 @@ go_library(
     ],
     importpath = "github.com/blackhorseya/ekko/entity/domain/workflow/biz",
     visibility = ["//visibility:public"],
-    deps = ["@org_uber_go_mock//gomock"],
+    deps = [
+        "//entity/domain/identity/model",
+        "//entity/domain/workflow/agg",
+        "//pkg/contextx",
+        "@org_uber_go_mock//gomock",
+    ],
 )

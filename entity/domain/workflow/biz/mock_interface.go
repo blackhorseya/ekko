@@ -5,6 +5,11 @@
 package biz
 
 import (
+	reflect "reflect"
+
+	model "github.com/blackhorseya/ekko/entity/domain/identity/model"
+	agg "github.com/blackhorseya/ekko/entity/domain/workflow/agg"
+	contextx "github.com/blackhorseya/ekko/pkg/contextx"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -29,4 +34,35 @@ func NewMockIWorkflowBiz(ctrl *gomock.Controller) *MockIWorkflowBiz {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockIWorkflowBiz) EXPECT() *MockIWorkflowBizMockRecorder {
 	return m.recorder
+}
+
+// CreateTodo mocks base method.
+func (m *MockIWorkflowBiz) CreateTodo(ctx contextx.Contextx, who *model.User, title string) (*agg.Issue, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateTodo", ctx, who, title)
+	ret0, _ := ret[0].(*agg.Issue)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateTodo indicates an expected call of CreateTodo.
+func (mr *MockIWorkflowBizMockRecorder) CreateTodo(ctx, who, title interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTodo", reflect.TypeOf((*MockIWorkflowBiz)(nil).CreateTodo), ctx, who, title)
+}
+
+// ListTodos mocks base method.
+func (m *MockIWorkflowBiz) ListTodos(ctx contextx.Contextx, who *model.User, opts ListTodosOptions) ([]*agg.Issue, int, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListTodos", ctx, who, opts)
+	ret0, _ := ret[0].([]*agg.Issue)
+	ret1, _ := ret[1].(int)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// ListTodos indicates an expected call of ListTodos.
+func (mr *MockIWorkflowBizMockRecorder) ListTodos(ctx, who, opts interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTodos", reflect.TypeOf((*MockIWorkflowBiz)(nil).ListTodos), ctx, who, opts)
 }
