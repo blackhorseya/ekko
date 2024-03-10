@@ -7,6 +7,7 @@ package restful
 import (
 	"github.com/blackhorseya/ekko/app/domain/workflow/biz"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
+	"github.com/blackhorseya/ekko/pkg/linebotx"
 	"github.com/blackhorseya/ekko/pkg/transports/httpx"
 	"github.com/google/wire"
 	"github.com/spf13/viper"
@@ -14,6 +15,7 @@ import (
 
 var providerSet = wire.NewSet(
 	httpx.NewServer,
+	linebotx.NewClient,
 	biz.DefaultWorkflowSet,
 )
 

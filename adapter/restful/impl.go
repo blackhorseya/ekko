@@ -13,23 +13,30 @@ import (
 	"github.com/blackhorseya/ekko/pkg/response"
 	"github.com/blackhorseya/ekko/pkg/transports/httpx"
 	"github.com/gin-gonic/gin"
+	"github.com/line/line-bot-sdk-go/v8/linebot/messaging_api"
 	"go.uber.org/zap"
 )
 
 type impl struct {
 	server   *httpx.Server
+	bot      *messaging_api.MessagingApiAPI
 	workflow biz.IWorkflowBiz
 }
 
-func newRestful(server *httpx.Server, workflow biz.IWorkflowBiz) adapterx.Restful {
+func newRestful(server *httpx.Server, bot *messaging_api.MessagingApiAPI, workflow biz.IWorkflowBiz) adapterx.Restful {
 	return &impl{
 		server:   server,
+		bot:      bot,
 		workflow: workflow,
 	}
 }
 
-func newService(server *httpx.Server, workflow biz.IWorkflowBiz) adapterx.Servicer {
-	return newRestful(server, workflow)
+func newService(server *httpx.Server, bot *messaging_api.MessagingApiAPI, workflow biz.IWorkflowBiz) adapterx.Servicer {
+	return newRestful(
+		server,
+		bot,
+		workflow,
+	)
 }
 
 func (i *impl) Start() error {

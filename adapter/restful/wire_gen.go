@@ -10,6 +10,7 @@ import (
 	"github.com/blackhorseya/ekko/app/domain/workflow/biz"
 	"github.com/blackhorseya/ekko/app/domain/workflow/repo/issue/mongodb"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
+	"github.com/blackhorseya/ekko/pkg/linebotx"
 	"github.com/blackhorseya/ekko/pkg/storage/mongodbx"
 	"github.com/blackhorseya/ekko/pkg/transports/httpx"
 	"github.com/google/wire"
@@ -23,13 +24,17 @@ func New(v *viper.Viper) (adapterx.Servicer, error) {
 	if err != nil {
 		return nil, err
 	}
+	messagingApiAPI, err := linebotx.NewClient()
+	if err != nil {
+		return nil, err
+	}
 	client, err := mongodbx.NewClient()
 	if err != nil {
 		return nil, err
 	}
 	iIssueRepo := mongodb.NewIssueRepo(client)
 	iWorkflowBiz := biz.NewWorkflowBiz(iIssueRepo)
-	servicer := newService(server, iWorkflowBiz)
+	servicer := newService(server, messagingApiAPI, iWorkflowBiz)
 	return servicer, nil
 }
 
@@ -38,16 +43,20 @@ func NewRestful(v *viper.Viper) (adapterx.Restful, error) {
 	if err != nil {
 		return nil, err
 	}
+	messagingApiAPI, err := linebotx.NewClient()
+	if err != nil {
+		return nil, err
+	}
 	client, err := mongodbx.NewClient()
 	if err != nil {
 		return nil, err
 	}
 	iIssueRepo := mongodb.NewIssueRepo(client)
 	iWorkflowBiz := biz.NewWorkflowBiz(iIssueRepo)
-	restful := newRestful(server, iWorkflowBiz)
+	restful := newRestful(server, messagingApiAPI, iWorkflowBiz)
 	return restful, nil
 }
 
 // wire.go:
 
-var providerSet = wire.NewSet(httpx.NewServer, biz.DefaultWorkflowSet)
+var providerSet = wire.NewSet(httpx.NewServer, linebotx.NewClient, biz.DefaultWorkflowSet)
