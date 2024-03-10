@@ -9,5 +9,5 @@ type User struct {
 	ID     uuid.UUID `json:"id,omitempty"`
 	Active bool      `json:"active,omitempty"`
 
-	Profile Profile `json:"profile,omitempty"`
+	Profile *Profile `json:"profile,omitempty"`
 }
