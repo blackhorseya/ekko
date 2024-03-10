@@ -10,8 +10,12 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/adapterx",
+        "//pkg/configx",
+        "//pkg/contextx",
+        "//pkg/response",
         "//pkg/transports/httpx",
         "@com_github_gin_gonic_gin//:gin",
         "@com_github_spf13_viper//:viper",
+        "@org_uber_go_zap//:zap",
     ],
 )
