@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "a559bcacb50c3588da47f5d55d6288e5211832d4a253becbde0d67b39894ea1f",
+  "moduleFileHash": "ed2c271ac700d45c69fe0bb19a10dbc250127279a7e7c82b0c4040b7f8c6df00",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -36,6 +36,7 @@
           "imports": {
             "com_github_gin_contrib_zap": "com_github_gin_contrib_zap",
             "com_github_gin_gonic_gin": "com_github_gin_gonic_gin",
+            "com_github_google_wire": "com_github_google_wire",
             "com_github_gorilla_websocket": "com_github_gorilla_websocket",
             "com_github_line_line_bot_sdk_go_v8": "com_github_line_line_bot_sdk_go_v8",
             "com_github_pkg_errors": "com_github_pkg_errors",
@@ -1072,9 +1073,9 @@
       "general": {
         "bzlTransitiveDigest": "zP01muRk4s4xWGK3gNPXOyDMQkOPsIhu99akeKWFFQ0=",
         "accumulatedFileDigests": {
-          "@@//:go.mod": "e4aa19b90fc453790254ab0f3c5bfda9ab220696236dca0dcb48d80acd6adc10",
+          "@@//:go.mod": "d3c71c7b22b53f9dacf1a4a6c5b4955b7170df14604b4dd5f87691ff53a10622",
           "@@rules_go~0.46.0//:go.sum": "d56fdb19b21a5f12bcf625c49432371ac39c2def0f564098fbda107f7c080f40",
-          "@@//:go.sum": "5ea6d8f27fab849e1ed50dbb5b0dfcf8919c8c192e81dd58528ff2f5937de227",
+          "@@//:go.sum": "242ce63a178627cbf67410b58e78a6beb4be3185106ecc84629bb68f2edcde5f",
           "@@gazelle~0.35.0//:go.mod": "48dc6e771c3028ee1c18b9ffc81e596fd5f6d7e0016c5ef280e30f2821f60473",
           "@@rules_go~0.46.0//:go.mod": "de22304b720f7f61350ec1c9739de6c0a1b1103fd22bfeb6e92c6c843ddc6d6e",
           "@@gazelle~0.35.0//:go.sum": "7c4460e8ecb5dd8691a51d4fa2e9e4751108b933636497ce46db499fc2e7a88d"
@@ -1588,9 +1589,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:zdAyfUGbYmuVokhzVmghFl2ZJh5QhcfebBgmVPFYA+8=",
+              "sum": "h1:FvmRgNOcs3kOa+T20R1uhfP9F6HgG2mfxDv1vrx1Htc=",
               "replace": "",
-              "version": "v0.15.0"
+              "version": "v0.17.0"
             }
           },
           "com_github_gogo_protobuf": {
@@ -1942,9 +1943,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:60k92dhOjHxJkrqnwsfl8KuaHbn/5dl0lUPUklKo3qE=",
+              "sum": "h1:5BMeUDZ7vkXGfEr1x9B4bRcTH4lpkTkpdh0T/J+qjbQ=",
               "replace": "",
-              "version": "v0.5.0"
+              "version": "v0.6.0"
             }
           },
           "com_github_chenzhuoyu_iasm": {
@@ -2073,6 +2074,22 @@
               "sum": "h1:pPC6BG5ex8PDFnkbrGU3EixyhKcQ2aDuBS36lqK/C7I=",
               "replace": "",
               "version": "v1.32.0"
+            }
+          },
+          "com_github_google_wire": {
+            "bzlFile": "@@gazelle~0.35.0//internal:go_repository.bzl",
+            "ruleClassName": "go_repository",
+            "attributes": {
+              "name": "gazelle~0.35.0~go_deps~com_github_google_wire",
+              "importpath": "github.com/google/wire",
+              "build_directives": [],
+              "build_file_generation": "auto",
+              "build_extra_args": [],
+              "patches": [],
+              "patch_args": [],
+              "sum": "h1:HBkoIh4BdSxoyo9PveV8giw7ZsaBOvzWKfcg/6MrVwI=",
+              "replace": "",
+              "version": "v0.6.0"
             }
           },
           "org_mongodb_go_mongo_driver": {
@@ -2805,6 +2822,7 @@
               "importpaths": {
                 "com_github_gin_contrib_zap": "github.com/gin-contrib/zap",
                 "com_github_gin_gonic_gin": "github.com/gin-gonic/gin",
+                "com_github_google_wire": "github.com/google/wire",
                 "com_github_gorilla_websocket": "github.com/gorilla/websocket",
                 "com_github_line_line_bot_sdk_go_v8": "github.com/line/line-bot-sdk-go/v8",
                 "com_github_pkg_errors": "github.com/pkg/errors",
@@ -3010,6 +3028,7 @@
           "explicitRootModuleDirectDeps": [
             "com_github_gin_contrib_zap",
             "com_github_gin_gonic_gin",
+            "com_github_google_wire",
             "com_github_gorilla_websocket",
             "com_github_line_line_bot_sdk_go_v8",
             "com_github_pkg_errors",

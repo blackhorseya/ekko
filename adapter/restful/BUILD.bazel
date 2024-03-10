@@ -2,12 +2,16 @@ load("@rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "restful",
-    srcs = ["impl.go"],
+    srcs = [
+        "impl.go",
+        "wire_gen.go",
+    ],
     importpath = "github.com/blackhorseya/ekko/adapter/restful",
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/adapterx",
         "//pkg/transports/httpx",
         "@com_github_gin_gonic_gin//:gin",
+        "@com_github_spf13_viper//:viper",
     ],
 )
