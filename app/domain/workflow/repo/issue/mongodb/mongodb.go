@@ -1,10 +1,19 @@
 package mongodb
 
 import (
+	"time"
+
 	"github.com/blackhorseya/ekko/entity/domain/workflow/agg"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/repo"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"go.mongodb.org/mongo-driver/mongo"
+)
+
+const (
+	timeoutDuration = 5 * time.Second
+
+	dbName   = "ekko"
+	collName = "issues"
 )
 
 type impl struct {
