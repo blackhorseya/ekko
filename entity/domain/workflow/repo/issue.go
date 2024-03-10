@@ -7,8 +7,17 @@ import (
 	"github.com/blackhorseya/ekko/pkg/contextx"
 )
 
+// ListIssueOptions is the options for list issues.
+type ListIssueOptions struct {
+	Limit  int
+	Offset int
+}
+
 // IIssueRepo is the interface that represents the issue repository.
 type IIssueRepo interface {
+	// List returns the issues by the given options.
+	List(ctx contextx.Contextx, options ListIssueOptions) (items []*agg.Issue, total int, err error)
+
 	// GetByID returns the issue by the given ID.
 	GetByID(ctx contextx.Contextx, id string) (item *agg.Issue, err error)
 

@@ -25,6 +25,11 @@ func NewIssueRepo(rw *mongo.Client) repo.IIssueRepo {
 	return &impl{rw: rw}
 }
 
+func (i *impl) List(ctx contextx.Contextx, options repo.ListIssueOptions) (items []*agg.Issue, total int, err error) {
+	// todo: 2024/3/10|sean|implement me
+	panic("implement me")
+}
+
 func (i *impl) GetByID(ctx contextx.Contextx, id string) (item *agg.Issue, err error) {
 	// todo: 2024/3/10|sean|implement me
 	panic("implement me")
