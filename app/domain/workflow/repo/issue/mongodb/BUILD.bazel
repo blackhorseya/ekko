@@ -10,9 +10,12 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//entity/domain/workflow/agg",
+        "//entity/domain/workflow/model",
         "//entity/domain/workflow/repo",
         "//pkg/contextx",
+        "@org_mongodb_go_mongo_driver//bson",
         "@org_mongodb_go_mongo_driver//bson/primitive",
         "@org_mongodb_go_mongo_driver//mongo",
+        "@org_mongodb_go_mongo_driver//mongo/options",
     ],
 )

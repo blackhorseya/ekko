@@ -9,8 +9,9 @@ import (
 
 // ListIssueOptions is the options for list issues.
 type ListIssueOptions struct {
-	Limit  int
-	Offset int
+	OwnerID string
+	Limit   int
+	Offset  int
 }
 
 // IIssueRepo is the interface that represents the issue repository.

@@ -6,8 +6,10 @@ import (
 	"github.com/blackhorseya/ekko/entity/domain/workflow/agg"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/repo"
 	"github.com/blackhorseya/ekko/pkg/contextx"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 const (
@@ -26,9 +28,43 @@ func NewIssueRepo(rw *mongo.Client) repo.IIssueRepo {
 	return &impl{rw: rw}
 }
 
-func (i *impl) List(ctx contextx.Contextx, options repo.ListIssueOptions) (items []*agg.Issue, total int, err error) {
-	// todo: 2024/3/10|sean|implement me
-	panic("implement me")
+func (i *impl) List(ctx contextx.Contextx, cond repo.ListIssueOptions) (items []*agg.Issue, total int, err error) {
+	timeout, cancelFunc := contextx.WithTimeout(ctx, timeoutDuration)
+	defer cancelFunc()
+
+	filter := bson.D{}
+	if cond.OwnerID != "" {
+		filter = append(filter, bson.E{Key: "owner_id", Value: cond.OwnerID})
+	}
+
+	opts := options.Find()
+	if cond.Limit > 0 {
+		opts.SetLimit(int64(cond.Limit))
+	}
+
+	if cond.Offset > 0 {
+		opts.SetSkip(int64(cond.Offset))
+	}
+
+	coll := i.rw.Database(dbName).Collection(collName)
+	cur, err := coll.Find(timeout, filter, opts)
+	if err != nil {
+		return nil, 0, err
+	}
+	defer cur.Close(timeout)
+
+	var ret []*agg.Issue
+	for cur.Next(timeout) {
+		var got *issue
+		err = cur.Decode(&got)
+		if err != nil {
+			return nil, 0, err
+		}
+
+		ret = append(ret, got.ToAgg())
+	}
+
+	return ret, 0, nil
 }
 
 func (i *impl) GetByID(ctx contextx.Contextx, id string) (item *agg.Issue, err error) {

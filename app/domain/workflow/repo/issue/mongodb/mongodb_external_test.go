@@ -13,7 +13,6 @@ import (
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/storage/mongodbx"
 	"github.com/stretchr/testify/suite"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/zap"
 )
@@ -46,6 +45,18 @@ func TestExternal(t *testing.T) {
 	suite.Run(t, new(suiteExternal))
 }
 
+func (s *suiteExternal) Test_Impl_List() {
+	ctx := contextx.Background()
+
+	opts := repo.ListIssueOptions{
+		OwnerID: "test",
+	}
+	items, total, err := s.repo.List(ctx, opts)
+	s.Require().NoError(err)
+
+	ctx.Debug("list issue success", zap.Any("items", items), zap.Int("total", total))
+}
+
 func (s *suiteExternal) Test_Impl_Create() {
 	ctx := contextx.Background()
 
@@ -54,7 +65,7 @@ func (s *suiteExternal) Test_Impl_Create() {
 			ID:        "",
 			Title:     "test",
 			Completed: false,
-			OwnerID:   primitive.NewObjectID().Hex(),
+			OwnerID:   "test",
 			CreatedAt: time.Time{},
 			UpdatedAt: time.Time{},
 		},
