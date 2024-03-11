@@ -3,7 +3,6 @@ package agg
 import (
 	"bytes"
 	"embed"
-	"errors"
 	"text/template"
 
 	"github.com/blackhorseya/ekko/entity/domain/workflow/model"
@@ -39,6 +38,17 @@ type Issues []*Issue
 
 // FlexContainer returns the issues as a flex message.
 func (x Issues) FlexContainer() (messaging_api.FlexContainerInterface, error) {
-	// todo: 2024/3/10|sean|implement this method
-	return nil, errors.New("issues flex message not implemented")
+	var containers []messaging_api.FlexBubble
+	for _, issue := range x {
+		container, err := issue.FlexContainer()
+		if err != nil {
+			return nil, err
+		}
+
+		containers = append(containers, container.(messaging_api.FlexBubble))
+	}
+
+	return &messaging_api.FlexCarousel{
+		Contents: containers,
+	}, nil
 }
