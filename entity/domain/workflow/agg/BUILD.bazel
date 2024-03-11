@@ -3,6 +3,7 @@ load("@rules_go//go:def.bzl", "go_library")
 go_library(
     name = "agg",
     srcs = ["issue.go"],
+    embedsrcs = ["issue.tmpl"],
     importpath = "github.com/blackhorseya/ekko/entity/domain/workflow/agg",
     visibility = ["//visibility:public"],
     deps = [

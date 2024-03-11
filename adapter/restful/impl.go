@@ -199,13 +199,16 @@ func (i *impl) handleTextMessage(
 			}, nil
 		}
 
-		flexMessage, err := items.FlexMessage()
+		container, err := items.FlexContainer()
 		if err != nil {
 			return handleError(err)
 		}
 
 		return []messaging_api.MessageInterface{
-			flexMessage,
+			&messaging_api.FlexMessage{
+				AltText:  "Issue List",
+				Contents: container,
+			},
 		}, nil
 	}
 
@@ -224,17 +227,16 @@ func (i *impl) handleTextMessage(
 			return handleError(err)
 		}
 
-		flexMessage, err := item.FlexMessage()
+		container, err := item.FlexContainer()
 		if err != nil {
-			return []messaging_api.MessageInterface{
-				&messaging_api.TextMessage{
-					Text: err.Error(),
-				},
-			}, nil
+			return handleError(err)
 		}
 
 		return []messaging_api.MessageInterface{
-			flexMessage,
+			messaging_api.FlexMessage{
+				AltText:  "Issue Information",
+				Contents: container,
+			},
 		}, nil
 	}
 
