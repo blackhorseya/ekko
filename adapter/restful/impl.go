@@ -240,6 +240,24 @@ func (i *impl) handleTextMessage(
 		}, nil
 	}
 
+	if strings.HasPrefix(text, "done.") {
+		id := strings.TrimPrefix(text, "done.")
+		if len(id) == 0 {
+			return handleError(errors.New("id is required"))
+		}
+
+		err := i.workflow.CompleteTodoByID(ctx, who, id)
+		if err != nil {
+			return handleError(err)
+		}
+
+		return []messaging_api.MessageInterface{
+			&messaging_api.TextMessage{
+				Text: "done",
+			},
+		}, nil
+	}
+
 	return nil, errors.New("not support")
 }
 

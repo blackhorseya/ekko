@@ -1476,10 +1476,10 @@
       "general": {
         "bzlTransitiveDigest": "D1+rhhbwX4ufoTmeUVxDpPg+Sknv3QzVXZnyK2zOjj4=",
         "recordedFileInputs": {
-          "@@//go.mod": "2559748410d0bb83432ca9a8af1934a93b733ea44ad3a22ebbb5d67169fafb31",
+          "@@//go.mod": "d38744a2252194ccb03bd488bc5c0745e3b3335f3237cc71549216ead32ce4a6",
           "@@rules_go~//go.mod": "de22304b720f7f61350ec1c9739de6c0a1b1103fd22bfeb6e92c6c843ddc6d6e",
           "@@gazelle~//go.sum": "7c4460e8ecb5dd8691a51d4fa2e9e4751108b933636497ce46db499fc2e7a88d",
-          "@@//go.sum": "b375e93386f2fcbd47ba8b0acb583b169b144e8e4693e376366754cdfd452412",
+          "@@//go.sum": "2411e1ab6ab2b4d19e94b7eee464cc2fb598ceb6353fda461ab1c4278bbad654",
           "@@rules_go~//go.sum": "d56fdb19b21a5f12bcf625c49432371ac39c2def0f564098fbda107f7c080f40",
           "@@gazelle~//go.mod": "48dc6e771c3028ee1c18b9ffc81e596fd5f6d7e0016c5ef280e30f2821f60473"
         },
@@ -2443,9 +2443,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:uNO2rsAINq/JlFpSdYEKIZ0uKD/R9cpdv0T+yoGwGmI=",
+              "sum": "h1:pPC6BG5ex8PDFnkbrGU3EixyhKcQ2aDuBS36lqK/C7I=",
               "replace": "",
-              "version": "v1.33.0"
+              "version": "v1.32.0"
             }
           },
           "com_github_google_wire": {
