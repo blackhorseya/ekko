@@ -13,3 +13,32 @@ go_binary(
     embed = [":adapter_lib"],
     visibility = ["//visibility:public"],
 )
+
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+
+pkg_tar(
+    name = "tar",
+    srcs = [":adapter"],
+)
+
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_push", "oci_tarball")
+
+oci_image(
+    name = "image",
+    base = "@alpine",
+    entrypoint = ["/adapter"],
+    tars = [":tar"],
+)
+
+oci_tarball(
+    name = "tarball",
+    image = ":image",
+    repo_tags = ["ghcr.io/blackhorseya/ekko:latest"],
+)
+
+oci_push(
+    name = "push",
+    image = ":image",
+    remote_tags = ["latest"],
+    repository = "ghcr.io/blackhorseya/ekko",
+)
