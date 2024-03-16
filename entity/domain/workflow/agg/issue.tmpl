@@ -6,9 +6,17 @@
     "contents": [
       {
         "type": "text",
-        "text": "{{ .Title }}",
+        "text": "{{if .Completed}} ✅ {{else}} ❌ {{end}} {{ .Title }}",
         "weight": "bold",
         "size": "xl"
+      },
+      {
+        "type": "button",
+        "action": {
+          "type": "message",
+          "label": "Done",
+          "text": "done.{{ .ID }}"
+        }
       }
     ]
   }
