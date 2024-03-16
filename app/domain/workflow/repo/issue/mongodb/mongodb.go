@@ -98,7 +98,7 @@ func (i *impl) Create(ctx contextx.Contextx, item *agg.Issue) (err error) {
 		Title:     item.Title,
 		Completed: item.Completed,
 		OwnerID:   item.OwnerID,
-		CreatedAt: now,
+		// CreatedAt: now,
 		UpdatedAt: now,
 	}
 	coll := i.rw.Database(dbName).Collection(collName)
@@ -112,8 +112,21 @@ func (i *impl) Create(ctx contextx.Contextx, item *agg.Issue) (err error) {
 }
 
 func (i *impl) Update(ctx contextx.Contextx, item *agg.Issue) (err error) {
-	// todo: 2024/3/10|sean|implement me
-	panic("implement me")
+	timeout, cancelFunc := contextx.WithTimeout(ctx, timeoutDuration)
+	defer cancelFunc()
+
+	item.UpdatedAt = time.Now()
+
+	update := newIssue(item)
+	filter := bson.M{"_id": update.ID}
+	opts := options.FindOneAndReplace().SetReturnDocument(options.After)
+	coll := i.rw.Database(dbName).Collection(collName)
+	err = coll.FindOneAndReplace(timeout, filter, update, opts).Err()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (i *impl) Delete(ctx contextx.Contextx, id string) (err error) {

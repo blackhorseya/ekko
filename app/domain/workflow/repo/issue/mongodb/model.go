@@ -17,6 +17,22 @@ type issue struct {
 	UpdatedAt time.Time          `bson:"updated_at"`
 }
 
+func newIssue(v *agg.Issue) *issue {
+	id := primitive.NewObjectIDFromTimestamp(time.Now())
+	if v.ID != "" {
+		id, _ = primitive.ObjectIDFromHex(v.ID)
+	}
+
+	return &issue{
+		ID:        id,
+		Title:     v.Ticket.Title,
+		Completed: v.Ticket.Completed,
+		OwnerID:   v.Ticket.OwnerID,
+		CreatedAt: v.Ticket.CreatedAt,
+		UpdatedAt: v.Ticket.UpdatedAt,
+	}
+}
+
 // ToAgg is to convert issue to aggregate issue.
 func (x *issue) ToAgg() *agg.Issue {
 	return &agg.Issue{

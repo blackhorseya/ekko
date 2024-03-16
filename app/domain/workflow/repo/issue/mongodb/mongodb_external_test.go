@@ -84,3 +84,22 @@ func (s *suiteExternal) Test_Impl_GetByID() {
 
 	ctx.Debug("get issue by id success", zap.Any("item", &item))
 }
+
+func (s *suiteExternal) Test_Impl_Update() {
+	ctx := contextx.Background()
+
+	item := &agg.Issue{
+		Ticket: &model.Ticket{
+			ID:        "65ed58f20d1152510f7bff43",
+			Title:     "test",
+			Completed: true,
+			OwnerID:   "test",
+			CreatedAt: time.Time{},
+			UpdatedAt: time.Time{},
+		},
+	}
+	err := s.repo.Update(ctx, item)
+	s.Require().NoError(err)
+
+	ctx.Debug("update issue success", zap.Any("item", &item))
+}
