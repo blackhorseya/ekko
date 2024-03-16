@@ -22,8 +22,13 @@ func NewWorkflowBiz(issues repo.IIssueRepo) biz.IWorkflowBiz {
 }
 
 func (i *impl) GetTodoByID(ctx contextx.Contextx, who *idM.User, id string) (item *agg.Issue, err error) {
-	// todo: 2024/3/16|sean|implement me
-	panic("implement me")
+	ret, err := i.issues.GetByID(ctx, id)
+	if err != nil {
+		ctx.Error("repo.IIssueRepo.GetByID", zap.Error(err))
+		return nil, err
+	}
+
+	return ret, nil
 }
 
 func (i *impl) CreateTodo(ctx contextx.Contextx, who *idM.User, title string) (item *agg.Issue, err error) {

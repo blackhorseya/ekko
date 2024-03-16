@@ -1,6 +1,7 @@
 package biz
 
 import (
+	"errors"
 	"reflect"
 	"testing"
 	"time"
@@ -151,6 +152,69 @@ func (s *suiteTester) Test_impl_ListTodos() {
 			}
 			if gotTotal != tt.wantTotal {
 				t.Errorf("ListTodos() gotTotal = %v, want %v", gotTotal, tt.wantTotal)
+			}
+		})
+	}
+}
+
+func (s *suiteTester) Test_impl_GetTodoByID() {
+	user1 := &idM.User{
+		ID: "user1",
+	}
+	issue1 := &agg.Issue{
+		Ticket: &model.Ticket{
+			ID:        "",
+			Title:     "issue1",
+			Completed: false,
+			OwnerID:   user1.ID,
+			CreatedAt: time.Time{},
+			UpdatedAt: time.Time{},
+		},
+	}
+
+	type args struct {
+		ctx  contextx.Contextx
+		who  *idM.User
+		id   string
+		mock func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantItem *agg.Issue
+		wantErr  bool
+	}{
+		{
+			name: "get todo by id then error",
+			args: args{who: user1, id: issue1.ID, mock: func() {
+				s.issues.EXPECT().GetByID(gomock.Any(), issue1.ID).Return(nil, errors.New("mock error")).Times(1)
+			}},
+			wantItem: nil,
+			wantErr:  true,
+		},
+		{
+			name: "get todo by id then ok",
+			args: args{who: user1, id: issue1.ID, mock: func() {
+				s.issues.EXPECT().GetByID(gomock.Any(), issue1.ID).Return(issue1, nil).Times(1)
+			}},
+			wantItem: issue1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			tt.args.ctx = contextx.Background()
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotItem, err := s.biz.GetTodoByID(tt.args.ctx, tt.args.who, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetTodoByID() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotItem, tt.wantItem) {
+				t.Errorf("GetTodoByID() gotItem = %v, want %v", gotItem, tt.wantItem)
 			}
 		})
 	}
