@@ -1,6 +1,6 @@
 # env for project
 PROJECT_NAME := ekko
-VERSION := $(shell git describe --tags --abbrev=0)
+VERSION := $(shell git describe --tags --always)
 
 ## common
 .PHONY: help
@@ -37,3 +37,7 @@ build: ## build go binary
 .PHONY: test
 test: ## test go binary
 	@bazel test //...
+
+.PHONY: docker-push
+docker-push: ## push docker image
+	@bazel run //adapter:push -- --tag=$(VERSION)
