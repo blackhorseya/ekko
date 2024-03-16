@@ -68,8 +68,24 @@ func (i *impl) List(ctx contextx.Contextx, cond repo.ListIssueOptions) (items []
 }
 
 func (i *impl) GetByID(ctx contextx.Contextx, id string) (item *agg.Issue, err error) {
-	// todo: 2024/3/10|sean|implement me
-	panic("implement me")
+	timeout, cancelFunc := contextx.WithTimeout(ctx, timeoutDuration)
+	defer cancelFunc()
+
+	hex, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{"_id": hex}
+	coll := i.rw.Database(dbName).Collection(collName)
+
+	var got *issue
+	err = coll.FindOne(timeout, filter).Decode(&got)
+	if err != nil {
+		return nil, err
+	}
+
+	return got.ToAgg(), nil
 }
 
 func (i *impl) Create(ctx contextx.Contextx, item *agg.Issue) (err error) {

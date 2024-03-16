@@ -75,3 +75,12 @@ func (s *suiteExternal) Test_Impl_Create() {
 
 	ctx.Debug("create issue success", zap.Any("item", &item))
 }
+
+func (s *suiteExternal) Test_Impl_GetByID() {
+	ctx := contextx.Background()
+
+	item, err := s.repo.GetByID(ctx, "65ed58f20d1152510f7bff43")
+	s.Require().NoError(err)
+
+	ctx.Debug("get issue by id success", zap.Any("item", &item))
+}
