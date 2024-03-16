@@ -47,6 +47,11 @@ func (i *impl) List(ctx contextx.Contextx, cond repo.ListIssueOptions) (items []
 	}
 
 	coll := i.rw.Database(dbName).Collection(collName)
+	count, err := coll.CountDocuments(timeout, filter)
+	if err != nil {
+		return nil, 0, err
+	}
+
 	cur, err := coll.Find(timeout, filter, opts)
 	if err != nil {
 		return nil, 0, err
@@ -64,7 +69,7 @@ func (i *impl) List(ctx contextx.Contextx, cond repo.ListIssueOptions) (items []
 		ret = append(ret, got.ToAgg())
 	}
 
-	return ret, 0, nil
+	return ret, int(count), nil
 }
 
 func (i *impl) GetByID(ctx contextx.Contextx, id string) (item *agg.Issue, err error) {
