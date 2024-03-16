@@ -147,6 +147,7 @@ func (i *impl) callback(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
+//nolint:gocognit,funlen // it's okay
 func (i *impl) handleTextMessage(
 	ctx contextx.Contextx,
 	event webhook.MessageEvent,
@@ -192,11 +193,7 @@ func (i *impl) handleTextMessage(
 		}
 
 		if len(items) == 0 {
-			return []messaging_api.MessageInterface{
-				&messaging_api.TextMessage{
-					Text: "no todos",
-				},
-			}, nil
+			return handleError(errors.New("no todos"))
 		}
 
 		container, err := items.FlexContainer()
@@ -215,11 +212,7 @@ func (i *impl) handleTextMessage(
 	if strings.HasPrefix(text, "create.") {
 		title := strings.TrimPrefix(text, "create.")
 		if len(title) == 0 {
-			return []messaging_api.MessageInterface{
-				&messaging_api.TextMessage{
-					Text: "title is required",
-				},
-			}, nil
+			return handleError(errors.New("title is required"))
 		}
 
 		item, err := i.workflow.CreateTodo(ctx, who, title)
