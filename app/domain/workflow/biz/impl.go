@@ -70,6 +70,18 @@ func (i *impl) ListTodos(
 }
 
 func (i *impl) CompleteTodoByID(ctx contextx.Contextx, who *idM.User, id string) (err error) {
-	// todo: 2024/3/16|sean|implement me
-	panic("implement me")
+	item, err := i.issues.GetByID(ctx, id)
+	if err != nil {
+		ctx.Error("repo.IIssueRepo.GetByID", zap.Error(err))
+		return err
+	}
+
+	item.Completed = true
+	err = i.issues.Update(ctx, item)
+	if err != nil {
+		ctx.Error("repo.IIssueRepo.Update", zap.Error(err))
+		return err
+	}
+
+	return nil
 }
