@@ -21,6 +21,11 @@ func NewWorkflowBiz(issues repo.IIssueRepo) biz.IWorkflowBiz {
 	return &impl{issues: issues}
 }
 
+func (i *impl) GetTodoByID(ctx contextx.Contextx, who *idM.User, id string) (item *agg.Issue, err error) {
+	// todo: 2024/3/16|sean|implement me
+	panic("implement me")
+}
+
 func (i *impl) CreateTodo(ctx contextx.Contextx, who *idM.User, title string) (item *agg.Issue, err error) {
 	issue := &agg.Issue{
 		Ticket: &model.Ticket{
@@ -57,4 +62,9 @@ func (i *impl) ListTodos(
 	}
 
 	return ret, t, nil
+}
+
+func (i *impl) CompleteTodoByID(ctx contextx.Contextx, who *idM.User, id string) (err error) {
+	// todo: 2024/3/16|sean|implement me
+	panic("implement me")
 }

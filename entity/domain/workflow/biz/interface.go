@@ -16,9 +16,15 @@ type ListTodosOptions struct {
 
 // IWorkflowBiz is the interface for workflow business logic.
 type IWorkflowBiz interface {
+	// GetTodoByID is to get todo item by id.
+	GetTodoByID(ctx contextx.Contextx, who *idM.User, id string) (item *agg.Issue, err error)
+
 	// CreateTodo is to create a todo item.
 	CreateTodo(ctx contextx.Contextx, who *idM.User, title string) (item *agg.Issue, err error)
 
 	// ListTodos is to list todo items.
 	ListTodos(ctx contextx.Contextx, who *idM.User, opts ListTodosOptions) (items []*agg.Issue, total int, err error)
+
+	// CompleteTodoByID is to complete todo item by id.
+	CompleteTodoByID(ctx contextx.Contextx, who *idM.User, id string) (err error)
 }

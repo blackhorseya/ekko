@@ -36,6 +36,20 @@ func (m *MockIWorkflowBiz) EXPECT() *MockIWorkflowBizMockRecorder {
 	return m.recorder
 }
 
+// CompleteTodoByID mocks base method.
+func (m *MockIWorkflowBiz) CompleteTodoByID(ctx contextx.Contextx, who *model.User, id string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CompleteTodoByID", ctx, who, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CompleteTodoByID indicates an expected call of CompleteTodoByID.
+func (mr *MockIWorkflowBizMockRecorder) CompleteTodoByID(ctx, who, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CompleteTodoByID", reflect.TypeOf((*MockIWorkflowBiz)(nil).CompleteTodoByID), ctx, who, id)
+}
+
 // CreateTodo mocks base method.
 func (m *MockIWorkflowBiz) CreateTodo(ctx contextx.Contextx, who *model.User, title string) (*agg.Issue, error) {
 	m.ctrl.T.Helper()
@@ -49,6 +63,21 @@ func (m *MockIWorkflowBiz) CreateTodo(ctx contextx.Contextx, who *model.User, ti
 func (mr *MockIWorkflowBizMockRecorder) CreateTodo(ctx, who, title interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTodo", reflect.TypeOf((*MockIWorkflowBiz)(nil).CreateTodo), ctx, who, title)
+}
+
+// GetTodoByID mocks base method.
+func (m *MockIWorkflowBiz) GetTodoByID(ctx contextx.Contextx, who *model.User, id string) (*agg.Issue, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTodoByID", ctx, who, id)
+	ret0, _ := ret[0].(*agg.Issue)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetTodoByID indicates an expected call of GetTodoByID.
+func (mr *MockIWorkflowBizMockRecorder) GetTodoByID(ctx, who, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTodoByID", reflect.TypeOf((*MockIWorkflowBiz)(nil).GetTodoByID), ctx, who, id)
 }
 
 // ListTodos mocks base method.
