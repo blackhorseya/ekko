@@ -37,7 +37,7 @@ func (i *impl) List(ctx contextx.Contextx, cond repo.ListIssueOptions) (items []
 		filter = append(filter, bson.E{Key: "owner_id", Value: cond.OwnerID})
 	}
 
-	opts := options.Find()
+	opts := options.Find().SetSort(bson.M{"updated_at": -1})
 	if cond.Limit > 0 {
 		opts.SetLimit(int64(cond.Limit))
 	}
