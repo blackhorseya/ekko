@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '^1.20'
+          cache: true
+
+      - uses: bazelbuild/setup-bazelisk@v2
+
+      - name: Mount bazel cache
+        id: cache-bazel
+        uses: actions/cache@v3
+        with:
+          path: "/home/runner/.cache/bazel"
+          key: bazel
+
+      - name: Build
+        run: bazel build //...
+
+      - name: Test
+        run: bazel test //...
+
+      - name: Docker Login
+        uses: docker/login-action@v2.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        run: |
+          make docker-push
+
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs:
+      - build
+    steps:
+      - name: Create Release
+        uses: ncipollo/release-action@v1.12.0
+        with:
+          generateReleaseNotes: true
+          prerelease: false
+          makeLatest: true
