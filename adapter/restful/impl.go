@@ -36,6 +36,7 @@ func newRestful(server *httpx.Server, bot *messaging_api.MessagingApiAPI, workfl
 			&PingCommand{},
 			&WhoAmICommand{},
 			&ListCommand{workflow: workflow},
+			&CreateCommand{workflow: workflow},
 		},
 	}
 }
@@ -180,30 +181,6 @@ func (i *impl) handleTextMessage(
 		}
 	}
 
-	// if strings.HasPrefix(text, "create.") {
-	// 	title := strings.TrimPrefix(text, "create.")
-	// 	if len(title) == 0 {
-	// 		return handleError(errors.New("title is required"))
-	// 	}
-	//
-	// 	item, err := i.workflow.CreateTodo(ctx, who, title)
-	// 	if err != nil {
-	// 		return handleError(err)
-	// 	}
-	//
-	// 	container, err := item.FlexContainer()
-	// 	if err != nil {
-	// 		return handleError(err)
-	// 	}
-	//
-	// 	return []messaging_api.MessageInterface{
-	// 		messaging_api.FlexMessage{
-	// 			AltText:  "Issue Information",
-	// 			Contents: container,
-	// 		},
-	// 	}, nil
-	// }
-	//
 	// if strings.HasPrefix(text, "done.") {
 	// 	id := strings.TrimPrefix(text, "done.")
 	// 	if len(id) == 0 {
