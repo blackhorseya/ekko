@@ -3,17 +3,16 @@ load("@rules_go//go:def.bzl", "go_library")
 go_library(
     name = "restful",
     srcs = [
-        "handle_message.go",
         "impl.go",
         "wire_gen.go",
     ],
     importpath = "github.com/blackhorseya/ekko/adapter/restful",
     visibility = ["//visibility:public"],
     deps = [
+        "//adapter/restful/cmds",
         "//app/domain/workflow/biz",
         "//app/domain/workflow/repo/issue/mongodb",
         "//entity/domain/identity/model",
-        "//entity/domain/workflow/agg",
         "//entity/domain/workflow/biz",
         "//pkg/adapterx",
         "//pkg/configx",

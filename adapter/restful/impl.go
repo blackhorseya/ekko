@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/blackhorseya/ekko/adapter/restful/cmds"
 	idM "github.com/blackhorseya/ekko/entity/domain/identity/model"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/biz"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
@@ -24,7 +25,7 @@ type impl struct {
 	server   *httpx.Server
 	bot      *messaging_api.MessagingApiAPI
 	workflow biz.IWorkflowBiz
-	commands []TextCommander
+	commands []cmds.TextCommander
 }
 
 func newRestful(server *httpx.Server, bot *messaging_api.MessagingApiAPI, workflow biz.IWorkflowBiz) adapterx.Restful {
@@ -32,13 +33,7 @@ func newRestful(server *httpx.Server, bot *messaging_api.MessagingApiAPI, workfl
 		server:   server,
 		bot:      bot,
 		workflow: workflow,
-		commands: []TextCommander{
-			&PingCommand{},
-			&WhoAmICommand{},
-			&ListCommand{workflow: workflow},
-			&CreateCommand{workflow: workflow},
-			&DoneCommand{workflow: workflow},
-		},
+		commands: cmds.NewCommands(workflow),
 	}
 }
 

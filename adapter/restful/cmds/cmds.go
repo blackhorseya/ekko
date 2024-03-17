@@ -1,4 +1,4 @@
-package restful
+package cmds
 
 import (
 	"errors"
@@ -14,6 +14,17 @@ import (
 // TextCommander is the interface for text command.
 type TextCommander interface {
 	Execute(ctx contextx.Contextx, who *idM.User, text string) ([]messaging_api.MessageInterface, error)
+}
+
+// NewCommands is the function to create new commands.
+func NewCommands(workflow biz.IWorkflowBiz) []TextCommander {
+	return []TextCommander{
+		&PingCommand{},
+		&WhoAmICommand{},
+		&ListCommand{workflow: workflow},
+		&CreateCommand{workflow: workflow},
+		&DoneCommand{workflow: workflow},
+	}
 }
 
 // PingCommand is the command for ping.
