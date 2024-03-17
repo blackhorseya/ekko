@@ -35,6 +35,7 @@ func newRestful(server *httpx.Server, bot *messaging_api.MessagingApiAPI, workfl
 		commands: []TextCommander{
 			&PingCommand{},
 			&WhoAmICommand{},
+			&ListCommand{workflow: workflow},
 		},
 	}
 }
@@ -179,33 +180,6 @@ func (i *impl) handleTextMessage(
 		}
 	}
 
-	// if text == "list" {
-	// 	var items agg.Issues
-	// 	items, _, err := i.workflow.ListTodos(ctx, who, biz.ListTodosOptions{
-	// 		Page: 1,
-	// 		Size: 5,
-	// 	})
-	// 	if err != nil {
-	// 		return handleError(err)
-	// 	}
-	//
-	// 	if len(items) == 0 {
-	// 		return handleError(errors.New("no todos"))
-	// 	}
-	//
-	// 	container, err := items.FlexContainer()
-	// 	if err != nil {
-	// 		return handleError(err)
-	// 	}
-	//
-	// 	return []messaging_api.MessageInterface{
-	// 		&messaging_api.FlexMessage{
-	// 			AltText:  "Issue List",
-	// 			Contents: container,
-	// 		},
-	// 	}, nil
-	// }
-	//
 	// if strings.HasPrefix(text, "create.") {
 	// 	title := strings.TrimPrefix(text, "create.")
 	// 	if len(title) == 0 {
