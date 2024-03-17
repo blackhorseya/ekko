@@ -5,11 +5,9 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 
 	idM "github.com/blackhorseya/ekko/entity/domain/identity/model"
-	"github.com/blackhorseya/ekko/entity/domain/workflow/agg"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/biz"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/configx"
@@ -26,6 +24,7 @@ type impl struct {
 	server   *httpx.Server
 	bot      *messaging_api.MessagingApiAPI
 	workflow biz.IWorkflowBiz
+	commands []TextCommander
 }
 
 func newRestful(server *httpx.Server, bot *messaging_api.MessagingApiAPI, workflow biz.IWorkflowBiz) adapterx.Restful {
@@ -33,6 +32,10 @@ func newRestful(server *httpx.Server, bot *messaging_api.MessagingApiAPI, workfl
 		server:   server,
 		bot:      bot,
 		workflow: workflow,
+		commands: []TextCommander{
+			&PingCommand{},
+			&WhoAmICommand{},
+		},
 	}
 }
 
@@ -147,21 +150,12 @@ func (i *impl) callback(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-//nolint:gocognit,funlen // it's okay
 func (i *impl) handleTextMessage(
 	ctx contextx.Contextx,
 	event webhook.MessageEvent,
 	message webhook.TextMessageContent,
 ) ([]messaging_api.MessageInterface, error) {
 	text := message.Text
-	if text == "ping" {
-		return []messaging_api.MessageInterface{
-			&messaging_api.TextMessage{
-				Text: "pong",
-			},
-		}, nil
-	}
-
 	who := &idM.User{}
 	switch source := event.Source.(type) {
 	case webhook.UserSource:
@@ -174,82 +168,85 @@ func (i *impl) handleTextMessage(
 		return nil, errors.New("source type not support")
 	}
 
-	if text == "whoami" {
-		return []messaging_api.MessageInterface{
-			&messaging_api.TextMessage{
-				Text: who.ID,
-			},
-		}, nil
+	for _, command := range i.commands {
+		messages, err := command.Execute(ctx, who, text)
+		if err != nil {
+			return handleError(err)
+		}
+
+		if messages != nil {
+			return messages, nil
+		}
 	}
 
-	if text == "list" {
-		var items agg.Issues
-		items, _, err := i.workflow.ListTodos(ctx, who, biz.ListTodosOptions{
-			Page: 1,
-			Size: 5,
-		})
-		if err != nil {
-			return handleError(err)
-		}
-
-		if len(items) == 0 {
-			return handleError(errors.New("no todos"))
-		}
-
-		container, err := items.FlexContainer()
-		if err != nil {
-			return handleError(err)
-		}
-
-		return []messaging_api.MessageInterface{
-			&messaging_api.FlexMessage{
-				AltText:  "Issue List",
-				Contents: container,
-			},
-		}, nil
-	}
-
-	if strings.HasPrefix(text, "create.") {
-		title := strings.TrimPrefix(text, "create.")
-		if len(title) == 0 {
-			return handleError(errors.New("title is required"))
-		}
-
-		item, err := i.workflow.CreateTodo(ctx, who, title)
-		if err != nil {
-			return handleError(err)
-		}
-
-		container, err := item.FlexContainer()
-		if err != nil {
-			return handleError(err)
-		}
-
-		return []messaging_api.MessageInterface{
-			messaging_api.FlexMessage{
-				AltText:  "Issue Information",
-				Contents: container,
-			},
-		}, nil
-	}
-
-	if strings.HasPrefix(text, "done.") {
-		id := strings.TrimPrefix(text, "done.")
-		if len(id) == 0 {
-			return handleError(errors.New("id is required"))
-		}
-
-		err := i.workflow.CompleteTodoByID(ctx, who, id)
-		if err != nil {
-			return handleError(err)
-		}
-
-		return []messaging_api.MessageInterface{
-			&messaging_api.TextMessage{
-				Text: "done",
-			},
-		}, nil
-	}
+	// if text == "list" {
+	// 	var items agg.Issues
+	// 	items, _, err := i.workflow.ListTodos(ctx, who, biz.ListTodosOptions{
+	// 		Page: 1,
+	// 		Size: 5,
+	// 	})
+	// 	if err != nil {
+	// 		return handleError(err)
+	// 	}
+	//
+	// 	if len(items) == 0 {
+	// 		return handleError(errors.New("no todos"))
+	// 	}
+	//
+	// 	container, err := items.FlexContainer()
+	// 	if err != nil {
+	// 		return handleError(err)
+	// 	}
+	//
+	// 	return []messaging_api.MessageInterface{
+	// 		&messaging_api.FlexMessage{
+	// 			AltText:  "Issue List",
+	// 			Contents: container,
+	// 		},
+	// 	}, nil
+	// }
+	//
+	// if strings.HasPrefix(text, "create.") {
+	// 	title := strings.TrimPrefix(text, "create.")
+	// 	if len(title) == 0 {
+	// 		return handleError(errors.New("title is required"))
+	// 	}
+	//
+	// 	item, err := i.workflow.CreateTodo(ctx, who, title)
+	// 	if err != nil {
+	// 		return handleError(err)
+	// 	}
+	//
+	// 	container, err := item.FlexContainer()
+	// 	if err != nil {
+	// 		return handleError(err)
+	// 	}
+	//
+	// 	return []messaging_api.MessageInterface{
+	// 		messaging_api.FlexMessage{
+	// 			AltText:  "Issue Information",
+	// 			Contents: container,
+	// 		},
+	// 	}, nil
+	// }
+	//
+	// if strings.HasPrefix(text, "done.") {
+	// 	id := strings.TrimPrefix(text, "done.")
+	// 	if len(id) == 0 {
+	// 		return handleError(errors.New("id is required"))
+	// 	}
+	//
+	// 	err := i.workflow.CompleteTodoByID(ctx, who, id)
+	// 	if err != nil {
+	// 		return handleError(err)
+	// 	}
+	//
+	// 	return []messaging_api.MessageInterface{
+	// 		&messaging_api.TextMessage{
+	// 			Text: "done",
+	// 		},
+	// 	}, nil
+	// }
 
 	return nil, errors.New("not support")
 }

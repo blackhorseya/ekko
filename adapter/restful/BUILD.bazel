@@ -13,7 +13,6 @@ go_library(
         "//app/domain/workflow/biz",
         "//app/domain/workflow/repo/issue/mongodb",
         "//entity/domain/identity/model",
-        "//entity/domain/workflow/agg",
         "//entity/domain/workflow/biz",
         "//pkg/adapterx",
         "//pkg/configx",
