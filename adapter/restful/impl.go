@@ -164,7 +164,7 @@ func (i *impl) handleTextMessage(
 	case webhook.RoomSource:
 		who.ID = source.RoomId
 	default:
-		return nil, errors.New("source type not support")
+		return handleError(errors.New("source type not support"))
 	}
 
 	for _, command := range i.commands {
