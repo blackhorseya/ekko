@@ -129,3 +129,34 @@ func (cmd *CreateCommand) Execute(
 
 	return nil, nil
 }
+
+// DoneCommand is the command for done.
+type DoneCommand struct {
+	workflow biz.IWorkflowBiz
+}
+
+func (cmd *DoneCommand) Execute(
+	ctx contextx.Contextx,
+	who *idM.User,
+	text string,
+) ([]messaging_api.MessageInterface, error) {
+	if strings.HasPrefix(text, "done.") {
+		id := strings.TrimPrefix(text, "done.")
+		if len(id) == 0 {
+			return nil, errors.New("id is required")
+		}
+
+		err := cmd.workflow.CompleteTodoByID(ctx, who, id)
+		if err != nil {
+			return nil, err
+		}
+
+		return []messaging_api.MessageInterface{
+			&messaging_api.TextMessage{
+				Text: "done",
+			},
+		}, nil
+	}
+
+	return nil, nil
+}

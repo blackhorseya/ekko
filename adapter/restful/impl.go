@@ -37,6 +37,7 @@ func newRestful(server *httpx.Server, bot *messaging_api.MessagingApiAPI, workfl
 			&WhoAmICommand{},
 			&ListCommand{workflow: workflow},
 			&CreateCommand{workflow: workflow},
+			&DoneCommand{workflow: workflow},
 		},
 	}
 }
@@ -159,6 +160,7 @@ func (i *impl) handleTextMessage(
 ) ([]messaging_api.MessageInterface, error) {
 	text := message.Text
 	who := &idM.User{}
+
 	switch source := event.Source.(type) {
 	case webhook.UserSource:
 		who.ID = source.UserId
@@ -180,24 +182,6 @@ func (i *impl) handleTextMessage(
 			return messages, nil
 		}
 	}
-
-	// if strings.HasPrefix(text, "done.") {
-	// 	id := strings.TrimPrefix(text, "done.")
-	// 	if len(id) == 0 {
-	// 		return handleError(errors.New("id is required"))
-	// 	}
-	//
-	// 	err := i.workflow.CompleteTodoByID(ctx, who, id)
-	// 	if err != nil {
-	// 		return handleError(err)
-	// 	}
-	//
-	// 	return []messaging_api.MessageInterface{
-	// 		&messaging_api.TextMessage{
-	// 			Text: "done",
-	// 		},
-	// 	}, nil
-	// }
 
 	return nil, errors.New("not support")
 }
