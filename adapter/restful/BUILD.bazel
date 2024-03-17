@@ -3,6 +3,7 @@ load("@rules_go//go:def.bzl", "go_library")
 go_library(
     name = "restful",
     srcs = [
+        "handle_message.go",
         "impl.go",
         "wire_gen.go",
     ],
