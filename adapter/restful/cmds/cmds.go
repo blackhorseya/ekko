@@ -20,5 +20,6 @@ func NewCommands(workflow biz.IWorkflowBiz) []TextCommander {
 		&ListCommand{workflow: workflow},
 		&CreateCommand{workflow: workflow},
 		&DoneCommand{workflow: workflow},
+		&UndoneCommand{workflow: workflow},
 	}
 }
