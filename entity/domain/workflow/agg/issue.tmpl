@@ -14,8 +14,8 @@
         "type": "button",
         "action": {
           "type": "message",
-          "label": "Done",
-          "text": "done.{{ .ID }}"
+          "label": "{{if .Completed}} Undone {{else}} Done {{end}}",
+          "text": "{{if .Completed}}undone{{else}}done{{end}}.{{ .ID }}"
         }
       }
     ]

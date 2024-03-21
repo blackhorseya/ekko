@@ -1,6 +1,9 @@
 package cmds
 
 import (
+	"errors"
+	"strings"
+
 	idM "github.com/blackhorseya/ekko/entity/domain/identity/model"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/biz"
 	"github.com/blackhorseya/ekko/pkg/contextx"
@@ -17,6 +20,23 @@ func (cmd *UndoneCommand) Execute(
 	who *idM.User,
 	text string,
 ) ([]messaging_api.MessageInterface, error) {
-	// todo: 2024/3/19|sean|implement me
+	if strings.HasPrefix(text, "undone.") {
+		id := strings.TrimPrefix(text, "undone.")
+		if len(id) == 0 {
+			return nil, errors.New("id is required")
+		}
+
+		err := cmd.workflow.UndoneTodoByID(ctx, who, id)
+		if err != nil {
+			return nil, err
+		}
+
+		return []messaging_api.MessageInterface{
+			&messaging_api.TextMessage{
+				Text: "undone",
+			},
+		}, nil
+	}
+
 	return nil, nil
 }
