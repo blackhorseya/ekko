@@ -39,10 +39,6 @@ func NewServer() (*Server, error) {
 	router.Use(contextx.AddContextxMiddleware())
 	router.Use(response.AddErrorHandlingMiddleware())
 
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, response.OK)
-	})
-
 	httpserver := &http.Server{
 		Addr:              configx.C.HTTP.GetAddr(),
 		Handler:           router,

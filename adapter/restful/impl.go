@@ -83,6 +83,12 @@ func (i *impl) AwaitSignal() error {
 }
 
 func (i *impl) InitRouting() error {
+	i.server.Router.LoadHTMLGlob("web/*")
+
+	i.server.Router.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", nil)
+	})
+
 	api := i.server.Router.Group("/api")
 	{
 		api.POST("/callback", i.callback)
