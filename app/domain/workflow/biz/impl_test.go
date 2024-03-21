@@ -219,3 +219,53 @@ func (s *suiteTester) Test_impl_GetTodoByID() {
 		})
 	}
 }
+
+func (s *suiteTester) Test_impl_UndoneTodoByID() {
+	user1 := &idM.User{
+		ID: "tester1",
+	}
+
+	issue1 := &agg.Issue{
+		Ticket: &model.Ticket{
+			ID:        "todo1",
+			Title:     "",
+			Completed: false,
+			OwnerID:   user1.ID,
+			CreatedAt: time.Time{},
+			UpdatedAt: time.Time{},
+		},
+	}
+
+	type args struct {
+		ctx  contextx.Contextx
+		who  *idM.User
+		id   string
+		mock func()
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "ok",
+			args: args{who: user1, id: issue1.ID, mock: func() {
+				s.issues.EXPECT().GetByID(gomock.Any(), issue1.ID).Return(issue1, nil).Times(1)
+				s.issues.EXPECT().Update(gomock.Any(), issue1).Return(nil).Times(1)
+			}},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			tt.args.ctx = contextx.Background()
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			if err := s.biz.UndoneTodoByID(tt.args.ctx, tt.args.who, tt.args.id); (err != nil) != tt.wantErr {
+				t.Errorf("UndoneTodoByID() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
