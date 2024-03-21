@@ -87,6 +87,18 @@ func (i *impl) CompleteTodoByID(ctx contextx.Contextx, who *idM.User, id string)
 }
 
 func (i *impl) UndoneTodoByID(ctx contextx.Contextx, who *idM.User, id string) (err error) {
-	// todo: 2024/3/21|sean|implement me
-	panic("implement me")
+	got, err := i.issues.GetByID(ctx, id)
+	if err != nil {
+		ctx.Error("repo.IIssueRepo.GetByID", zap.Error(err))
+		return err
+	}
+
+	got.Completed = false
+	err = i.issues.Update(ctx, got)
+	if err != nil {
+		ctx.Error("repo.IIssueRepo.Update", zap.Error(err))
+		return err
+	}
+
+	return nil
 }
