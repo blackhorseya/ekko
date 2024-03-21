@@ -27,4 +27,7 @@ type IWorkflowBiz interface {
 
 	// CompleteTodoByID is to complete todo item by id.
 	CompleteTodoByID(ctx contextx.Contextx, who *idM.User, id string) (err error)
+
+	// UndoneTodoByID is to undone todo item by id.
+	UndoneTodoByID(ctx contextx.Contextx, who *idM.User, id string) (err error)
 }

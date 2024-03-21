@@ -95,3 +95,17 @@ func (mr *MockIWorkflowBizMockRecorder) ListTodos(ctx, who, opts interface{}) *g
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTodos", reflect.TypeOf((*MockIWorkflowBiz)(nil).ListTodos), ctx, who, opts)
 }
+
+// UndoneTodoByID mocks base method.
+func (m *MockIWorkflowBiz) UndoneTodoByID(ctx contextx.Contextx, who *model.User, id string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UndoneTodoByID", ctx, who, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UndoneTodoByID indicates an expected call of UndoneTodoByID.
+func (mr *MockIWorkflowBizMockRecorder) UndoneTodoByID(ctx, who, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UndoneTodoByID", reflect.TypeOf((*MockIWorkflowBiz)(nil).UndoneTodoByID), ctx, who, id)
+}

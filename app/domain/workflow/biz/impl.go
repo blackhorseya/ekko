@@ -85,3 +85,8 @@ func (i *impl) CompleteTodoByID(ctx contextx.Contextx, who *idM.User, id string)
 
 	return nil
 }
+
+func (i *impl) UndoneTodoByID(ctx contextx.Contextx, who *idM.User, id string) (err error) {
+	// todo: 2024/3/21|sean|implement me
+	panic("implement me")
+}
