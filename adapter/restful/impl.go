@@ -9,6 +9,7 @@ import (
 
 	"github.com/blackhorseya/ekko/adapter/restful/cmds"
 	"github.com/blackhorseya/ekko/adapter/restful/templates"
+	v1 "github.com/blackhorseya/ekko/adapter/restful/v1"
 	idM "github.com/blackhorseya/ekko/entity/domain/identity/model"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/biz"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
@@ -109,6 +110,8 @@ func (i *impl) InitRouting() error {
 	api := i.server.Router.Group("/api")
 	{
 		api.POST("/callback", i.callback)
+
+		v1.Handler(api.Group("/v1"), i.authenticator)
 	}
 
 	return nil

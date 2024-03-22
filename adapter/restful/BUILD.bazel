@@ -11,6 +11,7 @@ go_library(
     deps = [
         "//adapter/restful/cmds",
         "//adapter/restful/templates",
+        "//adapter/restful/v1:restful",
         "//app/domain/workflow/biz",
         "//app/domain/workflow/repo/issue/mongodb",
         "//entity/domain/identity/model",
