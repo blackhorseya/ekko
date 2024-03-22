@@ -1,19 +1,9 @@
 {{ template "header.html" .}}
 
-<div class="container">
-    <form action="/login" method="post">
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Login">
-        </div>
-    </form>
+<div>
+    <h3>Auth0 Example</h3>
+    <p>Zero friction identity infrastructure, built for developers</p>
+    <a href="/api/v1/auth/login">SignIn</a>
 </div>
 
 {{ template "footer.html" .}}
