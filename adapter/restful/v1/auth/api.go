@@ -8,6 +8,8 @@ import (
 
 	"github.com/blackhorseya/ekko/pkg/authx"
 	"github.com/blackhorseya/ekko/pkg/configx"
+	"github.com/blackhorseya/ekko/pkg/contextx"
+	"github.com/blackhorseya/ekko/pkg/response"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
@@ -18,10 +20,7 @@ func Handler(g *gin.RouterGroup, authenticator *authx.Authenticator) {
 
 	g.GET("/callback", callback(authenticator))
 
-	g.GET("/me", func(c *gin.Context) {
-		// todo: 2024/3/22|sean|implement me
-		panic("implement me")
-	})
+	g.GET("/me", me())
 
 	g.GET("/logout", logout())
 }
@@ -48,8 +47,59 @@ func login(authenticator *authx.Authenticator) gin.HandlerFunc {
 
 func callback(authenticator *authx.Authenticator) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// todo: 2024/3/22|sean|implement me
-		panic("implement me")
+		ctx, err := contextx.FromGin(c)
+		if err != nil {
+			_ = c.Error(err)
+			return
+		}
+
+		session := sessions.Default(c)
+		if c.Query("state") != session.Get("state") {
+			c.JSON(http.StatusBadRequest, response.Err.WithMessage("invalid state"))
+			return
+		}
+
+		token, err := authenticator.Exchange(ctx, c.Query("code"))
+		if err != nil {
+			_ = c.Error(err)
+			return
+		}
+
+		idToken, err := authenticator.VerifyIDToken(ctx, token)
+		if err != nil {
+			_ = c.Error(err)
+			return
+		}
+
+		var profile map[string]any
+		err = idToken.Claims(&profile)
+		if err != nil {
+			_ = c.Error(err)
+			return
+		}
+
+		session.Set("access_token", token.AccessToken)
+		session.Set("profile", profile)
+		err = session.Save()
+		if err != nil {
+			_ = c.Error(err)
+			return
+		}
+
+		c.Redirect(http.StatusTemporaryRedirect, "/api/v1/auth/me")
+	}
+}
+
+func me() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+		profile := session.Get("profile")
+		if profile == nil {
+			c.JSON(http.StatusUnauthorized, response.Err.WithMessage("unauthorized"))
+			return
+		}
+
+		c.HTML(http.StatusOK, "user.html", profile)
 	}
 }
 

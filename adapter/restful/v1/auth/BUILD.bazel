@@ -8,6 +8,8 @@ go_library(
     deps = [
         "//pkg/authx",
         "//pkg/configx",
+        "//pkg/contextx",
+        "//pkg/response",
         "@com_github_gin_contrib_sessions//:sessions",
         "@com_github_gin_gonic_gin//:gin",
     ],
