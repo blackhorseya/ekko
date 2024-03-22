@@ -16,10 +16,7 @@ import (
 func Handler(g *gin.RouterGroup, authenticator *authx.Authenticator) {
 	g.GET("/login", login(authenticator))
 
-	g.GET("/callback", func(c *gin.Context) {
-		// todo: 2024/3/22|sean|implement me
-		panic("implement me")
-	})
+	g.GET("/callback", callback(authenticator))
 
 	g.GET("/me", func(c *gin.Context) {
 		// todo: 2024/3/22|sean|implement me
@@ -49,16 +46,11 @@ func login(authenticator *authx.Authenticator) gin.HandlerFunc {
 	}
 }
 
-func generateRandomState() (string, error) {
-	b := make([]byte, 32)
-	_, err := rand.Read(b)
-	if err != nil {
-		return "", err
+func callback(authenticator *authx.Authenticator) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// todo: 2024/3/22|sean|implement me
+		panic("implement me")
 	}
-
-	state := base64.StdEncoding.EncodeToString(b)
-
-	return state, nil
 }
 
 func logout() gin.HandlerFunc {
@@ -87,4 +79,16 @@ func logout() gin.HandlerFunc {
 
 		c.Redirect(http.StatusTemporaryRedirect, logoutURL.String())
 	}
+}
+
+func generateRandomState() (string, error) {
+	b := make([]byte, 32)
+	_, err := rand.Read(b)
+	if err != nil {
+		return "", err
+	}
+
+	state := base64.StdEncoding.EncodeToString(b)
+
+	return state, nil
 }
