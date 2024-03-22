@@ -10,6 +10,7 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//adapter/restful/cmds",
+        "//adapter/restful/templates",
         "//app/domain/workflow/biz",
         "//app/domain/workflow/repo/issue/mongodb",
         "//entity/domain/identity/model",

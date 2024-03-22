@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/blackhorseya/ekko/adapter/restful/cmds"
+	"github.com/blackhorseya/ekko/adapter/restful/templates"
 	idM "github.com/blackhorseya/ekko/entity/domain/identity/model"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/biz"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
@@ -83,7 +84,7 @@ func (i *impl) AwaitSignal() error {
 }
 
 func (i *impl) InitRouting() error {
-	i.server.Router.LoadHTMLGlob("web/*")
+	templates.SetHTMLTemplate(i.server.Router)
 
 	i.server.Router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", map[string]any{

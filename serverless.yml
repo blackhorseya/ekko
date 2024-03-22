@@ -30,5 +30,6 @@ functions:
     handler: ./adapter/lambda/
     name: ${sls:stage}-${self:service}-restful
     events:
+      - http: ANY /
       - http: ANY /{proxy+}
     environment: ${file(./deployments/${opt:stage, 'prod'}/.env.yaml)}
