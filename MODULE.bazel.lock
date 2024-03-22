@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 6,
-  "moduleFileHash": "bcab94b105e43d1039c70c16b9e573fc2deaa2ab3765f23ca5c940e72d60ea31",
+  "moduleFileHash": "e9a84dbb0b27c3329de7a12aa485638f3e35fd51f1c831465dcb7f8e9695ff2f",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -37,6 +37,7 @@
             "com_github_aws_aws_lambda_go": "com_github_aws_aws_lambda_go",
             "com_github_awslabs_aws_lambda_go_api_proxy": "com_github_awslabs_aws_lambda_go_api_proxy",
             "com_github_coreos_go_oidc_v3": "com_github_coreos_go_oidc_v3",
+            "com_github_gin_contrib_sessions": "com_github_gin_contrib_sessions",
             "com_github_gin_contrib_zap": "com_github_gin_contrib_zap",
             "com_github_gin_gonic_gin": "com_github_gin_gonic_gin",
             "com_github_google_wire": "com_github_google_wire",
@@ -76,7 +77,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 36,
+            "line": 37,
             "column": 20
           },
           "imports": {
@@ -98,7 +99,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 37,
+                "line": 38,
                 "column": 9
               }
             }
@@ -1978,10 +1979,10 @@
       "general": {
         "bzlTransitiveDigest": "D1+rhhbwX4ufoTmeUVxDpPg+Sknv3QzVXZnyK2zOjj4=",
         "recordedFileInputs": {
-          "@@//go.mod": "b7c0103bb024b4f350e5f6ea510ade254243f15169030f82b30354d55a367482",
+          "@@//go.mod": "a958a556282f4e412290e91abed7cbe432cbc71af7c6d6d38dfe9a662b2c61b0",
           "@@rules_go~//go.mod": "de22304b720f7f61350ec1c9739de6c0a1b1103fd22bfeb6e92c6c843ddc6d6e",
           "@@gazelle~//go.sum": "7c4460e8ecb5dd8691a51d4fa2e9e4751108b933636497ce46db499fc2e7a88d",
-          "@@//go.sum": "1ff442647ad38b44f8388b84acf2f1da00846b60a34c8cbad407d78c0382d557",
+          "@@//go.sum": "951a6101783f5f4404ae53b4afb13742d445334128b22d2f0838bab56437ed9e",
           "@@rules_go~//go.sum": "d56fdb19b21a5f12bcf625c49432371ac39c2def0f564098fbda107f7c080f40",
           "@@gazelle~//go.mod": "48dc6e771c3028ee1c18b9ffc81e596fd5f6d7e0016c5ef280e30f2821f60473"
         },
@@ -2133,9 +2134,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:LWAJwfNvjQZCFIDKWYQaM62NcYeYViCmWIwmOStowAI=",
+              "sum": "h1:QLgLl2yMN7N+ruc31VynXs1vhMZa7CeHHejIeBAsoHo=",
               "replace": "",
-              "version": "v2.1.1"
+              "version": "v2.2.0"
             }
           },
           "com_github_testcontainers_testcontainers_go_modules_mongodb": {
@@ -2950,6 +2951,21 @@
               "version": "v1.46.0"
             }
           },
+          "com_github_gorilla_securecookie": {
+            "bzlFile": "@@gazelle~//internal:go_repository.bzl",
+            "ruleClassName": "go_repository",
+            "attributes": {
+              "importpath": "github.com/gorilla/securecookie",
+              "build_directives": [],
+              "build_file_generation": "auto",
+              "build_extra_args": [],
+              "patches": [],
+              "patch_args": [],
+              "sum": "h1:YCIWL56dvtr73r6715mJs5ZvhtnY73hBvEF8kXD8ePA=",
+              "replace": "",
+              "version": "v1.1.2"
+            }
+          },
           "com_github_moby_sys_sequential": {
             "bzlFile": "@@gazelle~//internal:go_repository.bzl",
             "ruleClassName": "go_repository",
@@ -3005,9 +3021,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:pPC6BG5ex8PDFnkbrGU3EixyhKcQ2aDuBS36lqK/C7I=",
+              "sum": "h1:uNO2rsAINq/JlFpSdYEKIZ0uKD/R9cpdv0T+yoGwGmI=",
               "replace": "",
-              "version": "v1.32.0"
+              "version": "v1.33.0"
             }
           },
           "com_github_google_wire": {
@@ -3143,6 +3159,21 @@
               "sum": "h1:6E+4a0GO5zZEnZ81pIr0yLvtUWk2if982qA3F3QD6H4=",
               "replace": "",
               "version": "v0.0.0-20211012122336-39d0f177ccd0"
+            }
+          },
+          "com_github_gorilla_context": {
+            "bzlFile": "@@gazelle~//internal:go_repository.bzl",
+            "ruleClassName": "go_repository",
+            "attributes": {
+              "importpath": "github.com/gorilla/context",
+              "build_directives": [],
+              "build_file_generation": "auto",
+              "build_extra_args": [],
+              "patches": [],
+              "patch_args": [],
+              "sum": "h1:WRkNAv2uoa03QNIc1A6u4O7DAGMUVoopZhkiXWA2V1o=",
+              "replace": "",
+              "version": "v1.1.2"
             }
           },
           "com_github_sagikazarmark_slog_shim": {
@@ -3325,6 +3356,21 @@
               "version": "v0.0.0-20231115204819-d4c9dccdfbb1"
             }
           },
+          "com_github_gin_contrib_sessions": {
+            "bzlFile": "@@gazelle~//internal:go_repository.bzl",
+            "ruleClassName": "go_repository",
+            "attributes": {
+              "importpath": "github.com/gin-contrib/sessions",
+              "build_directives": [],
+              "build_file_generation": "auto",
+              "build_extra_args": [],
+              "patches": [],
+              "patch_args": [],
+              "sum": "h1:CATtfHmLMQrMNpJRgzjWXD7worTh7g7ritsQfmF+0jE=",
+              "replace": "",
+              "version": "v0.0.5"
+            }
+          },
           "org_golang_google_genproto": {
             "bzlFile": "@@gazelle~//internal:go_repository.bzl",
             "ruleClassName": "go_repository",
@@ -3410,9 +3456,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:ywfwo0a/3j9HR8wsYGWsIWl2mvRsI950HyoxiBERw5A=",
+              "sum": "h1:jRN+yEjakWh8aK5FzrciUHG8OFXK+4/KrAX/ysEtHAA=",
               "replace": "",
-              "version": "v1.11.2"
+              "version": "v1.11.3"
             }
           },
           "org_golang_google_grpc": {
@@ -3597,6 +3643,21 @@
               "version": "v1.19.0"
             }
           },
+          "com_github_gorilla_sessions": {
+            "bzlFile": "@@gazelle~//internal:go_repository.bzl",
+            "ruleClassName": "go_repository",
+            "attributes": {
+              "importpath": "github.com/gorilla/sessions",
+              "build_directives": [],
+              "build_file_generation": "auto",
+              "build_extra_args": [],
+              "patches": [],
+              "patch_args": [],
+              "sum": "h1:lqzMYz6bOfvn2WriPUjNByzeXIlVzURcPmgMczkmTjY=",
+              "replace": "",
+              "version": "v1.2.2"
+            }
+          },
           "com_github_montanaflynn_stats": {
             "bzlFile": "@@gazelle~//internal:go_repository.bzl",
             "ruleClassName": "go_repository",
@@ -3667,9 +3728,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:BvolUXjp4zuvkZ5YN5t7ebzbhlUtPsPm2S9NAZ5nl9U=",
+              "sum": "h1:ol+5Fu+cSq9JD7SoSqe04GMI92cbn0+wvQ3bZ8b/AU4=",
               "replace": "",
-              "version": "v10.18.0"
+              "version": "v10.19.0"
             }
           },
           "com_github_sagikazarmark_locafero": {
@@ -3695,6 +3756,7 @@
                 "com_github_aws_aws_lambda_go": "github.com/aws/aws-lambda-go",
                 "com_github_awslabs_aws_lambda_go_api_proxy": "github.com/awslabs/aws-lambda-go-api-proxy",
                 "com_github_coreos_go_oidc_v3": "github.com/coreos/go-oidc/v3",
+                "com_github_gin_contrib_sessions": "github.com/gin-contrib/sessions",
                 "com_github_gin_contrib_zap": "github.com/gin-contrib/zap",
                 "com_github_gin_gonic_gin": "github.com/gin-gonic/gin",
                 "com_github_google_wire": "github.com/google/wire",
@@ -3741,6 +3803,9 @@
                 "com_github_golang_protobuf": "github.com/golang/protobuf",
                 "com_github_golang_snappy": "github.com/golang/snappy",
                 "com_github_google_uuid": "github.com/google/uuid",
+                "com_github_gorilla_context": "github.com/gorilla/context",
+                "com_github_gorilla_securecookie": "github.com/gorilla/securecookie",
+                "com_github_gorilla_sessions": "github.com/gorilla/sessions",
                 "com_github_hashicorp_hcl": "github.com/hashicorp/hcl",
                 "com_github_inconshreveable_mousetrap": "github.com/inconshreveable/mousetrap",
                 "com_github_json_iterator_go": "github.com/json-iterator/go",
@@ -3901,6 +3966,7 @@
             "com_github_aws_aws_lambda_go",
             "com_github_awslabs_aws_lambda_go_api_proxy",
             "com_github_coreos_go_oidc_v3",
+            "com_github_gin_contrib_sessions",
             "com_github_gin_contrib_zap",
             "com_github_gin_gonic_gin",
             "com_github_google_wire",

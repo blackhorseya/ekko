@@ -1,6 +1,7 @@
 package restful
 
 import (
+	"encoding/gob"
 	"errors"
 	"net/http"
 	"os"
@@ -17,6 +18,8 @@ import (
 	"github.com/blackhorseya/ekko/pkg/configx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/transports/httpx"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/v8/linebot"
 	"github.com/line/line-bot-sdk-go/v8/linebot/messaging_api"
@@ -99,6 +102,10 @@ func (i *impl) AwaitSignal() error {
 }
 
 func (i *impl) InitRouting() error {
+	gob.Register(map[string]any{})
+	store := cookie.NewStore([]byte("secret"))
+	i.server.Router.Use(sessions.Sessions("auth-session", store))
+
 	templates.SetHTMLTemplate(i.server.Router)
 
 	i.server.Router.GET("/", func(c *gin.Context) {

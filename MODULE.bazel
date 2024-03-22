@@ -14,6 +14,7 @@ use_repo(
     "com_github_aws_aws_lambda_go",
     "com_github_awslabs_aws_lambda_go_api_proxy",
     "com_github_coreos_go_oidc_v3",
+    "com_github_gin_contrib_sessions",
     "com_github_gin_contrib_zap",
     "com_github_gin_gonic_gin",
     "com_github_google_wire",
