@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 6,
-  "moduleFileHash": "3d9225b0a3eaa0fbbc696bd1d550e5103028f14537f77dba8ec61d4e8e5b33c2",
+  "moduleFileHash": "429592020f59aee9f48c12ad8e9d9ef9d9af0d958a1a6d4da7dee9f9aebf8b78",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -36,6 +36,7 @@
           "imports": {
             "com_github_aws_aws_lambda_go": "com_github_aws_aws_lambda_go",
             "com_github_awslabs_aws_lambda_go_api_proxy": "com_github_awslabs_aws_lambda_go_api_proxy",
+            "com_github_coreos_go_oidc_v3": "com_github_coreos_go_oidc_v3",
             "com_github_gin_contrib_zap": "com_github_gin_contrib_zap",
             "com_github_gin_gonic_gin": "com_github_gin_gonic_gin",
             "com_github_google_wire": "com_github_google_wire",
@@ -47,6 +48,7 @@
             "com_github_stretchr_testify": "com_github_stretchr_testify",
             "com_github_testcontainers_testcontainers_go": "com_github_testcontainers_testcontainers_go",
             "com_github_testcontainers_testcontainers_go_modules_mongodb": "com_github_testcontainers_testcontainers_go_modules_mongodb",
+            "org_golang_x_oauth2": "org_golang_x_oauth2",
             "org_mongodb_go_mongo_driver": "org_mongodb_go_mongo_driver",
             "org_uber_go_mock": "org_uber_go_mock",
             "org_uber_go_zap": "org_uber_go_zap"
@@ -75,7 +77,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 35,
+            "line": 37,
             "column": 20
           },
           "imports": {
@@ -88,16 +90,16 @@
               "attributeValues": {
                 "name": "alpine",
                 "image": "docker.io/library/alpine",
-                "tag": "3",
                 "platforms": [
                   "linux/amd64",
                   "linux/arm64/v8"
-                ]
+                ],
+                "tag": "3"
               },
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 36,
+                "line": 38,
                 "column": 9
               }
             }
@@ -1948,14 +1950,39 @@
         "recordedRepoMappingEntries": []
       }
     },
+    "@@buildozer~//:buildozer_binary.bzl%buildozer_binary": {
+      "general": {
+        "bzlTransitiveDigest": "EleDU/FQ1+e/RgkW3aIDmdaxZEthvoWQhsqFTxiSgMI=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "buildozer_binary": {
+            "bzlFile": "@@buildozer~//private:buildozer_binary.bzl",
+            "ruleClassName": "_buildozer_binary_repo",
+            "attributes": {
+              "sha256": {
+                "darwin-amd64": "d29e347ecd6b5673d72cb1a8de05bf1b06178dd229ff5eb67fad5100c840cc8e",
+                "darwin-arm64": "9b9e71bdbec5e7223871e913b65d12f6d8fa026684daf991f00e52ed36a6978d",
+                "linux-amd64": "8dfd6345da4e9042daa738d7fdf34f699c5dfce4632f7207956fceedd8494119",
+                "linux-arm64": "6559558fded658c8fa7432a9d011f7c4dcbac6b738feae73d2d5c352e5f605fa",
+                "windows-amd64": "e7f05bf847f7c3689dd28926460ce6e1097ae97380ac8e6ae7147b7b706ba19b"
+              },
+              "version": "6.4.0"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": []
+      }
+    },
     "@@gazelle~//:extensions.bzl%go_deps": {
       "general": {
         "bzlTransitiveDigest": "D1+rhhbwX4ufoTmeUVxDpPg+Sknv3QzVXZnyK2zOjj4=",
         "recordedFileInputs": {
-          "@@//go.mod": "d38744a2252194ccb03bd488bc5c0745e3b3335f3237cc71549216ead32ce4a6",
+          "@@//go.mod": "2215853f2b0b972b27dca8043e955d0c528aa2c091bad2b874c6b823e4c703e2",
           "@@rules_go~//go.mod": "de22304b720f7f61350ec1c9739de6c0a1b1103fd22bfeb6e92c6c843ddc6d6e",
           "@@gazelle~//go.sum": "7c4460e8ecb5dd8691a51d4fa2e9e4751108b933636497ce46db499fc2e7a88d",
-          "@@//go.sum": "2411e1ab6ab2b4d19e94b7eee464cc2fb598ceb6353fda461ab1c4278bbad654",
+          "@@//go.sum": "b28b8ecb3d43818592420788596c8b3cd12aaf94f9a8e9634b7c062dda951635",
           "@@rules_go~//go.sum": "d56fdb19b21a5f12bcf625c49432371ac39c2def0f564098fbda107f7c080f40",
           "@@gazelle~//go.mod": "48dc6e771c3028ee1c18b9ffc81e596fd5f6d7e0016c5ef280e30f2821f60473"
         },
@@ -2290,6 +2317,21 @@
               "sum": "h1:EWaQ/wswjilfKLTECiXz7Rh+3BjFhfDFKv/oXslEjJA=",
               "replace": "",
               "version": "v0.14.1"
+            }
+          },
+          "com_github_go_jose_go_jose_v4": {
+            "bzlFile": "@@gazelle~//internal:go_repository.bzl",
+            "ruleClassName": "go_repository",
+            "attributes": {
+              "importpath": "github.com/go-jose/go-jose/v4",
+              "build_directives": [],
+              "build_file_generation": "auto",
+              "build_extra_args": [],
+              "patches": [],
+              "patch_args": [],
+              "sum": "h1:QVEPDE3OluqXBQZDcnNvQrInro2h0e4eqNbnZSWqS6U=",
+              "replace": "",
+              "version": "v4.0.1"
             }
           },
           "com_github_subosito_gotenv": {
@@ -2639,6 +2681,21 @@
               "version": "v0.0.0-20181117223130-1be2e3e5546d"
             }
           },
+          "com_github_coreos_go_oidc_v3": {
+            "bzlFile": "@@gazelle~//internal:go_repository.bzl",
+            "ruleClassName": "go_repository",
+            "attributes": {
+              "importpath": "github.com/coreos/go-oidc/v3",
+              "build_directives": [],
+              "build_file_generation": "auto",
+              "build_extra_args": [],
+              "patches": [],
+              "patch_args": [],
+              "sum": "h1:tDnXHnLyiTVyT/2zLDGj09pFPkhND8Gl8lnTRhoEaJU=",
+              "replace": "",
+              "version": "v3.10.0"
+            }
+          },
           "com_github_testcontainers_testcontainers_go": {
             "bzlFile": "@@gazelle~//internal:go_repository.bzl",
             "ruleClassName": "go_repository",
@@ -2754,9 +2811,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:AQyQV4dYCvJ7vGmJyKki9+PBdyvhkSd8EIx/qb0AYv4=",
+              "sum": "h1:9sGLhx7iRIHEiX0oAJ3MRZMUCElJgy7Br1nO+AMN3Tc=",
               "replace": "",
-              "version": "v0.21.0"
+              "version": "v0.22.0"
             }
           },
           "com_github_spf13_pflag": {
@@ -2772,6 +2829,21 @@
               "sum": "h1:iy+VFUOCP1a+8yFto/drg2CJ5u0yRoB7fZw3DKv/JXA=",
               "replace": "",
               "version": "v1.0.5"
+            }
+          },
+          "org_golang_x_oauth2": {
+            "bzlFile": "@@gazelle~//internal:go_repository.bzl",
+            "ruleClassName": "go_repository",
+            "attributes": {
+              "importpath": "golang.org/x/oauth2",
+              "build_directives": [],
+              "build_file_generation": "auto",
+              "build_extra_args": [],
+              "patches": [],
+              "patch_args": [],
+              "sum": "h1:09qnuIAgzdx1XplqJvW6CQqMCtGZykZWcXzPMPUusvI=",
+              "replace": "",
+              "version": "v0.18.0"
             }
           },
           "org_golang_x_sync": {
@@ -2817,6 +2889,21 @@
               "sum": "h1:nxdKQNcEB6vzgA2E2bvzKIYRuNj7XNJ4S/aRSwKzFtM=",
               "replace": "",
               "version": "v0.1.6"
+            }
+          },
+          "org_golang_google_appengine": {
+            "bzlFile": "@@gazelle~//internal:go_repository.bzl",
+            "ruleClassName": "go_repository",
+            "attributes": {
+              "importpath": "google.golang.org/appengine",
+              "build_directives": [],
+              "build_file_generation": "auto",
+              "build_extra_args": [],
+              "patches": [],
+              "patch_args": [],
+              "sum": "h1:IhEN5q69dyKagZPYMSdIjS2HqprW324FRQZJcGqPAsM=",
+              "replace": "",
+              "version": "v1.6.8"
             }
           },
           "com_github_felixge_httpsnoop": {
@@ -2919,9 +3006,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:pPC6BG5ex8PDFnkbrGU3EixyhKcQ2aDuBS36lqK/C7I=",
+              "sum": "h1:uNO2rsAINq/JlFpSdYEKIZ0uKD/R9cpdv0T+yoGwGmI=",
               "replace": "",
-              "version": "v1.32.0"
+              "version": "v1.33.0"
             }
           },
           "com_github_google_wire": {
@@ -2994,9 +3081,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:jmAMJJZXr5KiCw05dfYK9QnqaqKLYXijU23lsEdcQqg=",
+              "sum": "h1:X31++rzVUdKhX5sWmSOFZxx8UW/ldWx55cbf08iNAMA=",
               "replace": "",
-              "version": "v0.20.0"
+              "version": "v0.21.0"
             }
           },
           "com_github_hashicorp_hcl": {
@@ -3024,9 +3111,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:KhyjKVUg7Usr/dYsdSqoFveMYd5ko72D+zANwlG1mmg=",
+              "sum": "h1:i7eJL8qZTpSEXOPTxNKhASYpMn+8e5Q6AdndVa1dWek=",
               "replace": "",
-              "version": "v1.5.3"
+              "version": "v1.5.4"
             }
           },
           "org_uber_go_zap": {
@@ -3623,6 +3710,7 @@
               "importpaths": {
                 "com_github_aws_aws_lambda_go": "github.com/aws/aws-lambda-go",
                 "com_github_awslabs_aws_lambda_go_api_proxy": "github.com/awslabs/aws-lambda-go-api-proxy",
+                "com_github_coreos_go_oidc_v3": "github.com/coreos/go-oidc/v3",
                 "com_github_gin_contrib_zap": "github.com/gin-contrib/zap",
                 "com_github_gin_gonic_gin": "github.com/gin-gonic/gin",
                 "com_github_google_wire": "github.com/google/wire",
@@ -3637,6 +3725,7 @@
                 "org_mongodb_go_mongo_driver": "go.mongodb.org/mongo-driver",
                 "org_uber_go_mock": "go.uber.org/mock",
                 "org_uber_go_zap": "go.uber.org/zap",
+                "org_golang_x_oauth2": "golang.org/x/oauth2",
                 "cat_dario_mergo": "dario.cat/mergo",
                 "com_github_azure_go_ansiterm": "github.com/Azure/go-ansiterm",
                 "com_github_microsoft_go_winio": "github.com/Microsoft/go-winio",
@@ -3657,6 +3746,7 @@
                 "com_github_fsnotify_fsnotify": "github.com/fsnotify/fsnotify",
                 "com_github_gabriel_vasile_mimetype": "github.com/gabriel-vasile/mimetype",
                 "com_github_gin_contrib_sse": "github.com/gin-contrib/sse",
+                "com_github_go_jose_go_jose_v4": "github.com/go-jose/go-jose/v4",
                 "com_github_go_logr_logr": "github.com/go-logr/logr",
                 "com_github_go_logr_stdr": "github.com/go-logr/stdr",
                 "com_github_go_ole_go_ole": "github.com/go-ole/go-ole",
@@ -3724,6 +3814,7 @@
                 "org_golang_x_sys": "golang.org/x/sys",
                 "org_golang_x_text": "golang.org/x/text",
                 "org_golang_x_tools": "golang.org/x/tools",
+                "org_golang_google_appengine": "google.golang.org/appengine",
                 "org_golang_google_genproto_googleapis_rpc": "google.golang.org/genproto/googleapis/rpc",
                 "org_golang_google_grpc": "google.golang.org/grpc",
                 "org_golang_google_protobuf": "google.golang.org/protobuf",
@@ -3756,9 +3847,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:25cE3gD+tdBA7lp7QfhuV+rJiE9YXTcS3VG1SqssI/Y=",
+              "sum": "h1:DBdB3niSjOA/O0blCZBqDefyWNYveAYMNF1Wum0DYQ4=",
               "replace": "",
-              "version": "v0.17.0"
+              "version": "v0.18.0"
             }
           },
           "com_github_gin_gonic_gin": {
@@ -3826,6 +3917,7 @@
           "explicitRootModuleDirectDeps": [
             "com_github_aws_aws_lambda_go",
             "com_github_awslabs_aws_lambda_go_api_proxy",
+            "com_github_coreos_go_oidc_v3",
             "com_github_gin_contrib_zap",
             "com_github_gin_gonic_gin",
             "com_github_google_wire",
@@ -3839,7 +3931,8 @@
             "com_github_testcontainers_testcontainers_go_modules_mongodb",
             "org_mongodb_go_mongo_driver",
             "org_uber_go_mock",
-            "org_uber_go_zap"
+            "org_uber_go_zap",
+            "org_golang_x_oauth2"
           ],
           "explicitRootModuleDirectDevDeps": [],
           "useAllRepos": "NO",
