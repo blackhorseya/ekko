@@ -26,6 +26,13 @@ type Config struct {
 		Secret string `json:"secret" yaml:"secret"`
 		Token  string `json:"token" yaml:"token"`
 	} `json:"line_bot" yaml:"lineBot"`
+
+	Auth0 struct {
+		Domain       string `json:"domain" yaml:"domain"`
+		ClientID     string `json:"client_id" yaml:"clientID"`
+		ClientSecret string `json:"client_secret" yaml:"clientSecret"`
+		CallbackURL  string `json:"callback_url" yaml:"callbackURL"`
+	} `json:"auth0" yaml:"auth0"`
 }
 
 func (x *Config) String() string {
