@@ -22,26 +22,10 @@ type Config struct {
 		} `json:"mongodb" yaml:"mongodb"`
 	} `json:"storage" yaml:"storage"`
 
-	Finmind struct {
-		HTTP  HTTP   `json:"http" yaml:"http"`
-		Token string `json:"token" yaml:"token"`
-	} `json:"finmind" yaml:"finmind"`
-
-	LineNotify struct {
-		Endpoint    string `json:"endpoint" yaml:"endpoint"`
-		AccessToken string `json:"access_token" yaml:"accessToken"`
-	} `json:"line_notify" yaml:"lineNotify"`
-
 	LineBot struct {
 		Secret string `json:"secret" yaml:"secret"`
 		Token  string `json:"token" yaml:"token"`
 	} `json:"line_bot" yaml:"lineBot"`
-
-	Fugle struct {
-		APIKey    string    `json:"api_key" yaml:"apiKey"`
-		HTTP      HTTP      `json:"http" yaml:"http"`
-		Websocket Websocket `json:"websocket" yaml:"websocket"`
-	} `json:"fugle" yaml:"fugle"`
 }
 
 func (x *Config) String() string {
@@ -72,9 +56,4 @@ func (http *HTTP) GetAddr() string {
 	}
 
 	return fmt.Sprintf("%s:%d", http.Host, http.Port)
-}
-
-// Websocket defines the websocket struct.
-type Websocket struct {
-	Endpoint string `json:"endpoint" yaml:"endpoint"`
 }
