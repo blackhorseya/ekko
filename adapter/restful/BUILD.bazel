@@ -16,6 +16,7 @@ go_library(
         "//entity/domain/identity/model",
         "//entity/domain/workflow/biz",
         "//pkg/adapterx",
+        "//pkg/authx",
         "//pkg/configx",
         "//pkg/contextx",
         "//pkg/linebotx",

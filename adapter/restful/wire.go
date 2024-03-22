@@ -7,6 +7,7 @@ package restful
 import (
 	"github.com/blackhorseya/ekko/app/domain/workflow/biz"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
+	"github.com/blackhorseya/ekko/pkg/authx"
 	"github.com/blackhorseya/ekko/pkg/linebotx"
 	"github.com/blackhorseya/ekko/pkg/transports/httpx"
 	"github.com/google/wire"
@@ -17,6 +18,7 @@ var providerSet = wire.NewSet(
 	httpx.NewServer,
 	linebotx.NewClient,
 	biz.DefaultWorkflowSet,
+	authx.NewAuthenticator,
 )
 
 func New(v *viper.Viper) (adapterx.Servicer, error) {

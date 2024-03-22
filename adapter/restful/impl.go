@@ -12,6 +12,7 @@ import (
 	idM "github.com/blackhorseya/ekko/entity/domain/identity/model"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/biz"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
+	"github.com/blackhorseya/ekko/pkg/authx"
 	"github.com/blackhorseya/ekko/pkg/configx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/transports/httpx"
@@ -23,25 +24,38 @@ import (
 )
 
 type impl struct {
-	server   *httpx.Server
-	bot      *messaging_api.MessagingApiAPI
-	workflow biz.IWorkflowBiz
-	commands []cmds.TextCommander
+	server        *httpx.Server
+	bot           *messaging_api.MessagingApiAPI
+	authenticator *authx.Authenticator
+	workflow      biz.IWorkflowBiz
+	commands      []cmds.TextCommander
 }
 
-func newRestful(server *httpx.Server, bot *messaging_api.MessagingApiAPI, workflow biz.IWorkflowBiz) adapterx.Restful {
+func newRestful(
+	server *httpx.Server,
+	bot *messaging_api.MessagingApiAPI,
+	authenticator *authx.Authenticator,
+	workflow biz.IWorkflowBiz,
+) adapterx.Restful {
 	return &impl{
-		server:   server,
-		bot:      bot,
-		workflow: workflow,
-		commands: cmds.NewCommands(workflow),
+		server:        server,
+		bot:           bot,
+		authenticator: authenticator,
+		workflow:      workflow,
+		commands:      cmds.NewCommands(workflow),
 	}
 }
 
-func newService(server *httpx.Server, bot *messaging_api.MessagingApiAPI, workflow biz.IWorkflowBiz) adapterx.Servicer {
+func newService(
+	server *httpx.Server,
+	bot *messaging_api.MessagingApiAPI,
+	authenticator *authx.Authenticator,
+	workflow biz.IWorkflowBiz,
+) adapterx.Servicer {
 	return newRestful(
 		server,
 		bot,
+		authenticator,
 		workflow,
 	)
 }
