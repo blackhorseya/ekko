@@ -31,9 +31,20 @@ func (cmd *UndoneCommand) Execute(
 			return nil, err
 		}
 
+		got, err := cmd.workflow.GetTodoByID(ctx, who, id)
+		if err != nil {
+			return nil, err
+		}
+
+		container, err := got.FlexContainer()
+		if err != nil {
+			return nil, err
+		}
+
 		return []messaging_api.MessageInterface{
-			&messaging_api.TextMessage{
-				Text: "undone",
+			&messaging_api.FlexMessage{
+				AltText:  got.Title,
+				Contents: container,
 			},
 		}, nil
 	}
