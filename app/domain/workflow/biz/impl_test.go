@@ -263,7 +263,8 @@ func (s *suiteTester) Test_impl_UndoneTodoByID() {
 				tt.args.mock()
 			}
 
-			if err := s.biz.UndoneTodoByID(tt.args.ctx, tt.args.who, tt.args.id); (err != nil) != tt.wantErr {
+			_, err := s.biz.UndoneTodoByID(tt.args.ctx, tt.args.who, tt.args.id)
+			if (err != nil) != tt.wantErr {
 				t.Errorf("UndoneTodoByID() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

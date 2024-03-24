@@ -69,36 +69,36 @@ func (i *impl) ListTodos(
 	return ret, t, nil
 }
 
-func (i *impl) CompleteTodoByID(ctx contextx.Contextx, who *idM.User, id string) (err error) {
-	item, err := i.issues.GetByID(ctx, id)
-	if err != nil {
-		ctx.Error("repo.IIssueRepo.GetByID", zap.Error(err))
-		return err
-	}
-
-	item.Completed = true
-	err = i.issues.Update(ctx, item)
-	if err != nil {
-		ctx.Error("repo.IIssueRepo.Update", zap.Error(err))
-		return err
-	}
-
-	return nil
-}
-
-func (i *impl) UndoneTodoByID(ctx contextx.Contextx, who *idM.User, id string) (err error) {
+func (i *impl) CompleteTodoByID(ctx contextx.Contextx, who *idM.User, id string) (item *agg.Issue, err error) {
 	got, err := i.issues.GetByID(ctx, id)
 	if err != nil {
 		ctx.Error("repo.IIssueRepo.GetByID", zap.Error(err))
-		return err
+		return nil, err
+	}
+
+	got.Completed = true
+	err = i.issues.Update(ctx, got)
+	if err != nil {
+		ctx.Error("repo.IIssueRepo.Update", zap.Error(err))
+		return nil, err
+	}
+
+	return got, nil
+}
+
+func (i *impl) UndoneTodoByID(ctx contextx.Contextx, who *idM.User, id string) (item *agg.Issue, err error) {
+	got, err := i.issues.GetByID(ctx, id)
+	if err != nil {
+		ctx.Error("repo.IIssueRepo.GetByID", zap.Error(err))
+		return nil, err
 	}
 
 	got.Completed = false
 	err = i.issues.Update(ctx, got)
 	if err != nil {
 		ctx.Error("repo.IIssueRepo.Update", zap.Error(err))
-		return err
+		return nil, err
 	}
 
-	return nil
+	return got, nil
 }

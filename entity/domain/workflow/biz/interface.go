@@ -26,8 +26,8 @@ type IWorkflowBiz interface {
 	ListTodos(ctx contextx.Contextx, who *idM.User, opts ListTodosOptions) (items []*agg.Issue, total int, err error)
 
 	// CompleteTodoByID is to complete todo item by id.
-	CompleteTodoByID(ctx contextx.Contextx, who *idM.User, id string) (err error)
+	CompleteTodoByID(ctx contextx.Contextx, who *idM.User, id string) (item *agg.Issue, err error)
 
 	// UndoneTodoByID is to undone todo item by id.
-	UndoneTodoByID(ctx contextx.Contextx, who *idM.User, id string) (err error)
+	UndoneTodoByID(ctx contextx.Contextx, who *idM.User, id string) (item *agg.Issue, err error)
 }

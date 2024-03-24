@@ -26,12 +26,7 @@ func (cmd *DoneCommand) Execute(
 			return nil, errors.New("id is required")
 		}
 
-		err := cmd.workflow.CompleteTodoByID(ctx, who, id)
-		if err != nil {
-			return nil, err
-		}
-
-		got, err := cmd.workflow.GetTodoByID(ctx, who, id)
+		got, err := cmd.workflow.CompleteTodoByID(ctx, who, id)
 		if err != nil {
 			return nil, err
 		}

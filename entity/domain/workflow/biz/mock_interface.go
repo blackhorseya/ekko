@@ -37,11 +37,12 @@ func (m *MockIWorkflowBiz) EXPECT() *MockIWorkflowBizMockRecorder {
 }
 
 // CompleteTodoByID mocks base method.
-func (m *MockIWorkflowBiz) CompleteTodoByID(ctx contextx.Contextx, who *model.User, id string) error {
+func (m *MockIWorkflowBiz) CompleteTodoByID(ctx contextx.Contextx, who *model.User, id string) (*agg.Issue, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CompleteTodoByID", ctx, who, id)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*agg.Issue)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // CompleteTodoByID indicates an expected call of CompleteTodoByID.
@@ -97,11 +98,12 @@ func (mr *MockIWorkflowBizMockRecorder) ListTodos(ctx, who, opts interface{}) *g
 }
 
 // UndoneTodoByID mocks base method.
-func (m *MockIWorkflowBiz) UndoneTodoByID(ctx contextx.Contextx, who *model.User, id string) error {
+func (m *MockIWorkflowBiz) UndoneTodoByID(ctx contextx.Contextx, who *model.User, id string) (*agg.Issue, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UndoneTodoByID", ctx, who, id)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*agg.Issue)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // UndoneTodoByID indicates an expected call of UndoneTodoByID.
