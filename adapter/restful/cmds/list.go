@@ -20,7 +20,7 @@ func (cmd *ListCommand) Execute(
 	who *idM.User,
 	text string,
 ) ([]messaging_api.MessageInterface, error) {
-	if text == "list" {
+	if text == "/list" {
 		var items agg.Issues
 		items, _, err := cmd.workflow.ListTodos(ctx, who, biz.ListTodosOptions{Page: 1, Size: 5})
 		if err != nil {

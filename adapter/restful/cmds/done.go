@@ -20,8 +20,8 @@ func (cmd *DoneCommand) Execute(
 	who *idM.User,
 	text string,
 ) ([]messaging_api.MessageInterface, error) {
-	if strings.HasPrefix(text, "done.") {
-		id := strings.TrimPrefix(text, "done.")
+	if strings.HasPrefix(text, "/done ") {
+		id := strings.TrimPrefix(text, "/done ")
 		if len(id) == 0 {
 			return nil, errors.New("id is required")
 		}

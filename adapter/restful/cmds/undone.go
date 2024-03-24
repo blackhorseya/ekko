@@ -20,8 +20,8 @@ func (cmd *UndoneCommand) Execute(
 	who *idM.User,
 	text string,
 ) ([]messaging_api.MessageInterface, error) {
-	if strings.HasPrefix(text, "undone.") {
-		id := strings.TrimPrefix(text, "undone.")
+	if strings.HasPrefix(text, "/undone ") {
+		id := strings.TrimPrefix(text, "/undone ")
 		if len(id) == 0 {
 			return nil, errors.New("id is required")
 		}

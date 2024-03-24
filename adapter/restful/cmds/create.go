@@ -20,8 +20,8 @@ func (cmd *CreateCommand) Execute(
 	who *idM.User,
 	text string,
 ) ([]messaging_api.MessageInterface, error) {
-	if strings.HasPrefix(text, "create.") {
-		title := strings.TrimPrefix(text, "create.")
+	if strings.HasPrefix(text, "/create ") {
+		title := strings.TrimPrefix(text, "/create ")
 		if len(title) == 0 {
 			return nil, errors.New("title is required")
 		}

@@ -15,7 +15,7 @@ func (cmd *PingCommand) Execute(
 	who *idM.User,
 	text string,
 ) ([]messaging_api.MessageInterface, error) {
-	if text == "ping" {
+	if text == "/ping" {
 		return []messaging_api.MessageInterface{
 			&messaging_api.TextMessage{
 				Text: "pong",
