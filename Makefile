@@ -18,7 +18,7 @@ report: ## execute goreportcard
 
 .PHONY: clean
 clean:  ## remove artifacts
-	@rm -rf coverage.txt profile.out ./bin ./deployments/charts/*.tgz
+	@rm -rf cover.out result.json ./bin ./deployments/charts/*.tgz
 	@echo Successfuly removed artifacts
 
 ## go
@@ -37,6 +37,10 @@ build: ## build go binary
 .PHONY: test
 test: ## test go binary
 	@bazel test //...
+
+.PHONY: coverage
+coverage: ## generate coverage report
+	@go test -json -coverprofile=cover.out ./... >result.json
 
 .PHONY: docker-push
 docker-push: ## push docker image

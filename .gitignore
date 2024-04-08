@@ -237,3 +237,5 @@ $RECYCLE.BIN/
 bin
 
 deployments
+cover.out
+result.json
