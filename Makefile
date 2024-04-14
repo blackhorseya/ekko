@@ -44,4 +44,4 @@ coverage: ## generate coverage report
 
 .PHONY: docker-push
 docker-push: ## push docker image
-	@bazel run //adapter:push -- --tag=$(VERSION)
+	@bazel run //adapter:push --platforms=@rules_go//go/toolchain:linux_amd64 -- --tag=$(VERSION)
