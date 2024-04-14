@@ -30,6 +30,7 @@ jobs:
         with:
           charts_dir: app/infra/charts
           skip_existing: true
+          packages_with_index: true
           config: cr.yaml
         env:
           CR_TOKEN: ${{ secrets.CR_TOKEN }}
