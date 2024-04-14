@@ -29,5 +29,7 @@ jobs:
         uses: helm/chart-releaser-action@v1.6.0
         with:
           charts_dir: app/infra/charts
+          skip_existing: true
+          config: cr.yaml
         env:
           CR_TOKEN: ${{ secrets.CR_TOKEN }}
