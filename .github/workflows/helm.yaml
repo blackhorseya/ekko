@@ -38,6 +38,9 @@ jobs:
           echo "Packaging charts"
           cr package app/infra/charts/ekko-api
           
+          git remote add helm-charts https://github.com/blackhorseya/helm-charts.git
+          git fetch helm-charts gh-pages:gh-pages
+          
           echo "Uploading charts"
           cr upload --owner blackhorseya --git-repo helm-charts --packages-with-index --token "$CR_TOKEN" --push --skip-existing --remote helm-charts
           cr index --owner blackhorseya --git-repo helm-charts --packages-with-index --index-path . --token "$CR_TOKEN" --push --remote helm-charts
