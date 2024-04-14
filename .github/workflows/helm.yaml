@@ -41,5 +41,5 @@ jobs:
           cr package app/infra/charts/ekko-api
           
           echo "Uploading charts"
-          cr upload --owner blackhorseya --git-repo helm-charts --packages-with-index --token "$CR_TOKEN" --push --skip-existing
+          cr upload --owner blackhorseya --git-repo helm-charts --packages-with-index --token "$CR_TOKEN" --push --skip-existing --remote helm-charts
           cr index --owner blackhorseya --git-repo helm-charts --packages-with-index --index-path . --token "$CR_TOKEN" --push
