@@ -1,0 +1,77 @@
+basePath: /api
+definitions:
+  agg.Issue:
+    properties:
+      completed:
+        type: boolean
+      created_at:
+        type: string
+      id:
+        type: string
+      owner_id:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  response.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+info:
+  contact:
+    email: blackhorseya@gmail.com
+    name: Sean Zheng
+    url: https://blog.seancheng.space
+  description: Ekko open api swagger
+  license:
+    name: GPL-3.0
+    url: https://spdx.org/licenses/GPL-3.0-only.html
+  title: Ekko
+  version: 0.1.0
+paths:
+  /v1/todos:
+    get:
+      consumes:
+      - application/json
+      description: Get todo list.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/agg.Issue'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get todo list.
+      tags:
+      - todos
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

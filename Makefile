@@ -42,6 +42,11 @@ test: ## test go binary
 coverage: ## generate coverage report
 	@go test -json -coverprofile=cover.out ./... >result.json
 
+.PHONY: gen-swagger
+gen-swagger: ## generate swagger
+	@@swag init -q -d ./adapter,./entity,./pkg -o ./adapter/api
+
+## docker
 .PHONY: docker-push
 docker-push: ## push docker image
 	@bazel run //adapter:push --platforms=@rules_go//go/toolchain:linux_amd64 -- --tag=$(VERSION)
