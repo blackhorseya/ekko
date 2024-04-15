@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	_ "github.com/blackhorseya/ekko/adapter/api"
 	"github.com/blackhorseya/ekko/adapter/restful/cmds"
 	"github.com/blackhorseya/ekko/adapter/restful/templates"
 	v1 "github.com/blackhorseya/ekko/adapter/restful/v1"
@@ -24,6 +25,8 @@ import (
 	"github.com/line/line-bot-sdk-go/v8/linebot"
 	"github.com/line/line-bot-sdk-go/v8/linebot/messaging_api"
 	"github.com/line/line-bot-sdk-go/v8/linebot/webhook"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
 )
 
@@ -116,6 +119,7 @@ func (i *impl) InitRouting() error {
 
 	api := i.server.Router.Group("/api")
 	{
+		api.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 		api.POST("/callback", i.callback)
 
 		v1.Handler(api.Group("/v1"), i.authenticator)

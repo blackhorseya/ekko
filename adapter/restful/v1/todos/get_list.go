@@ -10,6 +10,7 @@ import (
 // @Tags todos
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Success 200 {object} response.Response{data=[]agg.Issue}
 // @Failure 400,404 {object} response.Response
 // @Failure 500 {object} response.Response

@@ -5,5 +5,5 @@ go_library(
     srcs = ["docs.go"],
     importpath = "github.com/blackhorseya/ekko/adapter/api",
     visibility = ["//visibility:public"],
-    deps = ["@com_github_swaggo_swag//:go_default_library"],
+    deps = ["@com_github_swaggo_swag//:swag"],
 )

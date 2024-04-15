@@ -25,6 +25,11 @@ const docTemplate = `{
     "paths": {
         "/v1/todos": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get todo list.",
                 "consumes": [
                     "application/json"
