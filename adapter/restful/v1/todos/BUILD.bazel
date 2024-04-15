@@ -2,8 +2,14 @@ load("@rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "todos",
-    srcs = ["api.go"],
+    srcs = [
+        "api.go",
+        "get_list.go",
+    ],
     importpath = "github.com/blackhorseya/ekko/adapter/restful/v1/todos",
     visibility = ["//visibility:public"],
-    deps = ["@com_github_gin_gonic_gin//:gin"],
+    deps = [
+        "//entity/domain/workflow/biz",
+        "@com_github_gin_gonic_gin//:gin",
+    ],
 )
