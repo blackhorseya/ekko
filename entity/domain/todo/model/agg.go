@@ -11,3 +11,11 @@ type Todo struct {
 	Done      bool      `json:"done,omitempty" bson:"done"`
 	UpdatedAt time.Time `json:"updated_at,omitempty" bson:"updated_at"`
 }
+
+// NewTodo is to create a new todo
+func NewTodo(title string) *Todo {
+	return &Todo{
+		Title:     title,
+		UpdatedAt: time.Now(),
+	}
+}

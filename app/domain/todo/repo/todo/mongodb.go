@@ -6,7 +6,9 @@ import (
 	"github.com/blackhorseya/ekko/entity/domain/todo/model"
 	"github.com/blackhorseya/ekko/entity/domain/todo/repo"
 	"github.com/blackhorseya/ekko/pkg/contextx"
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.uber.org/zap"
 )
 
 const (
@@ -38,8 +40,22 @@ func (i *mongodb) GetByID(ctx contextx.Contextx, id string) (item *model.Todo, e
 }
 
 func (i *mongodb) Create(ctx contextx.Contextx, item *model.Todo) (err error) {
-	// todo: 2024/6/3|sean|implement me
-	panic("implement me")
+	timeout, cancelFunc := contextx.WithTimeout(ctx, defaultTimeout)
+	defer cancelFunc()
+
+	if item.ID == "" {
+		item.ID = uuid.New().String()
+	}
+	item.UpdatedAt = time.Now()
+
+	coll := i.rw.Database(dbName).Collection(collName)
+	_, err = coll.InsertOne(timeout, item)
+	if err != nil {
+		ctx.Error("mongodb create todo error", zap.Error(err), zap.Any("item", &item))
+		return err
+	}
+
+	return nil
 }
 
 func (i *mongodb) Update(ctx contextx.Contextx, item *model.Todo) (err error) {
