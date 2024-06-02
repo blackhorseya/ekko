@@ -8,7 +8,7 @@ import (
 
 	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	"github.com/blackhorseya/ekko/pkg/response"
+	"github.com/blackhorseya/ekko/pkg/responsex"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -34,10 +34,11 @@ func NewServer() (*Server, error) {
 		Context:    nil,
 	}))
 	router.Use(ginzap.CustomRecoveryWithZap(ctx.Logger, true, func(c *gin.Context, err any) {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Err.WithMessage(fmt.Sprintf("%v", err)))
+		responsex.Err(c, fmt.Errorf("%v", err))
+		c.Abort()
 	}))
 	router.Use(contextx.AddContextxMiddleware())
-	router.Use(response.AddErrorHandlingMiddleware())
+	router.Use(responsex.AddErrorHandlingMiddleware())
 
 	httpserver := &http.Server{
 		Addr:              configx.A.HTTP.GetAddr(),

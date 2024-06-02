@@ -8,7 +8,7 @@ go_library(
     deps = [
         "//app/infra/configx",
         "//pkg/contextx",
-        "//pkg/response",
+        "//pkg/responsex",
         "@com_github_gin_contrib_zap//:zap",
         "@com_github_gin_gonic_gin//:gin",
         "@org_uber_go_zap//:zap",
