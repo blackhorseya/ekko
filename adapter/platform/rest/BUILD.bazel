@@ -14,6 +14,7 @@ go_library(
         "//adapter/platform/wirex",
         "//app/domain/todo/biz",
         "//app/domain/todo/repo/todo",
+        "//app/infra/authx",
         "//app/infra/configx",
         "//pkg/adapterx",
         "//pkg/contextx",

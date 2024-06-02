@@ -8,6 +8,7 @@ import (
 	"github.com/blackhorseya/ekko/adapter/platform/wirex"
 	"github.com/blackhorseya/ekko/app/domain/todo/biz"
 	"github.com/blackhorseya/ekko/app/domain/todo/repo/todo"
+	"github.com/blackhorseya/ekko/app/infra/authx"
 	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/logging"
@@ -34,6 +35,7 @@ func initApplication() (*configx.Application, error) {
 var providerSet = wire.NewSet(
 	wire.Struct(new(wirex.Injector), "*"),
 	initApplication,
+	authx.NewAuthx,
 
 	httpx.NewServer,
 	mongodbx.NewClient,
