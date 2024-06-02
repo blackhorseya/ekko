@@ -3,8 +3,7 @@ package cmd
 import (
 	"os"
 
-	"github.com/blackhorseya/ekko/pkg/configx"
-	"github.com/blackhorseya/ekko/pkg/logging"
+	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/spf13/cobra"
 )
 
@@ -44,7 +43,12 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ekko.yaml)")
+	rootCmd.PersistentFlags().StringVar(
+		&cfgFile,
+		"config",
+		"",
+		"config file (default is $HOME/.config/ekko/.ekko.yaml)",
+	)
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -53,9 +57,6 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	err := configx.LoadWithPathAndName(cfgFile, "ekko")
-	cobra.CheckErr(err)
-
-	err = logging.InitWithConfig(configx.C.Log)
+	err := configx.LoadConfig(cfgFile)
 	cobra.CheckErr(err)
 }
