@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 6,
-  "moduleFileHash": "7e6465f88b0936d58c8fe449e0da41e452b28eb5896b2e2184aca17c398929ac",
+  "moduleFileHash": "bbed965a350ba182739bb854b3bd1b222a092a4cb37af82bff27a74733a5f989",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -34,6 +34,7 @@
             "column": 24
           },
           "imports": {
+            "com_github_auth0_go_jwt_middleware_v2": "com_github_auth0_go_jwt_middleware_v2",
             "com_github_aws_aws_lambda_go": "com_github_aws_aws_lambda_go",
             "com_github_awslabs_aws_lambda_go_api_proxy": "com_github_awslabs_aws_lambda_go_api_proxy",
             "com_github_coreos_go_oidc_v3": "com_github_coreos_go_oidc_v3",
@@ -2004,10 +2005,10 @@
       "general": {
         "bzlTransitiveDigest": "sH0ZfrlZyTTSTIpGNBfQJlEWK7fgxR4W5O3QYxF2pqQ=",
         "recordedFileInputs": {
-          "@@//go.mod": "c24065ec3c076b0afafef729c23615361af577fa7f02a3528675b71d8629ebe1",
+          "@@//go.mod": "06783a26285593438b861ee4e24d1266ee400bc63f87df005a9179cbeb12cd93",
           "@@rules_go~//go.mod": "de22304b720f7f61350ec1c9739de6c0a1b1103fd22bfeb6e92c6c843ddc6d6e",
           "@@gazelle~//go.sum": "7c4460e8ecb5dd8691a51d4fa2e9e4751108b933636497ce46db499fc2e7a88d",
-          "@@//go.sum": "e30ac6f937b152a9f1e26961bde14162f403e6b94f6f3810f10f4503385bdb95",
+          "@@//go.sum": "bf0135c971fb82c40b108166d05b5f232b8285c6c76c7ef7c94ba7252135db99",
           "@@rules_go~//go.sum": "d56fdb19b21a5f12bcf625c49432371ac39c2def0f564098fbda107f7c080f40",
           "@@gazelle~//go.mod": "48dc6e771c3028ee1c18b9ffc81e596fd5f6d7e0016c5ef280e30f2821f60473"
         },
@@ -2691,6 +2692,21 @@
               "version": "v0.6.0"
             }
           },
+          "in_gopkg_go_jose_go_jose_v2": {
+            "bzlFile": "@@gazelle~//internal:go_repository.bzl",
+            "ruleClassName": "go_repository",
+            "attributes": {
+              "importpath": "gopkg.in/go-jose/go-jose.v2",
+              "build_directives": [],
+              "build_file_generation": "auto",
+              "build_extra_args": [],
+              "patches": [],
+              "patch_args": [],
+              "sum": "h1:Rl5+9rA0kG3vsO1qhncMPRT5eHICihAMQYJkD7u/i4M=",
+              "replace": "",
+              "version": "v2.6.2"
+            }
+          },
           "com_github_docker_go_connections": {
             "bzlFile": "@@gazelle~//internal:go_repository.bzl",
             "ruleClassName": "go_repository",
@@ -3004,6 +3020,21 @@
               "sum": "h1:tUHQJXo3NhBqw6s33wkGn9SP3bvrWLdlVIJ3hQBL7P0=",
               "replace": "",
               "version": "v0.9.1"
+            }
+          },
+          "com_github_auth0_go_jwt_middleware_v2": {
+            "bzlFile": "@@gazelle~//internal:go_repository.bzl",
+            "ruleClassName": "go_repository",
+            "attributes": {
+              "importpath": "github.com/auth0/go-jwt-middleware/v2",
+              "build_directives": [],
+              "build_file_generation": "auto",
+              "build_extra_args": [],
+              "patches": [],
+              "patch_args": [],
+              "sum": "h1:pqxEIwlCztD0T9ZygGfOrw4NK/F9iotnCnPJVADKbkE=",
+              "replace": "",
+              "version": "v2.2.1"
             }
           },
           "com_github_shoenig_go_m1cpu": {
@@ -3958,6 +3989,7 @@
             "ruleClassName": "_go_repository_config",
             "attributes": {
               "importpaths": {
+                "com_github_auth0_go_jwt_middleware_v2": "github.com/auth0/go-jwt-middleware/v2",
                 "com_github_aws_aws_lambda_go": "github.com/aws/aws-lambda-go",
                 "com_github_awslabs_aws_lambda_go_api_proxy": "github.com/awslabs/aws-lambda-go-api-proxy",
                 "com_github_coreos_go_oidc_v3": "github.com/coreos/go-oidc/v3",
@@ -4083,6 +4115,7 @@
                 "org_golang_google_genproto_googleapis_rpc": "google.golang.org/genproto/googleapis/rpc",
                 "org_golang_google_grpc": "google.golang.org/grpc",
                 "org_golang_google_protobuf": "google.golang.org/protobuf",
+                "in_gopkg_go_jose_go_jose_v2": "gopkg.in/go-jose/go-jose.v2",
                 "in_gopkg_ini_v1": "gopkg.in/ini.v1",
                 "in_gopkg_yaml_v2": "gopkg.in/yaml.v2",
                 "in_gopkg_yaml_v3": "gopkg.in/yaml.v3",
@@ -4196,6 +4229,7 @@
         },
         "moduleExtensionMetadata": {
           "explicitRootModuleDirectDeps": [
+            "com_github_auth0_go_jwt_middleware_v2",
             "com_github_aws_aws_lambda_go",
             "com_github_awslabs_aws_lambda_go_api_proxy",
             "com_github_coreos_go_oidc_v3",

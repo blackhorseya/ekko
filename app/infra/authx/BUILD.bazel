@@ -1,0 +1,20 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "authx",
+    srcs = ["authx.go"],
+    importpath = "github.com/blackhorseya/ekko/app/infra/authx",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//app/infra/configx",
+        "//entity/domain/identity/model",
+        "//pkg/contextx",
+        "//pkg/errorx",
+        "//pkg/responsex",
+        "@com_github_auth0_go_jwt_middleware_v2//:go-jwt-middleware",
+        "@com_github_auth0_go_jwt_middleware_v2//jwks",
+        "@com_github_auth0_go_jwt_middleware_v2//validator",
+        "@com_github_gin_gonic_gin//:gin",
+        "@org_uber_go_zap//:zap",
+    ],
+)
