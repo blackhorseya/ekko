@@ -1,0 +1,18 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "configx",
+    srcs = [
+        "app.go",
+        "config.go",
+        "parse.go",
+    ],
+    importpath = "github.com/blackhorseya/ekko/app/infra/configx",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/logging",
+        "//pkg/netx",
+        "@com_github_google_uuid//:uuid",
+        "@com_github_spf13_viper//:viper",
+    ],
+)
