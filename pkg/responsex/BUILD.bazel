@@ -1,0 +1,15 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "responsex",
+    srcs = [
+        "middleware.go",
+        "responsex.go",
+    ],
+    importpath = "github.com/blackhorseya/ekko/pkg/responsex",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/errorx",
+        "@com_github_gin_gonic_gin//:gin",
+    ],
+)

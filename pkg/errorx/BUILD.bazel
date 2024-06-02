@@ -1,0 +1,8 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "errorx",
+    srcs = ["errorx.go"],
+    importpath = "github.com/blackhorseya/ekko/pkg/errorx",
+    visibility = ["//visibility:public"],
+)
