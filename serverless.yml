@@ -31,6 +31,6 @@ functions:
     name: ${sls:stage}-${self:service}-platform-rest
     events:
       - httpApi:
-          path: /api/{proxy+}
+          path: /{proxy+}
           method: ANY
     environment: ${file(./deployments/${opt:stage, 'prod'}/.env.yaml)}

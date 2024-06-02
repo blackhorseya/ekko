@@ -2,14 +2,12 @@ package rest
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
 
 	_ "github.com/blackhorseya/ekko/adapter/api/platform_rest" // swagger docs
-	"github.com/blackhorseya/ekko/adapter/platform/rest/templates"
 	v1 "github.com/blackhorseya/ekko/adapter/platform/rest/v1"
 	"github.com/blackhorseya/ekko/adapter/platform/wirex"
 	"github.com/blackhorseya/ekko/app/infra/configx"
@@ -93,15 +91,6 @@ func (i *impl) AwaitSignal() error {
 
 func (i *impl) InitRouting() error {
 	router := i.server.Router
-
-	templates.SetHTMLTemplate(router)
-
-	// page
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", map[string]any{
-			"title": "Ekko Platform Restful API",
-		})
-	})
 
 	// api
 	api := router.Group("/api")
