@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 6,
-  "moduleFileHash": "862f4a54c70f2cb8a944dc4a6d64d74be9747096cd2b7c6cd4b679b75a4ab3a4",
+  "moduleFileHash": "7e6465f88b0936d58c8fe449e0da41e452b28eb5896b2e2184aca17c398929ac",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -40,6 +40,7 @@
             "com_github_gin_contrib_sessions": "com_github_gin_contrib_sessions",
             "com_github_gin_contrib_zap": "com_github_gin_contrib_zap",
             "com_github_gin_gonic_gin": "com_github_gin_gonic_gin",
+            "com_github_google_uuid": "com_github_google_uuid",
             "com_github_google_wire": "com_github_google_wire",
             "com_github_line_line_bot_sdk_go_v8": "com_github_line_line_bot_sdk_go_v8",
             "com_github_pkg_errors": "com_github_pkg_errors",
@@ -2003,7 +2004,7 @@
       "general": {
         "bzlTransitiveDigest": "sH0ZfrlZyTTSTIpGNBfQJlEWK7fgxR4W5O3QYxF2pqQ=",
         "recordedFileInputs": {
-          "@@//go.mod": "2f175c49b26c4e0c041d21cb22ae086b023e66b1297cd3b90378cc6eb21cca2e",
+          "@@//go.mod": "c24065ec3c076b0afafef729c23615361af577fa7f02a3528675b71d8629ebe1",
           "@@rules_go~//go.mod": "de22304b720f7f61350ec1c9739de6c0a1b1103fd22bfeb6e92c6c843ddc6d6e",
           "@@gazelle~//go.sum": "7c4460e8ecb5dd8691a51d4fa2e9e4751108b933636497ce46db499fc2e7a88d",
           "@@//go.sum": "e30ac6f937b152a9f1e26961bde14162f403e6b94f6f3810f10f4503385bdb95",
@@ -3963,6 +3964,7 @@
                 "com_github_gin_contrib_sessions": "github.com/gin-contrib/sessions",
                 "com_github_gin_contrib_zap": "github.com/gin-contrib/zap",
                 "com_github_gin_gonic_gin": "github.com/gin-gonic/gin",
+                "com_github_google_uuid": "github.com/google/uuid",
                 "com_github_google_wire": "github.com/google/wire",
                 "com_github_line_line_bot_sdk_go_v8": "github.com/line/line-bot-sdk-go/v8",
                 "com_github_pkg_errors": "github.com/pkg/errors",
@@ -4016,7 +4018,6 @@
                 "com_github_gogo_protobuf": "github.com/gogo/protobuf",
                 "com_github_golang_protobuf": "github.com/golang/protobuf",
                 "com_github_golang_snappy": "github.com/golang/snappy",
-                "com_github_google_uuid": "github.com/google/uuid",
                 "com_github_gorilla_context": "github.com/gorilla/context",
                 "com_github_gorilla_securecookie": "github.com/gorilla/securecookie",
                 "com_github_gorilla_sessions": "github.com/gorilla/sessions",
@@ -4201,6 +4202,7 @@
             "com_github_gin_contrib_sessions",
             "com_github_gin_contrib_zap",
             "com_github_gin_gonic_gin",
+            "com_github_google_uuid",
             "com_github_google_wire",
             "com_github_line_line_bot_sdk_go_v8",
             "com_github_pkg_errors",
