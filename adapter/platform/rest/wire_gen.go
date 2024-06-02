@@ -8,6 +8,8 @@ package rest
 
 import (
 	"github.com/blackhorseya/ekko/adapter/platform/wirex"
+	"github.com/blackhorseya/ekko/app/domain/todo/biz"
+	"github.com/blackhorseya/ekko/app/domain/todo/repo/todo"
 	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/logging"
@@ -27,8 +29,11 @@ func New(v *viper.Viper) (adapterx.Servicer, error) {
 	if err != nil {
 		return nil, err
 	}
+	iTodoRepo := todo.NewNil()
+	iTodoBiz := biz.NewTodoBiz(iTodoRepo)
 	injector := &wirex.Injector{
-		A: application,
+		A:    application,
+		Todo: iTodoBiz,
 	}
 	server, err := httpx.NewServer()
 	if err != nil {
@@ -54,4 +59,4 @@ func initApplication() (*configx.Application, error) {
 	return app, nil
 }
 
-var providerSet = wire.NewSet(wire.Struct(new(wirex.Injector), "*"), initApplication, httpx.NewServer)
+var providerSet = wire.NewSet(wire.Struct(new(wirex.Injector), "*"), initApplication, httpx.NewServer, biz.NewTodoBiz, todo.NewNil)

@@ -5,5 +5,8 @@ go_library(
     srcs = ["injector.go"],
     importpath = "github.com/blackhorseya/ekko/adapter/platform/wirex",
     visibility = ["//visibility:public"],
-    deps = ["//app/infra/configx"],
+    deps = [
+        "//app/infra/configx",
+        "//entity/domain/todo/biz",
+    ],
 )

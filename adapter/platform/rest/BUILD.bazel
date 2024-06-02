@@ -12,6 +12,8 @@ go_library(
         "//adapter/api/platform_rest",
         "//adapter/platform/rest/v1:rest",
         "//adapter/platform/wirex",
+        "//app/domain/todo/biz",
+        "//app/domain/todo/repo/todo",
         "//app/infra/configx",
         "//pkg/adapterx",
         "//pkg/contextx",

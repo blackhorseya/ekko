@@ -6,6 +6,8 @@ package rest
 
 import (
 	"github.com/blackhorseya/ekko/adapter/platform/wirex"
+	"github.com/blackhorseya/ekko/app/domain/todo/biz"
+	"github.com/blackhorseya/ekko/app/domain/todo/repo/todo"
 	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/logging"
@@ -33,6 +35,9 @@ var providerSet = wire.NewSet(
 	initApplication,
 
 	httpx.NewServer,
+
+	biz.NewTodoBiz,
+	todo.NewNil,
 )
 
 func New(v *viper.Viper) (adapterx.Servicer, error) {
