@@ -65,11 +65,57 @@ const docTemplateplatform_rest = `{
                     "todos"
                 ],
                 "summary": "Get todo list.",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 1,
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "maximum": 100,
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 10,
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responsex.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/responsex.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/github_com_blackhorseya_ekko_entity_domain_todo_model.Todo"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        "headers": {
+                            "X-Page": {
+                                "type": "int",
+                                "description": "page"
+                            },
+                            "X-Page-Size": {
+                                "type": "int",
+                                "description": "page size"
+                            },
+                            "X-Total-Count": {
+                                "type": "int",
+                                "description": "total count"
+                            }
                         }
                     },
                     "500": {
@@ -107,7 +153,19 @@ const docTemplateplatform_rest = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responsex.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/responsex.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/github_com_blackhorseya_ekko_entity_domain_todo_model.Todo"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "500": {
@@ -121,6 +179,23 @@ const docTemplateplatform_rest = `{
         }
     },
     "definitions": {
+        "github_com_blackhorseya_ekko_entity_domain_todo_model.Todo": {
+            "type": "object",
+            "properties": {
+                "done": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
         "responsex.Response": {
             "type": "object",
             "properties": {
@@ -134,7 +209,16 @@ const docTemplateplatform_rest = `{
             }
         },
         "todos.PostPayload": {
-            "type": "object"
+            "type": "object",
+            "required": [
+                "title"
+            ],
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "example": "example"
+                }
+            }
         }
     }
 }`

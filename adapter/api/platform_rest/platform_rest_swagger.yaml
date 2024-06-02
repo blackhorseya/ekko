@@ -1,5 +1,16 @@
 basePath: /api
 definitions:
+  github_com_blackhorseya_ekko_entity_domain_todo_model.Todo:
+    properties:
+      done:
+        type: boolean
+      id:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
   responsex.Response:
     properties:
       code:
@@ -9,6 +20,12 @@ definitions:
         type: string
     type: object
   todos.PostPayload:
+    properties:
+      title:
+        example: example
+        type: string
+    required:
+    - title
     type: object
 info:
   contact:
@@ -46,13 +63,42 @@ paths:
       consumes:
       - application/json
       description: get todo list.
+      parameters:
+      - default: 1
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - default: 10
+        in: query
+        maximum: 100
+        minimum: 1
+        name: size
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
+          headers:
+            X-Page:
+              description: page
+              type: int
+            X-Page-Size:
+              description: page size
+              type: int
+            X-Total-Count:
+              description: total count
+              type: int
           schema:
-            $ref: '#/definitions/responsex.Response'
+            allOf:
+            - $ref: '#/definitions/responsex.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/github_com_blackhorseya_ekko_entity_domain_todo_model.Todo'
+                  type: array
+              type: object
         "500":
           description: Internal Server Error
           schema:
@@ -77,7 +123,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responsex.Response'
+            allOf:
+            - $ref: '#/definitions/responsex.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/github_com_blackhorseya_ekko_entity_domain_todo_model.Todo'
+              type: object
         "500":
           description: Internal Server Error
           schema:
