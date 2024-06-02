@@ -46,7 +46,7 @@ func TestMongodbExternal(t *testing.T) {
 }
 
 func (s *suiteMongodbExternal) Test_mongodb_Create() {
-	todo := model.NewTodo("test")
+	todo, _ := model.NewTodo("test")
 	err := s.repo.Create(contextx.Background(), todo)
 	s.NoError(err)
 
@@ -58,7 +58,7 @@ func (s *suiteMongodbExternal) Test_mongodb_Create() {
 }
 
 func (s *suiteMongodbExternal) Test_mongodb_List() {
-	todo := model.NewTodo("test")
+	todo, _ := model.NewTodo("test")
 	err := s.repo.Create(contextx.Background(), todo)
 	s.NoError(err)
 

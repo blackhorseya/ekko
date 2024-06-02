@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"time"
 )
 
@@ -13,9 +14,13 @@ type Todo struct {
 }
 
 // NewTodo is to create a new todo
-func NewTodo(title string) *Todo {
+func NewTodo(title string) (*Todo, error) {
+	if title == "" {
+		return nil, errors.New("title is required")
+	}
+
 	return &Todo{
 		Title:     title,
 		UpdatedAt: time.Now(),
-	}
+	}, nil
 }
