@@ -65,7 +65,7 @@ func (i *impl) Start() error {
 	ctx.Info("start restful server", zap.String("swagger_url", fmt.Sprintf(
 		"http://%s/api/docs/index.html",
 		strings.ReplaceAll(configx.A.HTTP.GetAddr(), "0.0.0.0", "localhost"),
-	)), zap.String("home", fmt.Sprintf("http://%s", configx.A.HTTP.GetAddr())))
+	)))
 
 	return nil
 }

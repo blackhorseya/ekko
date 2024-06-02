@@ -120,7 +120,7 @@ func (a *Authx) ParseJWT() gin.HandlerFunc {
 				401,
 				errors.New("unauthorized"),
 			))
-			return
+			c.Abort()
 		}
 	}
 }
