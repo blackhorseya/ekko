@@ -10,6 +10,7 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//adapter/api/platform_rest",
+        "//adapter/platform/rest/templates",
         "//adapter/platform/rest/v1:rest",
         "//adapter/platform/wirex",
         "//app/domain/todo/biz",

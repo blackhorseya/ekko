@@ -2,12 +2,14 @@ package rest
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
 
 	_ "github.com/blackhorseya/ekko/adapter/api/platform_rest" // swagger docs
+	"github.com/blackhorseya/ekko/adapter/platform/rest/templates"
 	v1 "github.com/blackhorseya/ekko/adapter/platform/rest/v1"
 	"github.com/blackhorseya/ekko/adapter/platform/wirex"
 	"github.com/blackhorseya/ekko/app/infra/configx"
@@ -65,7 +67,7 @@ func (i *impl) Start() error {
 	ctx.Info("start restful server", zap.String("swagger_url", fmt.Sprintf(
 		"http://%s/api/docs/index.html",
 		strings.ReplaceAll(configx.A.HTTP.GetAddr(), "0.0.0.0", "localhost"),
-	)))
+	)), zap.String("home", fmt.Sprintf("http://%s", configx.A.HTTP.GetAddr())))
 
 	return nil
 }
@@ -92,6 +94,16 @@ func (i *impl) AwaitSignal() error {
 func (i *impl) InitRouting() error {
 	router := i.server.Router
 
+	templates.SetHTMLTemplate(router)
+
+	// page
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", map[string]any{
+			"title": "Ekko Platform Restful API",
+		})
+	})
+
+	// api
 	api := router.Group("/api")
 	{
 		api.GET("/docs/*any", ginSwagger.WrapHandler(
