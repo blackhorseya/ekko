@@ -101,7 +101,7 @@ func (i *impl) InitRouting() error {
 		))
 		api.GET("/healthz", i.Healthz)
 
-		v1.Handle(api.Group("/v1"), i.injector)
+		v1.Handle(api.Group("/v1", i.injector.Authx.ParseJWT()), i.injector)
 	}
 
 	return nil
