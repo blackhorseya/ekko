@@ -13,6 +13,7 @@ import (
 	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/logging"
+	"github.com/blackhorseya/ekko/pkg/storage/mongodbx"
 	"github.com/blackhorseya/ekko/pkg/transports/httpx"
 	"github.com/google/wire"
 	"github.com/spf13/viper"
@@ -29,7 +30,11 @@ func New(v *viper.Viper) (adapterx.Servicer, error) {
 	if err != nil {
 		return nil, err
 	}
-	iTodoRepo := todo.NewNil()
+	client, err := mongodbx.NewClient()
+	if err != nil {
+		return nil, err
+	}
+	iTodoRepo := todo.NewMongodb(client)
 	iTodoBiz := biz.NewTodoBiz(iTodoRepo)
 	injector := &wirex.Injector{
 		A:    application,
@@ -59,4 +64,4 @@ func initApplication() (*configx.Application, error) {
 	return app, nil
 }
 
-var providerSet = wire.NewSet(wire.Struct(new(wirex.Injector), "*"), initApplication, httpx.NewServer, biz.NewTodoBiz, todo.NewNil)
+var providerSet = wire.NewSet(wire.Struct(new(wirex.Injector), "*"), initApplication, httpx.NewServer, mongodbx.NewClient, biz.NewTodoBiz, todo.NewMongodb)
