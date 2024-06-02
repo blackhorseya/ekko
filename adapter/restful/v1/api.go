@@ -2,7 +2,6 @@ package v1
 
 import (
 	"github.com/blackhorseya/ekko/adapter/restful/v1/auth"
-	"github.com/blackhorseya/ekko/adapter/restful/v1/todos"
 	"github.com/blackhorseya/ekko/pkg/authx"
 	"github.com/gin-gonic/gin"
 )
@@ -10,5 +9,4 @@ import (
 // Handler is the api handler.
 func Handler(g *gin.RouterGroup, author *authx.Authenticator) {
 	auth.Handler(g.Group("/auth"), author)
-	todos.Handle(g.Group("/todos"))
 }

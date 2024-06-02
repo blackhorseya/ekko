@@ -7,7 +7,6 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//adapter/restful/v1/auth",
-        "//adapter/restful/v1/todos",
         "//pkg/authx",
         "@com_github_gin_gonic_gin//:gin",
     ],
