@@ -1,0 +1,9 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "wirex",
+    srcs = ["injector.go"],
+    importpath = "github.com/blackhorseya/ekko/adapter/platform/wirex",
+    visibility = ["//visibility:public"],
+    deps = ["//app/infra/configx"],
+)

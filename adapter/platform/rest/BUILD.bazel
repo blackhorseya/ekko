@@ -1,0 +1,17 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "rest",
+    srcs = [
+        "impl.go",
+        "wire_gen.go",
+    ],
+    importpath = "github.com/blackhorseya/ekko/adapter/platform/rest",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//adapter/platform/wirex",
+        "//app/infra/configx",
+        "//pkg/logging",
+        "@com_github_spf13_viper//:viper",
+    ],
+)
