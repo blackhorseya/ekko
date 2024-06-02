@@ -54,6 +54,11 @@ const docTemplateplatform_rest = `{
         },
         "/v1/todos": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "get todo list.",
                 "consumes": [
                     "application/json"
@@ -127,6 +132,11 @@ const docTemplateplatform_rest = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "create a todo.",
                 "consumes": [
                     "application/json"
@@ -179,6 +189,11 @@ const docTemplateplatform_rest = `{
         },
         "/v1/todos/{id}": {
             "patch": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "update a todo.",
                 "consumes": [
                     "application/json"
@@ -277,10 +292,6 @@ const docTemplateplatform_rest = `{
                 "done": {
                     "type": "boolean",
                     "example": true
-                },
-                "title": {
-                    "type": "string",
-                    "example": "example"
                 }
             }
         },
@@ -295,6 +306,13 @@ const docTemplateplatform_rest = `{
                     "example": "example"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

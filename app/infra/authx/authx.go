@@ -47,7 +47,7 @@ func NewAuthx(app *configx.Application) (*Authx, error) {
 		jwksProvider.KeyFunc,
 		validator.RS256,
 		issuerURL.String(),
-		[]string{app.HTTP.URL},
+		app.Auth0.Audiences,
 		validator.WithCustomClaims(func() validator.CustomClaims {
 			return &CustomClaims{}
 		}),

@@ -24,9 +24,6 @@ definitions:
       done:
         example: true
         type: boolean
-      title:
-        example: example
-        type: string
     required:
     - done
     type: object
@@ -114,6 +111,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/responsex.Response'
+      security:
+      - Bearer: []
       summary: Get todo list.
       tags:
       - todos
@@ -144,6 +143,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/responsex.Response'
+      security:
+      - Bearer: []
       summary: Create a todo.
       tags:
       - todos
@@ -181,7 +182,14 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/responsex.Response'
+      security:
+      - Bearer: []
       summary: Update a todo.
       tags:
       - todos
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

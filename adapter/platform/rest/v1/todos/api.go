@@ -41,6 +41,7 @@ type GetListQuery struct {
 // @Accept json
 // @Produce json
 // @Param query query GetListQuery false "query string"
+// @Security Bearer
 // @Success 200 {object} responsex.Response{data=[]model.Todo}
 // @Failure 500 {object} responsex.Response
 // @Header 200 {int} X-Total-Count "total count"
@@ -88,6 +89,7 @@ type PostPayload struct {
 // @Accept json
 // @Produce json
 // @Param payload body PostPayload true "payload"
+// @Security Bearer
 // @Success 200 {object} responsex.Response{data=model.Todo}
 // @Failure 500 {object} responsex.Response
 // @Router /v1/todos [post]
@@ -127,6 +129,7 @@ type PatchPayload struct {
 // @Produce json
 // @Param id path string true "todo id" example("ea10d92c-9ad2-4652-baa5-84e0e9575ba4")
 // @Param payload body PatchPayload true "payload"
+// @Security Bearer
 // @Success 200 {object} responsex.Response{data=model.Todo}
 // @Failure 500 {object} responsex.Response
 // @Router /v1/todos/{id} [patch]

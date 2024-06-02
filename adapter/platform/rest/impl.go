@@ -33,6 +33,10 @@ import (
 // @license.url https://spdx.org/licenses/GPL-3.0-only.html
 //
 // @BasePath /api
+//
+// @securityDefinitions.apikey Bearer
+// @in header
+// @name Authorization
 type impl struct {
 	injector *wirex.Injector
 	server   *httpx.Server

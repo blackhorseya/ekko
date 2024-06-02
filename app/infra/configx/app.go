@@ -34,10 +34,11 @@ type Application struct {
 	} `json:"line_bot" yaml:"lineBot"`
 
 	Auth0 struct {
-		Domain       string `json:"domain" yaml:"domain"`
-		ClientID     string `json:"client_id" yaml:"clientID"`
-		ClientSecret string `json:"client_secret" yaml:"clientSecret"`
-		CallbackURL  string `json:"callback_url" yaml:"callbackURL"`
+		Domain       string   `json:"domain" yaml:"domain"`
+		ClientID     string   `json:"client_id" yaml:"clientID"`
+		ClientSecret string   `json:"client_secret" yaml:"clientSecret"`
+		CallbackURL  string   `json:"callback_url" yaml:"callbackURL"`
+		Audiences    []string `json:"audiences" yaml:"audiences"`
 	} `json:"auth0" yaml:"auth0"`
 }
 
