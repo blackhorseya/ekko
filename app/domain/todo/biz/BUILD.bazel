@@ -1,17 +1,14 @@
 load("@rules_go//go:def.bzl", "go_library")
 
 go_library(
-    name = "todo",
-    srcs = [
-        "mongodb.go",
-        "wire.go",
-    ],
-    importpath = "github.com/blackhorseya/ekko/app/domain/todo/repo/todo",
+    name = "biz",
+    srcs = ["impl.go"],
+    importpath = "github.com/blackhorseya/ekko/app/domain/todo/biz",
     visibility = ["//visibility:public"],
     deps = [
+        "//entity/domain/todo/biz",
         "//entity/domain/todo/model",
         "//entity/domain/todo/repo",
         "//pkg/contextx",
-        "@org_mongodb_go_mongo_driver//mongo",
     ],
 )
