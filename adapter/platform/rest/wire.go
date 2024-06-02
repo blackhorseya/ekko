@@ -7,7 +7,9 @@ package rest
 import (
 	"github.com/blackhorseya/ekko/adapter/platform/wirex"
 	"github.com/blackhorseya/ekko/app/infra/configx"
+	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/logging"
+	"github.com/blackhorseya/ekko/pkg/transports/httpx"
 	"github.com/google/wire"
 	"github.com/spf13/viper"
 )
@@ -26,9 +28,13 @@ func initApplication() (*configx.Application, error) {
 	return app, nil
 }
 
-func New(v *viper.Viper) (wirex.Injector, error) {
-	panic(wire.Build(
-		wire.Struct(new(wirex.Injector), "*"),
-		initApplication,
-	))
+var providerSet = wire.NewSet(
+	wire.Struct(new(wirex.Injector), "*"),
+	initApplication,
+
+	httpx.NewServer,
+)
+
+func New(v *viper.Viper) (adapterx.Servicer, error) {
+	panic(wire.Build(newService, providerSet))
 }

@@ -9,21 +9,29 @@ package rest
 import (
 	"github.com/blackhorseya/ekko/adapter/platform/wirex"
 	"github.com/blackhorseya/ekko/app/infra/configx"
+	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/logging"
+	"github.com/blackhorseya/ekko/pkg/transports/httpx"
+	"github.com/google/wire"
 	"github.com/spf13/viper"
 )
 
 // Injectors from wire.go:
 
-func New(v *viper.Viper) (wirex.Injector, error) {
+func New(v *viper.Viper) (adapterx.Servicer, error) {
 	application, err := initApplication()
 	if err != nil {
-		return wirex.Injector{}, err
+		return nil, err
 	}
-	injector := wirex.Injector{
+	injector := &wirex.Injector{
 		A: application,
 	}
-	return injector, nil
+	server, err := httpx.NewServer()
+	if err != nil {
+		return nil, err
+	}
+	servicer := newService(injector, server)
+	return servicer, nil
 }
 
 // wire.go:
@@ -41,3 +49,5 @@ func initApplication() (*configx.Application, error) {
 
 	return app, nil
 }
+
+var providerSet = wire.NewSet(wire.Struct(new(wirex.Injector), "*"), initApplication, httpx.NewServer)
