@@ -16,6 +16,10 @@ import (
 	"github.com/spf13/viper"
 )
 
+import (
+	_ "github.com/blackhorseya/ekko/adapter/api/platform_rest"
+)
+
 // Injectors from wire.go:
 
 func New(v *viper.Viper) (adapterx.Servicer, error) {

@@ -11,11 +11,11 @@ import (
 	"github.com/blackhorseya/ekko/adapter/restful/cmds"
 	"github.com/blackhorseya/ekko/adapter/restful/templates"
 	v1 "github.com/blackhorseya/ekko/adapter/restful/v1"
+	"github.com/blackhorseya/ekko/app/infra/configx"
 	idM "github.com/blackhorseya/ekko/entity/domain/identity/model"
 	"github.com/blackhorseya/ekko/entity/domain/workflow/biz"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/authx"
-	"github.com/blackhorseya/ekko/pkg/configx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/transports/httpx"
 	"github.com/gin-contrib/sessions"
@@ -79,7 +79,7 @@ func (i *impl) Start() error {
 		return err
 	}
 
-	ctx.Info("start restful server", zap.String("addr", configx.C.HTTP.GetAddr()))
+	ctx.Info("start restful server", zap.String("addr", configx.A.HTTP.GetAddr()))
 
 	return nil
 }
@@ -138,7 +138,7 @@ func (i *impl) callback(c *gin.Context) {
 		return
 	}
 
-	cb, err := webhook.ParseRequest(configx.C.LineBot.Secret, c.Request)
+	cb, err := webhook.ParseRequest(configx.A.LineBot.Secret, c.Request)
 	if err != nil {
 		if errors.Is(err, linebot.ErrInvalidSignature) {
 			ctx.Error("invalid line bot signature", zap.Error(err))

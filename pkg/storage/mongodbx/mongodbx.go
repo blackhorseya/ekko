@@ -1,7 +1,7 @@
 package mongodbx
 
 import (
-	"github.com/blackhorseya/ekko/pkg/configx"
+	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/pkg/errors"
 	"github.com/testcontainers/testcontainers-go"
@@ -24,7 +24,7 @@ func NewClientWithDSN(dsn string) (*mongo.Client, error) {
 
 // NewClient returns a new mongo client.
 func NewClient() (*mongo.Client, error) {
-	return NewClientWithDSN(configx.C.Storage.Mongodb.DSN)
+	return NewClientWithDSN(configx.A.Storage.Mongodb.DSN)
 }
 
 // Container is used to represent a mongodb container.

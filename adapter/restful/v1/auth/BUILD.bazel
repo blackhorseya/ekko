@@ -6,8 +6,8 @@ go_library(
     importpath = "github.com/blackhorseya/ekko/adapter/restful/v1/auth",
     visibility = ["//visibility:public"],
     deps = [
+        "//app/infra/configx",
         "//pkg/authx",
-        "//pkg/configx",
         "//pkg/contextx",
         "//pkg/response",
         "@com_github_gin_contrib_sessions//:sessions",

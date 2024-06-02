@@ -6,7 +6,7 @@ go_library(
     importpath = "github.com/blackhorseya/ekko/pkg/storage/mongodbx",
     visibility = ["//visibility:public"],
     deps = [
-        "//pkg/configx",
+        "//app/infra/configx",
         "//pkg/contextx",
         "@com_github_pkg_errors//:errors",
         "@com_github_testcontainers_testcontainers_go//:testcontainers-go",

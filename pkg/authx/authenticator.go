@@ -3,7 +3,7 @@ package authx
 import (
 	"errors"
 
-	"github.com/blackhorseya/ekko/pkg/configx"
+	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/coreos/go-oidc/v3/oidc"
 	"golang.org/x/oauth2"
@@ -19,16 +19,16 @@ type Authenticator struct {
 func NewAuthenticator() (*Authenticator, error) {
 	ctx := contextx.Background()
 
-	provider, err := oidc.NewProvider(ctx, "https://"+configx.C.Auth0.Domain+"/")
+	provider, err := oidc.NewProvider(ctx, "https://"+configx.A.Auth0.Domain+"/")
 	if err != nil {
 		return nil, err
 	}
 
 	conf := oauth2.Config{
-		ClientID:     configx.C.Auth0.ClientID,
-		ClientSecret: configx.C.Auth0.ClientSecret,
+		ClientID:     configx.A.Auth0.ClientID,
+		ClientSecret: configx.A.Auth0.ClientSecret,
 		Endpoint:     provider.Endpoint(),
-		RedirectURL:  configx.C.Auth0.CallbackURL,
+		RedirectURL:  configx.A.Auth0.CallbackURL,
 		Scopes:       []string{oidc.ScopeOpenID, "profile", "email"},
 	}
 

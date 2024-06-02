@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/authx"
-	"github.com/blackhorseya/ekko/pkg/configx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/response"
 	"github.com/gin-contrib/sessions"
@@ -105,7 +105,7 @@ func me() gin.HandlerFunc {
 
 func logout() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		logoutURL, err := url.ParseRequestURI("https://" + configx.C.Auth0.Domain + "/2/logout")
+		logoutURL, err := url.ParseRequestURI("https://" + configx.A.Auth0.Domain + "/2/logout")
 		if err != nil {
 			_ = c.Error(err)
 			return
@@ -124,7 +124,7 @@ func logout() gin.HandlerFunc {
 
 		parameters := url.Values{}
 		parameters.Add("returnTo", returnTo.String())
-		parameters.Add("client_id", configx.C.Auth0.ClientID)
+		parameters.Add("client_id", configx.A.Auth0.ClientID)
 		logoutURL.RawQuery = parameters.Encode()
 
 		c.Redirect(http.StatusTemporaryRedirect, logoutURL.String())
