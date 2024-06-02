@@ -19,6 +19,17 @@ definitions:
       message:
         type: string
     type: object
+  todos.PatchPayload:
+    properties:
+      done:
+        example: true
+        type: boolean
+      title:
+        example: example
+        type: string
+    required:
+    - done
+    type: object
   todos.PostPayload:
     properties:
       title:
@@ -134,6 +145,43 @@ paths:
           schema:
             $ref: '#/definitions/responsex.Response'
       summary: Create a todo.
+      tags:
+      - todos
+  /v1/todos/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: update a todo.
+      parameters:
+      - description: todo id
+        example: '"ea10d92c-9ad2-4652-baa5-84e0e9575ba4"'
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/todos.PatchPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/responsex.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/github_com_blackhorseya_ekko_entity_domain_todo_model.Todo'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responsex.Response'
+      summary: Update a todo.
       tags:
       - todos
 swagger: "2.0"

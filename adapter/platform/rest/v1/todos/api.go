@@ -25,6 +25,7 @@ func Handle(g *gin.RouterGroup, injector *wirex.Injector) {
 
 	g.GET("", instance.GetList)
 	g.POST("", instance.Post)
+	g.PATCH("/:id", instance.Patch)
 }
 
 // GetListQuery defines the list query.
@@ -111,4 +112,49 @@ func (i *impl) Post(c *gin.Context) {
 	}
 
 	responsex.OK(c, ret)
+}
+
+// PatchPayload defines the patch payload.
+type PatchPayload struct {
+	Done bool `json:"done" binding:"required" example:"true"`
+}
+
+// Patch is used to update a todo.
+// @Summary Update a todo.
+// @Description update a todo.
+// @Tags todos
+// @Accept json
+// @Produce json
+// @Param id path string true "todo id" example("ea10d92c-9ad2-4652-baa5-84e0e9575ba4")
+// @Param payload body PatchPayload true "payload"
+// @Success 200 {object} responsex.Response{data=model.Todo}
+// @Failure 500 {object} responsex.Response
+// @Router /v1/todos/{id} [patch]
+func (i *impl) Patch(c *gin.Context) {
+	ctx, err := contextx.FromGin(c)
+	if err != nil {
+		_ = c.Error(err)
+		return
+	}
+
+	id := c.Param("id")
+	var payload PatchPayload
+	err = c.ShouldBindJSON(&payload)
+	if err != nil {
+		responsex.Err(c, errorx.Wrap(http.StatusBadRequest, 400, err))
+		return
+	}
+
+	if payload.Done {
+		ret, err2 := i.injector.Todo.CompleteTodo(ctx, id)
+		if err2 != nil {
+			_ = c.Error(err2)
+			return
+		}
+
+		responsex.OK(c, ret)
+		return
+	}
+
+	responsex.OK(c, nil)
 }

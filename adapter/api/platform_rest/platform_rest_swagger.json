@@ -169,6 +169,66 @@
                     }
                 }
             }
+        },
+        "/v1/todos/{id}": {
+            "patch": {
+                "description": "update a todo.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "todos"
+                ],
+                "summary": "Update a todo.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "\"ea10d92c-9ad2-4652-baa5-84e0e9575ba4\"",
+                        "description": "todo id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/todos.PatchPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/responsex.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/github_com_blackhorseya_ekko_entity_domain_todo_model.Todo"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responsex.Response"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -198,6 +258,22 @@
                 "data": {},
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "todos.PatchPayload": {
+            "type": "object",
+            "required": [
+                "done"
+            ],
+            "properties": {
+                "done": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "title": {
+                    "type": "string",
+                    "example": "example"
                 }
             }
         },
