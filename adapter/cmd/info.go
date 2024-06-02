@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"github.com/blackhorseya/ekko/pkg/configx"
-	"github.com/blackhorseya/ekko/pkg/contextx"
+	"encoding/json"
+
+	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/spf13/cobra"
-	"go.uber.org/zap"
 )
 
 // infoCmd represents the info command
@@ -12,7 +12,10 @@ var infoCmd = &cobra.Command{
 	Use:   "info",
 	Short: "print info",
 	Run: func(cmd *cobra.Command, args []string) {
-		contextx.Background().Info("info", zap.Any("config", &configx.C))
+		data, err := json.Marshal(configx.C)
+		cobra.CheckErr(err)
+
+		cmd.Println(string(data))
 	},
 }
 

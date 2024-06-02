@@ -13,9 +13,6 @@ go_library(
         "//adapter/restful",
         "//app/infra/configx",
         "//pkg/cmdx",
-        "//pkg/configx",
-        "//pkg/contextx",
         "@com_github_spf13_cobra//:cobra",
-        "@org_uber_go_zap//:zap",
     ],
 )
