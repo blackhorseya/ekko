@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	_ "github.com/blackhorseya/ekko/adapter/api/platform_rest" // swagger docs
+	v1 "github.com/blackhorseya/ekko/adapter/platform/rest/v1"
 	"github.com/blackhorseya/ekko/adapter/platform/wirex"
 	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
@@ -98,6 +99,8 @@ func (i *impl) InitRouting() error {
 			ginSwagger.InstanceName("platform_rest"),
 		))
 		api.GET("/healthz", i.Healthz)
+
+		v1.Handle(api.Group("/v1"), i.injector)
 	}
 
 	return nil
