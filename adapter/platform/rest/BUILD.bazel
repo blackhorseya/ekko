@@ -9,6 +9,7 @@ go_library(
     importpath = "github.com/blackhorseya/ekko/adapter/platform/rest",
     visibility = ["//visibility:public"],
     deps = [
+        "//adapter/api/platform_rest",
         "//adapter/platform/wirex",
         "//app/infra/configx",
         "//pkg/adapterx",

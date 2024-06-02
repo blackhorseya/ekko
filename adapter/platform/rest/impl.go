@@ -7,6 +7,7 @@ import (
 	"strings"
 	"syscall"
 
+	_ "github.com/blackhorseya/ekko/adapter/api/platform_rest" // swagger docs
 	"github.com/blackhorseya/ekko/adapter/platform/wirex"
 	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
@@ -19,6 +20,18 @@ import (
 	"go.uber.org/zap"
 )
 
+// @title Ekko Platform Restful API
+// @version 0.1.0
+// @description Ekko Platform Restful API document.
+//
+// @contact.name Sean Zheng
+// @contact.email blackhorseya@gmail.com
+// @contact.url https://blog.seancheng.space
+//
+// @license.name GPL-3.0
+// @license.url https://spdx.org/licenses/GPL-3.0-only.html
+//
+// @BasePath /api
 type impl struct {
 	injector *wirex.Injector
 	server   *httpx.Server
@@ -82,7 +95,7 @@ func (i *impl) InitRouting() error {
 	{
 		api.GET("/docs/*any", ginSwagger.WrapHandler(
 			swaggerFiles.Handler,
-			ginSwagger.InstanceName("platform_restful"),
+			ginSwagger.InstanceName("platform_rest"),
 		))
 		api.GET("/healthz", i.Healthz)
 	}

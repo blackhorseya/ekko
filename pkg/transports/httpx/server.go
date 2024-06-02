@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/blackhorseya/ekko/pkg/configx"
+	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/response"
 	ginzap "github.com/gin-contrib/zap"
@@ -24,7 +24,7 @@ type Server struct {
 func NewServer() (*Server, error) {
 	ctx := contextx.Background()
 
-	gin.SetMode(configx.C.HTTP.Mode)
+	gin.SetMode(configx.A.HTTP.Mode)
 
 	router := gin.New()
 	router.Use(ginzap.GinzapWithConfig(ctx.Logger, &ginzap.Config{
@@ -40,7 +40,7 @@ func NewServer() (*Server, error) {
 	router.Use(response.AddErrorHandlingMiddleware())
 
 	httpserver := &http.Server{
-		Addr:              configx.C.HTTP.GetAddr(),
+		Addr:              configx.A.HTTP.GetAddr(),
 		Handler:           router,
 		ReadHeaderTimeout: time.Second,
 	}

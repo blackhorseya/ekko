@@ -8,7 +8,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	_ "github.com/blackhorseya/ekko/adapter/api"
 	"github.com/blackhorseya/ekko/adapter/restful/cmds"
 	"github.com/blackhorseya/ekko/adapter/restful/templates"
 	v1 "github.com/blackhorseya/ekko/adapter/restful/v1"

@@ -44,7 +44,8 @@ coverage: ## generate coverage report
 
 .PHONY: gen-swagger
 gen-swagger: ## generate swagger
-	@@swag init -q -d ./adapter,./entity,./pkg -o ./adapter/api
+	@swag init -q -g impl.go -d ./adapter/platform/rest,./entity,./pkg \
+  -o ./adapter/api/platform_rest --instanceName platform_rest --parseDependency
 
 ## docker
 .PHONY: docker-push

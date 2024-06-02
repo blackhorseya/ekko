@@ -1,0 +1,42 @@
+basePath: /api
+definitions:
+  responsex.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+info:
+  contact:
+    email: blackhorseya@gmail.com
+    name: Sean Zheng
+    url: https://blog.seancheng.space
+  description: Ekko Platform Restful API document.
+  license:
+    name: GPL-3.0
+    url: https://spdx.org/licenses/GPL-3.0-only.html
+  title: Ekko Platform Restful API
+  version: 0.1.0
+paths:
+  /healthz:
+    get:
+      consumes:
+      - application/json
+      description: Check the health of the service.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsex.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responsex.Response'
+      summary: Check the health of the service.
+      tags:
+      - health
+swagger: "2.0"

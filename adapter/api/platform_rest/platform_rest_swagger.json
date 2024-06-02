@@ -1,0 +1,63 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Ekko Platform Restful API document.",
+        "title": "Ekko Platform Restful API",
+        "contact": {
+            "name": "Sean Zheng",
+            "url": "https://blog.seancheng.space",
+            "email": "blackhorseya@gmail.com"
+        },
+        "license": {
+            "name": "GPL-3.0",
+            "url": "https://spdx.org/licenses/GPL-3.0-only.html"
+        },
+        "version": "0.1.0"
+    },
+    "basePath": "/api",
+    "paths": {
+        "/healthz": {
+            "get": {
+                "description": "Check the health of the service.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "health"
+                ],
+                "summary": "Check the health of the service.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responsex.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responsex.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "responsex.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

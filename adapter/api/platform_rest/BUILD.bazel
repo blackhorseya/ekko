@@ -1,9 +1,9 @@
 load("@rules_go//go:def.bzl", "go_library")
 
 go_library(
-    name = "api",
-    srcs = ["docs.go"],
-    importpath = "github.com/blackhorseya/ekko/adapter/api",
+    name = "platform_rest",
+    srcs = ["platform_rest_docs.go"],
+    importpath = "github.com/blackhorseya/ekko/adapter/api/platform_rest",
     visibility = ["//visibility:public"],
     deps = ["@com_github_swaggo_swag//:swag"],
 )
