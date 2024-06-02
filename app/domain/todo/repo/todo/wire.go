@@ -6,26 +6,25 @@ import (
 	"github.com/blackhorseya/ekko/pkg/contextx"
 )
 
-type nil struct {
-}
+type empty struct{}
 
 // NewNil creates a new todo repo instance.
 func NewNil() repo.ITodoRepo {
-	return &nil{}
+	return &empty{}
 }
 
-func (n nil) List(ctx contextx.Contextx, condition repo.ListCondition) (items []*model.Todo, total int, err error) {
+func (x empty) List(ctx contextx.Contextx, condition repo.ListCondition) (items []*model.Todo, total int, err error) {
 	panic("implement me")
 }
 
-func (n nil) GetByID(ctx contextx.Contextx, id string) (item *model.Todo, err error) {
+func (x empty) GetByID(ctx contextx.Contextx, id string) (item *model.Todo, err error) {
 	panic("implement me")
 }
 
-func (n nil) Create(ctx contextx.Contextx, item *model.Todo) (err error) {
+func (x empty) Create(ctx contextx.Contextx, item *model.Todo) (err error) {
 	panic("implement me")
 }
 
-func (n nil) Update(ctx contextx.Contextx, item *model.Todo) (err error) {
+func (x empty) Update(ctx contextx.Contextx, item *model.Todo) (err error) {
 	panic("implement me")
 }
