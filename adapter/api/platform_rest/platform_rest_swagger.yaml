@@ -8,6 +8,8 @@ definitions:
       message:
         type: string
     type: object
+  todos.PostPayload:
+    type: object
 info:
   contact:
     email: blackhorseya@gmail.com
@@ -39,4 +41,48 @@ paths:
       summary: Check the health of the service.
       tags:
       - health
+  /v1/todos:
+    get:
+      consumes:
+      - application/json
+      description: get todo list.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsex.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responsex.Response'
+      summary: Get todo list.
+      tags:
+      - todos
+    post:
+      consumes:
+      - application/json
+      description: create a todo.
+      parameters:
+      - description: payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/todos.PostPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsex.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responsex.Response'
+      summary: Create a todo.
+      tags:
+      - todos
 swagger: "2.0"

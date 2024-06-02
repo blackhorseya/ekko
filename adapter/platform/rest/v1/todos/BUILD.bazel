@@ -1,12 +1,11 @@
 load("@rules_go//go:def.bzl", "go_library")
 
 go_library(
-    name = "rest",
+    name = "todos",
     srcs = ["api.go"],
-    importpath = "github.com/blackhorseya/ekko/adapter/platform/rest/v1",
+    importpath = "github.com/blackhorseya/ekko/adapter/platform/rest/v1/todos",
     visibility = ["//visibility:public"],
     deps = [
-        "//adapter/platform/rest/v1/todos",
         "//adapter/platform/wirex",
         "@com_github_gin_gonic_gin//:gin",
     ],
