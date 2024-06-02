@@ -13,7 +13,9 @@ go_library(
         "//entity/domain/todo/repo",
         "//pkg/contextx",
         "@com_github_google_uuid//:uuid",
+        "@org_mongodb_go_mongo_driver//bson",
         "@org_mongodb_go_mongo_driver//mongo",
+        "@org_mongodb_go_mongo_driver//mongo/options",
         "@org_uber_go_zap//:zap",
     ],
 )

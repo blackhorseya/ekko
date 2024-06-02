@@ -49,4 +49,25 @@ func (s *suiteMongodbExternal) Test_mongodb_Create() {
 	todo := model.NewTodo("test")
 	err := s.repo.Create(contextx.Background(), todo)
 	s.NoError(err)
+
+	item, err := s.repo.GetByID(contextx.Background(), todo.ID)
+	s.NoError(err)
+
+	s.Equal(todo.ID, item.ID)
+	s.T().Log(item)
+}
+
+func (s *suiteMongodbExternal) Test_mongodb_List() {
+	todo := model.NewTodo("test")
+	err := s.repo.Create(contextx.Background(), todo)
+	s.NoError(err)
+
+	items, total, err := s.repo.List(contextx.Background(), repo.ListCondition{
+		Limit: 10,
+		Skip:  0,
+	})
+	s.NoError(err)
+
+	s.NotEmpty(items)
+	s.GreaterOrEqual(total, 1)
 }
