@@ -115,5 +115,10 @@ func bindEnv(v *viper.Viper) (err error) {
 		return err
 	}
 
+	aud := os.Getenv("AUTH0_AUDIENCES")
+	if aud != "" {
+		v.Set("auth0.audiences", strings.Split(aud, ","))
+	}
+
 	return nil
 }
