@@ -10,6 +10,7 @@ go_library(
     importpath = "github.com/blackhorseya/ekko/adapter/cmd",
     visibility = ["//visibility:public"],
     deps = [
+        "//adapter/platform/linebot",
         "//adapter/platform/rest",
         "//app/infra/configx",
         "//pkg/cmdx",

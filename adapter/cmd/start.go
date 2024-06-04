@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/blackhorseya/ekko/adapter/platform/linebot"
 	"github.com/blackhorseya/ekko/adapter/platform/rest"
 	"github.com/blackhorseya/ekko/pkg/cmdx"
 	"github.com/spf13/cobra"
@@ -14,6 +15,7 @@ var startCmd = &cobra.Command{
 
 func init() {
 	startCmd.AddCommand(cmdx.NewServiceCmd("api", "start a restful server", rest.New))
+	startCmd.AddCommand(cmdx.NewServiceCmd("linebot", "start a linebot server", linebot.New))
 
 	rootCmd.AddCommand(startCmd)
 
