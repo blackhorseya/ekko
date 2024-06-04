@@ -9,13 +9,11 @@ package linebot
 import (
 	"github.com/blackhorseya/ekko/adapter/platform/wirex"
 	"github.com/blackhorseya/ekko/app/domain/todo/biz"
-	"github.com/blackhorseya/ekko/app/domain/todo/repo/todo"
 	"github.com/blackhorseya/ekko/app/infra/authx"
 	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/linebotx"
 	"github.com/blackhorseya/ekko/pkg/logging"
-	"github.com/blackhorseya/ekko/pkg/storage/mongodbx"
 	"github.com/blackhorseya/ekko/pkg/transports/httpx"
 	"github.com/google/wire"
 	"github.com/spf13/viper"
@@ -29,12 +27,7 @@ func New(v *viper.Viper) (adapterx.Servicer, error) {
 		return nil, err
 	}
 	authxAuthx := authx.NewNil()
-	client, err := mongodbx.NewClient()
-	if err != nil {
-		return nil, err
-	}
-	iTodoRepo := todo.NewMongodb(client)
-	iTodoBiz := biz.NewTodoBiz(iTodoRepo)
+	iTodoBiz := biz.NewNilTodoBiz()
 	injector := &wirex.Injector{
 		A:     application,
 		Authx: authxAuthx,
@@ -68,4 +61,4 @@ func initApplication() (*configx.Application, error) {
 	return app, nil
 }
 
-var providerSet = wire.NewSet(wire.Struct(new(wirex.Injector), "*"), initApplication, authx.NewNil, linebotx.NewClient, biz.NewTodoBiz, todo.NewMongodb, mongodbx.NewClient, httpx.NewServer)
+var providerSet = wire.NewSet(wire.Struct(new(wirex.Injector), "*"), initApplication, authx.NewNil, linebotx.NewClient, biz.NewNilTodoBiz, httpx.NewServer)

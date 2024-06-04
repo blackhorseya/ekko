@@ -9,6 +9,11 @@ import (
 	"github.com/blackhorseya/ekko/pkg/contextx"
 )
 
+// NewNilTodoBiz creates a new nil todo biz instance.
+func NewNilTodoBiz() biz.ITodoBiz {
+	return nil
+}
+
 type impl struct {
 	todos repo.ITodoRepo
 }
