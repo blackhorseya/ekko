@@ -5,4 +5,10 @@ go_library(
     srcs = ["impl.go"],
     importpath = "github.com/blackhorseya/ekko/adapter/platform/linebot",
     visibility = ["//visibility:public"],
+    deps = [
+        "//adapter/platform/wirex",
+        "//pkg/adapterx",
+        "//pkg/transports/httpx",
+        "@com_github_gin_gonic_gin//:gin",
+    ],
 )

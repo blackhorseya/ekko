@@ -2005,10 +2005,10 @@
       "general": {
         "bzlTransitiveDigest": "sH0ZfrlZyTTSTIpGNBfQJlEWK7fgxR4W5O3QYxF2pqQ=",
         "recordedFileInputs": {
-          "@@//go.mod": "06783a26285593438b861ee4e24d1266ee400bc63f87df005a9179cbeb12cd93",
+          "@@//go.mod": "75cec6b06f8a4a663a98eca2f53674a6a0349f617943909f8123abf97560b56a",
           "@@rules_go~//go.mod": "de22304b720f7f61350ec1c9739de6c0a1b1103fd22bfeb6e92c6c843ddc6d6e",
           "@@gazelle~//go.sum": "7c4460e8ecb5dd8691a51d4fa2e9e4751108b933636497ce46db499fc2e7a88d",
-          "@@//go.sum": "bf0135c971fb82c40b108166d05b5f232b8285c6c76c7ef7c94ba7252135db99",
+          "@@//go.sum": "7a35335c1ac7481ea0f0bf074c4016eba4134976dc34e8703ee4fd7883e2b7d0",
           "@@rules_go~//go.sum": "d56fdb19b21a5f12bcf625c49432371ac39c2def0f564098fbda107f7c080f40",
           "@@gazelle~//go.mod": "48dc6e771c3028ee1c18b9ffc81e596fd5f6d7e0016c5ef280e30f2821f60473"
         },
@@ -2702,9 +2702,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:Rl5+9rA0kG3vsO1qhncMPRT5eHICihAMQYJkD7u/i4M=",
+              "sum": "h1:nt80fvSDlhKWQgSWyHyy5CfmlQr+asih51R8PTWNKKs=",
               "replace": "",
-              "version": "v2.6.2"
+              "version": "v2.6.3"
             }
           },
           "com_github_docker_go_connections": {
