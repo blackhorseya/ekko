@@ -11,6 +11,7 @@ import (
 	"github.com/blackhorseya/ekko/app/infra/authx"
 	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
+	"github.com/blackhorseya/ekko/pkg/linebotx"
 	"github.com/blackhorseya/ekko/pkg/logging"
 	"github.com/blackhorseya/ekko/pkg/storage/mongodbx"
 	"github.com/blackhorseya/ekko/pkg/transports/httpx"
@@ -36,6 +37,7 @@ var providerSet = wire.NewSet(
 	wire.Struct(new(wirex.Injector), "*"),
 	initApplication,
 	authx.NewNil,
+	linebotx.NewClient,
 
 	biz.NewTodoBiz,
 	todo.NewMongodb,

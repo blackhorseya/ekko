@@ -13,6 +13,7 @@ import (
 	"github.com/blackhorseya/ekko/app/infra/authx"
 	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
+	"github.com/blackhorseya/ekko/pkg/linebotx"
 	"github.com/blackhorseya/ekko/pkg/logging"
 	"github.com/blackhorseya/ekko/pkg/storage/mongodbx"
 	"github.com/blackhorseya/ekko/pkg/transports/httpx"
@@ -43,7 +44,11 @@ func New(v *viper.Viper) (adapterx.Servicer, error) {
 	if err != nil {
 		return nil, err
 	}
-	servicer := newService(injector, server)
+	messagingApiAPI, err := linebotx.NewClient()
+	if err != nil {
+		return nil, err
+	}
+	servicer := newService(injector, server, messagingApiAPI)
 	return servicer, nil
 }
 
@@ -63,4 +68,4 @@ func initApplication() (*configx.Application, error) {
 	return app, nil
 }
 
-var providerSet = wire.NewSet(wire.Struct(new(wirex.Injector), "*"), initApplication, authx.NewNil, biz.NewTodoBiz, todo.NewMongodb, mongodbx.NewClient, httpx.NewServer)
+var providerSet = wire.NewSet(wire.Struct(new(wirex.Injector), "*"), initApplication, authx.NewNil, linebotx.NewClient, biz.NewTodoBiz, todo.NewMongodb, mongodbx.NewClient, httpx.NewServer)

@@ -1,4 +1,4 @@
-package commands
+package command
 
 import (
 	idM "github.com/blackhorseya/ekko/entity/domain/identity/model"
