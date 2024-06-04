@@ -25,12 +25,22 @@ package:
   individually: true
 
 functions:
+  # linebot
+  platformLinebot:
+    handler: ./adapter/platform/linebot/lambda/
+    name: ${sls:stage}-${self:service}-platform-linebot
+    events:
+      - httpApi:
+          path: /api/callback
+          method: ANY
+    environment: ${file(./deployments/${opt:stage, 'prod'}/.env.yaml)}
+
   # api
   platformRest:
     handler: ./adapter/platform/rest/lambda/
     name: ${sls:stage}-${self:service}-platform-rest
     events:
       - httpApi:
-          path: /{proxy+}
+          path: /api/{proxy+}
           method: ANY
     environment: ${file(./deployments/${opt:stage, 'prod'}/.env.yaml)}
