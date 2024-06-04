@@ -5,6 +5,15 @@ go_library(
     srcs = ["main.go"],
     importpath = "github.com/blackhorseya/ekko/adapter/platform/linebot/lambda",
     visibility = ["//visibility:private"],
+    deps = [
+        "//adapter/platform/linebot",
+        "//app/infra/configx",
+        "//pkg/adapterx",
+        "@com_github_aws_aws_lambda_go//events",
+        "@com_github_aws_aws_lambda_go//lambda",
+        "@com_github_awslabs_aws_lambda_go_api_proxy//gin",
+        "@com_github_spf13_viper//:viper",
+    ],
 )
 
 go_binary(
