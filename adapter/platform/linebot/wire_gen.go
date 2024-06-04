@@ -27,10 +27,7 @@ func New(v *viper.Viper) (adapterx.Servicer, error) {
 	if err != nil {
 		return nil, err
 	}
-	authxAuthx, err := authx.NewAuthx(application)
-	if err != nil {
-		return nil, err
-	}
+	authxAuthx := authx.NewNil()
 	client, err := mongodbx.NewClient()
 	if err != nil {
 		return nil, err
@@ -66,4 +63,4 @@ func initApplication() (*configx.Application, error) {
 	return app, nil
 }
 
-var providerSet = wire.NewSet(wire.Struct(new(wirex.Injector), "*"), initApplication, authx.NewAuthx, biz.NewTodoBiz, todo.NewMongodb, mongodbx.NewClient, httpx.NewServer)
+var providerSet = wire.NewSet(wire.Struct(new(wirex.Injector), "*"), initApplication, authx.NewNil, biz.NewTodoBiz, todo.NewMongodb, mongodbx.NewClient, httpx.NewServer)

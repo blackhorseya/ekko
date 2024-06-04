@@ -34,6 +34,11 @@ type Authx struct {
 	middleware *jwtmiddleware.JWTMiddleware
 }
 
+// NewNil returns a new Authx with nil.
+func NewNil() *Authx {
+	return &Authx{}
+}
+
 // NewAuthx returns a new Authx.
 func NewAuthx(app *configx.Application) (*Authx, error) {
 	issuerURL, err := url.Parse("https://" + app.Auth0.Domain + "/")

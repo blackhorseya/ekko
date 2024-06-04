@@ -35,7 +35,7 @@ func initApplication() (*configx.Application, error) {
 var providerSet = wire.NewSet(
 	wire.Struct(new(wirex.Injector), "*"),
 	initApplication,
-	authx.NewAuthx,
+	authx.NewNil,
 
 	biz.NewTodoBiz,
 	todo.NewMongodb,
