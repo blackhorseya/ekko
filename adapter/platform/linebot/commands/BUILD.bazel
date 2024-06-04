@@ -1,0 +1,13 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "commands",
+    srcs = ["commander.go"],
+    importpath = "github.com/blackhorseya/ekko/adapter/platform/linebot/commands",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//entity/domain/identity/model",
+        "//pkg/contextx",
+        "@com_github_line_line_bot_sdk_go_v8//linebot/messaging_api",
+    ],
+)
