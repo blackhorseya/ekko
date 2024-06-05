@@ -67,8 +67,6 @@ func (s *TicketStatusBacklog) MarshalJSON() ([]byte, error) {
 }
 
 func (s *TicketStatusBacklog) Execute(ctx contextx.Contextx, ticket *Ticket) error {
-	// todo: 2024/6/6|sean|implement me
-
 	ticket.Status = &TicketStatusTodo{}
 	return nil
 }
@@ -88,8 +86,6 @@ func (s *TicketStatusTodo) MarshalJSON() ([]byte, error) {
 }
 
 func (s *TicketStatusTodo) Execute(ctx contextx.Contextx, ticket *Ticket) error {
-	// todo: 2024/6/6|sean|implement me
-
 	ticket.Status = &TicketStatusInProgress{}
 	return nil
 }
@@ -109,8 +105,6 @@ func (s *TicketStatusInProgress) MarshalJSON() ([]byte, error) {
 }
 
 func (s *TicketStatusInProgress) Execute(ctx contextx.Contextx, ticket *Ticket) error {
-	// todo: 2024/6/6|sean|implement me
-
 	ticket.Status = &TicketStatusDone{}
 	return nil
 }
