@@ -18,6 +18,7 @@ type Todo struct {
 	ID        string    `json:"id,omitempty" bson:"_id"`
 	Title     string    `json:"title,omitempty" bson:"title"`
 	Done      bool      `json:"done,omitempty" bson:"done"`
+	CreatedBy string    `json:"created_by,omitempty" bson:"created_by"`
 	UpdatedAt time.Time `json:"updated_at,omitempty" bson:"updated_at"`
 }
 

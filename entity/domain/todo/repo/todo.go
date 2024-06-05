@@ -9,8 +9,9 @@ import (
 
 // ListCondition is the condition for listing todo
 type ListCondition struct {
-	Limit int
-	Skip  int
+	CreatedBy string
+	Limit     int
+	Skip      int
 }
 
 // ITodoRepo is the interface that defines the methods that the todo repository should implement
