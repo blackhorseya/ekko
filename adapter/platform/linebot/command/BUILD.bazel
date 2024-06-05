@@ -2,7 +2,10 @@ load("@rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "command",
-    srcs = ["commander.go"],
+    srcs = [
+        "commander.go",
+        "done.go",
+    ],
     importpath = "github.com/blackhorseya/ekko/adapter/platform/linebot/command",
     visibility = ["//visibility:public"],
     deps = [

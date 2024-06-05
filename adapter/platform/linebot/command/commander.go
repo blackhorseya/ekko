@@ -25,6 +25,7 @@ func NewCommands(injector *wirex.Injector) []TextCommander {
 		&WhoAmICommand{},
 		&ListTodoCommand{injector: injector},
 		&CreateTodoCommand{injector: injector},
+		&DoneCommand{injector: injector},
 	}
 }
 
