@@ -1,7 +1,27 @@
 basePath: /api
 definitions:
+  github_com_blackhorseya_ekko_entity_domain_task_model.Ticket:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      priority:
+        type: integer
+      status: {}
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
   github_com_blackhorseya_ekko_entity_domain_todo_model.Todo:
     properties:
+      created_by:
+        type: string
       done:
         type: boolean
       id:
@@ -17,6 +37,32 @@ definitions:
         type: integer
       data: {}
       message:
+        type: string
+    type: object
+  tickets.CreateTicketPayload:
+    properties:
+      title:
+        example: task title
+        type: string
+    required:
+    - title
+    type: object
+  tickets.UpdateTicketPayload:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      priority:
+        type: integer
+      status: {}
+      title:
+        type: string
+      updated_at:
         type: string
     type: object
   todos.PatchPayload:
@@ -66,6 +112,215 @@ paths:
       summary: Check the health of the service.
       tags:
       - health
+  /v1/tickets:
+    get:
+      consumes:
+      - application/json
+      description: list tickets
+      parameters:
+      - default: 1
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - default: 10
+        in: query
+        maximum: 100
+        minimum: 1
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          headers:
+            X-Page:
+              description: page
+              type: int
+            X-Page-Size:
+              description: page size
+              type: int
+            X-Total-Count:
+              description: total count
+              type: int
+          schema:
+            allOf:
+            - $ref: '#/definitions/responsex.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/github_com_blackhorseya_ekko_entity_domain_task_model.Ticket'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsex.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responsex.Response'
+      security:
+      - Bearer: []
+      summary: List tickets
+      tags:
+      - tickets
+    post:
+      consumes:
+      - application/json
+      description: create a ticket
+      parameters:
+      - description: create ticket payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/tickets.CreateTicketPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/responsex.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/github_com_blackhorseya_ekko_entity_domain_task_model.Ticket'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsex.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responsex.Response'
+      security:
+      - Bearer: []
+      summary: Create a ticket
+      tags:
+      - tickets
+  /v1/tickets/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a ticket
+      parameters:
+      - description: ticket id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsex.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsex.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responsex.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responsex.Response'
+      security:
+      - Bearer: []
+      summary: Delete a ticket
+      tags:
+      - tickets
+    get:
+      consumes:
+      - application/json
+      description: get a ticket
+      parameters:
+      - description: ticket id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/responsex.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/github_com_blackhorseya_ekko_entity_domain_task_model.Ticket'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsex.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responsex.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responsex.Response'
+      security:
+      - Bearer: []
+      summary: Get a ticket
+      tags:
+      - tickets
+    put:
+      consumes:
+      - application/json
+      description: update a ticket
+      parameters:
+      - description: ticket id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: update ticket payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/tickets.UpdateTicketPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/responsex.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/github_com_blackhorseya_ekko_entity_domain_task_model.Ticket'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responsex.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responsex.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responsex.Response'
+      security:
+      - Bearer: []
+      summary: Update a ticket
+      tags:
+      - tickets
   /v1/todos:
     get:
       consumes:
