@@ -8,7 +8,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/blackhorseya/ekko/adapter/restful/cmds"
 	"github.com/blackhorseya/ekko/adapter/restful/templates"
 	v1 "github.com/blackhorseya/ekko/adapter/restful/v1"
 	"github.com/blackhorseya/ekko/app/infra/configx"
@@ -34,7 +33,6 @@ type impl struct {
 	bot           *messaging_api.MessagingApiAPI
 	authenticator *authx.Authenticator
 	workflow      biz.IWorkflowBiz
-	commands      []cmds.TextCommander
 }
 
 func newRestful(
@@ -48,7 +46,6 @@ func newRestful(
 		bot:           bot,
 		authenticator: authenticator,
 		workflow:      workflow,
-		commands:      cmds.NewCommands(workflow),
 	}
 }
 
@@ -189,7 +186,6 @@ func (i *impl) handleTextMessage(
 	event webhook.MessageEvent,
 	message webhook.TextMessageContent,
 ) ([]messaging_api.MessageInterface, error) {
-	text := message.Text
 	who := &idM.User{}
 
 	switch source := event.Source.(type) {
@@ -201,17 +197,6 @@ func (i *impl) handleTextMessage(
 		who.ID = source.RoomId
 	default:
 		return handleError(errors.New("source type not support"))
-	}
-
-	for _, command := range i.commands {
-		messages, err := command.Execute(ctx, who, text)
-		if err != nil {
-			return handleError(err)
-		}
-
-		if messages != nil {
-			return messages, nil
-		}
 	}
 
 	return nil, errors.New("not support")
