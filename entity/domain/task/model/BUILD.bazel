@@ -2,7 +2,10 @@ load("@rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "model",
-    srcs = ["agg.go"],
+    srcs = [
+        "agg.go",
+        "vo.go",
+    ],
     importpath = "github.com/blackhorseya/ekko/entity/domain/task/model",
     visibility = ["//visibility:public"],
 )
