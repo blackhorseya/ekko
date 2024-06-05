@@ -3,6 +3,7 @@ package biz
 import (
 	"fmt"
 
+	idM "github.com/blackhorseya/ekko/entity/domain/identity/model"
 	"github.com/blackhorseya/ekko/entity/domain/todo/biz"
 	"github.com/blackhorseya/ekko/entity/domain/todo/model"
 	"github.com/blackhorseya/ekko/entity/domain/todo/repo"
@@ -26,17 +27,29 @@ func NewTodoBiz(todos repo.ITodoRepo) biz.ITodoBiz {
 }
 
 func (i *impl) ListTodo(ctx contextx.Contextx, opts biz.ListTodoOptions) (items []*model.Todo, total int, err error) {
+	who, err := idM.FromContext(ctx)
+	if err != nil {
+		return nil, 0, fmt.Errorf("get identity from context: %w", err)
+	}
+
 	return i.todos.List(ctx, repo.ListCondition{
-		Limit: opts.Size,
-		Skip:  (opts.Page - 1) * opts.Size,
+		CreatedBy: who.ID,
+		Limit:     opts.Size,
+		Skip:      (opts.Page - 1) * opts.Size,
 	})
 }
 
 func (i *impl) CreateTodo(ctx contextx.Contextx, title string) (item *model.Todo, err error) {
+	who, err := idM.FromContext(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("get identity from context: %w", err)
+	}
+
 	todo, err := model.NewTodo(title)
 	if err != nil {
 		return nil, fmt.Errorf("new todo model: %w", err)
 	}
+	todo.CreatedBy = who.ID
 
 	err = i.todos.Create(ctx, todo)
 	if err != nil {
@@ -47,9 +60,17 @@ func (i *impl) CreateTodo(ctx contextx.Contextx, title string) (item *model.Todo
 }
 
 func (i *impl) CompleteTodo(ctx contextx.Contextx, id string) (item *model.Todo, err error) {
+	who, err := idM.FromContext(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("get identity from context: %w", err)
+	}
+
 	item, err = i.todos.GetByID(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf("get todo by id: %w", err)
+	}
+	if item.CreatedBy != who.ID {
+		return nil, fmt.Errorf("todo not belong to you")
 	}
 
 	item.Done = true
