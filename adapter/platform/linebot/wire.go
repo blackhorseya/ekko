@@ -7,11 +7,13 @@ package linebot
 import (
 	"github.com/blackhorseya/ekko/adapter/platform/wirex"
 	"github.com/blackhorseya/ekko/app/domain/todo/biz"
+	"github.com/blackhorseya/ekko/app/domain/todo/repo/todo"
 	"github.com/blackhorseya/ekko/app/infra/authx"
 	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/linebotx"
 	"github.com/blackhorseya/ekko/pkg/logging"
+	"github.com/blackhorseya/ekko/pkg/storage/mongodbx"
 	"github.com/blackhorseya/ekko/pkg/transports/httpx"
 	"github.com/google/wire"
 	"github.com/spf13/viper"
@@ -37,7 +39,9 @@ var providerSet = wire.NewSet(
 	authx.NewNil,
 	linebotx.NewClient,
 
-	biz.NewNilTodoBiz,
+	biz.NewTodoBiz,
+	todo.NewMongodb,
+	mongodbx.NewClient,
 
 	httpx.NewServer,
 )

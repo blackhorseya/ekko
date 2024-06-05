@@ -2,6 +2,7 @@ package command
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/blackhorseya/ekko/adapter/platform/wirex"
 	idM "github.com/blackhorseya/ekko/entity/domain/identity/model"
@@ -9,6 +10,7 @@ import (
 	"github.com/blackhorseya/ekko/entity/domain/todo/model"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/line/line-bot-sdk-go/v8/linebot/messaging_api"
+	"go.uber.org/zap"
 )
 
 // TextCommander is the interface for text command.
@@ -17,10 +19,12 @@ type TextCommander interface {
 }
 
 // NewCommands is the function to create new commands.
-func NewCommands() []TextCommander {
+func NewCommands(injector *wirex.Injector) []TextCommander {
 	return []TextCommander{
 		&PingCommand{},
 		&WhoAmICommand{},
+		&ListTodoCommand{injector: injector},
+		&CreateTodoCommand{injector: injector},
 	}
 }
 
@@ -96,6 +100,46 @@ func (cmd *ListTodoCommand) Execute(
 		return []messaging_api.MessageInterface{
 			&messaging_api.FlexMessage{
 				AltText:  "Todo List",
+				Contents: container,
+			},
+		}, nil
+	}
+
+	return nil, nil
+}
+
+// CreateTodoCommand is the struct for create todo command.
+type CreateTodoCommand struct {
+	injector *wirex.Injector
+}
+
+func (cmd *CreateTodoCommand) Execute(
+	ctx contextx.Contextx,
+	who *idM.User,
+	text string,
+) ([]messaging_api.MessageInterface, error) {
+	if strings.HasPrefix(text, "/create ") {
+		title := strings.TrimPrefix(text, "/create ")
+		if len(title) == 0 {
+			ctx.Error("title is required")
+			return nil, errors.New("title is required")
+		}
+
+		todo, err := cmd.injector.Todo.CreateTodo(ctx, title)
+		if err != nil {
+			ctx.Error("create todo error", zap.Error(err))
+			return nil, err
+		}
+
+		container, err := todo.FlexContainer()
+		if err != nil {
+			ctx.Error("todo flex container error", zap.Error(err))
+			return nil, err
+		}
+
+		return []messaging_api.MessageInterface{
+			&messaging_api.FlexMessage{
+				AltText:  "Issue Information",
 				Contents: container,
 			},
 		}, nil

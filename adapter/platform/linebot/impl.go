@@ -34,7 +34,7 @@ func newRest(injector *wirex.Injector, server *httpx.Server, bot *messaging_api.
 		injector: injector,
 		server:   server,
 		bot:      bot,
-		commands: command.NewCommands(),
+		commands: command.NewCommands(injector),
 	}
 }
 
@@ -172,6 +172,7 @@ func (i *impl) generateReplyMessage(
 	default:
 		return nil, errors.New("source type not support")
 	}
+	ctx = contextx.WithValue(ctx, contextx.KeyWho, who)
 
 	for _, cmd := range i.commands {
 		messages, err := cmd.Execute(ctx, who, text)
