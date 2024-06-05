@@ -1,0 +1,36 @@
+{
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "{{if .Done}} ✅ {{else}} ❌ {{end}} {{ .Title }}",
+        "weight": "bold",
+        "size": "xl"
+      },
+      {
+        "type": "button",
+        "action": {
+          "type": "message",
+          "label": "{{if .Done}} Undone {{else}} Done {{end}}",
+          "text": "{{if .Done}}/undone{{else}}/done{{end}} {{ .ID }}"
+        }
+      }
+    ]
+  },
+  "footer": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "更新時間: {{.UpdatedAt}}",
+        "size": "xxs",
+        "color": "#8f96a1"
+      }
+    ]
+  },
+  "size": "micro"
+}

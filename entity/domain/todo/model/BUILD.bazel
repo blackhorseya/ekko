@@ -3,6 +3,8 @@ load("@rules_go//go:def.bzl", "go_library")
 go_library(
     name = "model",
     srcs = ["agg.go"],
+    embedsrcs = ["todo.tmpl"],
     importpath = "github.com/blackhorseya/ekko/entity/domain/todo/model",
     visibility = ["//visibility:public"],
+    deps = ["@com_github_line_line_bot_sdk_go_v8//linebot/messaging_api"],
 )
