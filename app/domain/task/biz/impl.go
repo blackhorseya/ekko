@@ -3,15 +3,19 @@ package biz
 import (
 	"github.com/blackhorseya/ekko/entity/domain/task/biz"
 	"github.com/blackhorseya/ekko/entity/domain/task/model"
+	"github.com/blackhorseya/ekko/entity/domain/task/repo"
 	"github.com/blackhorseya/ekko/pkg/contextx"
 )
 
 type impl struct {
+	tickets repo.ITicketRepo
 }
 
 // NewTaskBiz is used to create a new task business logic.
-func NewTaskBiz() biz.ITaskBiz {
-	return &impl{}
+func NewTaskBiz(tickets repo.ITicketRepo) biz.ITaskBiz {
+	return &impl{
+		tickets: tickets,
+	}
 }
 
 func (i *impl) CreateTicket(ctx contextx.Contextx, title string) (item *model.Ticket, err error) {
