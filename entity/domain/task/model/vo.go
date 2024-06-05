@@ -11,7 +11,6 @@ import (
 type TicketStatus interface {
 	fmt.Stringer
 	json.Marshaler
-	json.Unmarshaler
 
 	Execute(ctx contextx.Contextx, ticket *Ticket) error
 }
@@ -23,23 +22,18 @@ type TicketStatusBacklog struct {
 }
 
 func (s *TicketStatusBacklog) String() string {
-	// todo: 2024/6/6|sean|implement me
-	panic("implement me")
+	return "backlog"
 }
 
 func (s *TicketStatusBacklog) MarshalJSON() ([]byte, error) {
-	// todo: 2024/6/6|sean|implement me
-	panic("implement me")
-}
-
-func (s *TicketStatusBacklog) UnmarshalJSON(bytes []byte) error {
-	// todo: 2024/6/6|sean|implement me
-	panic("implement me")
+	return json.Marshal(s.String())
 }
 
 func (s *TicketStatusBacklog) Execute(ctx contextx.Contextx, ticket *Ticket) error {
 	// todo: 2024/6/6|sean|implement me
-	panic("implement me")
+
+	ticket.Status = &TicketStatusTodo{}
+	return nil
 }
 
 var _ TicketStatus = &TicketStatusTodo{}
@@ -49,23 +43,18 @@ type TicketStatusTodo struct {
 }
 
 func (s *TicketStatusTodo) String() string {
-	// TODO implement me
-	panic("implement me")
+	return "todo"
 }
 
 func (s *TicketStatusTodo) MarshalJSON() ([]byte, error) {
-	// TODO implement me
-	panic("implement me")
-}
-
-func (s *TicketStatusTodo) UnmarshalJSON(bytes []byte) error {
-	// TODO implement me
-	panic("implement me")
+	return json.Marshal(s.String())
 }
 
 func (s *TicketStatusTodo) Execute(ctx contextx.Contextx, ticket *Ticket) error {
-	// TODO implement me
-	panic("implement me")
+	// todo: 2024/6/6|sean|implement me
+
+	ticket.Status = &TicketStatusInProgress{}
+	return nil
 }
 
 var _ TicketStatus = &TicketStatusInProgress{}
@@ -75,23 +64,18 @@ type TicketStatusInProgress struct {
 }
 
 func (s *TicketStatusInProgress) String() string {
-	// TODO implement me
-	panic("implement me")
+	return "in_progress"
 }
 
 func (s *TicketStatusInProgress) MarshalJSON() ([]byte, error) {
-	// TODO implement me
-	panic("implement me")
-}
-
-func (s *TicketStatusInProgress) UnmarshalJSON(bytes []byte) error {
-	// TODO implement me
-	panic("implement me")
+	return json.Marshal(s.String())
 }
 
 func (s *TicketStatusInProgress) Execute(ctx contextx.Contextx, ticket *Ticket) error {
-	// TODO implement me
-	panic("implement me")
+	// todo: 2024/6/6|sean|implement me
+
+	ticket.Status = &TicketStatusDone{}
+	return nil
 }
 
 var _ TicketStatus = &TicketStatusDone{}
@@ -101,21 +85,14 @@ type TicketStatusDone struct {
 }
 
 func (s *TicketStatusDone) String() string {
-	// TODO implement me
-	panic("implement me")
+	return "done"
 }
 
 func (s *TicketStatusDone) MarshalJSON() ([]byte, error) {
-	// TODO implement me
-	panic("implement me")
-}
-
-func (s *TicketStatusDone) UnmarshalJSON(bytes []byte) error {
-	// TODO implement me
-	panic("implement me")
+	return json.Marshal(s.String())
 }
 
 func (s *TicketStatusDone) Execute(ctx contextx.Contextx, ticket *Ticket) error {
-	// TODO implement me
-	panic("implement me")
+	// todo: 2024/6/6|sean|implement me
+	return nil
 }

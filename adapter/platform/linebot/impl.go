@@ -95,7 +95,7 @@ func (i *impl) GetRouter() *gin.Engine {
 	return i.server.Router
 }
 
-func (i *impl) callback(c *gin.Context) {
+func (i *impl) callback(c *gin.Context) { //nolint:gocognit // ignore this
 	ctx, err := contextx.FromGin(c)
 	if err != nil {
 		_ = c.Error(err)
