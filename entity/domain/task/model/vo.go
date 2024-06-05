@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/blackhorseya/ekko/pkg/contextx"
@@ -13,6 +14,42 @@ type TicketStatus interface {
 	json.Marshaler
 
 	Execute(ctx contextx.Contextx, ticket *Ticket) error
+}
+
+// UnmarshalTicketStatus unmarshals a ticket status from a string.
+func UnmarshalTicketStatus(name string) (TicketStatus, error) {
+	switch name {
+	case (&TicketStatusBacklog{}).String():
+		return &TicketStatusBacklog{}, nil
+	case (&TicketStatusTodo{}).String():
+		return &TicketStatusTodo{}, nil
+	case (&TicketStatusInProgress{}).String():
+		return &TicketStatusInProgress{}, nil
+	case (&TicketStatusDone{}).String():
+		return &TicketStatusDone{}, nil
+	case "":
+		return &TicketStatusUnknown{}, nil
+	default:
+		return nil, fmt.Errorf("invalid status: %s", name)
+	}
+}
+
+var _ TicketStatus = &TicketStatusUnknown{}
+
+// TicketStatusUnknown is a type that represents an unknown status of a ticket.
+type TicketStatusUnknown struct {
+}
+
+func (s *TicketStatusUnknown) String() string {
+	return "unknown"
+}
+
+func (s *TicketStatusUnknown) MarshalJSON() ([]byte, error) {
+	return json.Marshal(s.String())
+}
+
+func (s *TicketStatusUnknown) Execute(ctx contextx.Contextx, ticket *Ticket) error {
+	return errors.New("unknown status")
 }
 
 var _ TicketStatus = &TicketStatusBacklog{}
@@ -93,6 +130,5 @@ func (s *TicketStatusDone) MarshalJSON() ([]byte, error) {
 }
 
 func (s *TicketStatusDone) Execute(ctx contextx.Contextx, ticket *Ticket) error {
-	// todo: 2024/6/6|sean|implement me
-	return nil
+	return errors.New("ticket is already done")
 }
