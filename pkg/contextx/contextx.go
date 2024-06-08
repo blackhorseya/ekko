@@ -35,14 +35,6 @@ func Background() Contextx {
 	}
 }
 
-// WithLogger returns a copy of parent in which the value associated with key is val.
-func WithLogger(logger *zap.Logger) Contextx {
-	return Contextx{
-		Context: context.Background(),
-		Logger:  logger,
-	}
-}
-
 // WithValue returns a copy of parent in which the value associated with key is val.
 func WithValue(parent Contextx, key, val interface{}) Contextx {
 	return Contextx{
