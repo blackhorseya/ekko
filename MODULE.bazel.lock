@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 6,
-  "moduleFileHash": "41d065158dcd50d81e822dc1757e1794c6dc370e72e7435ac0ca66b3d77a0ac6",
+  "moduleFileHash": "95d8454a0d16bf918d3713de57e5945f623a0de42e010442b3dab3af681768e0",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -150,9 +150,9 @@
             {
               "tagName": "download",
               "attributeValues": {
-                "version": "1.22.1",
                 "goarch": "amd64",
-                "goos": "linux"
+                "goos": "linux",
+                "version": "1.22.1"
               },
               "devDependency": false,
               "location": {

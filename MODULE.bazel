@@ -39,9 +39,9 @@ go_sdk.download(version = "1.22.1")
 
 # Alternately, download an SDK for a fixed OS/architecture.
 go_sdk.download(
-    version = "1.22.1",
     goarch = "amd64",
     goos = "linux",
+    version = "1.22.1",
 )
 
 # Register the Go SDK installed on the host.
