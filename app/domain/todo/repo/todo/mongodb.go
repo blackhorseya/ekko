@@ -6,6 +6,7 @@ import (
 	"github.com/blackhorseya/ekko/entity/domain/todo/model"
 	"github.com/blackhorseya/ekko/entity/domain/todo/repo"
 	"github.com/blackhorseya/ekko/pkg/contextx"
+	"github.com/blackhorseya/ekko/pkg/otelx"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -32,6 +33,9 @@ func (i *mongodb) List(
 	ctx contextx.Contextx,
 	condition repo.ListCondition,
 ) (items []*model.Todo, total int, err error) {
+	ctx, span := otelx.StartSpan(ctx, "repo.ITodoRepo.List")
+	defer span.End()
+
 	timeout, cancelFunc := contextx.WithTimeout(ctx, defaultTimeout)
 	defer cancelFunc()
 

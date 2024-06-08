@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/blackhorseya/ekko/pkg/contextx"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/propagation"
@@ -56,4 +57,10 @@ func SetupOTelSDK(
 	Tracer = provider.Tracer(serviceName)
 
 	return provider.Shutdown, nil
+}
+
+// StartSpan starts a new span with the given name.
+func StartSpan(ctx contextx.Contextx, name string) (contextx.Contextx, trace.Span) {
+	start, span := Tracer.Start(ctx, name)
+	return contextx.WithContext(start), span
 }

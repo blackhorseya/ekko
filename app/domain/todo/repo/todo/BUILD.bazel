@@ -12,6 +12,7 @@ go_library(
         "//entity/domain/todo/model",
         "//entity/domain/todo/repo",
         "//pkg/contextx",
+        "//pkg/otelx",
         "@com_github_google_uuid//:uuid",
         "@org_mongodb_go_mongo_driver//bson",
         "@org_mongodb_go_mongo_driver//mongo",

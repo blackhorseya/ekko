@@ -9,6 +9,7 @@ import (
 	_ "github.com/blackhorseya/ekko/entity/domain/todo/model" // import model
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/errorx"
+	"github.com/blackhorseya/ekko/pkg/otelx"
 	"github.com/blackhorseya/ekko/pkg/responsex"
 	"github.com/gin-gonic/gin"
 )
@@ -54,6 +55,9 @@ func (i *impl) GetList(c *gin.Context) {
 		_ = c.Error(err)
 		return
 	}
+
+	ctx, span := otelx.StartSpan(ctx, "api.todos.GetList")
+	defer span.End()
 
 	var query GetListQuery
 	err = c.ShouldBindQuery(&query)

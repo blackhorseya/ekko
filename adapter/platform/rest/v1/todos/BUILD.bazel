@@ -11,6 +11,7 @@ go_library(
         "//entity/domain/todo/model",
         "//pkg/contextx",
         "//pkg/errorx",
+        "//pkg/otelx",
         "//pkg/responsex",
         "@com_github_gin_gonic_gin//:gin",
     ],

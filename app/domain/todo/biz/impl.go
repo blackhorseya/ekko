@@ -8,6 +8,7 @@ import (
 	"github.com/blackhorseya/ekko/entity/domain/todo/model"
 	"github.com/blackhorseya/ekko/entity/domain/todo/repo"
 	"github.com/blackhorseya/ekko/pkg/contextx"
+	"github.com/blackhorseya/ekko/pkg/otelx"
 )
 
 // NewNilTodoBiz creates a new nil todo biz instance.
@@ -27,6 +28,9 @@ func NewTodoBiz(todos repo.ITodoRepo) biz.ITodoBiz {
 }
 
 func (i *impl) ListTodo(ctx contextx.Contextx, opts biz.ListTodoOptions) (items []*model.Todo, total int, err error) {
+	ctx, span := otelx.StartSpan(ctx, "biz.ITodoBiz.ListTodo")
+	defer span.End()
+
 	who, err := idM.FromContext(ctx)
 	if err != nil {
 		return nil, 0, fmt.Errorf("get identity from context: %w", err)
