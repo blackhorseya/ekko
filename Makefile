@@ -32,7 +32,7 @@ gazelle: ## run gazelle with bazel
 
 .PHONY: build
 build: ## build go binary
-	@bazel build //...
+	@bazel build --verbose_failures //...
 
 .PHONY: test
 test: ## test go binary
