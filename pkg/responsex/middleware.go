@@ -1,6 +1,9 @@
 package responsex
 
 import (
+	"errors"
+
+	"github.com/blackhorseya/ekko/pkg/errorx"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,8 +17,20 @@ func AddErrorHandlingMiddleware() gin.HandlerFunc {
 
 			err := c.Errors.Last().Err
 
-			Err(c, err)
-			c.Abort()
+			var e *errorx.Error
+			if errors.As(err, &e) {
+				c.JSON(e.StatusCode, Response{
+					Code:    e.Code,
+					Message: e.Error(),
+				})
+				c.Abort()
+			} else {
+				c.JSON(e.StatusCode, Response{
+					Code:    e.Code,
+					Message: err.Error(),
+				})
+				c.Abort()
+			}
 		}()
 
 		c.Next()
