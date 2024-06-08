@@ -3,13 +3,15 @@ package auth
 import (
 	"crypto/rand"
 	"encoding/base64"
+	"errors"
 	"net/http"
 	"net/url"
 
 	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/authx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	"github.com/blackhorseya/ekko/pkg/response"
+	"github.com/blackhorseya/ekko/pkg/errorx"
+	"github.com/blackhorseya/ekko/pkg/responsex"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
@@ -55,7 +57,7 @@ func callback(authenticator *authx.Authenticator) gin.HandlerFunc {
 
 		session := sessions.Default(c)
 		if c.Query("state") != session.Get("state") {
-			c.JSON(http.StatusBadRequest, response.Err.WithMessage("invalid state"))
+			responsex.Err(c, errorx.Wrap(http.StatusBadRequest, 400, errors.New("invalid state")))
 			return
 		}
 
@@ -95,7 +97,7 @@ func me() gin.HandlerFunc {
 		session := sessions.Default(c)
 		profile := session.Get("profile")
 		if profile == nil {
-			c.JSON(http.StatusUnauthorized, response.Err.WithMessage("unauthorized"))
+			responsex.Err(c, errorx.Wrap(http.StatusUnauthorized, 401, errors.New("unauthorized")))
 			return
 		}
 
