@@ -35,6 +35,14 @@ func Background() Contextx {
 	}
 }
 
+// WithContext returns a copy of parent in which the context is set to ctx.
+func WithContext(ctx context.Context) Contextx {
+	return Contextx{
+		Context: ctx,
+		Logger:  zap.L(),
+	}
+}
+
 // WithValue returns a copy of parent in which the value associated with key is val.
 func WithValue(parent Contextx, key, val interface{}) Contextx {
 	return Contextx{

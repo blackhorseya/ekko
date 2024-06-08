@@ -7,7 +7,7 @@ import (
 // AddContextxMiddleware is used to add contextx middleware.
 func AddContextxMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Set(KeyCtx, Background())
+		c.Set(KeyCtx, WithContext(c.Request.Context()))
 
 		c.Next()
 	}
