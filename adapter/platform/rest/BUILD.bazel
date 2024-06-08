@@ -19,6 +19,7 @@ go_library(
         "//pkg/adapterx",
         "//pkg/contextx",
         "//pkg/logging",
+        "//pkg/otelx",
         "//pkg/responsex",
         "//pkg/storage/mongodbx",
         "//pkg/transports/httpx",

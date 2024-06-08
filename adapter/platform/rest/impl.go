@@ -1,7 +1,9 @@
 package rest
 
 import (
+	"context"
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"strings"
@@ -13,6 +15,7 @@ import (
 	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/contextx"
+	"github.com/blackhorseya/ekko/pkg/otelx"
 	"github.com/blackhorseya/ekko/pkg/responsex"
 	"github.com/blackhorseya/ekko/pkg/transports/httpx"
 	"github.com/gin-gonic/gin"
@@ -40,12 +43,20 @@ import (
 type impl struct {
 	injector *wirex.Injector
 	server   *httpx.Server
+
+	shutdown func(context.Context) error
 }
 
 func newRestful(injector *wirex.Injector, server *httpx.Server) adapterx.Restful {
+	shutdown, err := otelx.SetupOTelSDK(contextx.Background(), injector.A.Name)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	return &impl{
 		injector: injector,
 		server:   server,
+		shutdown: shutdown,
 	}
 }
 
@@ -86,7 +97,11 @@ func (i *impl) AwaitSignal() error {
 		err := i.server.Stop(ctx)
 		if err != nil {
 			ctx.Error("shutdown restful server error", zap.Error(err))
-			return err
+		}
+
+		err = i.shutdown(ctx)
+		if err != nil {
+			ctx.Error("shutdown otel sdk error", zap.Error(err))
 		}
 	}
 
