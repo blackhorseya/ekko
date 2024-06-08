@@ -11,6 +11,7 @@ import (
 	"github.com/blackhorseya/ekko/pkg/responsex"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 	"go.uber.org/zap"
 )
 
@@ -33,12 +34,13 @@ func NewServer() (*Server, error) {
 		SkipPaths:  []string{"/api/healthz"},
 		Context:    nil,
 	}))
+	router.Use(otelgin.Middleware(configx.A.Name))
+	router.Use(contextx.AddContextxMiddleware())
+	router.Use(responsex.AddErrorHandlingMiddleware())
 	router.Use(ginzap.CustomRecoveryWithZap(ctx.Logger, true, func(c *gin.Context, err any) {
 		responsex.Err(c, fmt.Errorf("%v", err))
 		c.Abort()
 	}))
-	router.Use(contextx.AddContextxMiddleware())
-	router.Use(responsex.AddErrorHandlingMiddleware())
 
 	httpserver := &http.Server{
 		Addr:              configx.A.HTTP.GetAddr(),

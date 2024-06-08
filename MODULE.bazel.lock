@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 6,
-  "moduleFileHash": "95d8454a0d16bf918d3713de57e5945f623a0de42e010442b3dab3af681768e0",
+  "moduleFileHash": "5c683ee91b6976f10d5c60ed2532b0773efeb5497426b4e0e611474c3a03847e",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -53,6 +53,7 @@
             "com_github_swaggo_swag": "com_github_swaggo_swag",
             "com_github_testcontainers_testcontainers_go": "com_github_testcontainers_testcontainers_go",
             "com_github_testcontainers_testcontainers_go_modules_mongodb": "com_github_testcontainers_testcontainers_go_modules_mongodb",
+            "io_opentelemetry_go_contrib_instrumentation_github_com_gin_gonic_gin_otelgin": "io_opentelemetry_go_contrib_instrumentation_github_com_gin_gonic_gin_otelgin",
             "io_opentelemetry_go_otel": "io_opentelemetry_go_otel",
             "io_opentelemetry_go_otel_exporters_otlp_otlptrace_otlptracegrpc": "io_opentelemetry_go_otel_exporters_otlp_otlptrace_otlptracegrpc",
             "io_opentelemetry_go_otel_sdk": "io_opentelemetry_go_otel_sdk",
