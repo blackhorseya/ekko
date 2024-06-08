@@ -40,6 +40,10 @@ type Application struct {
 		CallbackURL  string   `json:"callback_url" yaml:"callbackURL"`
 		Audiences    []string `json:"audiences" yaml:"audiences"`
 	} `json:"auth0" yaml:"auth0"`
+
+	OTel struct {
+		Target string `json:"target" yaml:"target"`
+	} `json:"otel" yaml:"otel"`
 }
 
 // GetID is used to get the application id.

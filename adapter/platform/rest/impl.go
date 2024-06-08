@@ -48,9 +48,20 @@ type impl struct {
 }
 
 func newRestful(injector *wirex.Injector, server *httpx.Server) adapterx.Restful {
-	shutdown, err := otelx.SetupOTelSDK(contextx.Background(), injector.A.Name)
-	if err != nil {
-		log.Fatal(err)
+	shutdown := func(context.Context) error {
+		return nil
+	}
+	var err error
+	ctx := contextx.Background()
+
+	if injector.A.OTel.Target != "" {
+		ctx.Info("setup otel sdk", zap.String("target", injector.A.OTel.Target))
+		shutdown, err = otelx.SetupOTelSDK(ctx, injector.A.Name, injector.A.OTel.Target)
+		if err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		ctx.Info("skip setup otel sdk")
 	}
 
 	return &impl{
