@@ -18,7 +18,7 @@ import (
 
 var (
 	// Tracer is the global tracer.
-	Tracer trace.Tracer
+	Tracer = otel.Tracer("")
 )
 
 // SetupOTelSDK sets up the OpenTelemetry SDK with the Jaeger exporter.
