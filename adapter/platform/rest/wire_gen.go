@@ -61,12 +61,7 @@ func initAuthx(app *configx.Application) (*authx.Authx, error) {
 		return nil, nil
 	}
 
-	auth, err := authx.NewAuthx(app)
-	if err != nil {
-		return nil, err
-	}
-
-	return auth, nil
+	return authx.NewAuthx(app)
 }
 
 func initApplication() (*configx.Application, error) {

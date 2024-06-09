@@ -20,15 +20,10 @@ import (
 
 func initAuthx(app *configx.Application) (*authx.Authx, error) {
 	if !app.Auth0.Enabled {
-		return nil, nil
+		return nil, nil //nolint:nilnil // return nil
 	}
 
-	auth, err := authx.NewAuthx(app)
-	if err != nil {
-		return nil, err
-	}
-
-	return auth, nil
+	return authx.NewAuthx(app)
 }
 
 func initApplication() (*configx.Application, error) {
