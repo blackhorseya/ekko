@@ -131,7 +131,13 @@ func (i *impl) InitRouting() error {
 		))
 		api.GET("/healthz", i.Healthz)
 
-		v1.Handle(api.Group("/v1", i.injector.Authx.ParseJWT()), i.injector)
+		var middlewares []gin.HandlerFunc
+		if i.injector.A.Auth0.Enabled {
+			middlewares = append(middlewares, i.injector.Authx.ParseJWT())
+			contextx.Background().Info("setup auth0 middleware")
+		}
+
+		v1.Handle(api.Group("/v1", middlewares...), i.injector)
 	}
 
 	return nil
