@@ -95,6 +95,11 @@ func bindEnv(v *viper.Viper) (err error) {
 		return err
 	}
 
+	err = v.BindEnv("auth0.enabled", "AUTH0_ENABLED")
+	if err != nil {
+		return err
+	}
+
 	err = v.BindEnv("auth0.domain", "AUTH0_DOMAIN")
 	if err != nil {
 		return err
