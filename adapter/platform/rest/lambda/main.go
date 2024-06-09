@@ -7,7 +7,6 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/blackhorseya/ekko/adapter/platform/rest"
-	"github.com/blackhorseya/ekko/app/infra/configx"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/spf13/viper"
 )
@@ -20,11 +19,6 @@ func Handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.AP
 }
 
 func main() {
-	_, err := configx.LoadApplication(&configx.C.PlatformRest)
-	if err != nil {
-		panic(err)
-	}
-
 	service, err := rest.New(viper.GetViper())
 	if err != nil {
 		panic(err)

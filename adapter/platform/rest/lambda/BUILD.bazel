@@ -7,7 +7,6 @@ go_library(
     visibility = ["//visibility:private"],
     deps = [
         "//adapter/platform/rest",
-        "//app/infra/configx",
         "//pkg/adapterx",
         "@com_github_aws_aws_lambda_go//events",
         "@com_github_aws_aws_lambda_go//lambda",
