@@ -38,33 +38,39 @@ structure. The architecture is divided into several key layers:
 
 1. **Entities**:
 
-- These are the core business objects of the application.
-- They contain the essential business rules and properties that are independent of any external dependencies or
-  frameworks.
-- Examples include task, user, and issue objects.
+    - These are the core business objects of the application.
+    - They contain the essential business rules and properties that are independent of any external dependencies or
+      frameworks.
+    - Examples include task, user, and issue objects.
 
 2. **Use Cases**:
 
-- Use cases represent the application-specific business logic.
-- They orchestrate the flow of data to and from the entities, and direct how the data can be changed or interacted with.
-- They encapsulate all the use case-specific business rules, ensuring that the application logic remains decoupled from
-  the outer layers.
+    - Use cases represent the application-specific business logic.
+    - They orchestrate the flow of data to and from the entities, and direct how the data can be changed or interacted
+      with.
+    - They encapsulate all the use case-specific business rules, ensuring that the application logic remains decoupled
+      from
+      the outer layers.
 
 3. **Interface Adapters**:
 
-- This layer adapts the data from the outer layers (e.g., web controllers, database gateways) to the inner layers (use
-  cases and entities).
-- It contains the implementation of interfaces that convert data from the format most convenient for the use cases and
-  entities into the format needed by the frameworks and drivers.
-- Examples include REST controllers, presenters, and database repositories.
+    - This layer adapts the data from the outer layers (e.g., web controllers, database gateways) to the inner layers (
+      use
+      cases and entities).
+    - It contains the implementation of interfaces that convert data from the format most convenient for the use cases
+      and
+      entities into the format needed by the frameworks and drivers.
+    - Examples include REST controllers, presenters, and database repositories.
 
 4. **Frameworks & Drivers**:
 
-- This outermost layer includes frameworks and tools such as the database, web server, UI, and any external APIs.
-- It contains the code that interacts with external systems and frameworks, such as database connectors, HTTP clients,
-  and third-party services.
-- This layer depends on both the interface adapters and the use cases, providing implementations that are used by the
-  interface adapters.
+    - This outermost layer includes frameworks and tools such as the database, web server, UI, and any external APIs.
+    - It contains the code that interacts with external systems and frameworks, such as database connectors, HTTP
+      clients,
+      and third-party services.
+    - This layer depends on both the interface adapters and the use cases, providing implementations that are used by
+      the
+      interface adapters.
 
 ### Clean Architecture Benefits
 
@@ -87,16 +93,13 @@ To set up Ekko locally, follow these steps:
     cd ekko
     ```
 
-2. **Set up environment variables**:
-   Create a `.env` file and fill in the necessary configurations, such as database credentials and API keys.
-
-3. **Run the application**:
+2. **Run the application**:
     ```sh
-    docker-compose up --build
+    docker compose up --build
     ```
 
-4. **Access the application**:
-   Open your browser and go to `http://localhost:8080`.
+3. **Access the application**:
+   Open your browser and go to `http://localhost:8080/api/docs/index.html`.
 
 ## Contribution Guidelines
 
