@@ -1,0 +1,10 @@
+platformRest:
+  name: ekko-platform-rest
+
+  log:
+    level: debug
+    format: console
+
+  http:
+    port: 8080
+    mode: debug
