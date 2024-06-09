@@ -56,7 +56,7 @@ func (i *impl) GetList(c *gin.Context) {
 		return
 	}
 
-	ctx, span := otelx.StartSpan(ctx, "api.todos.GetList")
+	ctx, span := otelx.StartSpan(ctx, "api")
 	defer span.End()
 
 	var query GetListQuery
@@ -104,6 +104,9 @@ func (i *impl) Post(c *gin.Context) {
 		return
 	}
 
+	ctx, span := otelx.StartSpan(ctx, "api")
+	defer span.End()
+
 	var payload PostPayload
 	err = c.ShouldBindJSON(&payload)
 	if err != nil {
@@ -143,6 +146,9 @@ func (i *impl) Patch(c *gin.Context) {
 		_ = c.Error(err)
 		return
 	}
+
+	ctx, span := otelx.StartSpan(ctx, "api")
+	defer span.End()
 
 	id := c.Param("id")
 	var payload PatchPayload

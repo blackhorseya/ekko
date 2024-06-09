@@ -28,7 +28,7 @@ func NewTodoBiz(todos repo.ITodoRepo) biz.ITodoBiz {
 }
 
 func (i *impl) ListTodo(ctx contextx.Contextx, opts biz.ListTodoOptions) (items []*model.Todo, total int, err error) {
-	ctx, span := otelx.StartSpan(ctx, "biz.ITodoBiz.ListTodo")
+	ctx, span := otelx.StartSpan(ctx, "biz")
 	defer span.End()
 
 	who, err := idM.FromContext(ctx)
@@ -44,6 +44,9 @@ func (i *impl) ListTodo(ctx contextx.Contextx, opts biz.ListTodoOptions) (items 
 }
 
 func (i *impl) CreateTodo(ctx contextx.Contextx, title string) (item *model.Todo, err error) {
+	ctx, span := otelx.StartSpan(ctx, "biz")
+	defer span.End()
+
 	who, err := idM.FromContext(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("get identity from context: %w", err)
@@ -64,6 +67,9 @@ func (i *impl) CreateTodo(ctx contextx.Contextx, title string) (item *model.Todo
 }
 
 func (i *impl) CompleteTodo(ctx contextx.Contextx, id string) (item *model.Todo, err error) {
+	ctx, span := otelx.StartSpan(ctx, "biz")
+	defer span.End()
+
 	who, err := idM.FromContext(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("get identity from context: %w", err)

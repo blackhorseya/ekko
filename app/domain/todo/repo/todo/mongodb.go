@@ -33,7 +33,7 @@ func (i *mongodb) List(
 	ctx contextx.Contextx,
 	condition repo.ListCondition,
 ) (items []*model.Todo, total int, err error) {
-	ctx, span := otelx.StartSpan(ctx, "repo.ITodoRepo.List")
+	ctx, span := otelx.StartSpan(ctx, "repo")
 	defer span.End()
 
 	timeout, cancelFunc := contextx.WithTimeout(ctx, defaultTimeout)
@@ -77,6 +77,9 @@ func (i *mongodb) List(
 }
 
 func (i *mongodb) GetByID(ctx contextx.Contextx, id string) (item *model.Todo, err error) {
+	ctx, span := otelx.StartSpan(ctx, "repo")
+	defer span.End()
+
 	timeout, cancelFunc := contextx.WithTimeout(ctx, defaultTimeout)
 	defer cancelFunc()
 
@@ -91,6 +94,9 @@ func (i *mongodb) GetByID(ctx contextx.Contextx, id string) (item *model.Todo, e
 }
 
 func (i *mongodb) Create(ctx contextx.Contextx, item *model.Todo) (err error) {
+	ctx, span := otelx.StartSpan(ctx, "repo")
+	defer span.End()
+
 	timeout, cancelFunc := contextx.WithTimeout(ctx, defaultTimeout)
 	defer cancelFunc()
 
@@ -110,6 +116,9 @@ func (i *mongodb) Create(ctx contextx.Contextx, item *model.Todo) (err error) {
 }
 
 func (i *mongodb) Update(ctx contextx.Contextx, item *model.Todo) (err error) {
+	ctx, span := otelx.StartSpan(ctx, "repo")
+	defer span.End()
+
 	timeout, cancelFunc := contextx.WithTimeout(ctx, defaultTimeout)
 	defer cancelFunc()
 
