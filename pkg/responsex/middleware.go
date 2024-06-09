@@ -2,6 +2,7 @@ package responsex
 
 import (
 	"errors"
+	"net/http"
 
 	"github.com/blackhorseya/ekko/pkg/errorx"
 	"github.com/gin-gonic/gin"
@@ -25,8 +26,8 @@ func AddErrorHandlingMiddleware() gin.HandlerFunc {
 				})
 				c.Abort()
 			} else {
-				c.JSON(e.StatusCode, Response{
-					Code:    e.Code,
+				c.JSON(http.StatusInternalServerError, Response{
+					Code:    500,
 					Message: err.Error(),
 				})
 				c.Abort()
