@@ -8,3 +8,7 @@ platformRest:
   http:
     port: 8080
     mode: debug
+
+  storage:
+    mongodb:
+      dsn: mongodb://root:changeme@mongodb/?retryWrites=true&w=majority
