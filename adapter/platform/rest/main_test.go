@@ -1,0 +1,43 @@
+//go:build external
+
+package rest
+
+import (
+	"testing"
+
+	"github.com/blackhorseya/ekko/app/infra/configx"
+	"github.com/blackhorseya/ekko/pkg/logging"
+	"github.com/spf13/viper"
+)
+
+func TestRun(t *testing.T) {
+	err := configx.LoadConfig("")
+	if err != nil {
+		t.Fatalf("configx.LoadConfig() error = %v", err)
+	}
+
+	app, err := configx.LoadApplication(&configx.C.PlatformRest)
+	if err != nil {
+		t.Fatalf("configx.LoadApplication() error = %v", err)
+	}
+
+	err = logging.InitWithConfig(app.Log)
+	if err != nil {
+		t.Fatalf("logging.InitWithConfig() error = %v", err)
+	}
+
+	service, err := New(viper.GetViper())
+	if err != nil {
+		t.Fatalf("New() error = %v", err)
+	}
+
+	err = service.Start()
+	if err != nil {
+		t.Fatalf("service.Start() error = %v", err)
+	}
+
+	err = service.AwaitSignal()
+	if err != nil {
+		t.Fatalf("service.AwaitSignal() error = %v", err)
+	}
+}

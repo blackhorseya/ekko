@@ -31,7 +31,7 @@ func New(v *viper.Viper) (adapterx.Servicer, error) {
 	if err != nil {
 		return nil, err
 	}
-	authxAuthx, err := authx.NewAuthx(application)
+	authx, err := initAuthx(application)
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +43,7 @@ func New(v *viper.Viper) (adapterx.Servicer, error) {
 	iTodoBiz := biz.NewTodoBiz(iTodoRepo)
 	injector := &wirex.Injector{
 		A:     application,
-		Authx: authxAuthx,
+		Authx: authx,
 		Todo:  iTodoBiz,
 	}
 	server, err := httpx.NewServer()
@@ -55,6 +55,19 @@ func New(v *viper.Viper) (adapterx.Servicer, error) {
 }
 
 // wire.go:
+
+func initAuthx(app *configx.Application) (*authx.Authx, error) {
+	if !app.Auth0.Enabled {
+		return nil, nil
+	}
+
+	auth, err := authx.NewAuthx(app)
+	if err != nil {
+		return nil, err
+	}
+
+	return auth, nil
+}
 
 func initApplication() (*configx.Application, error) {
 	app, err := configx.LoadApplication(&configx.C.PlatformRest)
@@ -70,4 +83,6 @@ func initApplication() (*configx.Application, error) {
 	return app, nil
 }
 
-var providerSet = wire.NewSet(wire.Struct(new(wirex.Injector), "*"), initApplication, authx.NewAuthx, httpx.NewServer, mongodbx.NewClient, biz.NewTodoBiz, todo.NewMongodb)
+var providerSet = wire.NewSet(wire.Struct(new(wirex.Injector), "*"), initApplication,
+	initAuthx, httpx.NewServer, mongodbx.NewClient, biz.NewTodoBiz, todo.NewMongodb,
+)

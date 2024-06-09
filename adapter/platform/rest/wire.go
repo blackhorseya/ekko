@@ -18,6 +18,19 @@ import (
 	"github.com/spf13/viper"
 )
 
+func initAuthx(app *configx.Application) (*authx.Authx, error) {
+	if !app.Auth0.Enabled {
+		return nil, nil
+	}
+
+	auth, err := authx.NewAuthx(app)
+	if err != nil {
+		return nil, err
+	}
+
+	return auth, nil
+}
+
 func initApplication() (*configx.Application, error) {
 	app, err := configx.LoadApplication(&configx.C.PlatformRest)
 	if err != nil {
@@ -35,7 +48,7 @@ func initApplication() (*configx.Application, error) {
 var providerSet = wire.NewSet(
 	wire.Struct(new(wirex.Injector), "*"),
 	initApplication,
-	authx.NewAuthx,
+	initAuthx,
 
 	httpx.NewServer,
 	mongodbx.NewClient,
