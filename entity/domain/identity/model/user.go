@@ -1,10 +1,17 @@
 package model
 
 import (
-	"errors"
-
 	"github.com/blackhorseya/ekko/pkg/contextx"
+	"github.com/google/uuid"
 )
+
+var defaultUser = &User{
+	ID:     uuid.New().String(),
+	Active: true,
+	Profile: Profile{
+		Name: "Anonymous",
+	},
+}
 
 // User is an entity that represents a user
 type User struct {
@@ -18,7 +25,7 @@ type User struct {
 func FromContext(ctx contextx.Contextx) (*User, error) {
 	user, ok := ctx.Value(contextx.KeyWho).(*User)
 	if !ok {
-		return nil, errors.New("user not found in context")
+		return defaultUser, nil
 	}
 
 	return user, nil
