@@ -5,6 +5,7 @@ import (
 	"github.com/blackhorseya/ekko/adapter/platform/rest"
 	"github.com/blackhorseya/ekko/pkg/cmdx"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // startCmd represents the start command
@@ -14,7 +15,11 @@ var startCmd = &cobra.Command{
 }
 
 func init() {
-	startCmd.AddCommand(cmdx.NewServiceCmd("api", "start a restful server", rest.New))
+	startAPICmd := cmdx.NewServiceCmd("api", "start a restful server", rest.New)
+	startAPICmd.Flags().Bool("auth", false, "enable auth middleware")
+	_ = viper.GetViper().BindPFlag("auth0.enabled", startAPICmd.Flags().Lookup("auth"))
+
+	startCmd.AddCommand(startAPICmd)
 	startCmd.AddCommand(cmdx.NewServiceCmd("linebot", "start a linebot server", linebot.New))
 
 	rootCmd.AddCommand(startCmd)

@@ -15,5 +15,6 @@ go_library(
         "//app/infra/configx",
         "//pkg/cmdx",
         "@com_github_spf13_cobra//:cobra",
+        "@com_github_spf13_viper//:viper",
     ],
 )

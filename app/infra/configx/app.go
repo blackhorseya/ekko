@@ -34,6 +34,7 @@ type Application struct {
 	} `json:"line_bot" yaml:"lineBot"`
 
 	Auth0 struct {
+		Enabled      bool     `json:"enabled" yaml:"enabled"`
 		Domain       string   `json:"domain" yaml:"domain"`
 		ClientID     string   `json:"client_id" yaml:"clientID"`
 		ClientSecret string   `json:"client_secret" yaml:"clientSecret"`
