@@ -3,7 +3,7 @@ load("@rules_go//go:def.bzl", "go_library")
 go_library(
     name = "mongodbx",
     srcs = ["mongodbx.go"],
-    importpath = "github.com/blackhorseya/ekko/pkg/storage/mongodbx",
+    importpath = "github.com/blackhorseya/ekko/app/infra/storage/mongodbx",
     visibility = ["//visibility:public"],
     deps = [
         "//app/infra/configx",

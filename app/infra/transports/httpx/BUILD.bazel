@@ -3,7 +3,7 @@ load("@rules_go//go:def.bzl", "go_library")
 go_library(
     name = "httpx",
     srcs = ["server.go"],
-    importpath = "github.com/blackhorseya/ekko/pkg/transports/httpx",
+    importpath = "github.com/blackhorseya/ekko/app/infra/transports/httpx",
     visibility = ["//visibility:public"],
     deps = [
         "//app/infra/configx",

@@ -10,10 +10,10 @@ import (
 	"github.com/blackhorseya/ekko/app/domain/todo/repo/todo"
 	"github.com/blackhorseya/ekko/app/infra/authx"
 	"github.com/blackhorseya/ekko/app/infra/configx"
+	"github.com/blackhorseya/ekko/app/infra/storage/mongodbx"
+	"github.com/blackhorseya/ekko/app/infra/transports/httpx"
 	"github.com/blackhorseya/ekko/pkg/adapterx"
 	"github.com/blackhorseya/ekko/pkg/logging"
-	"github.com/blackhorseya/ekko/pkg/storage/mongodbx"
-	"github.com/blackhorseya/ekko/pkg/transports/httpx"
 	"github.com/google/wire"
 	"github.com/spf13/viper"
 )

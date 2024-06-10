@@ -5,11 +5,11 @@ import (
 	"strconv"
 
 	"github.com/blackhorseya/ekko/adapter/platform/wirex"
+	"github.com/blackhorseya/ekko/app/infra/otelx"
 	"github.com/blackhorseya/ekko/entity/domain/todo/biz"
 	_ "github.com/blackhorseya/ekko/entity/domain/todo/model" // import model
 	"github.com/blackhorseya/ekko/pkg/contextx"
 	"github.com/blackhorseya/ekko/pkg/errorx"
-	"github.com/blackhorseya/ekko/pkg/otelx"
 	"github.com/blackhorseya/ekko/pkg/responsex"
 	"github.com/gin-gonic/gin"
 )

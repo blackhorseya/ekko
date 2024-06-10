@@ -6,10 +6,10 @@ import (
 	"testing"
 
 	"github.com/blackhorseya/ekko/app/infra/configx"
+	"github.com/blackhorseya/ekko/app/infra/storage/mongodbx"
 	"github.com/blackhorseya/ekko/entity/domain/todo/model"
 	"github.com/blackhorseya/ekko/entity/domain/todo/repo"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	"github.com/blackhorseya/ekko/pkg/storage/mongodbx"
 	"github.com/stretchr/testify/suite"
 	"go.mongodb.org/mongo-driver/mongo"
 )

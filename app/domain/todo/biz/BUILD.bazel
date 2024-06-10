@@ -6,12 +6,12 @@ go_library(
     importpath = "github.com/blackhorseya/ekko/app/domain/todo/biz",
     visibility = ["//visibility:public"],
     deps = [
+        "//app/infra/otelx",
         "//entity/domain/identity/model",
         "//entity/domain/todo/biz",
         "//entity/domain/todo/model",
         "//entity/domain/todo/repo",
         "//pkg/contextx",
-        "//pkg/otelx",
     ],
 )
 

@@ -7,11 +7,11 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//adapter/platform/wirex",
+        "//app/infra/otelx",
         "//entity/domain/todo/biz",
         "//entity/domain/todo/model",
         "//pkg/contextx",
         "//pkg/errorx",
-        "//pkg/otelx",
         "//pkg/responsex",
         "@com_github_gin_gonic_gin//:gin",
     ],

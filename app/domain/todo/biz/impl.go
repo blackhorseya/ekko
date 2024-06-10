@@ -3,12 +3,12 @@ package biz
 import (
 	"fmt"
 
+	"github.com/blackhorseya/ekko/app/infra/otelx"
 	idM "github.com/blackhorseya/ekko/entity/domain/identity/model"
 	"github.com/blackhorseya/ekko/entity/domain/todo/biz"
 	"github.com/blackhorseya/ekko/entity/domain/todo/model"
 	"github.com/blackhorseya/ekko/entity/domain/todo/repo"
 	"github.com/blackhorseya/ekko/pkg/contextx"
-	"github.com/blackhorseya/ekko/pkg/otelx"
 )
 
 // NewNilTodoBiz creates a new nil todo biz instance.
