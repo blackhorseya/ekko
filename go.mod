@@ -1,6 +1,7 @@
 module github.com/blackhorseya/ekko
 
-go 1.22
+go 1.23.0
+
 toolchain go1.24.1
 
 require (
@@ -31,7 +32,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.27.0
 	go.uber.org/mock v0.4.0
 	go.uber.org/zap v1.27.0
-	golang.org/x/oauth2 v0.21.0
+	golang.org/x/oauth2 v0.27.0
 	google.golang.org/grpc v1.64.1
 )
 
